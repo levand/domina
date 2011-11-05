@@ -4,15 +4,22 @@
 
 (repl/connect "http://localhost:9000/repl")
 
+(js* "
+  window.tryfn = function(f) {
+    try {
+      return f.call();
+    } catch (e) {
+      return e;
+    }
+  };")
+
 (def tests (atom {}))
 
 (defn add-test [name testfn expectation]
   (swap! tests assoc name [testfn expectation]))
 
-(defn run-test [testfn expectation]
-  (try
-    (testfn)
-    (catch js/Error e e)))
+(defn run-test [testfn]
+  (js/tryfn testfn))
 
 (defn run-tests []
   (into {} (map (fn [[name [testfn expectation]]]
@@ -46,8 +53,8 @@
           3)
 
 (add-test "append a single child to a single parent"
-          #(do (append (xpath ".") "<p class='appended1'>test</p>")
-               (count (nodes (xpath "//body/p[@class='appended1'"))))
+          #(do (append (xpath "//body") "<p class='appended1'>test</p>")
+               (count (nodes (xpath "//body/p[@class='appended1']"))))
           1)
 
 

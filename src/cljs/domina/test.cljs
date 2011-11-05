@@ -1,5 +1,5 @@
 (ns domina.test
-  (:use [domina :only [nodes single-node xpath clone append]])
+  (:use [domina :only [nodes single-node xpath clone append detach destroy]])
   (:require [clojure.browser.repl :as repl]))
 
 (repl/connect "http://localhost:9000/repl")
@@ -13,51 +13,74 @@
     }
   };")
 
-(def tests (atom {}))
+(def tests (atom []))
 
-(defn add-test [name testfn expectation]
-  (swap! tests assoc name [testfn expectation]))
+(defn add-test [name testfn]
+  (swap! tests conj [name testfn]))
 
 (defn run-test [testfn]
   (js/tryfn testfn))
 
 (defn run-tests []
-  (into {} (map (fn [[name [testfn expectation]]]
-                  [name [(run-test testfn) expectation]])
-                @tests)))
+  (map (fn [[name testfn]]
+         [name (run-test testfn)])
+       @tests))
 
 (js/alert "Starting tests...")
 
 (add-test "basic xpath selection"
-          #(count (nodes (xpath "//p")))
-          3)
+          #(assert (== 3 (count (nodes (xpath "//p"))))))
 
 (add-test "basic xpath selection (single node)"
-          #(instance? js/Element (single-node (xpath "//p")))
-          true)
+          #(assert ( instance? js/Element (single-node (xpath "//p")))))
 
 (add-test "xpath selection with class specification"
-          #(count (nodes (xpath "//div[@class='test1']")))
-          1)
+          #(assert (== 1 (count (nodes (xpath "//div[@class='test1']"))))))
 
 (add-test "advanced xpath"
-          #(count (nodes (xpath "//p[following-sibling::p[@class='p3']]")))
-          2)
+          #(assert (== 2 (count (nodes (xpath "//p[following-sibling::p[@class='p3']]"))))))
 
 (add-test "clone a single node"
-          #(count (clone (single-node (xpath "//p"))))
-          1)
+          #(assert (== 1 (count (clone (single-node (xpath "//p")))))))
 
 (add-test "clone multiple nodes"
-          #(count (clone (nodes (xpath "//p"))))
-          3)
+          #(assert (== 3 (count (clone (nodes (xpath "//p")))))))
 
 (add-test "append a single child to a single parent"
           #(do (append (xpath "//body") "<p class='appended1'>test</p>")
-               (count (nodes (xpath "//body/p[@class='appended1']"))))
-          1)
+               (assert (== 1 (count (nodes (xpath "//body/p[@class='appended1']")))))))
 
+(add-test "append multiple children to a single parent"
+          #(do (append (xpath "//body")
+                       "<p class='appended2'>test2-1</p><p class='appended2'>test2-2</p>")
+               (assert (== 2 (count (nodes (xpath "//body/p[@class='appended2']")))))))
 
-(doseq [[name [result expectation]] (run-tests)]
-  (if (not (== result expectation))
-    (js/alert (str "Test [" name "] failed. Expected [" expectation "], got [" result "]"))))
+(add-test "append a single child to multiple parents"
+          #(do (append (xpath "//body/div/p")
+                       "<span>!!</span>")
+               (assert (== 3 (count (nodes (xpath "//div/p/span")))))))
+
+(add-test "destroy a single node"
+          #(do (destroy (xpath "//body/p[@class='appended1']"))
+               (assert (== 0 (count (nodes (xpath "//body/p[@class='appended1']")))))))
+
+(add-test "destroy multiple nodes"
+          #(do (destroy (xpath "//body/p[@class='appended2']"))
+               (assert (== 0 (count (nodes (xpath "//body/p[@class='appended2']")))))))
+
+(add-test "detach and reattach a single node"
+          #(let [n (detach (xpath "//p[@class='p3']"))]
+             (assert (== 0 (count (nodes (xpath "//p[@class='p3']")))))
+             (append (xpath "//div[@class='test1']") n)
+             (assert (== 1 (count (nodes (xpath "//p[@class='p3']")))))))
+
+(add-test "detach and reattach a multiple nodes"
+          #(let [n (detach (xpath "//div[@class='test1']/p"))]
+             (assert (== 0 (count (nodes (xpath "//div[@class='test1']/p")))))
+             (append (xpath "//div[@class='test1']") n)
+             (assert (== 3 (count (nodes (xpath "//div[@class='test1']/p")))))))
+
+(doseq [[name result] (run-tests)]
+  (if (not (== result nil))
+    (js/alert (str "Test \"" name "\" failed with error: [" result "]"))))
+

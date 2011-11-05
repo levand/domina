@@ -32,15 +32,25 @@
   [parent-content child-content]
   (apply-parent-child-with-cloning dom/appendChild parent-content child-content))
 
+(defn detach
+  "Removes all the nodes in a DomContent from the DOM and returns them."
+  [content]
+  (doall (map dom/removeNode (nodes content))))
+
+(defn destroy
+  "Removes all the nodes in a DomContent from the DOM. Returns nil."
+  [content]
+  (dorun (map dom/removeNode (nodes content))))
+
 ;;;;;;;;;;;;;;;;;;; private helper functions ;;;;;;;;;;;;;;;;;
 
 (defn- apply-parent-child-with-cloning
   "Takes a two-arg function, a parent DomContent and a child DomContent. Applies the function for each parent / child combination. Uses clones of the children for each additional parent after the first."
   [f parent-content child-content]
   (let [parents (nodes parent-content)]
-    (if (not (empty? parents))
+    (when (not (empty? parents))
       (doseq [child (nodes child-content)]
-        (f (first parents) child))
+          (f (first parents) child))
       (doseq [parent (rest parents)
               child (nodes (clone child-content))]
         (f parent child)))))
@@ -58,10 +68,8 @@
 (extend-protocol DomContent
 
   string
-  (nodes [s] (let [frag (dom/htmlToDocumentFragment s)]
-               (if (instance? js/Element frag) (cons frag) frag)))
-  (single-node [s] (let [frag (dom/htmlToDocumentFragment s)]
-                     (if (instance? js/Element frag) frag (first frag))))
+  (nodes [s] (cons (dom/htmlToDocumentFragment s)))
+  (single-node [s] (dom/htmlToDocumentFragment s))
 
   js/Node
   (nodes [content] (cons content))

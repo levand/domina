@@ -3,55 +3,82 @@
             [goog.dom.xml :as xml]
             [clojure.browser.repl :as repl]))
 
-;; Selecting (xpath, nodelist* -> nodelist) == traversing
-;; Manipulating
-;; - Creating (parentless)
-;; - Inserting
-;; - Deleting
+;;;;;;;;;;;;;;;;;;; Protocols ;;;;;;;;;;;;;;;;;
 
-;; Attributes
-;; - getting
-;; - setting
+(defprotocol DomContent
+  (nodes [content] "Returns the content as a sequence of nodes.")
+  (single-node [nodeseq] "Returns the content as a single node (the first node, if the content contains more than one"))
 
+;;;;;;;;;;;;;;;;;;; Public API ;;;;;;;;;;;;;;;;;
 
-(defn sel
-  "Given an xpath expression and an optional base node (or seq of nodes),
-returns a seq of matching nodes."
-  ([xpath] (sel js/document xpath))
-  ([base xpath] (if (seq? base)
-                  (mapcat #(xml/selectNodes % xpath) base)
-                  (seq (xml/selectNodes base xpath)))))
+(defn xpath
+  "Gets a DomContent from an xpath expression. Takes an optional DomContent as a base; if none is given, uses js/document as a base."
+  ([expr] (xpath js/document expr))
+  ([base expr] (reify DomContent
+                      (nodes [_] (mapcat #(xml/selectNodes % expr) (nodes base)))
+                      (single-node [_] (first (filter (complement nil?)
+                                                       (map #(xml/selectSingleNode % expr)
+                                                            (nodes base))))))))
 
-(defn sel-one
-  "Given an xpath expression and an optional base node (or seq of nodes),
-returns the first matching node"
-  ([xpath] (sel-one js/document xpath))
-  ([base xpath] (if (seq? base)
-                  (first (filter (complement nil?)
-                                 (map #(xml/selectSingleNode % xpath) base)))
-                  (xml/selectSingleNode base xpath))))
+(defn clone
+  "Returns a deep clone of DOM content."
+  [content]
+  (map #(. % (cloneNode true)) (nodes content)))
 
+(declare apply-parent-child-with-cloning)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defn append
+  "Given a parent and child DomContents, appends each of the children to all of the parents. If there is more than one parent, clones the children for the additional parents. Returns the parent."
+  [parent-content child-content]
+  (apply-parent-child-with-cloning dom/appendChild parent-content child-content))
 
+;;;;;;;;;;;;;;;;;;; private helper functions ;;;;;;;;;;;;;;;;;
 
+(defn- apply-parent-child-with-cloning
+  "Takes a two-arg function, a parent DomContent and a child DomContent. Applies the function for each parent / child combination. Uses clones of the children for each additional parent after the first."
+  [f parent-content child-content]
+  (let [parents (nodes parent-content)]
+    (if (not (empty? parents))
+      (doseq [child (nodes child-content)]
+        (f (first parents) child))
+      (doseq [parent (rest parents)
+              child (nodes (clone child-content))]
+        (f parent child)))))
 
+(defn- lazy-nodelist
+  "A lazy seq view of a js/NodeList"
+  ([nl] (lazy-nodelist nl 0))
+  ([nl n] (when (< n (. nl length))
+            (lazy-seq
+             (cons (. nl (item n))
+                   (lazy-nodelist nl (inc n)))))))
 
-(comment
+;;;;;;;;;;;;;;;;;;; Protocol Implementations ;;;;;;;;;;;;;;;;;
 
-  (def test (sel "//div[@class='level1']"))
-  (def te (sel-one "//div[@class='level2']"))
-  (def level2s (sel "//div[@class='level2']"))
+(extend-protocol DomContent
 
-  (def level3s (sel level2s "div[@class='level3']"))
+  string
+  (nodes [s] (let [frag (dom/htmlToDocumentFragment s)]
+               (if (instance? js/Element frag) (cons frag) frag)))
+  (single-node [s] (let [frag (dom/htmlToDocumentFragment s)]
+                     (if (instance? js/Element frag) frag (first frag))))
 
-  (mapcat #(sel % "div[@class='level3']") level2s)
-  
-  (for [e level2s]
-    (sel e ))
-  
-  (sel level2s "div[@class='level3']")
-  
-  (sel level)
-  )
+  js/Node
+  (nodes [content] (cons content))
+  (single-node [content] content)
 
+  default
+  (nodes [content] (seq content))
+  (single-node [content] (first content)))
+
+(extend-type js/NodeList
+  ICounted
+  (-count [nodelist] (. nodelist length))
+
+  IIndexed
+  (-nth ([nodelist n] (. nodelist (item n)))
+        ([nodelist n not-found] (if (<= (. nodelist length) n)
+                                  not-found
+                                  (nth nodelist n))))
+  ISeqable
+  (-seq [nodelist] (lazy-nodelist nodelist)))

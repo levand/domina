@@ -53,6 +53,36 @@
   (dorun (map dom/removeChildren (nodes content)))
   content)
 
+;;;;;;;;;;;;;;;;;;; TODO ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; Manipulation
+(defn prepend [parent-content child-content])
+(defn insert-before [content new-content])
+(defn insert-after [content new-cntent])
+(defn replace [old-content new-content])
+(defn wrap [content wrapping-content])
+(defn unwrap [content])
+
+;; Attributes, classes & styles
+(defn style ([content property]) ([content property value]))
+(defn attr ([content attribute]) ([content attribute value]))
+(defn styles ([content]) ([content style-map]))
+(defn attrs ([content]) ([content attr-map]))
+(defn has-class [content])
+(defn add-class [content class])
+(defn remove-class [content class])
+
+;; Contents
+(defn text ([content]) ([content text]))
+(defn value ([content]) ([content value]))
+(defn html ([content]) ([content html]))
+
+;; Display
+(defn offset ([content]) ([content value]))
+(defn position ([content]) ([content value]))
+(defn width ([content]) ([content value]))
+(defn height ([content] ([content value])))
+
 ;;;;;;;;;;;;;;;;;;; private helper functions ;;;;;;;;;;;;;;;;;
 
 (defn- apply-parent-child-with-cloning

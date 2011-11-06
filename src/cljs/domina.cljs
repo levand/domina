@@ -20,6 +20,11 @@
                                                        (map #(xml/selectSingleNode % expr)
                                                             (nodes base))))))))
 
+(defn children
+  "Gets all the children of a DomContent. Same as (xpath content '*') but more efficient."
+  [content]
+  (mapcat dom/getChildren (nodes content)))
+
 (defn clone
   "Returns a deep clone of DOM content."
   [content]
@@ -41,6 +46,12 @@
   "Removes all the nodes in a DomContent from the DOM. Returns nil."
   [content]
   (dorun (map dom/removeNode (nodes content))))
+
+(defn destroy-children
+  "Removes all the child nodes in a DomContent from the DOM. Returns the original DomContent."
+  [content]
+  (dorun (map dom/removeChildren (nodes content)))
+  content)
 
 ;;;;;;;;;;;;;;;;;;; private helper functions ;;;;;;;;;;;;;;;;;
 
@@ -90,3 +101,16 @@
                                   (nth nodelist n))))
   ISeqable
   (-seq [nodelist] (lazy-nodelist nodelist)))
+
+(extend-type js/HTMLCollection
+  ICounted
+  (-count [coll] (. coll length))
+
+  IIndexed
+  (-nth ([coll n] (. coll (item n)))
+        ([coll n not-found] (if (<= (. coll length) n)
+                                  not-found
+                                  (nth coll n))))
+  ISeqable
+  (-seq [coll] (lazy-nodelist coll)))
+

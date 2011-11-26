@@ -1,6 +1,6 @@
 (ns domina.test
-  (:use [domina :only [nodes single-node xpath children clone append
-                       detach destroy destroy-children]])
+  (:use [domina :only [nodes single-node xpath id class children clone append
+                       detach destroy destroy-children insert]])
   (:require [clojure.browser.repl :as repl]))
 
 (repl/connect "http://localhost:9000/repl")
@@ -32,7 +32,7 @@
                (append (xpath "//body") "<div class='d1'></div>")
                (append (xpath "//body/div") "<p class='p1'>P1</p>")
                (append (xpath "//body/div") "<p class='p2'>P2</p>")
-               (append (xpath "//body/div") "<p class='p3'>P3</p>")))
+               (append (xpath "//body/div") "<p id='id1' class='p3'>P3</p>")))
 
 (add-test "basic xpath selection"
           #(assert (== 3 (count (nodes (xpath "//p"))))))
@@ -48,6 +48,12 @@
                                            (xpath "p")))))))
 (add-test "advanced xpath"
           #(assert (== 2 (count (nodes (xpath "//p[following-sibling::p[@class='p3']]"))))))
+
+(add-test "look up node by id"
+          #(assert (== 1 (count (nodes (id "id1"))))))
+
+(add-test "look up nodes by class"
+          #(assert (== 1 (count (nodes (class "p3"))))))
 
 (add-test "child selection"
           #(assert (== 3 (count (children (xpath "//div[@class='d1']"))))))
@@ -78,6 +84,38 @@
                        "some <span class='foo'>more</span> text")
                (assert (== 3 (count (nodes (xpath "//div/p/span[@class='foo']")))))
                (assert (== 9 (count (nodes (xpath "//div/p/text()")))))))
+
+(add-test "Insert a single child to a single parent"
+          #(do (append (xpath "//body")
+                       "<div class='testInserts'></div>")
+               (append (xpath "//div[@class='testInserts']")
+                       "<p class='i1'></p>")
+               (append (xpath "//div[@class='testInserts']")
+                       "<p class='i3'></p>")
+               (insert (xpath "//div[@class='testInserts']")
+                       "<p class='i2'></p>" 1)
+               (assert (== 3 (count (nodes (xpath "//div[@class='testInserts']/p")))))
+               (assert (== 1 (count (nodes (xpath "//p[@class='i2']/preceding-sibling::*")))))
+               (assert (== 1 (count (nodes (xpath "//p[@class='i2']/following-sibling::*")))))))
+
+(add-test "Insert a single child to multiple parents"
+          #(do (append (xpath "//body")
+                       "<div class='testInserts' id='testInsert1'></div>")
+               (append (xpath "//body")
+                       "<div class='testInserts' id='testInsert2'></div>")
+               (append (xpath "//div[@class='testInserts']")
+                       "<p class='i1'></p>")
+               (append (xpath "//div[@class='testInserts']")
+                       "<p class='i3'></p>")
+               (insert (xpath "//div[@class='testInserts']")
+                       "<p class='i2'></p>" 1)
+               (doseq [children [(xpath "//div[@id='testInsert1']/p")
+                                 (xpath "//div[@id='testInsert2']/p")]]
+                 (assert (== 3 (count (nodes children))))
+                 (assert (== 1 (count (nodes (xpath children
+                                                    "p[@class='i2']/preceding-sibling::*")))))
+                 (assert (== 1 (count (nodes (xpath children
+                                                    "p[@class='i2']/following-sibling::*"))))))))
 
 (add-test "destroy a single node"
           #(do (destroy (xpath "//body/p[@class='appended1']"))

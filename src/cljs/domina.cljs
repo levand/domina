@@ -12,7 +12,7 @@
 ;;;;;;;;;;;;;;;;;;; Public API ;;;;;;;;;;;;;;;;;
 
 (defn xpath
-  "Gets a DomContent from an xpath expression. Takes an optional DomContent as a base; if none is given, uses js/document as a base."
+  "Returns content based on an xpath expression. Takes an optional content as a base; if none is given, uses js/document as a base."
   ([expr] (xpath js/document expr))
   ([base expr] (reify DomContent
                       (nodes [_] (mapcat #(xml/selectNodes % expr) (nodes base)))
@@ -20,35 +20,57 @@
                                                        (map #(xml/selectSingleNode % expr)
                                                             (nodes base))))))))
 
+(defn id
+  "Returns content containing a single node by looking up the given ID"
+  [id]
+  (dom/getElement id))
+
+(defn class
+  "Returns content containing nodes which have the specified CSS class."
+  [class]
+  (reify DomContent
+         (nodes [_] (dom/getElementsByClass class))
+         (single-node [_] (dom/getElementByClass class))))
+
 (defn children
-  "Gets all the children of a DomContent. Same as (xpath content '*') but more efficient."
+  "Gets all the child nodes of the elements in a content. Same as (xpath content '*') but more efficient."
   [content]
   (mapcat dom/getChildren (nodes content)))
 
 (defn clone
-  "Returns a deep clone of DOM content."
+  "Returns a deep clone of content."
   [content]
   (map #(. % (cloneNode true)) (nodes content)))
 
 (declare apply-parent-child-with-cloning)
 
 (defn append
-  "Given a parent and child DomContents, appends each of the children to all of the parents. If there is more than one parent, clones the children for the additional parents. Returns the parent."
+  "Given a parent and child contents, appends each of the children to all of the parents. If there is more than one node in the parent content, clones the children for the additional parents. Returns the parent content."
   [parent-content child-content]
   (apply-parent-child-with-cloning dom/appendChild parent-content child-content))
 
+(defn insert
+  "Given a parent and child contents, appends each of the children to all of the parents at the specified index. If there is more than one node in the parent content, clones the children for the additional parents. Returns the parent content."
+  [parent-content child-content idx]
+  (apply-parent-child-with-cloning #(dom/insertChildAt %1 %2 idx) parent-content child-content))
+
+(defn prepend
+  "Given a parent and child contents, prepends each of the children to all of the parents. If there is more than one node in the parent content, clones the children for the additional parents. Returns the parent content."
+  [parent-content child-content]
+  (insert parent-content child-content 0))
+
 (defn detach
-  "Removes all the nodes in a DomContent from the DOM and returns them."
+  "Removes all the nodes in a content from the DOM and returns them."
   [content]
   (doall (map dom/removeNode (nodes content))))
 
 (defn destroy
-  "Removes all the nodes in a DomContent from the DOM. Returns nil."
+  "Removes all the nodes in a content from the DOM. Returns nil."
   [content]
   (dorun (map dom/removeNode (nodes content))))
 
 (defn destroy-children
-  "Removes all the child nodes in a DomContent from the DOM. Returns the original DomContent."
+  "Removes all the child nodes in a content from the DOM. Returns the original content."
   [content]
   (dorun (map dom/removeChildren (nodes content)))
   content)

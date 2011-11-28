@@ -1,6 +1,7 @@
 (ns domina.test
-  (:use [domina :only [nodes single-node xpath id class children clone append
-                       detach destroy destroy-children insert]])
+  (:use [domina :only [nodes single-node xpath id css-class children clone append
+                       detach destroy destroy-children insert insert-before
+                       insert-after swap]])
   (:require [clojure.browser.repl :as repl]))
 
 (repl/connect "http://localhost:9000/repl")
@@ -72,7 +73,7 @@
 (add-test "look up nodes by class"
           #(do (reset)
                (standard-fixture)
-               (assert (== 1 (count (nodes (class "p3")))))))
+               (assert (== 1 (count (nodes (css-class "p3")))))))
 
 (add-test "child selection"
           #(do (reset)
@@ -187,6 +188,74 @@
                (destroy-children (xpath "//div[@class='d1']"))
                (assert (== 1 (count (nodes (xpath "//div[@class='d1']")))))
                (assert (== 0 (count (nodes (xpath "//div[@class='d1']/*")))))))
+
+(add-test "insert-before with a single reference and single new node"
+          #(do (reset)
+               (append (xpath "//body") "<div id='ref'>Some content</div>")
+               (insert-before (nodes (id "ref")) "<p>before</p>")
+               (assert (== 1 (count (nodes (xpath "//div[@id='ref']/preceding-sibling::*[text()='before']")))))))
+
+(add-test "insert-before with a single reference and multiple new nodes"
+          #(do (reset)
+               (append (xpath "//body") "<div id='ref'>Some content</div>")
+               (insert-before (nodes (id "ref")) "<p>before1</p><p>before2</p>")
+               (assert (== 1 (count (nodes (xpath "//div[@id='ref']/preceding-sibling::*[text()='before2' and position()=1]")))))
+               (assert (== 1 (count (nodes (xpath "//div[@id='ref']/preceding-sibling::*[text()='before1' and position()=2]")))))))
+
+(add-test "insert-before with multiple reference nodes and a single new node"
+          #(do (reset)
+               (append (xpath "//body") "<div class='ref' id='ref1'>content1</div>")
+               (append (xpath "//body") "<div class='ref' id='ref2'>content2</div>")
+               (insert-before (nodes (css-class "ref")) "<p>before</p>")
+               (assert (== 2 (count (nodes (xpath "//p")))))
+               (assert (== 1 (count (nodes (xpath "//div[@id='ref1']/preceding-sibling::p")))))
+               (assert (== 2 (count (nodes (xpath "//div[@id='ref2']/preceding-sibling::p")))))))
+
+
+(add-test "insert-after with a single reference and single new node"
+          #(do (reset)
+               (append (xpath "//body") "<div id='ref'>Some content</div>")
+               (insert-after (nodes (id "ref")) "<p>after</p>")
+               (assert (== 1 (count (nodes (xpath "//div[@id='ref']/following-sibling::*[text()='after']")))))))
+
+(add-test "insert-after with a single reference and multiple new nodes"
+          #(do (reset)
+               (append (xpath "//body") "<div id='ref'>Some content</div>")
+               (insert-after (nodes (id "ref")) "<p>after1</p><p>after2</p>")
+               (assert (== 1 (count (nodes (xpath "//div[@id='ref']/following-sibling::*[text()='after1' and position()=1]")))))
+               (assert (== 1 (count (nodes (xpath "//div[@id='ref']/following-sibling::*[text()='after2' and position()=2]")))))))
+
+(add-test "insert-after with multiple reference nodes and a single new node"
+          #(do (reset)
+               (append (xpath "//body") "<div class='ref' id='ref1'>content1</div>")
+               (append (xpath "//body") "<div class='ref' id='ref2'>content2</div>")
+               (insert-after (nodes (css-class "ref")) "<p>after</p>")
+               (assert (== 2 (count (nodes (xpath "//p")))))
+               (assert (== 2 (count (nodes (xpath "//div[@id='ref1']/following-sibling::p")))))
+               (assert (== 1 (count (nodes (xpath "//div[@id='ref2']/following-sibling::p")))))))
+
+(add-test "swap with a single reference node and a single new node"
+          #(do (reset)
+               (append (xpath "//body") "<div><p id='before'>TYPO</p></div>")
+               (swap (xpath "//p[@id='before']") "<p id='after'>fixed</p>")
+               (assert (== 0 (count (nodes (xpath "//p[@id='before']")))))
+               (assert (== 1 (count (nodes (xpath "//p[@id='after']")))))))
+
+(add-test "swap with a single reference node and multiple new nodes"
+          #(do (reset)
+               (append (xpath "//body") "<div><p id='before'>TYPO</p></div>")
+               (swap (xpath "//p[@id='before']") "<p class='after'>fixed1</p><p class='after'>fixed2</p>")
+               (assert (== 0 (count (nodes (xpath "//p[@id='before']")))))
+               (assert (== 2 (count (nodes (xpath "//p[@class='after']")))))))
+
+(add-test "swap with multiple reference nodes and multiple new nodes"
+          #(do (reset)
+               (append (xpath "//body") "<div><p class='before'>TYPO-1</p></div>")
+               (append (xpath "//body") "<div><p class='before'>TYPO-2</p></div>")
+               (swap (xpath "//p[@class='before']") "<p class='after'>fixed1</p><p class='after'>fixed2</p>")
+               (assert (== 0 (count (nodes (xpath "//p[@class='before']")))))
+               (assert (== 4 (count (nodes (xpath "//p[@class='after']")))))))
+
 
 (doseq [[name result] (run-tests)]
   (if (not (== result nil))

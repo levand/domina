@@ -25,12 +25,12 @@
   [id]
   (dom/getElement id))
 
-(defn class
+(defn css-class
   "Returns content containing nodes which have the specified CSS class."
-  [class]
+  [class-name]
   (reify DomContent
-         (nodes [_] (dom/getElementsByClass class))
-         (single-node [_] (dom/getElementByClass class))))
+         (nodes [_] (dom/getElementsByClass class-name))
+         (single-node [_] (dom/getElementByClass class-name))))
 
 (defn children
   "Gets all the child nodes of the elements in a content. Same as (xpath content '*') but more efficient."
@@ -59,6 +59,21 @@
   [parent-content child-content]
   (insert parent-content child-content 0))
 
+(defn insert-before
+  "Given a content and some new content, inserts the new content immediately before the reference content. If there is more than one node in the reference content, clones the new content for each one."
+  [content new-content]
+  (apply-parent-child-with-cloning #(dom/insertSiblingBefore %2 %1) content new-content))
+
+(defn insert-after
+  "Given a content and some new content, inserts the new content immediately after the reference content. If there is more than one node in the reference content, clones the new content for each one."
+  [content new-content]
+  (apply-parent-child-with-cloning #(dom/insertSiblingAfter %2 %1) content new-content))
+
+(defn swap
+  "Given some old content and some new content, replaces the old content with new content. If there are multiple nodes in the old content, replaces each of them and clones the new content as necessary."
+  [old-content new-content]
+  (apply-parent-child-with-cloning #(dom/replaceNode %2 %1) old-content new-content))
+
 (defn detach
   "Removes all the nodes in a content from the DOM and returns them."
   [content]
@@ -78,10 +93,7 @@
 ;;;;;;;;;;;;;;;;;;; TODO ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Manipulation
-(defn prepend [parent-content child-content])
-(defn insert-before [content new-content])
-(defn insert-after [content new-cntent])
-(defn replace [old-content new-content])
+
 (defn wrap [content wrapping-content])
 (defn unwrap [content])
 

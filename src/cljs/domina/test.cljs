@@ -1,5 +1,5 @@
 (ns domina.test
-  (:use [domina :only [nodes single-node xpath id css-class children clone append
+  (:use [domina :only [nodes single-node xpath by-id by-class children clone append
                        detach destroy destroy-children insert insert-before
                        insert-after swap]])
   (:require [clojure.browser.repl :as repl]))
@@ -68,12 +68,12 @@
 (add-test "look up node by id"
           #(do (reset)
                (standard-fixture)
-               (assert (== 1 (count (nodes (id "id1")))))))
+               (assert (== 1 (count (nodes (by-id "id1")))))))
 
 (add-test "look up nodes by class"
           #(do (reset)
                (standard-fixture)
-               (assert (== 1 (count (nodes (css-class "p3")))))))
+               (assert (== 1 (count (nodes (by-class "p3")))))))
 
 (add-test "child selection"
           #(do (reset)
@@ -192,13 +192,13 @@
 (add-test "insert-before with a single reference and single new node"
           #(do (reset)
                (append (xpath "//body") "<div id='ref'>Some content</div>")
-               (insert-before (nodes (id "ref")) "<p>before</p>")
+               (insert-before (nodes (by-id "ref")) "<p>before</p>")
                (assert (== 1 (count (nodes (xpath "//div[@id='ref']/preceding-sibling::*[text()='before']")))))))
 
 (add-test "insert-before with a single reference and multiple new nodes"
           #(do (reset)
                (append (xpath "//body") "<div id='ref'>Some content</div>")
-               (insert-before (nodes (id "ref")) "<p>before1</p><p>before2</p>")
+               (insert-before (nodes (by-id "ref")) "<p>before1</p><p>before2</p>")
                (assert (== 1 (count (nodes (xpath "//div[@id='ref']/preceding-sibling::*[text()='before2' and position()=1]")))))
                (assert (== 1 (count (nodes (xpath "//div[@id='ref']/preceding-sibling::*[text()='before1' and position()=2]")))))))
 
@@ -206,7 +206,7 @@
           #(do (reset)
                (append (xpath "//body") "<div class='ref' id='ref1'>content1</div>")
                (append (xpath "//body") "<div class='ref' id='ref2'>content2</div>")
-               (insert-before (nodes (css-class "ref")) "<p>before</p>")
+               (insert-before (nodes (by-class "ref")) "<p>before</p>")
                (assert (== 2 (count (nodes (xpath "//p")))))
                (assert (== 1 (count (nodes (xpath "//div[@id='ref1']/preceding-sibling::p")))))
                (assert (== 2 (count (nodes (xpath "//div[@id='ref2']/preceding-sibling::p")))))))
@@ -215,13 +215,13 @@
 (add-test "insert-after with a single reference and single new node"
           #(do (reset)
                (append (xpath "//body") "<div id='ref'>Some content</div>")
-               (insert-after (nodes (id "ref")) "<p>after</p>")
+               (insert-after (nodes (by-id "ref")) "<p>after</p>")
                (assert (== 1 (count (nodes (xpath "//div[@id='ref']/following-sibling::*[text()='after']")))))))
 
 (add-test "insert-after with a single reference and multiple new nodes"
           #(do (reset)
                (append (xpath "//body") "<div id='ref'>Some content</div>")
-               (insert-after (nodes (id "ref")) "<p>after1</p><p>after2</p>")
+               (insert-after (nodes (by-id "ref")) "<p>after1</p><p>after2</p>")
                (assert (== 1 (count (nodes (xpath "//div[@id='ref']/following-sibling::*[text()='after1' and position()=1]")))))
                (assert (== 1 (count (nodes (xpath "//div[@id='ref']/following-sibling::*[text()='after2' and position()=2]")))))))
 
@@ -229,7 +229,7 @@
           #(do (reset)
                (append (xpath "//body") "<div class='ref' id='ref1'>content1</div>")
                (append (xpath "//body") "<div class='ref' id='ref2'>content2</div>")
-               (insert-after (nodes (css-class "ref")) "<p>after</p>")
+               (insert-after (nodes (by-class "ref")) "<p>after</p>")
                (assert (== 2 (count (nodes (xpath "//p")))))
                (assert (== 2 (count (nodes (xpath "//div[@id='ref1']/following-sibling::p")))))
                (assert (== 1 (count (nodes (xpath "//div[@id='ref2']/following-sibling::p")))))))

@@ -20,12 +20,12 @@
                                                        (map #(xml/selectSingleNode % expr)
                                                             (nodes base))))))))
 
-(defn id
+(defn by-id
   "Returns content containing a single node by looking up the given ID"
   [id]
   (dom/getElement id))
 
-(defn css-class
+(defn by-class
   "Returns content containing nodes which have the specified CSS class."
   [class-name]
   (reify DomContent
@@ -92,19 +92,31 @@
 
 ;;;;;;;;;;;;;;;;;;; TODO ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; Manipulation
-
-(defn wrap [content wrapping-content])
-(defn unwrap [content])
-
 ;; Attributes, classes & styles
-(defn style ([content property]) ([content property value]))
-(defn attr ([content attribute]) ([content attribute value]))
-(defn styles ([content]) ([content style-map]))
-(defn attrs ([content]) ([content attr-map]))
-(defn has-class [content])
-(defn add-class [content class])
-(defn remove-class [content class])
+
+(defn style [content name] "Gets the value of a CSS property. Assumes content will be a single node. Name may be a string or keyword.")
+
+(defn attr [content name] "Gets the value of an HTML attribute. Assumes content will be a single node. Name may be a stirng or keyword.")
+
+(defn set-style [content name value] "Sets the value of a CSS property for each node in the content. Name may be a string or keyword.")
+
+(defn set-attr [content name value] "Sets the value of an HTML property for each node in the content. Name may be a string or keyword.")
+
+(defn styles [content] "Returns a map of the CSS styles/values. Assumes content will be a single node. Style names are returned as keywords.")
+
+(defn attrs [content] "Returns a map of the HTML attributes/values. Assumes content will be asingle node. Property names are returned as keywords.")
+
+(defn set-styles [content styles] "Sets the specified CSS styles for each node in the content, given a map of names and values. Style names may be keywords or strings.")
+
+(defn set-attrs [content attrs] "Sets the specified CSS styles fpr each node in the content, given a map of names and values. Style names may be keywords or strings.")
+
+(defn has-class? [content class] "Returns true if the node has the specified CSS class.")
+
+(defn add-class [content class] "Adds the specified CSS class to each node in the content.")
+
+(defn remove-class [content class] "Removes the specified CSS class from each node in the content.")
+
+(defn classes [content] "Returns a seq of all the CSS classes currently applied to a node.")
 
 ;; Contents
 (defn text ([content]) ([content text]))

@@ -42,17 +42,17 @@
   [content]
   (map #(. % (cloneNode true)) (nodes content)))
 
-(declare apply-parent-child-with-cloning)
+(declare apply-with-cloning)
 
 (defn append
   "Given a parent and child contents, appends each of the children to all of the parents. If there is more than one node in the parent content, clones the children for the additional parents. Returns the parent content."
   [parent-content child-content]
-  (apply-parent-child-with-cloning dom/appendChild parent-content child-content))
+  (apply-with-cloning dom/appendChild parent-content child-content))
 
 (defn insert
   "Given a parent and child contents, appends each of the children to all of the parents at the specified index. If there is more than one node in the parent content, clones the children for the additional parents. Returns the parent content."
   [parent-content child-content idx]
-  (apply-parent-child-with-cloning #(dom/insertChildAt %1 %2 idx) parent-content child-content))
+  (apply-with-cloning #(dom/insertChildAt %1 %2 idx) parent-content child-content))
 
 (defn prepend
   "Given a parent and child contents, prepends each of the children to all of the parents. If there is more than one node in the parent content, clones the children for the additional parents. Returns the parent content."
@@ -62,17 +62,17 @@
 (defn insert-before
   "Given a content and some new content, inserts the new content immediately before the reference content. If there is more than one node in the reference content, clones the new content for each one."
   [content new-content]
-  (apply-parent-child-with-cloning #(dom/insertSiblingBefore %2 %1) content new-content))
+  (apply-with-cloning #(dom/insertSiblingBefore %2 %1) content new-content))
 
 (defn insert-after
   "Given a content and some new content, inserts the new content immediately after the reference content. If there is more than one node in the reference content, clones the new content for each one."
   [content new-content]
-  (apply-parent-child-with-cloning #(dom/insertSiblingAfter %2 %1) content new-content))
+  (apply-with-cloning #(dom/insertSiblingAfter %2 %1) content new-content))
 
 (defn swap
   "Given some old content and some new content, replaces the old content with new content. If there are multiple nodes in the old content, replaces each of them and clones the new content as necessary."
   [old-content new-content]
-  (apply-parent-child-with-cloning #(dom/replaceNode %2 %1) old-content new-content))
+  (apply-with-cloning #(dom/replaceNode %2 %1) old-content new-content))
 
 (defn detach
   "Removes all the nodes in a content from the DOM and returns them."
@@ -119,8 +119,8 @@
 
 ;;;;;;;;;;;;;;;;;;; private helper functions ;;;;;;;;;;;;;;;;;
 
-(defn- apply-parent-child-with-cloning
-  "Takes a two-arg function, a parent DomContent and a child DomContent. Applies the function for each parent / child combination. Uses clones of the children for each additional parent after the first."
+(defn- apply-with-cloning
+  "Takes a two-arg function, a reference DomContent and new DomContent. Applies the function for each reference / content combination. Uses clones of the new content for each additional parent after the first."
   [f parent-content child-content]
   (let [parents (nodes parent-content)]
     (when (not (empty? parents))

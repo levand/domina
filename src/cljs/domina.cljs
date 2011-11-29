@@ -108,9 +108,17 @@
   [content name]
   (.getAttribute (single-node content) (core/name name)))
 
-(defn set-style [content name value] "Sets the value of a CSS property for each node in the content. Name may be a string or keyword.")
+(defn set-style
+  "Sets the value of a CSS property for each node in the content. Name may be a string or keyword."
+  [content name value]
+  (doseq [n (nodes content)]
+    (style/setStyle n (core/name name) value)))
 
-(defn set-attr [content name value] "Sets the value of an HTML property for each node in the content. Name may be a string or keyword.")
+(defn set-attr
+  "Sets the value of an HTML property for each node in the content. Name may be a string or keyword."
+  [content name value]
+  (doseq [n (nodes content)]
+    (.setAttribute n (core/name name) value)))
 
 (defn styles [content] "Returns a map of the CSS styles/values. Assumes content will be a single node. Style names are returned as keywords.")
 

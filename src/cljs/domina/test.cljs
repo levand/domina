@@ -1,7 +1,7 @@
 (ns domina.test
   (:use [domina :only [nodes single-node xpath by-id by-class children clone append
                        detach destroy destroy-children insert insert-before
-                       insert-after swap style attr]])
+                       insert-after swap style attr set-style set-attr]])
   (:require [clojure.browser.repl :as repl]))
 
 (repl/connect "http://localhost:9000/repl")
@@ -273,6 +273,36 @@
                  (assert (== "42" (attr (xpath "//div") "height")))
                  (assert (== "42" (attr (xpath "//div") :height)))
                  (assert (nil? (attr (xpath "//div") :no-such-attr:c)))))
+
+(add-test "can set a css property on a single node"
+          #(do (reset)
+               (append (xpath "//body") "<div>1</div><div>2</div>")
+               (set-style (xpath "//div[1]") "color" "red")
+               (set-style (xpath "//div[2]") :color "green")
+               (assert (== "red" (style (xpath "//div[1]") "color")))
+               (assert (== "green" (style (xpath "//div[2]") "color")))))
+
+(add-test "can set a css property on multiple nodes"
+          #(do (reset)
+               (append (xpath "//body") "<div>1</div><div>2</div>")
+               (set-style (xpath "//div") "color" "red")
+               (assert (== "red" (style (xpath "//div[1]") "color")))
+               (assert (== "red" (style (xpath "//div[2]") "color")))))
+
+(add-test "can set a html attribute on a single node"
+          #(do (reset)
+               (append (xpath "//body") "<div>1</div><div>2</div>")
+               (set-attr (xpath "//div[1]") "width" 42)
+               (set-attr (xpath "//div[2]") :width 42)
+               (assert (== "42" (attr (xpath "//div[1]") "width")))
+               (assert (== "42" (attr (xpath "//div[2]") "width")))))
+
+(add-test "can set a html attribute on a single node"
+          #(do (reset)
+               (append (xpath "//body") "<div>1</div><div>2</div>")
+               (set-attr (xpath "//div") "width" 42)
+               (assert (== "42" (attr (xpath "//div[1]") "width")))
+               (assert (== "42" (attr (xpath "//div[2]") "width")))))
 
 (doseq [[name result] (run-tests)]
   (if (not (== result nil))

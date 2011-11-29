@@ -1,6 +1,9 @@
 (ns domina
   (:require [goog.dom :as dom]
+            [goog.style :as style]
             [goog.dom.xml :as xml]
+            [goog.string :as string]
+            [cljs.core :as core]
             [clojure.browser.repl :as repl]))
 
 ;;;;;;;;;;;;;;;;;;; Protocols ;;;;;;;;;;;;;;;;;
@@ -94,9 +97,16 @@
 
 ;; Attributes, classes & styles
 
-(defn style [content name] "Gets the value of a CSS property. Assumes content will be a single node. Name may be a string or keyword.")
+(defn style
+    "Gets the value of a CSS property. Assumes content will be a single node. Name may be a string or keyword. Returns nil if there is no value set for the style."
+    [content name]
+    (let [s (style/getStyle (single-node content) (core/name name))]
+      (if (not (string/isEmptySafe s)) s)))
 
-(defn attr [content name] "Gets the value of an HTML attribute. Assumes content will be a single node. Name may be a stirng or keyword.")
+(defn attr
+  "Gets the value of an HTML attribute. Assumes content will be a single node. Name may be a stirng or keyword. Returns nil if there is no value set for the style."
+  [content name]
+  (.getAttribute (single-node content) (core/name name)))
 
 (defn set-style [content name value] "Sets the value of a CSS property for each node in the content. Name may be a string or keyword.")
 

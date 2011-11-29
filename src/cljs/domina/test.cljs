@@ -1,7 +1,7 @@
 (ns domina.test
   (:use [domina :only [nodes single-node xpath by-id by-class children clone append
                        detach destroy destroy-children insert insert-before
-                       insert-after swap]])
+                       insert-after swap style attr]])
   (:require [clojure.browser.repl :as repl]))
 
 (repl/connect "http://localhost:9000/repl")
@@ -39,6 +39,8 @@
   (append (xpath "//body")
           "<div class='d1'><p class='p1'>P1</p><p class='p2'>P2</p>
 <p id='id1' class='p3'>P3</p>"))
+
+;;;;;; DOM Manipulation Tests
 
 (add-test "basic xpath selection"
           #(do (reset)
@@ -256,6 +258,21 @@
                (assert (== 0 (count (nodes (xpath "//p[@class='before']")))))
                (assert (== 4 (count (nodes (xpath "//p[@class='after']")))))))
 
+;;;;;; Style / Attribute tests
+
+(add-test "can retrieve a css property value"
+            #(do (reset)
+                 (append (xpath "//body") "<div style=\"background-color: maroon;\">Test</div>")
+                 (assert (== "maroon" (style (xpath "//div") "background-color")))
+                 (assert (== "maroon" (style (xpath "//div") :background-color)))
+                 (assert (nil? (style (xpath "//div") :no-such-style)))))
+
+(add-test "can retrieve an HTML attribute value"
+            #(do (reset)
+                 (append (xpath "//body") "<div height=\"42\">Content!</div>")
+                 (assert (== "42" (attr (xpath "//div") "height")))
+                 (assert (== "42" (attr (xpath "//div") :height)))
+                 (assert (nil? (attr (xpath "//div") :no-such-attr:c)))))
 
 (doseq [[name result] (run-tests)]
   (if (not (== result nil))

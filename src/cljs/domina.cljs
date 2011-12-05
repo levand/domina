@@ -1,7 +1,8 @@
 (ns domina
   (:require [goog.dom :as dom]
-            [goog.style :as style]
             [goog.dom.xml :as xml]
+            [goog.dom.classes :as classes]
+            [goog.style :as style]
             [goog.string :as string]
             [cljs.core :as core]
             [clojure.browser.repl :as repl]))
@@ -139,8 +140,8 @@
   (parse-style-attributes (attr content "style")))
 
 (defn attrs
-  [content]
   "Returns a map of the HTML attributes/values. Assumes content will be a single node. Attribute names are returned as keywords."
+  [content]
   (let [node (single-node content)
         attrs (. node attributes)]
     (reduce conj (map
@@ -149,22 +150,39 @@
                       (. attr nodeValue)})
                   (range (. attrs length))))))
 
-(defn set-styles [content styles] "Sets the specified CSS styles for each node in the content, given a map of names and values. Style names may be keywords or strings."
+(defn set-styles
+  "Sets the specified CSS styles for each node in the content, given a map of names and values. Style names may be keywords or strings."
+  [content styles]
   (doseq [[name value] styles]
     (set-style content name value)))
 
-(defn set-attrs [content attrs] "Sets the specified CSS styles fpr each node in the content, given a map of names and values. Style names may be keywords or strings."
+(defn set-attrs
+  "Sets the specified CSS styles fpr each node in the content, given a map of names and values. Style names may be keywords or strings."
+  [content attrs]
   (doseq [[name value] attrs]
     (set-attr content name value)))
 
+(defn has-class?
+  "Returns true if the node has the specified CSS class. Assumes content is a single node."
+  [content class]
+  (classes/has (single-node content) class))
 
-(defn has-class? [content class] "Returns true if the node has the specified CSS class.")
+(defn add-class
+  "Adds the specified CSS class to each node in the content."
+  [content class]
+  (doseq [node (nodes content)]
+    (classes/add node class)))
 
-(defn add-class [content class] "Adds the specified CSS class to each node in the content.")
+(defn remove-class
+  "Removes the specified CSS class from each node in the content."
+  [content class]
+  (doseq [node (nodes content)]
+    (classes/remove node class)))
 
-(defn remove-class [content class] "Removes the specified CSS class from each node in the content.")
-
-(defn classes [content] "Returns a seq of all the CSS classes currently applied to a node.")
+(defn classes
+  "Returns a seq of all the CSS classes currently applied to a node. Assumes content is a single node."
+  [content]
+  (seq (classes/get (single-node content))))
 
 ;; Contents
 (defn text ([content]) ([content text]))

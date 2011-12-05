@@ -2,7 +2,7 @@
   (:use [domina :only [nodes single-node xpath by-id by-class children clone append
                        detach destroy destroy-children insert insert-before
                        insert-after swap style attr set-style set-attr styles attrs
-                       set-styles set-attrs]])
+                       set-styles set-attrs has-class? add-class remove-class classes]])
   (:require [clojure.browser.repl :as repl]))
 
 (repl/connect "http://localhost:9000/repl")
@@ -356,6 +356,54 @@
                (assert (= "24" (attr (xpath "//div[1]") "height")))
                (assert (= "42" (attr (xpath "//div[2]") "width")))
                (assert (= "24" (attr (xpath "//div[2]") "height")))))
+
+(add-test "test the has-class? function"
+          #(do (reset)
+               (append (xpath "//body") "<div class='class1'>1</div>")
+               (append (xpath "//body") "<div class='class2'>2</div>")
+               (assert (= true (has-class? (xpath "//div[1]") "class1")))
+               (assert (= true (has-class? (xpath "//div[2]") "class2")))
+               (assert (= false (has-class? (xpath "//div[1]") "class2")))
+               (assert (= false (has-class? (xpath "//div[2]") "class1")))))
+
+(add-test "can add a CSS class to a single node"
+          #(do (reset)
+               (append (xpath "//body") "<div>1</div>")
+               (add-class (xpath "//div") "class1")
+               (add-class (xpath "//div") "class2")
+               (assert (= true (has-class? (xpath "//div") "class1")))
+               (assert (= true (has-class? (xpath "//div") "class2")))))
+
+(add-test "can add a CSS class to multiple nodes"
+          #(do (reset)
+               (append (xpath "//body") "<div>1</div><div>2</div>")
+               (add-class (xpath "//div") "class1")
+               (add-class (xpath "//div") "class2")
+               (assert (= true (has-class? (xpath "//div[1]") "class1")))
+               (assert (= true (has-class? (xpath "//div[2]") "class1")))
+               (assert (= true (has-class? (xpath "//div[1]") "class2")))
+               (assert (= true (has-class? (xpath "//div[2]") "class2")))))
+
+(add-test "can remove a CSS class from a single node"
+          #(do (reset)
+               (append (xpath "//body") "<div class='class1 class2'>1</div>")
+               (remove-class (xpath "//div") "class1")
+               (assert (= false (has-class? (xpath "//div") "class1")))
+               (assert (= true (has-class? (xpath "//div") "class2")))))
+
+(add-test "can remove a CSS class from a multiple nodes"
+          #(do (reset)
+               (append (xpath "//body") "<div class='class1 class2'>1</div><div class='class1 class2'>2</div>")
+               (remove-class (xpath "//div") "class1")
+               (assert (= false (has-class? (xpath "//div[1]") "class1")))
+               (assert (= true (has-class? (xpath "//div[1]") "class2")))
+               (assert (= false (has-class? (xpath "//div[2]") "class1")))
+               (assert (= true (has-class? (xpath "//div[2]") "class2")))))
+
+(add-test "can get a list of all css classes for a node"
+          #(do (reset)
+               (append (xpath "//body") "<div class='class1 class2 class3'>1</div>")
+               (assert (= ["class1" "class2" "class3"] (classes (xpath "//div"))))))
 
 (doseq [[name result] (run-tests)]
   (if (not (= result nil))

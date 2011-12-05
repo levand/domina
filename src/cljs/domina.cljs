@@ -149,11 +149,13 @@
                       (. attr nodeValue)})
                   (range (. attrs length))))))
 
-(defn set-styles [content styles] "Sets the specified CSS styles for each node in the content, given a map of names and values. Style names may be keywords or strings.")
+(defn set-styles [content styles] "Sets the specified CSS styles for each node in the content, given a map of names and values. Style names may be keywords or strings."
+  (doseq [[name value] styles]
+    (set-style content name value)))
 
-(defn set-attrs [content attrs] "Sets the specified CSS styles fpr each node in the content, given a map of names and values. Style names may be keywords or strings.")
-
-
+(defn set-attrs [content attrs] "Sets the specified CSS styles fpr each node in the content, given a map of names and values. Style names may be keywords or strings."
+  (doseq [[name value] attrs]
+    (set-attr content name value)))
 
 
 (defn has-class? [content class] "Returns true if the node has the specified CSS class.")

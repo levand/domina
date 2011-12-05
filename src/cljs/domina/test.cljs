@@ -1,7 +1,8 @@
 (ns domina.test
   (:use [domina :only [nodes single-node xpath by-id by-class children clone append
                        detach destroy destroy-children insert insert-before
-                       insert-after swap style attr set-style set-attr styles attrs]])
+                       insert-after swap style attr set-style set-attr styles attrs
+                       set-styles set-attrs]])
   (:require [clojure.browser.repl :as repl]))
 
 (repl/connect "http://localhost:9000/repl")
@@ -319,6 +320,42 @@
                (set-attr (xpath "//div") "height" 24)
                (assert (= {:width "42" :height "24"}
                           (attrs (xpath "//div"))))))
+
+(add-test "can set multiple CSS styles on a single node"
+          #(do (reset)
+               (append (xpath "//body") "<div>1</div>")
+               (set-styles (xpath "//div") {:color "red"
+                                            :background-color "black"})
+               (assert (= "black" (style (xpath "//div") "background-color")))
+               (assert (= "red" (style (xpath "//div") "color")))))
+
+(add-test "can set multiple CSS styles on multiple nodes"
+          #(do (reset)
+               (append (xpath "//body") "<div>1</div><div>2</div>")
+               (set-styles (xpath "//div") {:color "red"
+                                            :background-color "black"})
+               (assert (= "black" (style (xpath "//div[1]") "background-color")))
+               (assert (= "red" (style (xpath "//div[1]") "color")))
+               (assert (= "black" (style (xpath "//div[2]") "background-color")))
+               (assert (= "red" (style (xpath "//div[2]") "color")))))
+
+(add-test "can set multiple HTML attributes on a single node"
+          #(do (reset)
+               (append (xpath "//body") "<div>1</div>")
+               (set-attrs (xpath "//div") {:width 42
+                                           :height 24})
+               (assert (= "42" (attr (xpath "//div") "width")))
+               (assert (= "24" (attr (xpath "//div") "height")))))
+
+(add-test "can set multiple CSS styles on multiple nodes"
+          #(do (reset)
+               (append (xpath "//body") "<div>1</div><div>2</div>")
+               (set-attrs (xpath "//div") {:width 42
+                                           :height 24})
+               (assert (= "42" (attr (xpath "//div[1]") "width")))
+               (assert (= "24" (attr (xpath "//div[1]") "height")))
+               (assert (= "42" (attr (xpath "//div[2]") "width")))
+               (assert (= "24" (attr (xpath "//div[2]") "height")))))
 
 (doseq [[name result] (run-tests)]
   (if (not (= result nil))

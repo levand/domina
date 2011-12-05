@@ -120,13 +120,41 @@
   (doseq [n (nodes content)]
     (.setAttribute n (core/name name) value)))
 
-(defn styles [content] "Returns a map of the CSS styles/values. Assumes content will be a single node. Style names are returned as keywords.")
+;; We don't use the existing style/parseStyleAttributes because it camelcases everything.
+;; This uses the same technique, however.
+(defn parse-style-attributes
+  "Parses a CSS style string and returns the properties as a map."
+  [style]
+  (reduce (fn [acc pair]
+            (let [[k v] (. pair split #"\s*:\s*")]
+              (if (and k v)
+                (assoc acc (keyword (. k (toLowerCase))) v)
+                acc)))
+          {}
+          (. style split #"\s*;\s*")))
 
-(defn attrs [content] "Returns a map of the HTML attributes/values. Assumes content will be asingle node. Property names are returned as keywords.")
+(defn styles
+  "Returns a map of the CSS styles/values. Assumes content will be a single node. Style names are returned as keywords."
+  [content]
+  (parse-style-attributes (attr content "style")))
+
+(defn attrs
+  [content]
+  "Returns a map of the HTML attributes/values. Assumes content will be a single node. Attribute names are returned as keywords."
+  (let [node (single-node content)
+        attrs (. node attributes)]
+    (reduce conj (map
+                  #(let [attr (. attrs item %)]
+                     {(keyword (.. attr nodeName (toLowerCase)))
+                      (. attr nodeValue)})
+                  (range (. attrs length))))))
 
 (defn set-styles [content styles] "Sets the specified CSS styles for each node in the content, given a map of names and values. Style names may be keywords or strings.")
 
 (defn set-attrs [content attrs] "Sets the specified CSS styles fpr each node in the content, given a map of names and values. Style names may be keywords or strings.")
+
+
+
 
 (defn has-class? [content class] "Returns true if the node has the specified CSS class.")
 
@@ -140,12 +168,6 @@
 (defn text ([content]) ([content text]))
 (defn value ([content]) ([content value]))
 (defn html ([content]) ([content html]))
-
-;; Display
-(defn offset ([content]) ([content value]))
-(defn position ([content]) ([content value]))
-(defn width ([content]) ([content value]))
-(defn height ([content] ([content value])))
 
 ;;;;;;;;;;;;;;;;;;; private helper functions ;;;;;;;;;;;;;;;;;
 

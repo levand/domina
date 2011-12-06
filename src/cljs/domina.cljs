@@ -223,13 +223,6 @@
   (doseq [node (nodes content)]
     (set! (. node innerHTML) value)))
 
-;; CSS selectors
-
-(defn sel
-  "Returns content based on a CSS selector."
-  [expr])
-
-
 ;;;;;;;;;;;;;;;;;;; private helper functions ;;;;;;;;;;;;;;;;;
 
 (defn- apply-with-cloning

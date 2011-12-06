@@ -6,8 +6,9 @@
         :output-dir "build"
         :output-to "main.js"})
 
-(do
+(comment
+  (do
     (require '[cljs.repl :as repl])
     (require '[cljs.repl.browser :as browser])
     (def env (browser/repl-env))
-    (repl/repl env))
+    (repl/repl env)))

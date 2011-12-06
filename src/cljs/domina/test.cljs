@@ -1,6 +1,6 @@
 (ns domina.test
   (:use [domina :only [nodes single-node xpath by-id by-class children clone append
-                       detach destroy destroy-children insert insert-before
+                       prepend detach destroy destroy-children insert insert-before
                        insert-after swap style attr set-style set-attr styles attrs
                        set-styles set-attrs has-class? add-class remove-class classes
                        text set-text value set-value html set-html]])
@@ -63,7 +63,16 @@
           #(do (reset)
                (standard-fixture)
                (assert (= 3 (count (nodes (-> (xpath "//body/div[@class='d1']")
-                                               (xpath "p"))))))))
+                                              (xpath "p"))))))))
+
+(add-test "extended selection chaining"
+          #(do (reset)
+               (append (xpath "//body")
+                       "<div><p><span>some text</span></p><p><span>more text</span></p></div>")
+               (assert (= 2 (count (nodes (-> (xpath "//body")
+                                              (xpath "div")
+                                              (xpath "p")
+                                              (xpath "span"))))))))
 (add-test "advanced xpath"
           #(do (reset)
                (standard-fixture)
@@ -120,6 +129,20 @@
                        "some <span class='foo'>more</span> text")
                (assert (= 3 (count (nodes (xpath "//div/p/span[@class='foo']")))))
                (assert (= 9 (count (nodes (xpath "//div/p/text()")))))))
+
+(add-test "prepend a single child to a single parent"
+          #(do (reset)
+               (append (xpath "//body") "<div>2</div><div>3</div>")
+               (prepend (xpath "//body") "<div>1</div>")
+               (assert (= "1" (text (xpath "//body/div[1]"))))
+               (assert (= "2" (text (xpath "//body/div[2]"))))
+               (assert (= "3" (text (xpath "//body/div[3]"))))))
+
+(add-test "prepend a single child to multiple parents"
+          #(do (reset)
+               (append (xpath "//body") "<div><p>2</p></div><div><p>2</p></div>")
+               (prepend (xpath "//body/div") "<p>1</p>")
+               (assert (= 2 (count (nodes (xpath "//body/div/p[text()='2']")))))))
 
 (add-test "Insert a single child to a single parent"
           #(do (reset)

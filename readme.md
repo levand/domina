@@ -28,15 +28,21 @@ Entities which implement `DomContent` include:
 
 ### Selectors
 
-Selector functions take a string and return a `DomContent` representing matching nodes. For example, the expression `(xpath "//div[@class='foo']/p[2]")` returns a content containing all the paragraph elements in a document  which are the second children of divs with an class of 'foo'.
+Selector functions take a string and return a `DomContent` representing matching nodes. For example:
+
+```clojure
+(xpath "//div[@class='foo']/p[2]")
+```
+
+This epxression returns a content containing all the paragraph elements in a document  which are the second children of divs with an class of 'foo'.
 
 The `xpath` function also takes an optional first argument (which can be any `DomContent`) representing the context node(s) from which XPath evaluation will start. This allows selectors to be chained:
 
 ```clojure
-    (-> (xpath "//body")
-        (xpath "div")
-        (xpath "p")
-        (xpath "span"))
+(-> (xpath "//body")
+    (xpath "div")
+    (xpath "p")
+    (xpath "span"))
 ```
 
 Other selector functions include `by-id` and `by-class` which return a `DomContent` based on node id and node class, respectively.
@@ -45,34 +51,48 @@ Other selector functions include `by-id` and `by-class` which return a `DomConte
 
 Append a `<div>` to the body element:
 
-    (append (xpath "//body") "<div>Hello world!</div>")
+```clojure
+(append (xpath "//body") "<div>Hello world!</div>")
+```
 
 Move a `<div>` from the end of the document to the beginning:
 
-    (prepend (xpath "//body") 
-             (detach (xpath "//body/div[last()]")))
+```clojure
+(prepend (xpath "//body") 
+         (detach (xpath "//body/div[last()]")))
+```
 
 Add a CSS class on a node with a particular id:
 
-    (add-class (by-id "foobar")
+```clojure
+(add-class (by-id "foobar")
+```
 
 Delete all nodes of a given class:
 
-    (delete (by-class "foo"))
+```clojure
+(delete (by-class "foo"))
+```
 
 Set some colors on all child nodes of `<div>` elements with a class of 'foo':
 
-    (set-styles (xpath "//div[@class='foo']/*")
-                {:background-color "black"
-                 :color "white})
+```clojure
+(set-styles (xpath "//div[@class='foo']/*")
+            {:background-color "black"
+             :color "white})
+```
 
 Set the text content of a node:
 
-    (set-text (by-id "foobar") "Lorem ipsum...")
+```clojure
+(set-text (by-id "foobar") "Lorem ipsum...")
+```
 
 Get the values of all `<input>` elements on the page:
 
-    (map value (nodes (xpath "//input")))
+```clojure
+(map value (nodes (xpath "//input")))
+```
 
 For examples of every currently implemented function, see the `test.cljs` file in the code repository, which exercises each function in unit tests against a DOM page. The `test.html` file loads and runs `test.cljs` in the context of the DOM.
 

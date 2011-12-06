@@ -79,7 +79,7 @@ Set some colors on all child nodes of `<div>` elements with a class of 'foo':
 ```clojure
 (set-styles (xpath "//div[@class='foo']/*")
             {:background-color "black"
-             :color "white})
+             :color "white"})
 ```
 
 Set the text content of a node:

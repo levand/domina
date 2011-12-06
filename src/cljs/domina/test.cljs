@@ -3,7 +3,7 @@
                        detach destroy destroy-children insert insert-before
                        insert-after swap style attr set-style set-attr styles attrs
                        set-styles set-attrs has-class? add-class remove-class classes
-                       text set-text value set-value]])
+                       text set-text value set-value html set-html]])
   (:require [clojure.browser.repl :as repl]))
 
 (repl/connect "http://localhost:9000/repl")
@@ -447,6 +447,23 @@
                (set-value (xpath "//input") "Test Value")
                (assert (= "Test Value" (value (xpath "//input[1]"))))
                (assert (= "Test Value" (value (xpath "//input[2]"))))))
+
+(add-test "can get a node's innerHTML"
+          #(do (reset)
+               (append (xpath "//body") "<div><p class='foobar'>some text</p></div>")
+               (assert (= "<p class=\"foobar\">some text</p>" (html (xpath "//div"))))))
+
+(add-test "can set a node's innerHTML"
+          #(do (reset)
+               (append (xpath "//body") "<div></div>")
+               (set-html (xpath "//div") "<p class='foobar'>some text</p>")
+               (assert (= 1 (count (nodes (xpath "//body/div/p[@class='foobar']")))))))
+
+(add-test "can set multiple node's innerHTML"
+          #(do (reset)
+               (append (xpath "//body") "<div></div><div></div>")
+               (set-html (xpath "//div") "<p class='foobar'>some text</p>")
+               (assert (= 2 (count (nodes (xpath "//body/div/p[@class='foobar']")))))))
 
 (doseq [[name result] (run-tests)]
   (if (not (= result nil))

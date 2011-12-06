@@ -214,11 +214,14 @@
 
 (defn html
   "Returns the innerHTML of a node. Assumes content is a single node."
-  [content])
+  [content]
+  (. (single-node content) innerHTML))
 
 (defn set-html
   "Sets the innerHTML value for all the nodes in the given content."
-  [content value])
+  [content value]
+  (doseq [node (nodes content)]
+    (set! (. node innerHTML) value)))
 
 ;; CSS selectors
 

@@ -2,6 +2,7 @@
   (:require [goog.dom :as dom]
             [goog.dom.xml :as xml]
             [goog.dom.classes :as classes]
+            [goog.dom.forms :as forms]
             [goog.style :as style]
             [goog.string :as string]
             [cljs.core :as core]
@@ -202,11 +203,14 @@
 
 (defn value
   "Returns the value of a node (presumably a form field). Assumes content is a single node."
-  [content])
+  [content]
+  (forms/getValue (single-node content)))
 
 (defn set-value
   "Sets the value of all the nodes (presumably form fields) in the given content."
-  [content value])
+  [content value]
+  (doseq [node (nodes content)]
+    (forms/setValue node value)))
 
 (defn html
   "Returns the innerHTML of a node. Assumes content is a single node."

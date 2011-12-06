@@ -3,7 +3,7 @@
                        detach destroy destroy-children insert insert-before
                        insert-after swap style attr set-style set-attr styles attrs
                        set-styles set-attrs has-class? add-class remove-class classes
-                       text set-text]])
+                       text set-text value set-value]])
   (:require [clojure.browser.repl :as repl]))
 
 (repl/connect "http://localhost:9000/repl")
@@ -429,6 +429,24 @@
                (set-text (xpath "//p") "Hello world!")
                (assert (= "Hello world!" (text (xpath "//p[1]"))))
                (assert (= "Hello world!" (text (xpath "//p[2]"))))))
+
+(add-test "can get a form field value"
+          #(do (reset)
+               (append (xpath "//body") "<form><input type='text' name='test' value='Test Value'></input></form>")
+               (assert (= "Test Value" (value (xpath "//input"))))))
+
+(add-test "can set a form field value"
+          #(do (reset)
+               (append (xpath "//body") "<form><input type='text' name='test'></input></form>")
+               (set-value (xpath "//input") "Test Value")
+               (assert (= "Test Value" (value (xpath "//input"))))))
+
+(add-test "can set multiple form field values"
+          #(do (reset)
+               (append (xpath "//body") "<form><input type='text' name='test'></input><input type='text' name='test'></input></form>")
+               (set-value (xpath "//input") "Test Value")
+               (assert (= "Test Value" (value (xpath "//input[1]"))))
+               (assert (= "Test Value" (value (xpath "//input[2]"))))))
 
 (doseq [[name result] (run-tests)]
   (if (not (= result nil))

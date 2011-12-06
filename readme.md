@@ -32,10 +32,12 @@ Selector functions take a string and return a `DomContent` representing matching
 
 The `xpath` function also takes an optional first argument (which can be any `DomContent`) representing the context node(s) from which XPath evaluation will start. This allows selectors to be chained:
 
+```clojure
     (-> (xpath "//body")
         (xpath "div")
         (xpath "p")
         (xpath "span"))
+```
 
 Other selector functions include `by-id` and `by-class` which return a `DomContent` based on node id and node class, respectively.
 

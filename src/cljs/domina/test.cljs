@@ -2,7 +2,8 @@
   (:use [domina :only [nodes single-node xpath by-id by-class children clone append
                        detach destroy destroy-children insert insert-before
                        insert-after swap style attr set-style set-attr styles attrs
-                       set-styles set-attrs has-class? add-class remove-class classes]])
+                       set-styles set-attrs has-class? add-class remove-class classes
+                       text set-text]])
   (:require [clojure.browser.repl :as repl]))
 
 (repl/connect "http://localhost:9000/repl")
@@ -404,6 +405,30 @@
           #(do (reset)
                (append (xpath "//body") "<div class='class1 class2 class3'>1</div>")
                (assert (= ["class1" "class2" "class3"] (classes (xpath "//div"))))))
+
+(add-test "can retrieve the text value of a node with normalization."
+          #(do (reset)
+               (append (xpath "//body") "<p>\n\n   Some text.  \n  </p>")
+               (assert (= "Some text. " (text (xpath "//p"))))
+               (assert (= "Some text. " (text (xpath "//p") true)))))
+
+(add-test "can retrieve the text value of a node without normalization."
+          #(do (reset)
+               (append (xpath "//body") "<p>\n\n   Some text.  \n  </p>")
+               (assert (= "\n\n   Some text.  \n  " (text (xpath "//p") false)))))
+
+(add-test "can set text on a single node"
+          #(do (reset)
+               (append (xpath "//body") "<p></p>")
+               (set-text (xpath "//p") "Hello world!")
+               (assert (= "Hello world!" (text (xpath "//p"))))))
+
+(add-test "can set text on a multiple nodes"
+          #(do (reset)
+               (append (xpath "//body") "<p></p><p></p>")
+               (set-text (xpath "//p") "Hello world!")
+               (assert (= "Hello world!" (text (xpath "//p[1]"))))
+               (assert (= "Hello world!" (text (xpath "//p[2]"))))))
 
 (doseq [[name result] (run-tests)]
   (if (not (= result nil))

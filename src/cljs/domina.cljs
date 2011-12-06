@@ -185,9 +185,43 @@
   (seq (classes/get (single-node content))))
 
 ;; Contents
-(defn text ([content]) ([content text]))
-(defn value ([content]) ([content value]))
-(defn html ([content]) ([content html]))
+
+(defn text
+  "Returns the text of a node. Assumes content is a single node. Optional 'normalize' paramter indicates whether to collapse whitespace and normalize line breaks (defaults to true). Does not return internal markup."
+  ([content] (text content true))
+  ([content normalize]
+     (if normalize
+       (dom/getTextContent (single-node content))
+       (dom/getRawTextContent (single-node content)))))
+
+(defn set-text
+  "Sets the text value of all the nodes in the given content."
+  [content value]
+  (doseq [node (nodes content)]
+    (dom/setTextContent node value)))
+
+(defn value
+  "Returns the value of a node (presumably a form field). Assumes content is a single node."
+  [content])
+
+(defn set-value
+  "Sets the value of all the nodes (presumably form fields) in the given content."
+  [content value])
+
+(defn html
+  "Returns the innerHTML of a node. Assumes content is a single node."
+  [content])
+
+(defn set-html
+  "Sets the innerHTML value for all the nodes in the given content."
+  [content value])
+
+;; CSS selectors
+
+(defn sel
+  "Returns content based on a CSS selector."
+  [expr])
+
 
 ;;;;;;;;;;;;;;;;;;; private helper functions ;;;;;;;;;;;;;;;;;
 

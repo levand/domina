@@ -15,7 +15,7 @@ However, a jQuery-esqe, functional approach to DOM manipulation is extremely wel
 ## Key Concepts
 
 ### Content
-Most of Domina's functions accept or return *content*, an abstraction that represents one or more DOM nodes, rather than DOM nodes themselves. Content is implemented as a protocol (`DomContent`) which responds to two methods, `nodes` and `single-node`. `nodes` returns a sequence of DOM nodes, `single-node` returns a single DOM node (usually the first one, if the content contains multiple nodes.
+Most of Domina's functions accept or return *content*, an abstraction that represents one or more DOM nodes, rather than DOM nodes themselves. Content is implemented as a protocol (`DomContent`) which responds to two methods, `nodes` and `single-node`. `nodes` returns a sequence of DOM nodes, `single-node` returns a single DOM node (usually the first one), if the content contains multiple nodes.
 
 Entities which implement `DomContent` include:
 

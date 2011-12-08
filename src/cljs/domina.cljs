@@ -52,32 +52,38 @@
 (defn append!
   "Given a parent and child contents, appends each of the children to all of the parents. If there is more than one node in the parent content, clones the children for the additional parents. Returns the parent content."
   [parent-content child-content]
-  (apply-with-cloning dom/appendChild parent-content child-content))
+  (apply-with-cloning dom/appendChild parent-content child-content)
+  parent-content)
 
 (defn insert!
   "Given a parent and child contents, appends each of the children to all of the parents at the specified index. If there is more than one node in the parent content, clones the children for the additional parents. Returns the parent content."
   [parent-content child-content idx]
-  (apply-with-cloning #(dom/insertChildAt %1 %2 idx) parent-content child-content))
+  (apply-with-cloning #(dom/insertChildAt %1 %2 idx) parent-content child-content)
+  parent-content)
 
 (defn prepend!
   "Given a parent and child contents, prepends each of the children to all of the parents. If there is more than one node in the parent content, clones the children for the additional parents. Returns the parent content."
   [parent-content child-content]
-  (insert! parent-content child-content 0))
+  (insert! parent-content child-content 0)
+  parent-content)
 
 (defn insert-before!
   "Given a content and some new content, inserts the new content immediately before the reference content. If there is more than one node in the reference content, clones the new content for each one."
   [content new-content]
-  (apply-with-cloning #(dom/insertSiblingBefore %2 %1) content new-content))
+  (apply-with-cloning #(dom/insertSiblingBefore %2 %1) content new-content)
+  content)
 
 (defn insert-after!
   "Given a content and some new content, inserts the new content immediately after the reference content. If there is more than one node in the reference content, clones the new content for each one."
   [content new-content]
-  (apply-with-cloning #(dom/insertSiblingAfter %2 %1) content new-content))
+  (apply-with-cloning #(dom/insertSiblingAfter %2 %1) content new-content)
+  content)
 
 (defn swap-content!
   "Given some old content and some new content, replaces the old content with new content. If there are multiple nodes in the old content, replaces each of them and clones the new content as necessary."
   [old-content new-content]
-  (apply-with-cloning #(dom/replaceNode %2 %1) old-content new-content))
+  (apply-with-cloning #(dom/replaceNode %2 %1) old-content new-content)
+  old-content)
 
 (defn detach
   "Removes all the nodes in a content from the DOM and returns them."
@@ -157,13 +163,15 @@
   "Sets the specified CSS styles for each node in the content, given a map of names and values. Style names may be keywords or strings."
   [content styles]
   (doseq [[name value] styles]
-    (set-style! content name value)))
+    (set-style! content name value))
+  content)
 
 (defn set-attrs!
   "Sets the specified CSS styles fpr each node in the content, given a map of names and values. Style names may be keywords or strings."
   [content attrs]
   (doseq [[name value] attrs]
-    (set-attr! content name value)))
+    (set-attr! content name value))
+  content)
 
 (defn has-class?
   "Returns true if the node has the specified CSS class. Assumes content is a single node."
@@ -174,13 +182,15 @@
   "Adds the specified CSS class to each node in the content."
   [content class]
   (doseq [node (nodes content)]
-    (classes/add node class)))
+    (classes/add node class))
+  content)
 
 (defn remove-class!
   "Removes the specified CSS class from each node in the content."
   [content class]
   (doseq [node (nodes content)]
-    (classes/remove node class)))
+    (classes/remove node class))
+  content)
 
 (defn classes
   "Returns a seq of all the CSS classes currently applied to a node. Assumes content is a single node."
@@ -201,7 +211,8 @@
   "Sets the text value of all the nodes in the given content."
   [content value]
   (doseq [node (nodes content)]
-    (dom/setTextContent node value)))
+    (dom/setTextContent node value))
+  content)
 
 (defn value
   "Returns the value of a node (presumably a form field). Assumes content is a single node."
@@ -212,7 +223,8 @@
   "Sets the value of all the nodes (presumably form fields) in the given content."
   [content value]
   (doseq [node (nodes content)]
-    (forms/setValue node value)))
+    (forms/setValue node value))
+  content)
 
 (defn html
   "Returns the innerHTML of a node. Assumes content is a single node."
@@ -223,7 +235,8 @@
   "Sets the innerHTML value for all the nodes in the given content."
   [content value]
   (doseq [node (nodes content)]
-    (set! (. node innerHTML) value)))
+    (set! (. node innerHTML) value))
+  content)
 
 ;;;;;;;;;;;;;;;;;;; private helper functions ;;;;;;;;;;;;;;;;;
 

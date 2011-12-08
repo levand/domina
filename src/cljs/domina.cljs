@@ -20,10 +20,10 @@
   "Returns content based on an xpath expression. Takes an optional content as a base; if none is given, uses js/document as a base."
   ([expr] (xpath js/document expr))
   ([base expr] (reify DomContent
-                      (nodes [_] (mapcat #(xml/selectNodes % expr) (nodes base)))
-                      (single-node [_] (first (filter (complement nil?)
-                                                       (map #(xml/selectSingleNode % expr)
-                                                            (nodes base))))))))
+                 (nodes [_] (mapcat #(xml/selectNodes % expr) (nodes base)))
+                 (single-node [_] (first (filter (complement nil?)
+                                                 (map #(xml/selectSingleNode % expr)
+                                                      (nodes base))))))))
 
 (defn by-id
   "Returns content containing a single node by looking up the given ID"
@@ -34,8 +34,8 @@
   "Returns content containing nodes which have the specified CSS class."
   [class-name]
   (reify DomContent
-         (nodes [_] (dom/getElementsByClass class-name))
-         (single-node [_] (dom/getElementByClass class-name))))
+    (nodes [_] (dom/getElementsByClass class-name))
+    (single-node [_] (dom/getElementByClass class-name))))
 
 (defn children
   "Gets all the child nodes of the elements in a content. Same as (xpath content '*') but more efficient."
@@ -100,27 +100,29 @@
 ;; Attributes, classes & styles
 
 (defn style
-    "Gets the value of a CSS property. Assumes content will be a single node. Name may be a string or keyword. Returns nil if there is no value set for the style."
-    [content name]
-    (let [s (style/getStyle (single-node content) (core/name name))]
-      (if (not (string/isEmptySafe s)) s)))
+  "Gets the value of a CSS property. Assumes content will be a single node. Name may be a string or keyword. Returns nil if there is no value set for the style."
+  [content name]
+  (let [s (style/getStyle (single-node content) (core/name name))]
+    (if (not (string/isEmptySafe s)) s)))
 
 (defn attr
   "Gets the value of an HTML attribute. Assumes content will be a single node. Name may be a stirng or keyword. Returns nil if there is no value set for the style."
   [content name]
   (.getAttribute (single-node content) (core/name name)))
 
-(defn set-style
+(defn set-style!
   "Sets the value of a CSS property for each node in the content. Name may be a string or keyword."
   [content name value]
   (doseq [n (nodes content)]
-    (style/setStyle n (core/name name) value)))
+    (style/setStyle n (core/name name) value))
+  content)
 
-(defn set-attr
+(defn set-attr!
   "Sets the value of an HTML property for each node in the content. Name may be a string or keyword."
   [content name value]
   (doseq [n (nodes content)]
-    (.setAttribute n (core/name name) value)))
+    (.setAttribute n (core/name name) value))
+  content)
 
 ;; We don't use the existing style/parseStyleAttributes because it camelcases everything.
 ;; This uses the same technique, however.
@@ -266,9 +268,9 @@
 
   IIndexed
   (-nth ([nodelist n] (. nodelist (item n)))
-        ([nodelist n not-found] (if (<= (. nodelist length) n)
-                                  not-found
-                                  (nth nodelist n))))
+    ([nodelist n not-found] (if (<= (. nodelist length) n)
+                              not-found
+                              (nth nodelist n))))
   ISeqable
   (-seq [nodelist] (lazy-nodelist nodelist)))
 
@@ -278,9 +280,8 @@
 
   IIndexed
   (-nth ([coll n] (. coll (item n)))
-        ([coll n not-found] (if (<= (. coll length) n)
-                                  not-found
-                                  (nth coll n))))
+    ([coll n not-found] (if (<= (. coll length) n)
+                          not-found
+                          (nth coll n))))
   ISeqable
   (-seq [coll] (lazy-nodelist coll)))
-

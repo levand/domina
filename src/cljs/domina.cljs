@@ -246,7 +246,7 @@
   (let [parents (nodes parent-content)]
     (when (not (empty? parents))
       (doseq [child (nodes child-content)]
-          (f (first parents) child))
+        (f (first parents) child))
       (doseq [parent (rest parents)
               child (nodes (clone child-content))]
         (f parent child)))))

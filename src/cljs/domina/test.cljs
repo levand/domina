@@ -493,4 +493,3 @@
     (js/alert (str "Test \"" name "\" failed with error: [" result "]"))))
 
 (js/alert "Tests completed.")
-

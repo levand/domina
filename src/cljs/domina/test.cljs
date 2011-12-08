@@ -1,12 +1,14 @@
 (ns domina.test
   (:use [domina :only [nodes single-node xpath by-id by-class children clone append!
-                       prepend! detach destroy! destroy-children! insert! insert-before!
+                       prepend! detach! destroy! destroy-children! insert! insert-before!
                        insert-after! swap-content! style attr set-style! set-attr! styles attrs
                        set-styles! set-attrs! has-class? add-class! remove-class! classes
                        text set-text! value set-value! html set-html!]])
   (:require [clojure.browser.repl :as repl]))
 
-(repl/connect "http://localhost:9000/repl")
+(comment
+  (repl/connect "http://localhost:9000/repl")
+)
 
 (js* "
   window.tryfn = function(f) {
@@ -196,7 +198,7 @@
 (add-test "detach and reattach a single node"
           #(do (reset)
                (standard-fixture)
-               (let [n (detach (xpath "//p[@class='p3']"))]
+               (let [n (detach! (xpath "//p[@class='p3']"))]
                  (assert (= 0 (count (nodes (xpath "//p[@class='p3']")))))
                  (append! (xpath "//div[@class='d1']") n)
                  (assert (= 1 (count (nodes (xpath "//p[@class='p3']"))))))))
@@ -204,7 +206,7 @@
 (add-test "detach and reattach multiple nodes"
           #(do (reset)
                (standard-fixture)
-               (let [n (detach (xpath "//div[@class='d1']/p"))]
+               (let [n (detach! (xpath "//div[@class='d1']/p"))]
                  (assert (= 0 (count (nodes (xpath "//div[@class='d1']/p")))))
                  (append! (xpath "//div[@class='d1']") n)
                  (assert (= 3 (count (nodes (xpath "//div[@class='d1']/p"))))))))

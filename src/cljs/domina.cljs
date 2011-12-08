@@ -85,7 +85,7 @@
   (apply-with-cloning #(dom/replaceNode %2 %1) old-content new-content)
   old-content)
 
-(defn detach
+(defn detach!
   "Removes all the nodes in a content from the DOM and returns them."
   [content]
   (doall (map dom/removeNode (nodes content))))

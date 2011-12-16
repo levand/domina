@@ -11,7 +11,7 @@
 )
 
 (js* "
-  window.tryfn = function(f) {
+  window['tryfn'] = function(f) {
     try {
       return f.call();
     } catch (e) {

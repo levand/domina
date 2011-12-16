@@ -1,3 +1,4 @@
 .repl
 build
-main.js
+public/build_no_opt
+public/test_*.js

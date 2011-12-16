@@ -8,7 +8,7 @@
 
 (comment
   (repl/connect "http://localhost:9000/repl")
-)
+  )
 
 (js* "
   window['tryfn'] = function(f) {
@@ -490,8 +490,26 @@
                (set-html! (xpath "//div") "<p class='foobar'>some text</p>")
                (assert (= 2 (count (nodes (xpath "//body/div/p[@class='foobar']")))))))
 
-(doseq [[name result] (run-tests)]
-  (if (not (= result nil))
-    (js/alert (str "Test \"" name "\" failed with error: [" result "]"))))
+(defn report
+  [test-results]
+  (reset)
+  (doseq [[name result] test-results]
+    (let [result-div (single-node "<div class='test-result'></div>")]
+      (set-text! result-div name)
+      (if (not (= result nil))
+        (do
+          (add-class! result-div "failed")
+          (append! result-div (str "<div class='message'>" result "</div>")))
+        (add-class! result-div "passed"))
+      (append! (xpath "//body") result-div)))
+  (prepend! (xpath "//body") "<div id='test-summary'>ran <span id='total-tests'></span> tests with <span id='total-failures'></span> failures")
+  (set-text! (by-id "total-tests") (count test-results))
+  (let [failure-count (count (filter (complement nil?) (map second test-results)))]
+    (set-text! (by-id "total-failures") failure-count)
+    (if (= 0 failure-count)
+      (add-class! (by-id "test-summary") "passed")
+      (add-class! (by-id "test-summary") "failed"))))
 
-(js/alert "Tests completed.")
+
+(def test-results (doall (run-tests)))
+(report test-results)

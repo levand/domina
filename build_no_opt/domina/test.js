@@ -89,6 +89,14 @@ if(cljs.core.truth_(cljs.core.instance_QMARK_.call(null,Element,domina.single_no
 {throw (new Error(cljs.core.str.call(null,"Assert failed: ",cljs.core.pr_str.call(null,cljs.core.list("﷑'instance?","﷑'js/Element",cljs.core.list("﷑'single-node",cljs.core.list("﷑'xpath","//p")))))));
 }
 }));
+domina.test.add_test.call(null,"always fails",(function (){
+domina.test.reset.call(null);
+if(cljs.core.truth_(cljs.core._EQ_.call(null,5,(2 + 2))))
+{return null;
+} else
+{throw (new Error(cljs.core.str.call(null,"Assert failed: ",cljs.core.pr_str.call(null,cljs.core.list("﷑'=",5,cljs.core.list("﷑'+",2,2))))));
+}
+}));
 domina.test.add_test.call(null,"xpath selection with class specification",(function (){
 domina.test.reset.call(null);
 domina.test.standard_fixture.call(null);

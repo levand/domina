@@ -2,3 +2,4 @@
 build
 public/build_no_opt
 public/test_*.js
+domina-tests

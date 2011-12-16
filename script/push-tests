@@ -1,0 +1,23 @@
+#!/bin/bash
+
+# Commits the contents of the /public directory to the domina-tests repo.
+# This allows the compiled artifact to be hosted on github for easy testing, without polluting
+# the core repository with build artifacts.
+
+# Checks out the domina-tests repo to a temp file, removing the need to manually maintain a checkout.
+
+# Assumes the user running this script has privileges to the domina-tests repository.
+
+PUBLIC_DIR=`dirname $0`/../public
+
+TEMP_DIR=`mktemp -d -t domina-test`
+git clone git@github.com:levand/domina.git $TEMP_DIR
+cp -r $PUBLIC_DIR/* $TEMP_DIR/.
+cd $TEMP_DIR
+git add .
+git add -u
+git commit -m "Commit build artifacts (`date +%s`)"
+git push
+cd $TEMP_DIR/..
+rm -rf $TEMP_DIR
+

@@ -1,0 +1,44 @@
+#test-summary {
+    font-size: 1.5em;
+    font-weight: bold;
+    text-align: center;
+}
+
+#test-summary.failed {
+    color: darkred;
+}
+
+#test-summary.passed {
+    color: darkgreen;
+}
+
+#test-summary.passed {
+    color: darkgreen;
+}
+
+.test-result {
+    margin: 0.5em;
+    padding: 0.5em;
+    border: 1px solid black;
+    border-radius: 7px;
+}
+
+.test-result.passed {
+    background-color: lightgreen;
+    color: darkgreen;
+    border-color: darkgreen;
+}
+
+.test-result.failed {
+    background-color: pink;
+    color: darkred;
+    border-color: darkred;
+}
+
+.message {
+    background-color: white;
+    border: 1px solid;
+    border-radius: 7px;
+    padding: 0.5em;
+    margin-top: 0.5em;
+}

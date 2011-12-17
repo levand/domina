@@ -1,16 +1,6 @@
 #!/bin/sh
 
-CP=''
-CP=$CP:$CLOJURESCRIPT_HOME/lib/*
-CP=$CP:$CLOJURESCRIPT_HOME/src/clj
-CP=$CP:$CLOJURESCRIPT_HOME/src/cljs
+. `dirname $0`/set-classpath
 
-PROJECT_DIR=`dirname $0`\..
-
-CP=$CP:$PROJECT_DIR/src/cljs
-CP=$CP:$PROJECT_DIR/src/clj
-CP=$CP:$PROJECT_DIR/test/cljs
-CP=$CP:$PROJECT_DIR/test/clj
-
-java -server -cp $CP clojure.main -i `dirname $0`/compile.clj
+java -server clojure.main -i `dirname $0`/compile.clj
 

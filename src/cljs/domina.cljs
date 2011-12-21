@@ -28,14 +28,14 @@
 (defn by-id
   "Returns content containing a single node by looking up the given ID"
   [id]
-  (dom/getElement id))
+  (dom/getElement (core/name id)))
 
 (defn by-class
   "Returns content containing nodes which have the specified CSS class."
   [class-name]
   (reify DomContent
-    (nodes [_] (dom/getElementsByClass class-name))
-    (single-node [_] (dom/getElementByClass class-name))))
+    (nodes [_] (dom/getElementsByClass (core/name class-name)))
+    (single-node [_] (dom/getElementByClass (core/name class-name)))))
 
 (defn children
   "Gets all the child nodes of the elements in a content. Same as (xpath content '*') but more efficient."

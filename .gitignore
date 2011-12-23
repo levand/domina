@@ -4,3 +4,4 @@ public/build_no_opt
 public/test_*.js
 domina-tests
 lib/*.jar
+script/run-tests

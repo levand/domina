@@ -481,67 +481,6 @@ goog.base = function(me, opt_methodName, var_args) {
 goog.scope = function(fn) {
   fn.call(goog.global)
 };
-goog.provide("goog.disposable.IDisposable");
-goog.disposable.IDisposable = function() {
-};
-goog.disposable.IDisposable.prototype.dispose;
-goog.disposable.IDisposable.prototype.isDisposed;
-goog.provide("goog.Disposable");
-goog.provide("goog.dispose");
-goog.require("goog.disposable.IDisposable");
-goog.Disposable = function() {
-  if(goog.Disposable.ENABLE_MONITORING) {
-    goog.Disposable.instances_[goog.getUid(this)] = this
-  }
-};
-goog.Disposable.ENABLE_MONITORING = false;
-goog.Disposable.instances_ = {};
-goog.Disposable.getUndisposedObjects = function() {
-  var ret = [];
-  for(var id in goog.Disposable.instances_) {
-    if(goog.Disposable.instances_.hasOwnProperty(id)) {
-      ret.push(goog.Disposable.instances_[Number(id)])
-    }
-  }
-  return ret
-};
-goog.Disposable.clearUndisposedObjects = function() {
-  goog.Disposable.instances_ = {}
-};
-goog.Disposable.prototype.disposed_ = false;
-goog.Disposable.prototype.isDisposed = function() {
-  return this.disposed_
-};
-goog.Disposable.prototype.getDisposed = goog.Disposable.prototype.isDisposed;
-goog.Disposable.prototype.dispose = function() {
-  if(!this.disposed_) {
-    this.disposed_ = true;
-    this.disposeInternal();
-    if(goog.Disposable.ENABLE_MONITORING) {
-      var uid = goog.getUid(this);
-      if(!goog.Disposable.instances_.hasOwnProperty(uid)) {
-        throw Error(this + " did not call the goog.Disposable base " + "constructor or was disposed of after a clearUndisposedObjects " + "call");
-      }
-      delete goog.Disposable.instances_[uid]
-    }
-  }
-};
-goog.Disposable.prototype.disposeInternal = function() {
-};
-goog.dispose = function(obj) {
-  if(obj && typeof obj.dispose == "function") {
-    obj.dispose()
-  }
-};
-goog.provide("goog.debug.Error");
-goog.debug.Error = function(opt_msg) {
-  this.stack = (new Error).stack || "";
-  if(opt_msg) {
-    this.message = String(opt_msg)
-  }
-};
-goog.inherits(goog.debug.Error, Error);
-goog.debug.Error.prototype.name = "CustomError";
 goog.provide("goog.string");
 goog.provide("goog.string.Unicode");
 goog.string.Unicode = {NBSP:"\u00a0"};
@@ -955,6 +894,192 @@ goog.string.toSelectorCaseCache_ = {};
 goog.string.toSelectorCase = function(str) {
   return goog.string.toSelectorCaseCache_[str] || (goog.string.toSelectorCaseCache_[str] = String(str).replace(/([A-Z])/g, "-$1").toLowerCase())
 };
+goog.provide("goog.userAgent.jscript");
+goog.require("goog.string");
+goog.userAgent.jscript.ASSUME_NO_JSCRIPT = false;
+goog.userAgent.jscript.init_ = function() {
+  var hasScriptEngine = "ScriptEngine" in goog.global;
+  goog.userAgent.jscript.DETECTED_HAS_JSCRIPT_ = hasScriptEngine && goog.global["ScriptEngine"]() == "JScript";
+  goog.userAgent.jscript.DETECTED_VERSION_ = goog.userAgent.jscript.DETECTED_HAS_JSCRIPT_ ? goog.global["ScriptEngineMajorVersion"]() + "." + goog.global["ScriptEngineMinorVersion"]() + "." + goog.global["ScriptEngineBuildVersion"]() : "0"
+};
+if(!goog.userAgent.jscript.ASSUME_NO_JSCRIPT) {
+  goog.userAgent.jscript.init_()
+}
+goog.userAgent.jscript.HAS_JSCRIPT = goog.userAgent.jscript.ASSUME_NO_JSCRIPT ? false : goog.userAgent.jscript.DETECTED_HAS_JSCRIPT_;
+goog.userAgent.jscript.VERSION = goog.userAgent.jscript.ASSUME_NO_JSCRIPT ? "0" : goog.userAgent.jscript.DETECTED_VERSION_;
+goog.userAgent.jscript.isVersion = function(version) {
+  return goog.string.compareVersions(goog.userAgent.jscript.VERSION, version) >= 0
+};
+goog.provide("goog.string.StringBuffer");
+goog.require("goog.userAgent.jscript");
+goog.string.StringBuffer = function(opt_a1, var_args) {
+  this.buffer_ = goog.userAgent.jscript.HAS_JSCRIPT ? [] : "";
+  if(opt_a1 != null) {
+    this.append.apply(this, arguments)
+  }
+};
+goog.string.StringBuffer.prototype.set = function(s) {
+  this.clear();
+  this.append(s)
+};
+if(goog.userAgent.jscript.HAS_JSCRIPT) {
+  goog.string.StringBuffer.prototype.bufferLength_ = 0;
+  goog.string.StringBuffer.prototype.append = function(a1, opt_a2, var_args) {
+    if(opt_a2 == null) {
+      this.buffer_[this.bufferLength_++] = a1
+    }else {
+      this.buffer_.push.apply(this.buffer_, arguments);
+      this.bufferLength_ = this.buffer_.length
+    }
+    return this
+  }
+}else {
+  goog.string.StringBuffer.prototype.append = function(a1, opt_a2, var_args) {
+    this.buffer_ += a1;
+    if(opt_a2 != null) {
+      for(var i = 1;i < arguments.length;i++) {
+        this.buffer_ += arguments[i]
+      }
+    }
+    return this
+  }
+}
+goog.string.StringBuffer.prototype.clear = function() {
+  if(goog.userAgent.jscript.HAS_JSCRIPT) {
+    this.buffer_.length = 0;
+    this.bufferLength_ = 0
+  }else {
+    this.buffer_ = ""
+  }
+};
+goog.string.StringBuffer.prototype.getLength = function() {
+  return this.toString().length
+};
+goog.string.StringBuffer.prototype.toString = function() {
+  if(goog.userAgent.jscript.HAS_JSCRIPT) {
+    var str = this.buffer_.join("");
+    this.clear();
+    if(str) {
+      this.append(str)
+    }
+    return str
+  }else {
+    return this.buffer_
+  }
+};
+goog.provide("goog.userAgent");
+goog.require("goog.string");
+goog.userAgent.ASSUME_IE = false;
+goog.userAgent.ASSUME_GECKO = false;
+goog.userAgent.ASSUME_WEBKIT = false;
+goog.userAgent.ASSUME_MOBILE_WEBKIT = false;
+goog.userAgent.ASSUME_OPERA = false;
+goog.userAgent.BROWSER_KNOWN_ = goog.userAgent.ASSUME_IE || goog.userAgent.ASSUME_GECKO || goog.userAgent.ASSUME_MOBILE_WEBKIT || goog.userAgent.ASSUME_WEBKIT || goog.userAgent.ASSUME_OPERA;
+goog.userAgent.getUserAgentString = function() {
+  return goog.global["navigator"] ? goog.global["navigator"].userAgent : null
+};
+goog.userAgent.getNavigator = function() {
+  return goog.global["navigator"]
+};
+goog.userAgent.init_ = function() {
+  goog.userAgent.detectedOpera_ = false;
+  goog.userAgent.detectedIe_ = false;
+  goog.userAgent.detectedWebkit_ = false;
+  goog.userAgent.detectedMobile_ = false;
+  goog.userAgent.detectedGecko_ = false;
+  var ua;
+  if(!goog.userAgent.BROWSER_KNOWN_ && (ua = goog.userAgent.getUserAgentString())) {
+    var navigator = goog.userAgent.getNavigator();
+    goog.userAgent.detectedOpera_ = ua.indexOf("Opera") == 0;
+    goog.userAgent.detectedIe_ = !goog.userAgent.detectedOpera_ && ua.indexOf("MSIE") != -1;
+    goog.userAgent.detectedWebkit_ = !goog.userAgent.detectedOpera_ && ua.indexOf("WebKit") != -1;
+    goog.userAgent.detectedMobile_ = goog.userAgent.detectedWebkit_ && ua.indexOf("Mobile") != -1;
+    goog.userAgent.detectedGecko_ = !goog.userAgent.detectedOpera_ && !goog.userAgent.detectedWebkit_ && navigator.product == "Gecko"
+  }
+};
+if(!goog.userAgent.BROWSER_KNOWN_) {
+  goog.userAgent.init_()
+}
+goog.userAgent.OPERA = goog.userAgent.BROWSER_KNOWN_ ? goog.userAgent.ASSUME_OPERA : goog.userAgent.detectedOpera_;
+goog.userAgent.IE = goog.userAgent.BROWSER_KNOWN_ ? goog.userAgent.ASSUME_IE : goog.userAgent.detectedIe_;
+goog.userAgent.GECKO = goog.userAgent.BROWSER_KNOWN_ ? goog.userAgent.ASSUME_GECKO : goog.userAgent.detectedGecko_;
+goog.userAgent.WEBKIT = goog.userAgent.BROWSER_KNOWN_ ? goog.userAgent.ASSUME_WEBKIT || goog.userAgent.ASSUME_MOBILE_WEBKIT : goog.userAgent.detectedWebkit_;
+goog.userAgent.MOBILE = goog.userAgent.ASSUME_MOBILE_WEBKIT || goog.userAgent.detectedMobile_;
+goog.userAgent.SAFARI = goog.userAgent.WEBKIT;
+goog.userAgent.determinePlatform_ = function() {
+  var navigator = goog.userAgent.getNavigator();
+  return navigator && navigator.platform || ""
+};
+goog.userAgent.PLATFORM = goog.userAgent.determinePlatform_();
+goog.userAgent.ASSUME_MAC = false;
+goog.userAgent.ASSUME_WINDOWS = false;
+goog.userAgent.ASSUME_LINUX = false;
+goog.userAgent.ASSUME_X11 = false;
+goog.userAgent.PLATFORM_KNOWN_ = goog.userAgent.ASSUME_MAC || goog.userAgent.ASSUME_WINDOWS || goog.userAgent.ASSUME_LINUX || goog.userAgent.ASSUME_X11;
+goog.userAgent.initPlatform_ = function() {
+  goog.userAgent.detectedMac_ = goog.string.contains(goog.userAgent.PLATFORM, "Mac");
+  goog.userAgent.detectedWindows_ = goog.string.contains(goog.userAgent.PLATFORM, "Win");
+  goog.userAgent.detectedLinux_ = goog.string.contains(goog.userAgent.PLATFORM, "Linux");
+  goog.userAgent.detectedX11_ = !!goog.userAgent.getNavigator() && goog.string.contains(goog.userAgent.getNavigator()["appVersion"] || "", "X11")
+};
+if(!goog.userAgent.PLATFORM_KNOWN_) {
+  goog.userAgent.initPlatform_()
+}
+goog.userAgent.MAC = goog.userAgent.PLATFORM_KNOWN_ ? goog.userAgent.ASSUME_MAC : goog.userAgent.detectedMac_;
+goog.userAgent.WINDOWS = goog.userAgent.PLATFORM_KNOWN_ ? goog.userAgent.ASSUME_WINDOWS : goog.userAgent.detectedWindows_;
+goog.userAgent.LINUX = goog.userAgent.PLATFORM_KNOWN_ ? goog.userAgent.ASSUME_LINUX : goog.userAgent.detectedLinux_;
+goog.userAgent.X11 = goog.userAgent.PLATFORM_KNOWN_ ? goog.userAgent.ASSUME_X11 : goog.userAgent.detectedX11_;
+goog.userAgent.determineVersion_ = function() {
+  var version = "", re;
+  if(goog.userAgent.OPERA && goog.global["opera"]) {
+    var operaVersion = goog.global["opera"].version;
+    version = typeof operaVersion == "function" ? operaVersion() : operaVersion
+  }else {
+    if(goog.userAgent.GECKO) {
+      re = /rv\:([^\);]+)(\)|;)/
+    }else {
+      if(goog.userAgent.IE) {
+        re = /MSIE\s+([^\);]+)(\)|;)/
+      }else {
+        if(goog.userAgent.WEBKIT) {
+          re = /WebKit\/(\S+)/
+        }
+      }
+    }
+    if(re) {
+      var arr = re.exec(goog.userAgent.getUserAgentString());
+      version = arr ? arr[1] : ""
+    }
+  }
+  if(goog.userAgent.IE) {
+    var docMode = goog.userAgent.getDocumentMode_();
+    if(docMode > parseFloat(version)) {
+      return String(docMode)
+    }
+  }
+  return version
+};
+goog.userAgent.getDocumentMode_ = function() {
+  var doc = goog.global["document"];
+  return doc ? doc["documentMode"] : undefined
+};
+goog.userAgent.VERSION = goog.userAgent.determineVersion_();
+goog.userAgent.compare = function(v1, v2) {
+  return goog.string.compareVersions(v1, v2)
+};
+goog.userAgent.isVersionCache_ = {};
+goog.userAgent.isVersion = function(version) {
+  return goog.userAgent.isVersionCache_[version] || (goog.userAgent.isVersionCache_[version] = goog.string.compareVersions(goog.userAgent.VERSION, version) >= 0)
+};
+goog.provide("goog.debug.Error");
+goog.debug.Error = function(opt_msg) {
+  this.stack = (new Error).stack || "";
+  if(opt_msg) {
+    this.message = String(opt_msg)
+  }
+};
+goog.inherits(goog.debug.Error, Error);
+goog.debug.Error.prototype.name = "CustomError";
 goog.provide("goog.asserts");
 goog.provide("goog.asserts.AssertionError");
 goog.require("goog.debug.Error");
@@ -1499,541 +1624,209 @@ goog.array.shuffle = function(arr, opt_randFn) {
     arr[j] = tmp
   }
 };
-goog.provide("goog.debug.EntryPointMonitor");
-goog.provide("goog.debug.entryPointRegistry");
-goog.debug.EntryPointMonitor = function() {
-};
-goog.debug.EntryPointMonitor.prototype.wrap;
-goog.debug.EntryPointMonitor.prototype.unwrap;
-goog.debug.entryPointRegistry.refList_ = [];
-goog.debug.entryPointRegistry.register = function(callback) {
-  goog.debug.entryPointRegistry.refList_[goog.debug.entryPointRegistry.refList_.length] = callback
-};
-goog.debug.entryPointRegistry.monitorAll = function(monitor) {
-  var transformer = goog.bind(monitor.wrap, monitor);
-  for(var i = 0;i < goog.debug.entryPointRegistry.refList_.length;i++) {
-    goog.debug.entryPointRegistry.refList_[i](transformer)
-  }
-};
-goog.debug.entryPointRegistry.unmonitorAllIfPossible = function(monitor) {
-  var transformer = goog.bind(monitor.unwrap, monitor);
-  for(var i = 0;i < goog.debug.entryPointRegistry.refList_.length;i++) {
-    goog.debug.entryPointRegistry.refList_[i](transformer)
-  }
-};
-goog.provide("goog.debug.errorHandlerWeakDep");
-goog.debug.errorHandlerWeakDep = {protectEntryPoint:function(fn, opt_tracers) {
-  return fn
-}};
-goog.provide("goog.userAgent");
-goog.require("goog.string");
-goog.userAgent.ASSUME_IE = false;
-goog.userAgent.ASSUME_GECKO = false;
-goog.userAgent.ASSUME_WEBKIT = false;
-goog.userAgent.ASSUME_MOBILE_WEBKIT = false;
-goog.userAgent.ASSUME_OPERA = false;
-goog.userAgent.BROWSER_KNOWN_ = goog.userAgent.ASSUME_IE || goog.userAgent.ASSUME_GECKO || goog.userAgent.ASSUME_MOBILE_WEBKIT || goog.userAgent.ASSUME_WEBKIT || goog.userAgent.ASSUME_OPERA;
-goog.userAgent.getUserAgentString = function() {
-  return goog.global["navigator"] ? goog.global["navigator"].userAgent : null
-};
-goog.userAgent.getNavigator = function() {
-  return goog.global["navigator"]
-};
-goog.userAgent.init_ = function() {
-  goog.userAgent.detectedOpera_ = false;
-  goog.userAgent.detectedIe_ = false;
-  goog.userAgent.detectedWebkit_ = false;
-  goog.userAgent.detectedMobile_ = false;
-  goog.userAgent.detectedGecko_ = false;
-  var ua;
-  if(!goog.userAgent.BROWSER_KNOWN_ && (ua = goog.userAgent.getUserAgentString())) {
-    var navigator = goog.userAgent.getNavigator();
-    goog.userAgent.detectedOpera_ = ua.indexOf("Opera") == 0;
-    goog.userAgent.detectedIe_ = !goog.userAgent.detectedOpera_ && ua.indexOf("MSIE") != -1;
-    goog.userAgent.detectedWebkit_ = !goog.userAgent.detectedOpera_ && ua.indexOf("WebKit") != -1;
-    goog.userAgent.detectedMobile_ = goog.userAgent.detectedWebkit_ && ua.indexOf("Mobile") != -1;
-    goog.userAgent.detectedGecko_ = !goog.userAgent.detectedOpera_ && !goog.userAgent.detectedWebkit_ && navigator.product == "Gecko"
-  }
-};
-if(!goog.userAgent.BROWSER_KNOWN_) {
-  goog.userAgent.init_()
-}
-goog.userAgent.OPERA = goog.userAgent.BROWSER_KNOWN_ ? goog.userAgent.ASSUME_OPERA : goog.userAgent.detectedOpera_;
-goog.userAgent.IE = goog.userAgent.BROWSER_KNOWN_ ? goog.userAgent.ASSUME_IE : goog.userAgent.detectedIe_;
-goog.userAgent.GECKO = goog.userAgent.BROWSER_KNOWN_ ? goog.userAgent.ASSUME_GECKO : goog.userAgent.detectedGecko_;
-goog.userAgent.WEBKIT = goog.userAgent.BROWSER_KNOWN_ ? goog.userAgent.ASSUME_WEBKIT || goog.userAgent.ASSUME_MOBILE_WEBKIT : goog.userAgent.detectedWebkit_;
-goog.userAgent.MOBILE = goog.userAgent.ASSUME_MOBILE_WEBKIT || goog.userAgent.detectedMobile_;
-goog.userAgent.SAFARI = goog.userAgent.WEBKIT;
-goog.userAgent.determinePlatform_ = function() {
-  var navigator = goog.userAgent.getNavigator();
-  return navigator && navigator.platform || ""
-};
-goog.userAgent.PLATFORM = goog.userAgent.determinePlatform_();
-goog.userAgent.ASSUME_MAC = false;
-goog.userAgent.ASSUME_WINDOWS = false;
-goog.userAgent.ASSUME_LINUX = false;
-goog.userAgent.ASSUME_X11 = false;
-goog.userAgent.PLATFORM_KNOWN_ = goog.userAgent.ASSUME_MAC || goog.userAgent.ASSUME_WINDOWS || goog.userAgent.ASSUME_LINUX || goog.userAgent.ASSUME_X11;
-goog.userAgent.initPlatform_ = function() {
-  goog.userAgent.detectedMac_ = goog.string.contains(goog.userAgent.PLATFORM, "Mac");
-  goog.userAgent.detectedWindows_ = goog.string.contains(goog.userAgent.PLATFORM, "Win");
-  goog.userAgent.detectedLinux_ = goog.string.contains(goog.userAgent.PLATFORM, "Linux");
-  goog.userAgent.detectedX11_ = !!goog.userAgent.getNavigator() && goog.string.contains(goog.userAgent.getNavigator()["appVersion"] || "", "X11")
-};
-if(!goog.userAgent.PLATFORM_KNOWN_) {
-  goog.userAgent.initPlatform_()
-}
-goog.userAgent.MAC = goog.userAgent.PLATFORM_KNOWN_ ? goog.userAgent.ASSUME_MAC : goog.userAgent.detectedMac_;
-goog.userAgent.WINDOWS = goog.userAgent.PLATFORM_KNOWN_ ? goog.userAgent.ASSUME_WINDOWS : goog.userAgent.detectedWindows_;
-goog.userAgent.LINUX = goog.userAgent.PLATFORM_KNOWN_ ? goog.userAgent.ASSUME_LINUX : goog.userAgent.detectedLinux_;
-goog.userAgent.X11 = goog.userAgent.PLATFORM_KNOWN_ ? goog.userAgent.ASSUME_X11 : goog.userAgent.detectedX11_;
-goog.userAgent.determineVersion_ = function() {
-  var version = "", re;
-  if(goog.userAgent.OPERA && goog.global["opera"]) {
-    var operaVersion = goog.global["opera"].version;
-    version = typeof operaVersion == "function" ? operaVersion() : operaVersion
-  }else {
-    if(goog.userAgent.GECKO) {
-      re = /rv\:([^\);]+)(\)|;)/
-    }else {
-      if(goog.userAgent.IE) {
-        re = /MSIE\s+([^\);]+)(\)|;)/
-      }else {
-        if(goog.userAgent.WEBKIT) {
-          re = /WebKit\/(\S+)/
-        }
-      }
-    }
-    if(re) {
-      var arr = re.exec(goog.userAgent.getUserAgentString());
-      version = arr ? arr[1] : ""
-    }
-  }
-  if(goog.userAgent.IE) {
-    var docMode = goog.userAgent.getDocumentMode_();
-    if(docMode > parseFloat(version)) {
-      return String(docMode)
-    }
-  }
-  return version
-};
-goog.userAgent.getDocumentMode_ = function() {
-  var doc = goog.global["document"];
-  return doc ? doc["documentMode"] : undefined
-};
-goog.userAgent.VERSION = goog.userAgent.determineVersion_();
-goog.userAgent.compare = function(v1, v2) {
-  return goog.string.compareVersions(v1, v2)
-};
-goog.userAgent.isVersionCache_ = {};
-goog.userAgent.isVersion = function(version) {
-  return goog.userAgent.isVersionCache_[version] || (goog.userAgent.isVersionCache_[version] = goog.string.compareVersions(goog.userAgent.VERSION, version) >= 0)
-};
-goog.provide("goog.events.BrowserFeature");
+goog.provide("goog.dom.BrowserFeature");
 goog.require("goog.userAgent");
-goog.events.BrowserFeature = {HAS_W3C_BUTTON:!goog.userAgent.IE || goog.userAgent.isVersion("9"), SET_KEY_CODE_TO_PREVENT_DEFAULT:goog.userAgent.IE && !goog.userAgent.isVersion("8")};
-goog.provide("goog.events.Event");
-goog.require("goog.Disposable");
-goog.events.Event = function(type, opt_target) {
-  goog.Disposable.call(this);
-  this.type = type;
-  this.target = opt_target;
-  this.currentTarget = this.target
+goog.dom.BrowserFeature = {CAN_ADD_NAME_OR_TYPE_ATTRIBUTES:!goog.userAgent.IE || goog.userAgent.isVersion("9"), CAN_USE_CHILDREN_ATTRIBUTE:!goog.userAgent.GECKO && !goog.userAgent.IE || goog.userAgent.IE && goog.userAgent.isVersion("9") || goog.userAgent.GECKO && goog.userAgent.isVersion("1.9.1"), CAN_USE_INNER_TEXT:goog.userAgent.IE && !goog.userAgent.isVersion("9"), INNER_HTML_NEEDS_SCOPED_ELEMENT:goog.userAgent.IE};
+goog.provide("goog.dom.TagName");
+goog.dom.TagName = {A:"A", ABBR:"ABBR", ACRONYM:"ACRONYM", ADDRESS:"ADDRESS", APPLET:"APPLET", AREA:"AREA", B:"B", BASE:"BASE", BASEFONT:"BASEFONT", BDO:"BDO", BIG:"BIG", BLOCKQUOTE:"BLOCKQUOTE", BODY:"BODY", BR:"BR", BUTTON:"BUTTON", CANVAS:"CANVAS", CAPTION:"CAPTION", CENTER:"CENTER", CITE:"CITE", CODE:"CODE", COL:"COL", COLGROUP:"COLGROUP", DD:"DD", DEL:"DEL", DFN:"DFN", DIR:"DIR", DIV:"DIV", DL:"DL", DT:"DT", EM:"EM", FIELDSET:"FIELDSET", FONT:"FONT", FORM:"FORM", FRAME:"FRAME", FRAMESET:"FRAMESET", 
+H1:"H1", H2:"H2", H3:"H3", H4:"H4", H5:"H5", H6:"H6", HEAD:"HEAD", HR:"HR", HTML:"HTML", I:"I", IFRAME:"IFRAME", IMG:"IMG", INPUT:"INPUT", INS:"INS", ISINDEX:"ISINDEX", KBD:"KBD", LABEL:"LABEL", LEGEND:"LEGEND", LI:"LI", LINK:"LINK", MAP:"MAP", MENU:"MENU", META:"META", NOFRAMES:"NOFRAMES", NOSCRIPT:"NOSCRIPT", OBJECT:"OBJECT", OL:"OL", OPTGROUP:"OPTGROUP", OPTION:"OPTION", P:"P", PARAM:"PARAM", PRE:"PRE", Q:"Q", S:"S", SAMP:"SAMP", SCRIPT:"SCRIPT", SELECT:"SELECT", SMALL:"SMALL", SPAN:"SPAN", STRIKE:"STRIKE", 
+STRONG:"STRONG", STYLE:"STYLE", SUB:"SUB", SUP:"SUP", TABLE:"TABLE", TBODY:"TBODY", TD:"TD", TEXTAREA:"TEXTAREA", TFOOT:"TFOOT", TH:"TH", THEAD:"THEAD", TITLE:"TITLE", TR:"TR", TT:"TT", U:"U", UL:"UL", VAR:"VAR"};
+goog.provide("goog.dom.classes");
+goog.require("goog.array");
+goog.dom.classes.set = function(element, className) {
+  element.className = className
 };
-goog.inherits(goog.events.Event, goog.Disposable);
-goog.events.Event.prototype.disposeInternal = function() {
-  delete this.type;
-  delete this.target;
-  delete this.currentTarget
+goog.dom.classes.get = function(element) {
+  var className = element.className;
+  return className && typeof className.split == "function" ? className.split(/\s+/) : []
 };
-goog.events.Event.prototype.propagationStopped_ = false;
-goog.events.Event.prototype.returnValue_ = true;
-goog.events.Event.prototype.stopPropagation = function() {
-  this.propagationStopped_ = true
+goog.dom.classes.add = function(element, var_args) {
+  var classes = goog.dom.classes.get(element);
+  var args = goog.array.slice(arguments, 1);
+  var b = goog.dom.classes.add_(classes, args);
+  element.className = classes.join(" ");
+  return b
 };
-goog.events.Event.prototype.preventDefault = function() {
-  this.returnValue_ = false
+goog.dom.classes.remove = function(element, var_args) {
+  var classes = goog.dom.classes.get(element);
+  var args = goog.array.slice(arguments, 1);
+  var b = goog.dom.classes.remove_(classes, args);
+  element.className = classes.join(" ");
+  return b
 };
-goog.events.Event.stopPropagation = function(e) {
-  e.stopPropagation()
-};
-goog.events.Event.preventDefault = function(e) {
-  e.preventDefault()
-};
-goog.provide("goog.events.EventType");
-goog.require("goog.userAgent");
-goog.events.EventType = {CLICK:"click", DBLCLICK:"dblclick", MOUSEDOWN:"mousedown", MOUSEUP:"mouseup", MOUSEOVER:"mouseover", MOUSEOUT:"mouseout", MOUSEMOVE:"mousemove", SELECTSTART:"selectstart", KEYPRESS:"keypress", KEYDOWN:"keydown", KEYUP:"keyup", BLUR:"blur", FOCUS:"focus", DEACTIVATE:"deactivate", FOCUSIN:goog.userAgent.IE ? "focusin" : "DOMFocusIn", FOCUSOUT:goog.userAgent.IE ? "focusout" : "DOMFocusOut", CHANGE:"change", SELECT:"select", SUBMIT:"submit", INPUT:"input", PROPERTYCHANGE:"propertychange", 
-DRAGSTART:"dragstart", DRAGENTER:"dragenter", DRAGOVER:"dragover", DRAGLEAVE:"dragleave", DROP:"drop", TOUCHSTART:"touchstart", TOUCHMOVE:"touchmove", TOUCHEND:"touchend", TOUCHCANCEL:"touchcancel", CONTEXTMENU:"contextmenu", ERROR:"error", HELP:"help", LOAD:"load", LOSECAPTURE:"losecapture", READYSTATECHANGE:"readystatechange", RESIZE:"resize", SCROLL:"scroll", UNLOAD:"unload", HASHCHANGE:"hashchange", PAGEHIDE:"pagehide", PAGESHOW:"pageshow", POPSTATE:"popstate", COPY:"copy", PASTE:"paste", CUT:"cut", 
-MESSAGE:"message", CONNECT:"connect"};
-goog.provide("goog.reflect");
-goog.reflect.object = function(type, object) {
-  return object
-};
-goog.reflect.sinkValue = new Function("a", "return a");
-goog.provide("goog.events.BrowserEvent");
-goog.provide("goog.events.BrowserEvent.MouseButton");
-goog.require("goog.events.BrowserFeature");
-goog.require("goog.events.Event");
-goog.require("goog.events.EventType");
-goog.require("goog.reflect");
-goog.require("goog.userAgent");
-goog.events.BrowserEvent = function(opt_e, opt_currentTarget) {
-  if(opt_e) {
-    this.init(opt_e, opt_currentTarget)
-  }
-};
-goog.inherits(goog.events.BrowserEvent, goog.events.Event);
-goog.events.BrowserEvent.MouseButton = {LEFT:0, MIDDLE:1, RIGHT:2};
-goog.events.BrowserEvent.IEButtonMap = [1, 4, 2];
-goog.events.BrowserEvent.prototype.target = null;
-goog.events.BrowserEvent.prototype.currentTarget;
-goog.events.BrowserEvent.prototype.relatedTarget = null;
-goog.events.BrowserEvent.prototype.offsetX = 0;
-goog.events.BrowserEvent.prototype.offsetY = 0;
-goog.events.BrowserEvent.prototype.clientX = 0;
-goog.events.BrowserEvent.prototype.clientY = 0;
-goog.events.BrowserEvent.prototype.screenX = 0;
-goog.events.BrowserEvent.prototype.screenY = 0;
-goog.events.BrowserEvent.prototype.button = 0;
-goog.events.BrowserEvent.prototype.keyCode = 0;
-goog.events.BrowserEvent.prototype.charCode = 0;
-goog.events.BrowserEvent.prototype.ctrlKey = false;
-goog.events.BrowserEvent.prototype.altKey = false;
-goog.events.BrowserEvent.prototype.shiftKey = false;
-goog.events.BrowserEvent.prototype.metaKey = false;
-goog.events.BrowserEvent.prototype.state;
-goog.events.BrowserEvent.prototype.platformModifierKey = false;
-goog.events.BrowserEvent.prototype.event_ = null;
-goog.events.BrowserEvent.prototype.init = function(e, opt_currentTarget) {
-  var type = this.type = e.type;
-  goog.events.Event.call(this, type);
-  this.target = e.target || e.srcElement;
-  this.currentTarget = opt_currentTarget;
-  var relatedTarget = e.relatedTarget;
-  if(relatedTarget) {
-    if(goog.userAgent.GECKO) {
-      try {
-        goog.reflect.sinkValue(relatedTarget.nodeName)
-      }catch(err) {
-        relatedTarget = null
-      }
-    }
-  }else {
-    if(type == goog.events.EventType.MOUSEOVER) {
-      relatedTarget = e.fromElement
-    }else {
-      if(type == goog.events.EventType.MOUSEOUT) {
-        relatedTarget = e.toElement
-      }
+goog.dom.classes.add_ = function(classes, args) {
+  var rv = 0;
+  for(var i = 0;i < args.length;i++) {
+    if(!goog.array.contains(classes, args[i])) {
+      classes.push(args[i]);
+      rv++
     }
   }
-  this.relatedTarget = relatedTarget;
-  this.offsetX = e.offsetX !== undefined ? e.offsetX : e.layerX;
-  this.offsetY = e.offsetY !== undefined ? e.offsetY : e.layerY;
-  this.clientX = e.clientX !== undefined ? e.clientX : e.pageX;
-  this.clientY = e.clientY !== undefined ? e.clientY : e.pageY;
-  this.screenX = e.screenX || 0;
-  this.screenY = e.screenY || 0;
-  this.button = e.button;
-  this.keyCode = e.keyCode || 0;
-  this.charCode = e.charCode || (type == "keypress" ? e.keyCode : 0);
-  this.ctrlKey = e.ctrlKey;
-  this.altKey = e.altKey;
-  this.shiftKey = e.shiftKey;
-  this.metaKey = e.metaKey;
-  this.platformModifierKey = goog.userAgent.MAC ? e.metaKey : e.ctrlKey;
-  this.state = e.state;
-  this.event_ = e;
-  delete this.returnValue_;
-  delete this.propagationStopped_
+  return rv == args.length
 };
-goog.events.BrowserEvent.prototype.isButton = function(button) {
-  if(!goog.events.BrowserFeature.HAS_W3C_BUTTON) {
-    if(this.type == "click") {
-      return button == goog.events.BrowserEvent.MouseButton.LEFT
-    }else {
-      return!!(this.event_.button & goog.events.BrowserEvent.IEButtonMap[button])
-    }
-  }else {
-    return this.event_.button == button
-  }
-};
-goog.events.BrowserEvent.prototype.isMouseActionButton = function() {
-  return this.isButton(goog.events.BrowserEvent.MouseButton.LEFT) && !(goog.userAgent.WEBKIT && goog.userAgent.MAC && this.ctrlKey)
-};
-goog.events.BrowserEvent.prototype.stopPropagation = function() {
-  goog.events.BrowserEvent.superClass_.stopPropagation.call(this);
-  if(this.event_.stopPropagation) {
-    this.event_.stopPropagation()
-  }else {
-    this.event_.cancelBubble = true
-  }
-};
-goog.events.BrowserEvent.prototype.preventDefault = function() {
-  goog.events.BrowserEvent.superClass_.preventDefault.call(this);
-  var be = this.event_;
-  if(!be.preventDefault) {
-    be.returnValue = false;
-    if(goog.events.BrowserFeature.SET_KEY_CODE_TO_PREVENT_DEFAULT) {
-      try {
-        var VK_F1 = 112;
-        var VK_F12 = 123;
-        if(be.ctrlKey || be.keyCode >= VK_F1 && be.keyCode <= VK_F12) {
-          be.keyCode = -1
-        }
-      }catch(ex) {
-      }
-    }
-  }else {
-    be.preventDefault()
-  }
-};
-goog.events.BrowserEvent.prototype.getBrowserEvent = function() {
-  return this.event_
-};
-goog.events.BrowserEvent.prototype.disposeInternal = function() {
-  goog.events.BrowserEvent.superClass_.disposeInternal.call(this);
-  this.event_ = null;
-  this.target = null;
-  this.currentTarget = null;
-  this.relatedTarget = null
-};
-goog.provide("goog.events.EventWrapper");
-goog.events.EventWrapper = function() {
-};
-goog.events.EventWrapper.prototype.listen = function(src, listener, opt_capt, opt_scope, opt_eventHandler) {
-};
-goog.events.EventWrapper.prototype.unlisten = function(src, listener, opt_capt, opt_scope, opt_eventHandler) {
-};
-goog.provide("goog.events.Listener");
-goog.events.Listener = function() {
-};
-goog.events.Listener.counter_ = 0;
-goog.events.Listener.prototype.isFunctionListener_;
-goog.events.Listener.prototype.listener;
-goog.events.Listener.prototype.proxy;
-goog.events.Listener.prototype.src;
-goog.events.Listener.prototype.type;
-goog.events.Listener.prototype.capture;
-goog.events.Listener.prototype.handler;
-goog.events.Listener.prototype.key = 0;
-goog.events.Listener.prototype.removed = false;
-goog.events.Listener.prototype.callOnce = false;
-goog.events.Listener.prototype.init = function(listener, proxy, src, type, capture, opt_handler) {
-  if(goog.isFunction(listener)) {
-    this.isFunctionListener_ = true
-  }else {
-    if(listener && listener.handleEvent && goog.isFunction(listener.handleEvent)) {
-      this.isFunctionListener_ = false
-    }else {
-      throw Error("Invalid listener argument");
+goog.dom.classes.remove_ = function(classes, args) {
+  var rv = 0;
+  for(var i = 0;i < classes.length;i++) {
+    if(goog.array.contains(args, classes[i])) {
+      goog.array.splice(classes, i--, 1);
+      rv++
     }
   }
-  this.listener = listener;
-  this.proxy = proxy;
-  this.src = src;
-  this.type = type;
-  this.capture = !!capture;
-  this.handler = opt_handler;
-  this.callOnce = false;
-  this.key = ++goog.events.Listener.counter_;
-  this.removed = false
+  return rv == args.length
 };
-goog.events.Listener.prototype.handleEvent = function(eventObject) {
-  if(this.isFunctionListener_) {
-    return this.listener.call(this.handler || this.src, eventObject)
-  }
-  return this.listener.handleEvent.call(this.listener, eventObject)
-};
-goog.provide("goog.structs.SimplePool");
-goog.require("goog.Disposable");
-goog.structs.SimplePool = function(initialCount, maxCount) {
-  goog.Disposable.call(this);
-  this.maxCount_ = maxCount;
-  this.freeQueue_ = [];
-  this.createInitial_(initialCount)
-};
-goog.inherits(goog.structs.SimplePool, goog.Disposable);
-goog.structs.SimplePool.prototype.createObjectFn_ = null;
-goog.structs.SimplePool.prototype.disposeObjectFn_ = null;
-goog.structs.SimplePool.prototype.setCreateObjectFn = function(createObjectFn) {
-  this.createObjectFn_ = createObjectFn
-};
-goog.structs.SimplePool.prototype.setDisposeObjectFn = function(disposeObjectFn) {
-  this.disposeObjectFn_ = disposeObjectFn
-};
-goog.structs.SimplePool.prototype.getObject = function() {
-  if(this.freeQueue_.length) {
-    return this.freeQueue_.pop()
-  }
-  return this.createObject()
-};
-goog.structs.SimplePool.prototype.releaseObject = function(obj) {
-  if(this.freeQueue_.length < this.maxCount_) {
-    this.freeQueue_.push(obj)
-  }else {
-    this.disposeObject(obj)
-  }
-};
-goog.structs.SimplePool.prototype.createInitial_ = function(initialCount) {
-  if(initialCount > this.maxCount_) {
-    throw Error("[goog.structs.SimplePool] Initial cannot be greater than max");
-  }
-  for(var i = 0;i < initialCount;i++) {
-    this.freeQueue_.push(this.createObject())
-  }
-};
-goog.structs.SimplePool.prototype.createObject = function() {
-  if(this.createObjectFn_) {
-    return this.createObjectFn_()
-  }else {
-    return{}
-  }
-};
-goog.structs.SimplePool.prototype.disposeObject = function(obj) {
-  if(this.disposeObjectFn_) {
-    this.disposeObjectFn_(obj)
-  }else {
-    if(goog.isObject(obj)) {
-      if(goog.isFunction(obj.dispose)) {
-        obj.dispose()
-      }else {
-        for(var i in obj) {
-          delete obj[i]
-        }
-      }
+goog.dom.classes.swap = function(element, fromClass, toClass) {
+  var classes = goog.dom.classes.get(element);
+  var removed = false;
+  for(var i = 0;i < classes.length;i++) {
+    if(classes[i] == fromClass) {
+      goog.array.splice(classes, i--, 1);
+      removed = true
     }
   }
-};
-goog.structs.SimplePool.prototype.disposeInternal = function() {
-  goog.structs.SimplePool.superClass_.disposeInternal.call(this);
-  var freeQueue = this.freeQueue_;
-  while(freeQueue.length) {
-    this.disposeObject(freeQueue.pop())
+  if(removed) {
+    classes.push(toClass);
+    element.className = classes.join(" ")
   }
-  delete this.freeQueue_
+  return removed
 };
-goog.provide("goog.userAgent.jscript");
-goog.require("goog.string");
-goog.userAgent.jscript.ASSUME_NO_JSCRIPT = false;
-goog.userAgent.jscript.init_ = function() {
-  var hasScriptEngine = "ScriptEngine" in goog.global;
-  goog.userAgent.jscript.DETECTED_HAS_JSCRIPT_ = hasScriptEngine && goog.global["ScriptEngine"]() == "JScript";
-  goog.userAgent.jscript.DETECTED_VERSION_ = goog.userAgent.jscript.DETECTED_HAS_JSCRIPT_ ? goog.global["ScriptEngineMajorVersion"]() + "." + goog.global["ScriptEngineMinorVersion"]() + "." + goog.global["ScriptEngineBuildVersion"]() : "0"
+goog.dom.classes.addRemove = function(element, classesToRemove, classesToAdd) {
+  var classes = goog.dom.classes.get(element);
+  if(goog.isString(classesToRemove)) {
+    goog.array.remove(classes, classesToRemove)
+  }else {
+    if(goog.isArray(classesToRemove)) {
+      goog.dom.classes.remove_(classes, classesToRemove)
+    }
+  }
+  if(goog.isString(classesToAdd) && !goog.array.contains(classes, classesToAdd)) {
+    classes.push(classesToAdd)
+  }else {
+    if(goog.isArray(classesToAdd)) {
+      goog.dom.classes.add_(classes, classesToAdd)
+    }
+  }
+  element.className = classes.join(" ")
 };
-if(!goog.userAgent.jscript.ASSUME_NO_JSCRIPT) {
-  goog.userAgent.jscript.init_()
+goog.dom.classes.has = function(element, className) {
+  return goog.array.contains(goog.dom.classes.get(element), className)
+};
+goog.dom.classes.enable = function(element, className, enabled) {
+  if(enabled) {
+    goog.dom.classes.add(element, className)
+  }else {
+    goog.dom.classes.remove(element, className)
+  }
+};
+goog.dom.classes.toggle = function(element, className) {
+  var add = !goog.dom.classes.has(element, className);
+  goog.dom.classes.enable(element, className, add);
+  return add
+};
+goog.provide("goog.math.Coordinate");
+goog.math.Coordinate = function(opt_x, opt_y) {
+  this.x = goog.isDef(opt_x) ? opt_x : 0;
+  this.y = goog.isDef(opt_y) ? opt_y : 0
+};
+goog.math.Coordinate.prototype.clone = function() {
+  return new goog.math.Coordinate(this.x, this.y)
+};
+if(goog.DEBUG) {
+  goog.math.Coordinate.prototype.toString = function() {
+    return"(" + this.x + ", " + this.y + ")"
+  }
 }
-goog.userAgent.jscript.HAS_JSCRIPT = goog.userAgent.jscript.ASSUME_NO_JSCRIPT ? false : goog.userAgent.jscript.DETECTED_HAS_JSCRIPT_;
-goog.userAgent.jscript.VERSION = goog.userAgent.jscript.ASSUME_NO_JSCRIPT ? "0" : goog.userAgent.jscript.DETECTED_VERSION_;
-goog.userAgent.jscript.isVersion = function(version) {
-  return goog.string.compareVersions(goog.userAgent.jscript.VERSION, version) >= 0
+goog.math.Coordinate.equals = function(a, b) {
+  if(a == b) {
+    return true
+  }
+  if(!a || !b) {
+    return false
+  }
+  return a.x == b.x && a.y == b.y
 };
-goog.provide("goog.events.pools");
-goog.require("goog.events.BrowserEvent");
-goog.require("goog.events.Listener");
-goog.require("goog.structs.SimplePool");
-goog.require("goog.userAgent.jscript");
-goog.events.ASSUME_GOOD_GC = false;
-goog.events.pools.getObject;
-goog.events.pools.releaseObject;
-goog.events.pools.getArray;
-goog.events.pools.releaseArray;
-goog.events.pools.getProxy;
-goog.events.pools.setProxyCallbackFunction;
-goog.events.pools.releaseProxy;
-goog.events.pools.getListener;
-goog.events.pools.releaseListener;
-goog.events.pools.getEvent;
-goog.events.pools.releaseEvent;
-(function() {
-  var BAD_GC = !goog.events.ASSUME_GOOD_GC && goog.userAgent.jscript.HAS_JSCRIPT && !goog.userAgent.jscript.isVersion("5.7");
-  function getObject() {
-    return{count_:0, remaining_:0}
+goog.math.Coordinate.distance = function(a, b) {
+  var dx = a.x - b.x;
+  var dy = a.y - b.y;
+  return Math.sqrt(dx * dx + dy * dy)
+};
+goog.math.Coordinate.squaredDistance = function(a, b) {
+  var dx = a.x - b.x;
+  var dy = a.y - b.y;
+  return dx * dx + dy * dy
+};
+goog.math.Coordinate.difference = function(a, b) {
+  return new goog.math.Coordinate(a.x - b.x, a.y - b.y)
+};
+goog.math.Coordinate.sum = function(a, b) {
+  return new goog.math.Coordinate(a.x + b.x, a.y + b.y)
+};
+goog.provide("goog.math.Size");
+goog.math.Size = function(width, height) {
+  this.width = width;
+  this.height = height
+};
+goog.math.Size.equals = function(a, b) {
+  if(a == b) {
+    return true
   }
-  function getArray() {
-    return[]
+  if(!a || !b) {
+    return false
   }
-  var proxyCallbackFunction;
-  goog.events.pools.setProxyCallbackFunction = function(cb) {
-    proxyCallbackFunction = cb
-  };
-  function getProxy() {
-    var f = function(eventObject) {
-      return proxyCallbackFunction.call(f.src, f.key, eventObject)
-    };
-    return f
+  return a.width == b.width && a.height == b.height
+};
+goog.math.Size.prototype.clone = function() {
+  return new goog.math.Size(this.width, this.height)
+};
+if(goog.DEBUG) {
+  goog.math.Size.prototype.toString = function() {
+    return"(" + this.width + " x " + this.height + ")"
   }
-  function getListener() {
-    return new goog.events.Listener
-  }
-  function getEvent() {
-    return new goog.events.BrowserEvent
-  }
-  if(!BAD_GC) {
-    goog.events.pools.getObject = getObject;
-    goog.events.pools.releaseObject = goog.nullFunction;
-    goog.events.pools.getArray = getArray;
-    goog.events.pools.releaseArray = goog.nullFunction;
-    goog.events.pools.getProxy = getProxy;
-    goog.events.pools.releaseProxy = goog.nullFunction;
-    goog.events.pools.getListener = getListener;
-    goog.events.pools.releaseListener = goog.nullFunction;
-    goog.events.pools.getEvent = getEvent;
-    goog.events.pools.releaseEvent = goog.nullFunction
-  }else {
-    goog.events.pools.getObject = function() {
-      return objectPool.getObject()
-    };
-    goog.events.pools.releaseObject = function(obj) {
-      objectPool.releaseObject(obj)
-    };
-    goog.events.pools.getArray = function() {
-      return arrayPool.getObject()
-    };
-    goog.events.pools.releaseArray = function(obj) {
-      arrayPool.releaseObject(obj)
-    };
-    goog.events.pools.getProxy = function() {
-      return proxyPool.getObject()
-    };
-    goog.events.pools.releaseProxy = function(obj) {
-      proxyPool.releaseObject(getProxy())
-    };
-    goog.events.pools.getListener = function() {
-      return listenerPool.getObject()
-    };
-    goog.events.pools.releaseListener = function(obj) {
-      listenerPool.releaseObject(obj)
-    };
-    goog.events.pools.getEvent = function() {
-      return eventPool.getObject()
-    };
-    goog.events.pools.releaseEvent = function(obj) {
-      eventPool.releaseObject(obj)
-    };
-    var OBJECT_POOL_INITIAL_COUNT = 0;
-    var OBJECT_POOL_MAX_COUNT = 600;
-    var objectPool = new goog.structs.SimplePool(OBJECT_POOL_INITIAL_COUNT, OBJECT_POOL_MAX_COUNT);
-    objectPool.setCreateObjectFn(getObject);
-    var ARRAY_POOL_INITIAL_COUNT = 0;
-    var ARRAY_POOL_MAX_COUNT = 600;
-    var arrayPool = new goog.structs.SimplePool(ARRAY_POOL_INITIAL_COUNT, ARRAY_POOL_MAX_COUNT);
-    arrayPool.setCreateObjectFn(getArray);
-    var HANDLE_EVENT_PROXY_POOL_INITIAL_COUNT = 0;
-    var HANDLE_EVENT_PROXY_POOL_MAX_COUNT = 600;
-    var proxyPool = new goog.structs.SimplePool(HANDLE_EVENT_PROXY_POOL_INITIAL_COUNT, HANDLE_EVENT_PROXY_POOL_MAX_COUNT);
-    proxyPool.setCreateObjectFn(getProxy);
-    var LISTENER_POOL_INITIAL_COUNT = 0;
-    var LISTENER_POOL_MAX_COUNT = 600;
-    var listenerPool = new goog.structs.SimplePool(LISTENER_POOL_INITIAL_COUNT, LISTENER_POOL_MAX_COUNT);
-    listenerPool.setCreateObjectFn(getListener);
-    var EVENT_POOL_INITIAL_COUNT = 0;
-    var EVENT_POOL_MAX_COUNT = 600;
-    var eventPool = new goog.structs.SimplePool(EVENT_POOL_INITIAL_COUNT, EVENT_POOL_MAX_COUNT);
-    eventPool.setCreateObjectFn(getEvent)
-  }
-})();
+}
+goog.math.Size.prototype.getLongest = function() {
+  return Math.max(this.width, this.height)
+};
+goog.math.Size.prototype.getShortest = function() {
+  return Math.min(this.width, this.height)
+};
+goog.math.Size.prototype.area = function() {
+  return this.width * this.height
+};
+goog.math.Size.prototype.perimeter = function() {
+  return(this.width + this.height) * 2
+};
+goog.math.Size.prototype.aspectRatio = function() {
+  return this.width / this.height
+};
+goog.math.Size.prototype.isEmpty = function() {
+  return!this.area()
+};
+goog.math.Size.prototype.ceil = function() {
+  this.width = Math.ceil(this.width);
+  this.height = Math.ceil(this.height);
+  return this
+};
+goog.math.Size.prototype.fitsInside = function(target) {
+  return this.width <= target.width && this.height <= target.height
+};
+goog.math.Size.prototype.floor = function() {
+  this.width = Math.floor(this.width);
+  this.height = Math.floor(this.height);
+  return this
+};
+goog.math.Size.prototype.round = function() {
+  this.width = Math.round(this.width);
+  this.height = Math.round(this.height);
+  return this
+};
+goog.math.Size.prototype.scale = function(s) {
+  this.width *= s;
+  this.height *= s;
+  return this
+};
+goog.math.Size.prototype.scaleToFit = function(target) {
+  var s = this.aspectRatio() > target.aspectRatio() ? target.width / this.width : target.height / this.height;
+  return this.scale(s)
+};
 goog.provide("goog.object");
 goog.object.forEach = function(obj, f, opt_obj) {
   for(var key in obj) {
@@ -2246,4047 +2039,6 @@ goog.object.createSet = function(var_args) {
     rv[arguments[i]] = true
   }
   return rv
-};
-goog.provide("goog.events");
-goog.require("goog.array");
-goog.require("goog.debug.entryPointRegistry");
-goog.require("goog.debug.errorHandlerWeakDep");
-goog.require("goog.events.BrowserEvent");
-goog.require("goog.events.Event");
-goog.require("goog.events.EventWrapper");
-goog.require("goog.events.pools");
-goog.require("goog.object");
-goog.require("goog.userAgent");
-goog.events.listeners_ = {};
-goog.events.listenerTree_ = {};
-goog.events.sources_ = {};
-goog.events.onString_ = "on";
-goog.events.onStringMap_ = {};
-goog.events.keySeparator_ = "_";
-goog.events.requiresSyntheticEventPropagation_;
-goog.events.listen = function(src, type, listener, opt_capt, opt_handler) {
-  if(!type) {
-    throw Error("Invalid event type");
-  }else {
-    if(goog.isArray(type)) {
-      for(var i = 0;i < type.length;i++) {
-        goog.events.listen(src, type[i], listener, opt_capt, opt_handler)
-      }
-      return null
-    }else {
-      var capture = !!opt_capt;
-      var map = goog.events.listenerTree_;
-      if(!(type in map)) {
-        map[type] = goog.events.pools.getObject()
-      }
-      map = map[type];
-      if(!(capture in map)) {
-        map[capture] = goog.events.pools.getObject();
-        map.count_++
-      }
-      map = map[capture];
-      var srcUid = goog.getUid(src);
-      var listenerArray, listenerObj;
-      map.remaining_++;
-      if(!map[srcUid]) {
-        listenerArray = map[srcUid] = goog.events.pools.getArray();
-        map.count_++
-      }else {
-        listenerArray = map[srcUid];
-        for(var i = 0;i < listenerArray.length;i++) {
-          listenerObj = listenerArray[i];
-          if(listenerObj.listener == listener && listenerObj.handler == opt_handler) {
-            if(listenerObj.removed) {
-              break
-            }
-            return listenerArray[i].key
-          }
-        }
-      }
-      var proxy = goog.events.pools.getProxy();
-      proxy.src = src;
-      listenerObj = goog.events.pools.getListener();
-      listenerObj.init(listener, proxy, src, type, capture, opt_handler);
-      var key = listenerObj.key;
-      proxy.key = key;
-      listenerArray.push(listenerObj);
-      goog.events.listeners_[key] = listenerObj;
-      if(!goog.events.sources_[srcUid]) {
-        goog.events.sources_[srcUid] = goog.events.pools.getArray()
-      }
-      goog.events.sources_[srcUid].push(listenerObj);
-      if(src.addEventListener) {
-        if(src == goog.global || !src.customEvent_) {
-          src.addEventListener(type, proxy, capture)
-        }
-      }else {
-        src.attachEvent(goog.events.getOnString_(type), proxy)
-      }
-      return key
-    }
-  }
-};
-goog.events.listenOnce = function(src, type, listener, opt_capt, opt_handler) {
-  if(goog.isArray(type)) {
-    for(var i = 0;i < type.length;i++) {
-      goog.events.listenOnce(src, type[i], listener, opt_capt, opt_handler)
-    }
-    return null
-  }
-  var key = goog.events.listen(src, type, listener, opt_capt, opt_handler);
-  var listenerObj = goog.events.listeners_[key];
-  listenerObj.callOnce = true;
-  return key
-};
-goog.events.listenWithWrapper = function(src, wrapper, listener, opt_capt, opt_handler) {
-  wrapper.listen(src, listener, opt_capt, opt_handler)
-};
-goog.events.unlisten = function(src, type, listener, opt_capt, opt_handler) {
-  if(goog.isArray(type)) {
-    for(var i = 0;i < type.length;i++) {
-      goog.events.unlisten(src, type[i], listener, opt_capt, opt_handler)
-    }
-    return null
-  }
-  var capture = !!opt_capt;
-  var listenerArray = goog.events.getListeners_(src, type, capture);
-  if(!listenerArray) {
-    return false
-  }
-  for(var i = 0;i < listenerArray.length;i++) {
-    if(listenerArray[i].listener == listener && listenerArray[i].capture == capture && listenerArray[i].handler == opt_handler) {
-      return goog.events.unlistenByKey(listenerArray[i].key)
-    }
-  }
-  return false
-};
-goog.events.unlistenByKey = function(key) {
-  if(!goog.events.listeners_[key]) {
-    return false
-  }
-  var listener = goog.events.listeners_[key];
-  if(listener.removed) {
-    return false
-  }
-  var src = listener.src;
-  var type = listener.type;
-  var proxy = listener.proxy;
-  var capture = listener.capture;
-  if(src.removeEventListener) {
-    if(src == goog.global || !src.customEvent_) {
-      src.removeEventListener(type, proxy, capture)
-    }
-  }else {
-    if(src.detachEvent) {
-      src.detachEvent(goog.events.getOnString_(type), proxy)
-    }
-  }
-  var srcUid = goog.getUid(src);
-  var listenerArray = goog.events.listenerTree_[type][capture][srcUid];
-  if(goog.events.sources_[srcUid]) {
-    var sourcesArray = goog.events.sources_[srcUid];
-    goog.array.remove(sourcesArray, listener);
-    if(sourcesArray.length == 0) {
-      delete goog.events.sources_[srcUid]
-    }
-  }
-  listener.removed = true;
-  listenerArray.needsCleanup_ = true;
-  goog.events.cleanUp_(type, capture, srcUid, listenerArray);
-  delete goog.events.listeners_[key];
-  return true
-};
-goog.events.unlistenWithWrapper = function(src, wrapper, listener, opt_capt, opt_handler) {
-  wrapper.unlisten(src, listener, opt_capt, opt_handler)
-};
-goog.events.cleanUp_ = function(type, capture, srcUid, listenerArray) {
-  if(!listenerArray.locked_) {
-    if(listenerArray.needsCleanup_) {
-      for(var oldIndex = 0, newIndex = 0;oldIndex < listenerArray.length;oldIndex++) {
-        if(listenerArray[oldIndex].removed) {
-          var proxy = listenerArray[oldIndex].proxy;
-          proxy.src = null;
-          goog.events.pools.releaseProxy(proxy);
-          goog.events.pools.releaseListener(listenerArray[oldIndex]);
-          continue
-        }
-        if(oldIndex != newIndex) {
-          listenerArray[newIndex] = listenerArray[oldIndex]
-        }
-        newIndex++
-      }
-      listenerArray.length = newIndex;
-      listenerArray.needsCleanup_ = false;
-      if(newIndex == 0) {
-        goog.events.pools.releaseArray(listenerArray);
-        delete goog.events.listenerTree_[type][capture][srcUid];
-        goog.events.listenerTree_[type][capture].count_--;
-        if(goog.events.listenerTree_[type][capture].count_ == 0) {
-          goog.events.pools.releaseObject(goog.events.listenerTree_[type][capture]);
-          delete goog.events.listenerTree_[type][capture];
-          goog.events.listenerTree_[type].count_--
-        }
-        if(goog.events.listenerTree_[type].count_ == 0) {
-          goog.events.pools.releaseObject(goog.events.listenerTree_[type]);
-          delete goog.events.listenerTree_[type]
-        }
-      }
-    }
-  }
-};
-goog.events.removeAll = function(opt_obj, opt_type, opt_capt) {
-  var count = 0;
-  var noObj = opt_obj == null;
-  var noType = opt_type == null;
-  var noCapt = opt_capt == null;
-  opt_capt = !!opt_capt;
-  if(!noObj) {
-    var srcUid = goog.getUid(opt_obj);
-    if(goog.events.sources_[srcUid]) {
-      var sourcesArray = goog.events.sources_[srcUid];
-      for(var i = sourcesArray.length - 1;i >= 0;i--) {
-        var listener = sourcesArray[i];
-        if((noType || opt_type == listener.type) && (noCapt || opt_capt == listener.capture)) {
-          goog.events.unlistenByKey(listener.key);
-          count++
-        }
-      }
-    }
-  }else {
-    goog.object.forEach(goog.events.sources_, function(listeners) {
-      for(var i = listeners.length - 1;i >= 0;i--) {
-        var listener = listeners[i];
-        if((noType || opt_type == listener.type) && (noCapt || opt_capt == listener.capture)) {
-          goog.events.unlistenByKey(listener.key);
-          count++
-        }
-      }
-    })
-  }
-  return count
-};
-goog.events.getListeners = function(obj, type, capture) {
-  return goog.events.getListeners_(obj, type, capture) || []
-};
-goog.events.getListeners_ = function(obj, type, capture) {
-  var map = goog.events.listenerTree_;
-  if(type in map) {
-    map = map[type];
-    if(capture in map) {
-      map = map[capture];
-      var objUid = goog.getUid(obj);
-      if(map[objUid]) {
-        return map[objUid]
-      }
-    }
-  }
-  return null
-};
-goog.events.getListener = function(src, type, listener, opt_capt, opt_handler) {
-  var capture = !!opt_capt;
-  var listenerArray = goog.events.getListeners_(src, type, capture);
-  if(listenerArray) {
-    for(var i = 0;i < listenerArray.length;i++) {
-      if(listenerArray[i].listener == listener && listenerArray[i].capture == capture && listenerArray[i].handler == opt_handler) {
-        return listenerArray[i]
-      }
-    }
-  }
-  return null
-};
-goog.events.hasListener = function(obj, opt_type, opt_capture) {
-  var objUid = goog.getUid(obj);
-  var listeners = goog.events.sources_[objUid];
-  if(listeners) {
-    var hasType = goog.isDef(opt_type);
-    var hasCapture = goog.isDef(opt_capture);
-    if(hasType && hasCapture) {
-      var map = goog.events.listenerTree_[opt_type];
-      return!!map && !!map[opt_capture] && objUid in map[opt_capture]
-    }else {
-      if(!(hasType || hasCapture)) {
-        return true
-      }else {
-        return goog.array.some(listeners, function(listener) {
-          return hasType && listener.type == opt_type || hasCapture && listener.capture == opt_capture
-        })
-      }
-    }
-  }
-  return false
-};
-goog.events.expose = function(e) {
-  var str = [];
-  for(var key in e) {
-    if(e[key] && e[key].id) {
-      str.push(key + " = " + e[key] + " (" + e[key].id + ")")
-    }else {
-      str.push(key + " = " + e[key])
-    }
-  }
-  return str.join("\n")
-};
-goog.events.getOnString_ = function(type) {
-  if(type in goog.events.onStringMap_) {
-    return goog.events.onStringMap_[type]
-  }
-  return goog.events.onStringMap_[type] = goog.events.onString_ + type
-};
-goog.events.fireListeners = function(obj, type, capture, eventObject) {
-  var map = goog.events.listenerTree_;
-  if(type in map) {
-    map = map[type];
-    if(capture in map) {
-      return goog.events.fireListeners_(map[capture], obj, type, capture, eventObject)
-    }
-  }
-  return true
-};
-goog.events.fireListeners_ = function(map, obj, type, capture, eventObject) {
-  var retval = 1;
-  var objUid = goog.getUid(obj);
-  if(map[objUid]) {
-    map.remaining_--;
-    var listenerArray = map[objUid];
-    if(!listenerArray.locked_) {
-      listenerArray.locked_ = 1
-    }else {
-      listenerArray.locked_++
-    }
-    try {
-      var length = listenerArray.length;
-      for(var i = 0;i < length;i++) {
-        var listener = listenerArray[i];
-        if(listener && !listener.removed) {
-          retval &= goog.events.fireListener(listener, eventObject) !== false
-        }
-      }
-    }finally {
-      listenerArray.locked_--;
-      goog.events.cleanUp_(type, capture, objUid, listenerArray)
-    }
-  }
-  return Boolean(retval)
-};
-goog.events.fireListener = function(listener, eventObject) {
-  var rv = listener.handleEvent(eventObject);
-  if(listener.callOnce) {
-    goog.events.unlistenByKey(listener.key)
-  }
-  return rv
-};
-goog.events.getTotalListenerCount = function() {
-  return goog.object.getCount(goog.events.listeners_)
-};
-goog.events.dispatchEvent = function(src, e) {
-  var type = e.type || e;
-  var map = goog.events.listenerTree_;
-  if(!(type in map)) {
-    return true
-  }
-  if(goog.isString(e)) {
-    e = new goog.events.Event(e, src)
-  }else {
-    if(!(e instanceof goog.events.Event)) {
-      var oldEvent = e;
-      e = new goog.events.Event(type, src);
-      goog.object.extend(e, oldEvent)
-    }else {
-      e.target = e.target || src
-    }
-  }
-  var rv = 1, ancestors;
-  map = map[type];
-  var hasCapture = true in map;
-  var targetsMap;
-  if(hasCapture) {
-    ancestors = [];
-    for(var parent = src;parent;parent = parent.getParentEventTarget()) {
-      ancestors.push(parent)
-    }
-    targetsMap = map[true];
-    targetsMap.remaining_ = targetsMap.count_;
-    for(var i = ancestors.length - 1;!e.propagationStopped_ && i >= 0 && targetsMap.remaining_;i--) {
-      e.currentTarget = ancestors[i];
-      rv &= goog.events.fireListeners_(targetsMap, ancestors[i], e.type, true, e) && e.returnValue_ != false
-    }
-  }
-  var hasBubble = false in map;
-  if(hasBubble) {
-    targetsMap = map[false];
-    targetsMap.remaining_ = targetsMap.count_;
-    if(hasCapture) {
-      for(var i = 0;!e.propagationStopped_ && i < ancestors.length && targetsMap.remaining_;i++) {
-        e.currentTarget = ancestors[i];
-        rv &= goog.events.fireListeners_(targetsMap, ancestors[i], e.type, false, e) && e.returnValue_ != false
-      }
-    }else {
-      for(var current = src;!e.propagationStopped_ && current && targetsMap.remaining_;current = current.getParentEventTarget()) {
-        e.currentTarget = current;
-        rv &= goog.events.fireListeners_(targetsMap, current, e.type, false, e) && e.returnValue_ != false
-      }
-    }
-  }
-  return Boolean(rv)
-};
-goog.events.protectBrowserEventEntryPoint = function(errorHandler) {
-  goog.events.handleBrowserEvent_ = errorHandler.protectEntryPoint(goog.events.handleBrowserEvent_);
-  goog.events.pools.setProxyCallbackFunction(goog.events.handleBrowserEvent_)
-};
-goog.events.handleBrowserEvent_ = function(key, opt_evt) {
-  if(!goog.events.listeners_[key]) {
-    return true
-  }
-  var listener = goog.events.listeners_[key];
-  var type = listener.type;
-  var map = goog.events.listenerTree_;
-  if(!(type in map)) {
-    return true
-  }
-  map = map[type];
-  var retval, targetsMap;
-  if(goog.events.synthesizeEventPropagation_()) {
-    var ieEvent = opt_evt || goog.getObjectByName("window.event");
-    var hasCapture = true in map;
-    var hasBubble = false in map;
-    if(hasCapture) {
-      if(goog.events.isMarkedIeEvent_(ieEvent)) {
-        return true
-      }
-      goog.events.markIeEvent_(ieEvent)
-    }
-    var evt = goog.events.pools.getEvent();
-    evt.init(ieEvent, this);
-    retval = true;
-    try {
-      if(hasCapture) {
-        var ancestors = goog.events.pools.getArray();
-        for(var parent = evt.currentTarget;parent;parent = parent.parentNode) {
-          ancestors.push(parent)
-        }
-        targetsMap = map[true];
-        targetsMap.remaining_ = targetsMap.count_;
-        for(var i = ancestors.length - 1;!evt.propagationStopped_ && i >= 0 && targetsMap.remaining_;i--) {
-          evt.currentTarget = ancestors[i];
-          retval &= goog.events.fireListeners_(targetsMap, ancestors[i], type, true, evt)
-        }
-        if(hasBubble) {
-          targetsMap = map[false];
-          targetsMap.remaining_ = targetsMap.count_;
-          for(var i = 0;!evt.propagationStopped_ && i < ancestors.length && targetsMap.remaining_;i++) {
-            evt.currentTarget = ancestors[i];
-            retval &= goog.events.fireListeners_(targetsMap, ancestors[i], type, false, evt)
-          }
-        }
-      }else {
-        retval = goog.events.fireListener(listener, evt)
-      }
-    }finally {
-      if(ancestors) {
-        ancestors.length = 0;
-        goog.events.pools.releaseArray(ancestors)
-      }
-      evt.dispose();
-      goog.events.pools.releaseEvent(evt)
-    }
-    return retval
-  }
-  var be = new goog.events.BrowserEvent(opt_evt, this);
-  try {
-    retval = goog.events.fireListener(listener, be)
-  }finally {
-    be.dispose()
-  }
-  return retval
-};
-goog.events.pools.setProxyCallbackFunction(goog.events.handleBrowserEvent_);
-goog.events.markIeEvent_ = function(e) {
-  var useReturnValue = false;
-  if(e.keyCode == 0) {
-    try {
-      e.keyCode = -1;
-      return
-    }catch(ex) {
-      useReturnValue = true
-    }
-  }
-  if(useReturnValue || e.returnValue == undefined) {
-    e.returnValue = true
-  }
-};
-goog.events.isMarkedIeEvent_ = function(e) {
-  return e.keyCode < 0 || e.returnValue != undefined
-};
-goog.events.uniqueIdCounter_ = 0;
-goog.events.getUniqueId = function(identifier) {
-  return identifier + "_" + goog.events.uniqueIdCounter_++
-};
-goog.events.synthesizeEventPropagation_ = function() {
-  if(goog.events.requiresSyntheticEventPropagation_ === undefined) {
-    goog.events.requiresSyntheticEventPropagation_ = goog.userAgent.IE && !goog.global["addEventListener"]
-  }
-  return goog.events.requiresSyntheticEventPropagation_
-};
-goog.debug.entryPointRegistry.register(function(transformer) {
-  goog.events.handleBrowserEvent_ = transformer(goog.events.handleBrowserEvent_);
-  goog.events.pools.setProxyCallbackFunction(goog.events.handleBrowserEvent_)
-});
-goog.provide("goog.events.EventTarget");
-goog.require("goog.Disposable");
-goog.require("goog.events");
-goog.events.EventTarget = function() {
-  goog.Disposable.call(this)
-};
-goog.inherits(goog.events.EventTarget, goog.Disposable);
-goog.events.EventTarget.prototype.customEvent_ = true;
-goog.events.EventTarget.prototype.parentEventTarget_ = null;
-goog.events.EventTarget.prototype.getParentEventTarget = function() {
-  return this.parentEventTarget_
-};
-goog.events.EventTarget.prototype.setParentEventTarget = function(parent) {
-  this.parentEventTarget_ = parent
-};
-goog.events.EventTarget.prototype.addEventListener = function(type, handler, opt_capture, opt_handlerScope) {
-  goog.events.listen(this, type, handler, opt_capture, opt_handlerScope)
-};
-goog.events.EventTarget.prototype.removeEventListener = function(type, handler, opt_capture, opt_handlerScope) {
-  goog.events.unlisten(this, type, handler, opt_capture, opt_handlerScope)
-};
-goog.events.EventTarget.prototype.dispatchEvent = function(e) {
-  return goog.events.dispatchEvent(this, e)
-};
-goog.events.EventTarget.prototype.disposeInternal = function() {
-  goog.events.EventTarget.superClass_.disposeInternal.call(this);
-  goog.events.removeAll(this);
-  this.parentEventTarget_ = null
-};
-goog.provide("goog.Timer");
-goog.require("goog.events.EventTarget");
-goog.Timer = function(opt_interval, opt_timerObject) {
-  goog.events.EventTarget.call(this);
-  this.interval_ = opt_interval || 1;
-  this.timerObject_ = opt_timerObject || goog.Timer.defaultTimerObject;
-  this.boundTick_ = goog.bind(this.tick_, this);
-  this.last_ = goog.now()
-};
-goog.inherits(goog.Timer, goog.events.EventTarget);
-goog.Timer.MAX_TIMEOUT_ = 2147483647;
-goog.Timer.prototype.enabled = false;
-goog.Timer.defaultTimerObject = goog.global["window"];
-goog.Timer.intervalScale = 0.8;
-goog.Timer.prototype.timer_ = null;
-goog.Timer.prototype.getInterval = function() {
-  return this.interval_
-};
-goog.Timer.prototype.setInterval = function(interval) {
-  this.interval_ = interval;
-  if(this.timer_ && this.enabled) {
-    this.stop();
-    this.start()
-  }else {
-    if(this.timer_) {
-      this.stop()
-    }
-  }
-};
-goog.Timer.prototype.tick_ = function() {
-  if(this.enabled) {
-    var elapsed = goog.now() - this.last_;
-    if(elapsed > 0 && elapsed < this.interval_ * goog.Timer.intervalScale) {
-      this.timer_ = this.timerObject_.setTimeout(this.boundTick_, this.interval_ - elapsed);
-      return
-    }
-    this.dispatchTick();
-    if(this.enabled) {
-      this.timer_ = this.timerObject_.setTimeout(this.boundTick_, this.interval_);
-      this.last_ = goog.now()
-    }
-  }
-};
-goog.Timer.prototype.dispatchTick = function() {
-  this.dispatchEvent(goog.Timer.TICK)
-};
-goog.Timer.prototype.start = function() {
-  this.enabled = true;
-  if(!this.timer_) {
-    this.timer_ = this.timerObject_.setTimeout(this.boundTick_, this.interval_);
-    this.last_ = goog.now()
-  }
-};
-goog.Timer.prototype.stop = function() {
-  this.enabled = false;
-  if(this.timer_) {
-    this.timerObject_.clearTimeout(this.timer_);
-    this.timer_ = null
-  }
-};
-goog.Timer.prototype.disposeInternal = function() {
-  goog.Timer.superClass_.disposeInternal.call(this);
-  this.stop();
-  delete this.timerObject_
-};
-goog.Timer.TICK = "tick";
-goog.Timer.callOnce = function(listener, opt_delay, opt_handler) {
-  if(goog.isFunction(listener)) {
-    if(opt_handler) {
-      listener = goog.bind(listener, opt_handler)
-    }
-  }else {
-    if(listener && typeof listener.handleEvent == "function") {
-      listener = goog.bind(listener.handleEvent, listener)
-    }else {
-      throw Error("Invalid listener argument");
-    }
-  }
-  if(opt_delay > goog.Timer.MAX_TIMEOUT_) {
-    return-1
-  }else {
-    return goog.Timer.defaultTimerObject.setTimeout(listener, opt_delay || 0)
-  }
-};
-goog.Timer.clear = function(timerId) {
-  goog.Timer.defaultTimerObject.clearTimeout(timerId)
-};
-goog.provide("goog.structs");
-goog.require("goog.array");
-goog.require("goog.object");
-goog.structs.getCount = function(col) {
-  if(typeof col.getCount == "function") {
-    return col.getCount()
-  }
-  if(goog.isArrayLike(col) || goog.isString(col)) {
-    return col.length
-  }
-  return goog.object.getCount(col)
-};
-goog.structs.getValues = function(col) {
-  if(typeof col.getValues == "function") {
-    return col.getValues()
-  }
-  if(goog.isString(col)) {
-    return col.split("")
-  }
-  if(goog.isArrayLike(col)) {
-    var rv = [];
-    var l = col.length;
-    for(var i = 0;i < l;i++) {
-      rv.push(col[i])
-    }
-    return rv
-  }
-  return goog.object.getValues(col)
-};
-goog.structs.getKeys = function(col) {
-  if(typeof col.getKeys == "function") {
-    return col.getKeys()
-  }
-  if(typeof col.getValues == "function") {
-    return undefined
-  }
-  if(goog.isArrayLike(col) || goog.isString(col)) {
-    var rv = [];
-    var l = col.length;
-    for(var i = 0;i < l;i++) {
-      rv.push(i)
-    }
-    return rv
-  }
-  return goog.object.getKeys(col)
-};
-goog.structs.contains = function(col, val) {
-  if(typeof col.contains == "function") {
-    return col.contains(val)
-  }
-  if(typeof col.containsValue == "function") {
-    return col.containsValue(val)
-  }
-  if(goog.isArrayLike(col) || goog.isString(col)) {
-    return goog.array.contains(col, val)
-  }
-  return goog.object.containsValue(col, val)
-};
-goog.structs.isEmpty = function(col) {
-  if(typeof col.isEmpty == "function") {
-    return col.isEmpty()
-  }
-  if(goog.isArrayLike(col) || goog.isString(col)) {
-    return goog.array.isEmpty(col)
-  }
-  return goog.object.isEmpty(col)
-};
-goog.structs.clear = function(col) {
-  if(typeof col.clear == "function") {
-    col.clear()
-  }else {
-    if(goog.isArrayLike(col)) {
-      goog.array.clear(col)
-    }else {
-      goog.object.clear(col)
-    }
-  }
-};
-goog.structs.forEach = function(col, f, opt_obj) {
-  if(typeof col.forEach == "function") {
-    col.forEach(f, opt_obj)
-  }else {
-    if(goog.isArrayLike(col) || goog.isString(col)) {
-      goog.array.forEach(col, f, opt_obj)
-    }else {
-      var keys = goog.structs.getKeys(col);
-      var values = goog.structs.getValues(col);
-      var l = values.length;
-      for(var i = 0;i < l;i++) {
-        f.call(opt_obj, values[i], keys && keys[i], col)
-      }
-    }
-  }
-};
-goog.structs.filter = function(col, f, opt_obj) {
-  if(typeof col.filter == "function") {
-    return col.filter(f, opt_obj)
-  }
-  if(goog.isArrayLike(col) || goog.isString(col)) {
-    return goog.array.filter(col, f, opt_obj)
-  }
-  var rv;
-  var keys = goog.structs.getKeys(col);
-  var values = goog.structs.getValues(col);
-  var l = values.length;
-  if(keys) {
-    rv = {};
-    for(var i = 0;i < l;i++) {
-      if(f.call(opt_obj, values[i], keys[i], col)) {
-        rv[keys[i]] = values[i]
-      }
-    }
-  }else {
-    rv = [];
-    for(var i = 0;i < l;i++) {
-      if(f.call(opt_obj, values[i], undefined, col)) {
-        rv.push(values[i])
-      }
-    }
-  }
-  return rv
-};
-goog.structs.map = function(col, f, opt_obj) {
-  if(typeof col.map == "function") {
-    return col.map(f, opt_obj)
-  }
-  if(goog.isArrayLike(col) || goog.isString(col)) {
-    return goog.array.map(col, f, opt_obj)
-  }
-  var rv;
-  var keys = goog.structs.getKeys(col);
-  var values = goog.structs.getValues(col);
-  var l = values.length;
-  if(keys) {
-    rv = {};
-    for(var i = 0;i < l;i++) {
-      rv[keys[i]] = f.call(opt_obj, values[i], keys[i], col)
-    }
-  }else {
-    rv = [];
-    for(var i = 0;i < l;i++) {
-      rv[i] = f.call(opt_obj, values[i], undefined, col)
-    }
-  }
-  return rv
-};
-goog.structs.some = function(col, f, opt_obj) {
-  if(typeof col.some == "function") {
-    return col.some(f, opt_obj)
-  }
-  if(goog.isArrayLike(col) || goog.isString(col)) {
-    return goog.array.some(col, f, opt_obj)
-  }
-  var keys = goog.structs.getKeys(col);
-  var values = goog.structs.getValues(col);
-  var l = values.length;
-  for(var i = 0;i < l;i++) {
-    if(f.call(opt_obj, values[i], keys && keys[i], col)) {
-      return true
-    }
-  }
-  return false
-};
-goog.structs.every = function(col, f, opt_obj) {
-  if(typeof col.every == "function") {
-    return col.every(f, opt_obj)
-  }
-  if(goog.isArrayLike(col) || goog.isString(col)) {
-    return goog.array.every(col, f, opt_obj)
-  }
-  var keys = goog.structs.getKeys(col);
-  var values = goog.structs.getValues(col);
-  var l = values.length;
-  for(var i = 0;i < l;i++) {
-    if(!f.call(opt_obj, values[i], keys && keys[i], col)) {
-      return false
-    }
-  }
-  return true
-};
-goog.provide("goog.iter");
-goog.provide("goog.iter.Iterator");
-goog.provide("goog.iter.StopIteration");
-goog.require("goog.array");
-goog.require("goog.asserts");
-goog.iter.Iterable;
-if("StopIteration" in goog.global) {
-  goog.iter.StopIteration = goog.global["StopIteration"]
-}else {
-  goog.iter.StopIteration = Error("StopIteration")
-}
-goog.iter.Iterator = function() {
-};
-goog.iter.Iterator.prototype.next = function() {
-  throw goog.iter.StopIteration;
-};
-goog.iter.Iterator.prototype.__iterator__ = function(opt_keys) {
-  return this
-};
-goog.iter.toIterator = function(iterable) {
-  if(iterable instanceof goog.iter.Iterator) {
-    return iterable
-  }
-  if(typeof iterable.__iterator__ == "function") {
-    return iterable.__iterator__(false)
-  }
-  if(goog.isArrayLike(iterable)) {
-    var i = 0;
-    var newIter = new goog.iter.Iterator;
-    newIter.next = function() {
-      while(true) {
-        if(i >= iterable.length) {
-          throw goog.iter.StopIteration;
-        }
-        if(!(i in iterable)) {
-          i++;
-          continue
-        }
-        return iterable[i++]
-      }
-    };
-    return newIter
-  }
-  throw Error("Not implemented");
-};
-goog.iter.forEach = function(iterable, f, opt_obj) {
-  if(goog.isArrayLike(iterable)) {
-    try {
-      goog.array.forEach(iterable, f, opt_obj)
-    }catch(ex) {
-      if(ex !== goog.iter.StopIteration) {
-        throw ex;
-      }
-    }
-  }else {
-    iterable = goog.iter.toIterator(iterable);
-    try {
-      while(true) {
-        f.call(opt_obj, iterable.next(), undefined, iterable)
-      }
-    }catch(ex) {
-      if(ex !== goog.iter.StopIteration) {
-        throw ex;
-      }
-    }
-  }
-};
-goog.iter.filter = function(iterable, f, opt_obj) {
-  iterable = goog.iter.toIterator(iterable);
-  var newIter = new goog.iter.Iterator;
-  newIter.next = function() {
-    while(true) {
-      var val = iterable.next();
-      if(f.call(opt_obj, val, undefined, iterable)) {
-        return val
-      }
-    }
-  };
-  return newIter
-};
-goog.iter.range = function(startOrStop, opt_stop, opt_step) {
-  var start = 0;
-  var stop = startOrStop;
-  var step = opt_step || 1;
-  if(arguments.length > 1) {
-    start = startOrStop;
-    stop = opt_stop
-  }
-  if(step == 0) {
-    throw Error("Range step argument must not be zero");
-  }
-  var newIter = new goog.iter.Iterator;
-  newIter.next = function() {
-    if(step > 0 && start >= stop || step < 0 && start <= stop) {
-      throw goog.iter.StopIteration;
-    }
-    var rv = start;
-    start += step;
-    return rv
-  };
-  return newIter
-};
-goog.iter.join = function(iterable, deliminator) {
-  return goog.iter.toArray(iterable).join(deliminator)
-};
-goog.iter.map = function(iterable, f, opt_obj) {
-  iterable = goog.iter.toIterator(iterable);
-  var newIter = new goog.iter.Iterator;
-  newIter.next = function() {
-    while(true) {
-      var val = iterable.next();
-      return f.call(opt_obj, val, undefined, iterable)
-    }
-  };
-  return newIter
-};
-goog.iter.reduce = function(iterable, f, val, opt_obj) {
-  var rval = val;
-  goog.iter.forEach(iterable, function(val) {
-    rval = f.call(opt_obj, rval, val)
-  });
-  return rval
-};
-goog.iter.some = function(iterable, f, opt_obj) {
-  iterable = goog.iter.toIterator(iterable);
-  try {
-    while(true) {
-      if(f.call(opt_obj, iterable.next(), undefined, iterable)) {
-        return true
-      }
-    }
-  }catch(ex) {
-    if(ex !== goog.iter.StopIteration) {
-      throw ex;
-    }
-  }
-  return false
-};
-goog.iter.every = function(iterable, f, opt_obj) {
-  iterable = goog.iter.toIterator(iterable);
-  try {
-    while(true) {
-      if(!f.call(opt_obj, iterable.next(), undefined, iterable)) {
-        return false
-      }
-    }
-  }catch(ex) {
-    if(ex !== goog.iter.StopIteration) {
-      throw ex;
-    }
-  }
-  return true
-};
-goog.iter.chain = function(var_args) {
-  var args = arguments;
-  var length = args.length;
-  var i = 0;
-  var newIter = new goog.iter.Iterator;
-  newIter.next = function() {
-    try {
-      if(i >= length) {
-        throw goog.iter.StopIteration;
-      }
-      var current = goog.iter.toIterator(args[i]);
-      return current.next()
-    }catch(ex) {
-      if(ex !== goog.iter.StopIteration || i >= length) {
-        throw ex;
-      }else {
-        i++;
-        return this.next()
-      }
-    }
-  };
-  return newIter
-};
-goog.iter.dropWhile = function(iterable, f, opt_obj) {
-  iterable = goog.iter.toIterator(iterable);
-  var newIter = new goog.iter.Iterator;
-  var dropping = true;
-  newIter.next = function() {
-    while(true) {
-      var val = iterable.next();
-      if(dropping && f.call(opt_obj, val, undefined, iterable)) {
-        continue
-      }else {
-        dropping = false
-      }
-      return val
-    }
-  };
-  return newIter
-};
-goog.iter.takeWhile = function(iterable, f, opt_obj) {
-  iterable = goog.iter.toIterator(iterable);
-  var newIter = new goog.iter.Iterator;
-  var taking = true;
-  newIter.next = function() {
-    while(true) {
-      if(taking) {
-        var val = iterable.next();
-        if(f.call(opt_obj, val, undefined, iterable)) {
-          return val
-        }else {
-          taking = false
-        }
-      }else {
-        throw goog.iter.StopIteration;
-      }
-    }
-  };
-  return newIter
-};
-goog.iter.toArray = function(iterable) {
-  if(goog.isArrayLike(iterable)) {
-    return goog.array.toArray(iterable)
-  }
-  iterable = goog.iter.toIterator(iterable);
-  var array = [];
-  goog.iter.forEach(iterable, function(val) {
-    array.push(val)
-  });
-  return array
-};
-goog.iter.equals = function(iterable1, iterable2) {
-  iterable1 = goog.iter.toIterator(iterable1);
-  iterable2 = goog.iter.toIterator(iterable2);
-  var b1, b2;
-  try {
-    while(true) {
-      b1 = b2 = false;
-      var val1 = iterable1.next();
-      b1 = true;
-      var val2 = iterable2.next();
-      b2 = true;
-      if(val1 != val2) {
-        return false
-      }
-    }
-  }catch(ex) {
-    if(ex !== goog.iter.StopIteration) {
-      throw ex;
-    }else {
-      if(b1 && !b2) {
-        return false
-      }
-      if(!b2) {
-        try {
-          val2 = iterable2.next();
-          return false
-        }catch(ex1) {
-          if(ex1 !== goog.iter.StopIteration) {
-            throw ex1;
-          }
-          return true
-        }
-      }
-    }
-  }
-  return false
-};
-goog.iter.nextOrValue = function(iterable, defaultValue) {
-  try {
-    return goog.iter.toIterator(iterable).next()
-  }catch(e) {
-    if(e != goog.iter.StopIteration) {
-      throw e;
-    }
-    return defaultValue
-  }
-};
-goog.iter.product = function(var_args) {
-  var someArrayEmpty = goog.array.some(arguments, function(arr) {
-    return!arr.length
-  });
-  if(someArrayEmpty || !arguments.length) {
-    return new goog.iter.Iterator
-  }
-  var iter = new goog.iter.Iterator;
-  var arrays = arguments;
-  var indicies = goog.array.repeat(0, arrays.length);
-  iter.next = function() {
-    if(indicies) {
-      var retVal = goog.array.map(indicies, function(valueIndex, arrayIndex) {
-        return arrays[arrayIndex][valueIndex]
-      });
-      for(var i = indicies.length - 1;i >= 0;i--) {
-        goog.asserts.assert(indicies);
-        if(indicies[i] < arrays[i].length - 1) {
-          indicies[i]++;
-          break
-        }
-        if(i == 0) {
-          indicies = null;
-          break
-        }
-        indicies[i] = 0
-      }
-      return retVal
-    }
-    throw goog.iter.StopIteration;
-  };
-  return iter
-};
-goog.provide("goog.structs.Map");
-goog.require("goog.iter.Iterator");
-goog.require("goog.iter.StopIteration");
-goog.require("goog.object");
-goog.require("goog.structs");
-goog.structs.Map = function(opt_map, var_args) {
-  this.map_ = {};
-  this.keys_ = [];
-  var argLength = arguments.length;
-  if(argLength > 1) {
-    if(argLength % 2) {
-      throw Error("Uneven number of arguments");
-    }
-    for(var i = 0;i < argLength;i += 2) {
-      this.set(arguments[i], arguments[i + 1])
-    }
-  }else {
-    if(opt_map) {
-      this.addAll(opt_map)
-    }
-  }
-};
-goog.structs.Map.prototype.count_ = 0;
-goog.structs.Map.prototype.version_ = 0;
-goog.structs.Map.prototype.getCount = function() {
-  return this.count_
-};
-goog.structs.Map.prototype.getValues = function() {
-  this.cleanupKeysArray_();
-  var rv = [];
-  for(var i = 0;i < this.keys_.length;i++) {
-    var key = this.keys_[i];
-    rv.push(this.map_[key])
-  }
-  return rv
-};
-goog.structs.Map.prototype.getKeys = function() {
-  this.cleanupKeysArray_();
-  return this.keys_.concat()
-};
-goog.structs.Map.prototype.containsKey = function(key) {
-  return goog.structs.Map.hasKey_(this.map_, key)
-};
-goog.structs.Map.prototype.containsValue = function(val) {
-  for(var i = 0;i < this.keys_.length;i++) {
-    var key = this.keys_[i];
-    if(goog.structs.Map.hasKey_(this.map_, key) && this.map_[key] == val) {
-      return true
-    }
-  }
-  return false
-};
-goog.structs.Map.prototype.equals = function(otherMap, opt_equalityFn) {
-  if(this === otherMap) {
-    return true
-  }
-  if(this.count_ != otherMap.getCount()) {
-    return false
-  }
-  var equalityFn = opt_equalityFn || goog.structs.Map.defaultEquals;
-  this.cleanupKeysArray_();
-  for(var key, i = 0;key = this.keys_[i];i++) {
-    if(!equalityFn(this.get(key), otherMap.get(key))) {
-      return false
-    }
-  }
-  return true
-};
-goog.structs.Map.defaultEquals = function(a, b) {
-  return a === b
-};
-goog.structs.Map.prototype.isEmpty = function() {
-  return this.count_ == 0
-};
-goog.structs.Map.prototype.clear = function() {
-  this.map_ = {};
-  this.keys_.length = 0;
-  this.count_ = 0;
-  this.version_ = 0
-};
-goog.structs.Map.prototype.remove = function(key) {
-  if(goog.structs.Map.hasKey_(this.map_, key)) {
-    delete this.map_[key];
-    this.count_--;
-    this.version_++;
-    if(this.keys_.length > 2 * this.count_) {
-      this.cleanupKeysArray_()
-    }
-    return true
-  }
-  return false
-};
-goog.structs.Map.prototype.cleanupKeysArray_ = function() {
-  if(this.count_ != this.keys_.length) {
-    var srcIndex = 0;
-    var destIndex = 0;
-    while(srcIndex < this.keys_.length) {
-      var key = this.keys_[srcIndex];
-      if(goog.structs.Map.hasKey_(this.map_, key)) {
-        this.keys_[destIndex++] = key
-      }
-      srcIndex++
-    }
-    this.keys_.length = destIndex
-  }
-  if(this.count_ != this.keys_.length) {
-    var seen = {};
-    var srcIndex = 0;
-    var destIndex = 0;
-    while(srcIndex < this.keys_.length) {
-      var key = this.keys_[srcIndex];
-      if(!goog.structs.Map.hasKey_(seen, key)) {
-        this.keys_[destIndex++] = key;
-        seen[key] = 1
-      }
-      srcIndex++
-    }
-    this.keys_.length = destIndex
-  }
-};
-goog.structs.Map.prototype.get = function(key, opt_val) {
-  if(goog.structs.Map.hasKey_(this.map_, key)) {
-    return this.map_[key]
-  }
-  return opt_val
-};
-goog.structs.Map.prototype.set = function(key, value) {
-  if(!goog.structs.Map.hasKey_(this.map_, key)) {
-    this.count_++;
-    this.keys_.push(key);
-    this.version_++
-  }
-  this.map_[key] = value
-};
-goog.structs.Map.prototype.addAll = function(map) {
-  var keys, values;
-  if(map instanceof goog.structs.Map) {
-    keys = map.getKeys();
-    values = map.getValues()
-  }else {
-    keys = goog.object.getKeys(map);
-    values = goog.object.getValues(map)
-  }
-  for(var i = 0;i < keys.length;i++) {
-    this.set(keys[i], values[i])
-  }
-};
-goog.structs.Map.prototype.clone = function() {
-  return new goog.structs.Map(this)
-};
-goog.structs.Map.prototype.transpose = function() {
-  var transposed = new goog.structs.Map;
-  for(var i = 0;i < this.keys_.length;i++) {
-    var key = this.keys_[i];
-    var value = this.map_[key];
-    transposed.set(value, key)
-  }
-  return transposed
-};
-goog.structs.Map.prototype.toObject = function() {
-  this.cleanupKeysArray_();
-  var obj = {};
-  for(var i = 0;i < this.keys_.length;i++) {
-    var key = this.keys_[i];
-    obj[key] = this.map_[key]
-  }
-  return obj
-};
-goog.structs.Map.prototype.getKeyIterator = function() {
-  return this.__iterator__(true)
-};
-goog.structs.Map.prototype.getValueIterator = function() {
-  return this.__iterator__(false)
-};
-goog.structs.Map.prototype.__iterator__ = function(opt_keys) {
-  this.cleanupKeysArray_();
-  var i = 0;
-  var keys = this.keys_;
-  var map = this.map_;
-  var version = this.version_;
-  var selfObj = this;
-  var newIter = new goog.iter.Iterator;
-  newIter.next = function() {
-    while(true) {
-      if(version != selfObj.version_) {
-        throw Error("The map has changed since the iterator was created");
-      }
-      if(i >= keys.length) {
-        throw goog.iter.StopIteration;
-      }
-      var key = keys[i++];
-      return opt_keys ? key : map[key]
-    }
-  };
-  return newIter
-};
-goog.structs.Map.hasKey_ = function(obj, key) {
-  return Object.prototype.hasOwnProperty.call(obj, key)
-};
-goog.provide("goog.structs.Set");
-goog.require("goog.structs");
-goog.require("goog.structs.Map");
-goog.structs.Set = function(opt_values) {
-  this.map_ = new goog.structs.Map;
-  if(opt_values) {
-    this.addAll(opt_values)
-  }
-};
-goog.structs.Set.getKey_ = function(val) {
-  var type = typeof val;
-  if(type == "object" && val || type == "function") {
-    return"o" + goog.getUid(val)
-  }else {
-    return type.substr(0, 1) + val
-  }
-};
-goog.structs.Set.prototype.getCount = function() {
-  return this.map_.getCount()
-};
-goog.structs.Set.prototype.add = function(element) {
-  this.map_.set(goog.structs.Set.getKey_(element), element)
-};
-goog.structs.Set.prototype.addAll = function(col) {
-  var values = goog.structs.getValues(col);
-  var l = values.length;
-  for(var i = 0;i < l;i++) {
-    this.add(values[i])
-  }
-};
-goog.structs.Set.prototype.removeAll = function(col) {
-  var values = goog.structs.getValues(col);
-  var l = values.length;
-  for(var i = 0;i < l;i++) {
-    this.remove(values[i])
-  }
-};
-goog.structs.Set.prototype.remove = function(element) {
-  return this.map_.remove(goog.structs.Set.getKey_(element))
-};
-goog.structs.Set.prototype.clear = function() {
-  this.map_.clear()
-};
-goog.structs.Set.prototype.isEmpty = function() {
-  return this.map_.isEmpty()
-};
-goog.structs.Set.prototype.contains = function(element) {
-  return this.map_.containsKey(goog.structs.Set.getKey_(element))
-};
-goog.structs.Set.prototype.containsAll = function(col) {
-  return goog.structs.every(col, this.contains, this)
-};
-goog.structs.Set.prototype.intersection = function(col) {
-  var result = new goog.structs.Set;
-  var values = goog.structs.getValues(col);
-  for(var i = 0;i < values.length;i++) {
-    var value = values[i];
-    if(this.contains(value)) {
-      result.add(value)
-    }
-  }
-  return result
-};
-goog.structs.Set.prototype.getValues = function() {
-  return this.map_.getValues()
-};
-goog.structs.Set.prototype.clone = function() {
-  return new goog.structs.Set(this)
-};
-goog.structs.Set.prototype.equals = function(col) {
-  return this.getCount() == goog.structs.getCount(col) && this.isSubsetOf(col)
-};
-goog.structs.Set.prototype.isSubsetOf = function(col) {
-  var colCount = goog.structs.getCount(col);
-  if(this.getCount() > colCount) {
-    return false
-  }
-  if(!(col instanceof goog.structs.Set) && colCount > 5) {
-    col = new goog.structs.Set(col)
-  }
-  return goog.structs.every(this, function(value) {
-    return goog.structs.contains(col, value)
-  })
-};
-goog.structs.Set.prototype.__iterator__ = function(opt_keys) {
-  return this.map_.__iterator__(false)
-};
-goog.provide("goog.debug");
-goog.require("goog.array");
-goog.require("goog.string");
-goog.require("goog.structs.Set");
-goog.debug.catchErrors = function(logFunc, opt_cancel, opt_target) {
-  var target = opt_target || goog.global;
-  var oldErrorHandler = target.onerror;
-  target.onerror = function(message, url, line) {
-    if(oldErrorHandler) {
-      oldErrorHandler(message, url, line)
-    }
-    logFunc({message:message, fileName:url, line:line});
-    return Boolean(opt_cancel)
-  }
-};
-goog.debug.expose = function(obj, opt_showFn) {
-  if(typeof obj == "undefined") {
-    return"undefined"
-  }
-  if(obj == null) {
-    return"NULL"
-  }
-  var str = [];
-  for(var x in obj) {
-    if(!opt_showFn && goog.isFunction(obj[x])) {
-      continue
-    }
-    var s = x + " = ";
-    try {
-      s += obj[x]
-    }catch(e) {
-      s += "*** " + e + " ***"
-    }
-    str.push(s)
-  }
-  return str.join("\n")
-};
-goog.debug.deepExpose = function(obj, opt_showFn) {
-  var previous = new goog.structs.Set;
-  var str = [];
-  var helper = function(obj, space) {
-    var nestspace = space + "  ";
-    var indentMultiline = function(str) {
-      return str.replace(/\n/g, "\n" + space)
-    };
-    try {
-      if(!goog.isDef(obj)) {
-        str.push("undefined")
-      }else {
-        if(goog.isNull(obj)) {
-          str.push("NULL")
-        }else {
-          if(goog.isString(obj)) {
-            str.push('"' + indentMultiline(obj) + '"')
-          }else {
-            if(goog.isFunction(obj)) {
-              str.push(indentMultiline(String(obj)))
-            }else {
-              if(goog.isObject(obj)) {
-                if(previous.contains(obj)) {
-                  str.push("*** reference loop detected ***")
-                }else {
-                  previous.add(obj);
-                  str.push("{");
-                  for(var x in obj) {
-                    if(!opt_showFn && goog.isFunction(obj[x])) {
-                      continue
-                    }
-                    str.push("\n");
-                    str.push(nestspace);
-                    str.push(x + " = ");
-                    helper(obj[x], nestspace)
-                  }
-                  str.push("\n" + space + "}")
-                }
-              }else {
-                str.push(obj)
-              }
-            }
-          }
-        }
-      }
-    }catch(e) {
-      str.push("*** " + e + " ***")
-    }
-  };
-  helper(obj, "");
-  return str.join("")
-};
-goog.debug.exposeArray = function(arr) {
-  var str = [];
-  for(var i = 0;i < arr.length;i++) {
-    if(goog.isArray(arr[i])) {
-      str.push(goog.debug.exposeArray(arr[i]))
-    }else {
-      str.push(arr[i])
-    }
-  }
-  return"[ " + str.join(", ") + " ]"
-};
-goog.debug.exposeException = function(err, opt_fn) {
-  try {
-    var e = goog.debug.normalizeErrorObject(err);
-    var error = "Message: " + goog.string.htmlEscape(e.message) + '\nUrl: <a href="view-source:' + e.fileName + '" target="_new">' + e.fileName + "</a>\nLine: " + e.lineNumber + "\n\nBrowser stack:\n" + goog.string.htmlEscape(e.stack + "-> ") + "[end]\n\nJS stack traversal:\n" + goog.string.htmlEscape(goog.debug.getStacktrace(opt_fn) + "-> ");
-    return error
-  }catch(e2) {
-    return"Exception trying to expose exception! You win, we lose. " + e2
-  }
-};
-goog.debug.normalizeErrorObject = function(err) {
-  var href = goog.getObjectByName("window.location.href");
-  if(goog.isString(err)) {
-    return{"message":err, "name":"Unknown error", "lineNumber":"Not available", "fileName":href, "stack":"Not available"}
-  }
-  var lineNumber, fileName;
-  var threwError = false;
-  try {
-    lineNumber = err.lineNumber || err.line || "Not available"
-  }catch(e) {
-    lineNumber = "Not available";
-    threwError = true
-  }
-  try {
-    fileName = err.fileName || err.filename || err.sourceURL || href
-  }catch(e) {
-    fileName = "Not available";
-    threwError = true
-  }
-  if(threwError || !err.lineNumber || !err.fileName || !err.stack) {
-    return{"message":err.message, "name":err.name, "lineNumber":lineNumber, "fileName":fileName, "stack":err.stack || "Not available"}
-  }
-  return err
-};
-goog.debug.enhanceError = function(err, opt_message) {
-  var error = typeof err == "string" ? Error(err) : err;
-  if(!error.stack) {
-    error.stack = goog.debug.getStacktrace(arguments.callee.caller)
-  }
-  if(opt_message) {
-    var x = 0;
-    while(error["message" + x]) {
-      ++x
-    }
-    error["message" + x] = String(opt_message)
-  }
-  return error
-};
-goog.debug.getStacktraceSimple = function(opt_depth) {
-  var sb = [];
-  var fn = arguments.callee.caller;
-  var depth = 0;
-  while(fn && (!opt_depth || depth < opt_depth)) {
-    sb.push(goog.debug.getFunctionName(fn));
-    sb.push("()\n");
-    try {
-      fn = fn.caller
-    }catch(e) {
-      sb.push("[exception trying to get caller]\n");
-      break
-    }
-    depth++;
-    if(depth >= goog.debug.MAX_STACK_DEPTH) {
-      sb.push("[...long stack...]");
-      break
-    }
-  }
-  if(opt_depth && depth >= opt_depth) {
-    sb.push("[...reached max depth limit...]")
-  }else {
-    sb.push("[end]")
-  }
-  return sb.join("")
-};
-goog.debug.MAX_STACK_DEPTH = 50;
-goog.debug.getStacktrace = function(opt_fn) {
-  return goog.debug.getStacktraceHelper_(opt_fn || arguments.callee.caller, [])
-};
-goog.debug.getStacktraceHelper_ = function(fn, visited) {
-  var sb = [];
-  if(goog.array.contains(visited, fn)) {
-    sb.push("[...circular reference...]")
-  }else {
-    if(fn && visited.length < goog.debug.MAX_STACK_DEPTH) {
-      sb.push(goog.debug.getFunctionName(fn) + "(");
-      var args = fn.arguments;
-      for(var i = 0;i < args.length;i++) {
-        if(i > 0) {
-          sb.push(", ")
-        }
-        var argDesc;
-        var arg = args[i];
-        switch(typeof arg) {
-          case "object":
-            argDesc = arg ? "object" : "null";
-            break;
-          case "string":
-            argDesc = arg;
-            break;
-          case "number":
-            argDesc = String(arg);
-            break;
-          case "boolean":
-            argDesc = arg ? "true" : "false";
-            break;
-          case "function":
-            argDesc = goog.debug.getFunctionName(arg);
-            argDesc = argDesc ? argDesc : "[fn]";
-            break;
-          case "undefined":
-          ;
-          default:
-            argDesc = typeof arg;
-            break
-        }
-        if(argDesc.length > 40) {
-          argDesc = argDesc.substr(0, 40) + "..."
-        }
-        sb.push(argDesc)
-      }
-      visited.push(fn);
-      sb.push(")\n");
-      try {
-        sb.push(goog.debug.getStacktraceHelper_(fn.caller, visited))
-      }catch(e) {
-        sb.push("[exception trying to get caller]\n")
-      }
-    }else {
-      if(fn) {
-        sb.push("[...long stack...]")
-      }else {
-        sb.push("[end]")
-      }
-    }
-  }
-  return sb.join("")
-};
-goog.debug.getFunctionName = function(fn) {
-  var functionSource = String(fn);
-  if(!goog.debug.fnNameCache_[functionSource]) {
-    var matches = /function ([^\(]+)/.exec(functionSource);
-    if(matches) {
-      var method = matches[1];
-      goog.debug.fnNameCache_[functionSource] = method
-    }else {
-      goog.debug.fnNameCache_[functionSource] = "[Anonymous]"
-    }
-  }
-  return goog.debug.fnNameCache_[functionSource]
-};
-goog.debug.makeWhitespaceVisible = function(string) {
-  return string.replace(/ /g, "[_]").replace(/\f/g, "[f]").replace(/\n/g, "[n]\n").replace(/\r/g, "[r]").replace(/\t/g, "[t]")
-};
-goog.debug.fnNameCache_ = {};
-goog.provide("goog.debug.LogRecord");
-goog.debug.LogRecord = function(level, msg, loggerName, opt_time, opt_sequenceNumber) {
-  this.reset(level, msg, loggerName, opt_time, opt_sequenceNumber)
-};
-goog.debug.LogRecord.prototype.time_;
-goog.debug.LogRecord.prototype.level_;
-goog.debug.LogRecord.prototype.msg_;
-goog.debug.LogRecord.prototype.loggerName_;
-goog.debug.LogRecord.prototype.sequenceNumber_ = 0;
-goog.debug.LogRecord.prototype.exception_ = null;
-goog.debug.LogRecord.prototype.exceptionText_ = null;
-goog.debug.LogRecord.ENABLE_SEQUENCE_NUMBERS = true;
-goog.debug.LogRecord.nextSequenceNumber_ = 0;
-goog.debug.LogRecord.prototype.reset = function(level, msg, loggerName, opt_time, opt_sequenceNumber) {
-  if(goog.debug.LogRecord.ENABLE_SEQUENCE_NUMBERS) {
-    this.sequenceNumber_ = typeof opt_sequenceNumber == "number" ? opt_sequenceNumber : goog.debug.LogRecord.nextSequenceNumber_++
-  }
-  this.time_ = opt_time || goog.now();
-  this.level_ = level;
-  this.msg_ = msg;
-  this.loggerName_ = loggerName;
-  delete this.exception_;
-  delete this.exceptionText_
-};
-goog.debug.LogRecord.prototype.getLoggerName = function() {
-  return this.loggerName_
-};
-goog.debug.LogRecord.prototype.getException = function() {
-  return this.exception_
-};
-goog.debug.LogRecord.prototype.setException = function(exception) {
-  this.exception_ = exception
-};
-goog.debug.LogRecord.prototype.getExceptionText = function() {
-  return this.exceptionText_
-};
-goog.debug.LogRecord.prototype.setExceptionText = function(text) {
-  this.exceptionText_ = text
-};
-goog.debug.LogRecord.prototype.setLoggerName = function(loggerName) {
-  this.loggerName_ = loggerName
-};
-goog.debug.LogRecord.prototype.getLevel = function() {
-  return this.level_
-};
-goog.debug.LogRecord.prototype.setLevel = function(level) {
-  this.level_ = level
-};
-goog.debug.LogRecord.prototype.getMessage = function() {
-  return this.msg_
-};
-goog.debug.LogRecord.prototype.setMessage = function(msg) {
-  this.msg_ = msg
-};
-goog.debug.LogRecord.prototype.getMillis = function() {
-  return this.time_
-};
-goog.debug.LogRecord.prototype.setMillis = function(time) {
-  this.time_ = time
-};
-goog.debug.LogRecord.prototype.getSequenceNumber = function() {
-  return this.sequenceNumber_
-};
-goog.provide("goog.debug.LogBuffer");
-goog.require("goog.asserts");
-goog.require("goog.debug.LogRecord");
-goog.debug.LogBuffer = function() {
-  goog.asserts.assert(goog.debug.LogBuffer.isBufferingEnabled(), "Cannot use goog.debug.LogBuffer without defining " + "goog.debug.LogBuffer.CAPACITY.");
-  this.clear()
-};
-goog.debug.LogBuffer.getInstance = function() {
-  if(!goog.debug.LogBuffer.instance_) {
-    goog.debug.LogBuffer.instance_ = new goog.debug.LogBuffer
-  }
-  return goog.debug.LogBuffer.instance_
-};
-goog.debug.LogBuffer.CAPACITY = 0;
-goog.debug.LogBuffer.prototype.buffer_;
-goog.debug.LogBuffer.prototype.curIndex_;
-goog.debug.LogBuffer.prototype.isFull_;
-goog.debug.LogBuffer.prototype.addRecord = function(level, msg, loggerName) {
-  var curIndex = (this.curIndex_ + 1) % goog.debug.LogBuffer.CAPACITY;
-  this.curIndex_ = curIndex;
-  if(this.isFull_) {
-    var ret = this.buffer_[curIndex];
-    ret.reset(level, msg, loggerName);
-    return ret
-  }
-  this.isFull_ = curIndex == goog.debug.LogBuffer.CAPACITY - 1;
-  return this.buffer_[curIndex] = new goog.debug.LogRecord(level, msg, loggerName)
-};
-goog.debug.LogBuffer.isBufferingEnabled = function() {
-  return goog.debug.LogBuffer.CAPACITY > 0
-};
-goog.debug.LogBuffer.prototype.clear = function() {
-  this.buffer_ = new Array(goog.debug.LogBuffer.CAPACITY);
-  this.curIndex_ = -1;
-  this.isFull_ = false
-};
-goog.debug.LogBuffer.prototype.forEachRecord = function(func) {
-  var buffer = this.buffer_;
-  if(!buffer[0]) {
-    return
-  }
-  var curIndex = this.curIndex_;
-  var i = this.isFull_ ? curIndex : -1;
-  do {
-    i = (i + 1) % goog.debug.LogBuffer.CAPACITY;
-    func(buffer[i])
-  }while(i != curIndex)
-};
-goog.provide("goog.debug.LogManager");
-goog.provide("goog.debug.Logger");
-goog.provide("goog.debug.Logger.Level");
-goog.require("goog.array");
-goog.require("goog.asserts");
-goog.require("goog.debug");
-goog.require("goog.debug.LogBuffer");
-goog.require("goog.debug.LogRecord");
-goog.debug.Logger = function(name) {
-  this.name_ = name
-};
-goog.debug.Logger.prototype.parent_ = null;
-goog.debug.Logger.prototype.level_ = null;
-goog.debug.Logger.prototype.children_ = null;
-goog.debug.Logger.prototype.handlers_ = null;
-goog.debug.Logger.ENABLE_HIERARCHY = true;
-if(!goog.debug.Logger.ENABLE_HIERARCHY) {
-  goog.debug.Logger.rootHandlers_ = [];
-  goog.debug.Logger.rootLevel_
-}
-goog.debug.Logger.Level = function(name, value) {
-  this.name = name;
-  this.value = value
-};
-goog.debug.Logger.Level.prototype.toString = function() {
-  return this.name
-};
-goog.debug.Logger.Level.OFF = new goog.debug.Logger.Level("OFF", Infinity);
-goog.debug.Logger.Level.SHOUT = new goog.debug.Logger.Level("SHOUT", 1200);
-goog.debug.Logger.Level.SEVERE = new goog.debug.Logger.Level("SEVERE", 1E3);
-goog.debug.Logger.Level.WARNING = new goog.debug.Logger.Level("WARNING", 900);
-goog.debug.Logger.Level.INFO = new goog.debug.Logger.Level("INFO", 800);
-goog.debug.Logger.Level.CONFIG = new goog.debug.Logger.Level("CONFIG", 700);
-goog.debug.Logger.Level.FINE = new goog.debug.Logger.Level("FINE", 500);
-goog.debug.Logger.Level.FINER = new goog.debug.Logger.Level("FINER", 400);
-goog.debug.Logger.Level.FINEST = new goog.debug.Logger.Level("FINEST", 300);
-goog.debug.Logger.Level.ALL = new goog.debug.Logger.Level("ALL", 0);
-goog.debug.Logger.Level.PREDEFINED_LEVELS = [goog.debug.Logger.Level.OFF, goog.debug.Logger.Level.SHOUT, goog.debug.Logger.Level.SEVERE, goog.debug.Logger.Level.WARNING, goog.debug.Logger.Level.INFO, goog.debug.Logger.Level.CONFIG, goog.debug.Logger.Level.FINE, goog.debug.Logger.Level.FINER, goog.debug.Logger.Level.FINEST, goog.debug.Logger.Level.ALL];
-goog.debug.Logger.Level.predefinedLevelsCache_ = null;
-goog.debug.Logger.Level.createPredefinedLevelsCache_ = function() {
-  goog.debug.Logger.Level.predefinedLevelsCache_ = {};
-  for(var i = 0, level;level = goog.debug.Logger.Level.PREDEFINED_LEVELS[i];i++) {
-    goog.debug.Logger.Level.predefinedLevelsCache_[level.value] = level;
-    goog.debug.Logger.Level.predefinedLevelsCache_[level.name] = level
-  }
-};
-goog.debug.Logger.Level.getPredefinedLevel = function(name) {
-  if(!goog.debug.Logger.Level.predefinedLevelsCache_) {
-    goog.debug.Logger.Level.createPredefinedLevelsCache_()
-  }
-  return goog.debug.Logger.Level.predefinedLevelsCache_[name] || null
-};
-goog.debug.Logger.Level.getPredefinedLevelByValue = function(value) {
-  if(!goog.debug.Logger.Level.predefinedLevelsCache_) {
-    goog.debug.Logger.Level.createPredefinedLevelsCache_()
-  }
-  if(value in goog.debug.Logger.Level.predefinedLevelsCache_) {
-    return goog.debug.Logger.Level.predefinedLevelsCache_[value]
-  }
-  for(var i = 0;i < goog.debug.Logger.Level.PREDEFINED_LEVELS.length;++i) {
-    var level = goog.debug.Logger.Level.PREDEFINED_LEVELS[i];
-    if(level.value <= value) {
-      return level
-    }
-  }
-  return null
-};
-goog.debug.Logger.getLogger = function(name) {
-  return goog.debug.LogManager.getLogger(name)
-};
-goog.debug.Logger.prototype.getName = function() {
-  return this.name_
-};
-goog.debug.Logger.prototype.addHandler = function(handler) {
-  if(goog.debug.Logger.ENABLE_HIERARCHY) {
-    if(!this.handlers_) {
-      this.handlers_ = []
-    }
-    this.handlers_.push(handler)
-  }else {
-    goog.asserts.assert(!this.name_, "Cannot call addHandler on a non-root logger when " + "goog.debug.Logger.ENABLE_HIERARCHY is false.");
-    goog.debug.Logger.rootHandlers_.push(handler)
-  }
-};
-goog.debug.Logger.prototype.removeHandler = function(handler) {
-  var handlers = goog.debug.Logger.ENABLE_HIERARCHY ? this.handlers_ : goog.debug.Logger.rootHandlers_;
-  return!!handlers && goog.array.remove(handlers, handler)
-};
-goog.debug.Logger.prototype.getParent = function() {
-  return this.parent_
-};
-goog.debug.Logger.prototype.getChildren = function() {
-  if(!this.children_) {
-    this.children_ = {}
-  }
-  return this.children_
-};
-goog.debug.Logger.prototype.setLevel = function(level) {
-  if(goog.debug.Logger.ENABLE_HIERARCHY) {
-    this.level_ = level
-  }else {
-    goog.asserts.assert(!this.name_, "Cannot call setLevel() on a non-root logger when " + "goog.debug.Logger.ENABLE_HIERARCHY is false.");
-    goog.debug.Logger.rootLevel_ = level
-  }
-};
-goog.debug.Logger.prototype.getLevel = function() {
-  return this.level_
-};
-goog.debug.Logger.prototype.getEffectiveLevel = function() {
-  if(!goog.debug.Logger.ENABLE_HIERARCHY) {
-    return goog.debug.Logger.rootLevel_
-  }
-  if(this.level_) {
-    return this.level_
-  }
-  if(this.parent_) {
-    return this.parent_.getEffectiveLevel()
-  }
-  goog.asserts.fail("Root logger has no level set.");
-  return null
-};
-goog.debug.Logger.prototype.isLoggable = function(level) {
-  return level.value >= this.getEffectiveLevel().value
-};
-goog.debug.Logger.prototype.log = function(level, msg, opt_exception) {
-  if(this.isLoggable(level)) {
-    this.doLogRecord_(this.getLogRecord(level, msg, opt_exception))
-  }
-};
-goog.debug.Logger.prototype.getLogRecord = function(level, msg, opt_exception) {
-  if(goog.debug.LogBuffer.isBufferingEnabled()) {
-    var logRecord = goog.debug.LogBuffer.getInstance().addRecord(level, msg, this.name_)
-  }else {
-    logRecord = new goog.debug.LogRecord(level, String(msg), this.name_)
-  }
-  if(opt_exception) {
-    logRecord.setException(opt_exception);
-    logRecord.setExceptionText(goog.debug.exposeException(opt_exception, arguments.callee.caller))
-  }
-  return logRecord
-};
-goog.debug.Logger.prototype.shout = function(msg, opt_exception) {
-  this.log(goog.debug.Logger.Level.SHOUT, msg, opt_exception)
-};
-goog.debug.Logger.prototype.severe = function(msg, opt_exception) {
-  this.log(goog.debug.Logger.Level.SEVERE, msg, opt_exception)
-};
-goog.debug.Logger.prototype.warning = function(msg, opt_exception) {
-  this.log(goog.debug.Logger.Level.WARNING, msg, opt_exception)
-};
-goog.debug.Logger.prototype.info = function(msg, opt_exception) {
-  this.log(goog.debug.Logger.Level.INFO, msg, opt_exception)
-};
-goog.debug.Logger.prototype.config = function(msg, opt_exception) {
-  this.log(goog.debug.Logger.Level.CONFIG, msg, opt_exception)
-};
-goog.debug.Logger.prototype.fine = function(msg, opt_exception) {
-  this.log(goog.debug.Logger.Level.FINE, msg, opt_exception)
-};
-goog.debug.Logger.prototype.finer = function(msg, opt_exception) {
-  this.log(goog.debug.Logger.Level.FINER, msg, opt_exception)
-};
-goog.debug.Logger.prototype.finest = function(msg, opt_exception) {
-  this.log(goog.debug.Logger.Level.FINEST, msg, opt_exception)
-};
-goog.debug.Logger.prototype.logRecord = function(logRecord) {
-  if(this.isLoggable(logRecord.getLevel())) {
-    this.doLogRecord_(logRecord)
-  }
-};
-goog.debug.Logger.prototype.logToSpeedTracer_ = function(msg) {
-  if(goog.global["console"] && goog.global["console"]["markTimeline"]) {
-    goog.global["console"]["markTimeline"](msg)
-  }
-};
-goog.debug.Logger.prototype.doLogRecord_ = function(logRecord) {
-  this.logToSpeedTracer_("log:" + logRecord.getMessage());
-  if(goog.debug.Logger.ENABLE_HIERARCHY) {
-    var target = this;
-    while(target) {
-      target.callPublish_(logRecord);
-      target = target.getParent()
-    }
-  }else {
-    for(var i = 0, handler;handler = goog.debug.Logger.rootHandlers_[i++];) {
-      handler(logRecord)
-    }
-  }
-};
-goog.debug.Logger.prototype.callPublish_ = function(logRecord) {
-  if(this.handlers_) {
-    for(var i = 0, handler;handler = this.handlers_[i];i++) {
-      handler(logRecord)
-    }
-  }
-};
-goog.debug.Logger.prototype.setParent_ = function(parent) {
-  this.parent_ = parent
-};
-goog.debug.Logger.prototype.addChild_ = function(name, logger) {
-  this.getChildren()[name] = logger
-};
-goog.debug.LogManager = {};
-goog.debug.LogManager.loggers_ = {};
-goog.debug.LogManager.rootLogger_ = null;
-goog.debug.LogManager.initialize = function() {
-  if(!goog.debug.LogManager.rootLogger_) {
-    goog.debug.LogManager.rootLogger_ = new goog.debug.Logger("");
-    goog.debug.LogManager.loggers_[""] = goog.debug.LogManager.rootLogger_;
-    goog.debug.LogManager.rootLogger_.setLevel(goog.debug.Logger.Level.CONFIG)
-  }
-};
-goog.debug.LogManager.getLoggers = function() {
-  return goog.debug.LogManager.loggers_
-};
-goog.debug.LogManager.getRoot = function() {
-  goog.debug.LogManager.initialize();
-  return goog.debug.LogManager.rootLogger_
-};
-goog.debug.LogManager.getLogger = function(name) {
-  goog.debug.LogManager.initialize();
-  var ret = goog.debug.LogManager.loggers_[name];
-  return ret || goog.debug.LogManager.createLogger_(name)
-};
-goog.debug.LogManager.createFunctionForCatchErrors = function(opt_logger) {
-  return function(info) {
-    var logger = opt_logger || goog.debug.LogManager.getRoot();
-    logger.severe("Error: " + info.message + " (" + info.fileName + " @ Line: " + info.line + ")")
-  }
-};
-goog.debug.LogManager.createLogger_ = function(name) {
-  var logger = new goog.debug.Logger(name);
-  if(goog.debug.Logger.ENABLE_HIERARCHY) {
-    var lastDotIndex = name.lastIndexOf(".");
-    var parentName = name.substr(0, lastDotIndex);
-    var leafName = name.substr(lastDotIndex + 1);
-    var parentLogger = goog.debug.LogManager.getLogger(parentName);
-    parentLogger.addChild_(leafName, logger);
-    logger.setParent_(parentLogger)
-  }
-  goog.debug.LogManager.loggers_[name] = logger;
-  return logger
-};
-goog.provide("goog.json");
-goog.provide("goog.json.Serializer");
-goog.json.isValid_ = function(s) {
-  if(/^\s*$/.test(s)) {
-    return false
-  }
-  var backslashesRe = /\\["\\\/bfnrtu]/g;
-  var simpleValuesRe = /"[^"\\\n\r\u2028\u2029\x00-\x08\x10-\x1f\x80-\x9f]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g;
-  var openBracketsRe = /(?:^|:|,)(?:[\s\u2028\u2029]*\[)+/g;
-  var remainderRe = /^[\],:{}\s\u2028\u2029]*$/;
-  return remainderRe.test(s.replace(backslashesRe, "@").replace(simpleValuesRe, "]").replace(openBracketsRe, ""))
-};
-goog.json.parse = function(s) {
-  var o = String(s);
-  if(goog.json.isValid_(o)) {
-    try {
-      return eval("(" + o + ")")
-    }catch(ex) {
-    }
-  }
-  throw Error("Invalid JSON string: " + o);
-};
-goog.json.unsafeParse = function(s) {
-  return eval("(" + s + ")")
-};
-goog.json.serialize = function(object) {
-  return(new goog.json.Serializer).serialize(object)
-};
-goog.json.Serializer = function() {
-};
-goog.json.Serializer.prototype.serialize = function(object) {
-  var sb = [];
-  this.serialize_(object, sb);
-  return sb.join("")
-};
-goog.json.Serializer.prototype.serialize_ = function(object, sb) {
-  switch(typeof object) {
-    case "string":
-      this.serializeString_(object, sb);
-      break;
-    case "number":
-      this.serializeNumber_(object, sb);
-      break;
-    case "boolean":
-      sb.push(object);
-      break;
-    case "undefined":
-      sb.push("null");
-      break;
-    case "object":
-      if(object == null) {
-        sb.push("null");
-        break
-      }
-      if(goog.isArray(object)) {
-        this.serializeArray_(object, sb);
-        break
-      }
-      this.serializeObject_(object, sb);
-      break;
-    case "function":
-      break;
-    default:
-      throw Error("Unknown type: " + typeof object);
-  }
-};
-goog.json.Serializer.charToJsonCharCache_ = {'"':'\\"', "\\":"\\\\", "/":"\\/", "\u0008":"\\b", "\u000c":"\\f", "\n":"\\n", "\r":"\\r", "\t":"\\t", "\u000b":"\\u000b"};
-goog.json.Serializer.charsToReplace_ = /\uffff/.test("\uffff") ? /[\\\"\x00-\x1f\x7f-\uffff]/g : /[\\\"\x00-\x1f\x7f-\xff]/g;
-goog.json.Serializer.prototype.serializeString_ = function(s, sb) {
-  sb.push('"', s.replace(goog.json.Serializer.charsToReplace_, function(c) {
-    if(c in goog.json.Serializer.charToJsonCharCache_) {
-      return goog.json.Serializer.charToJsonCharCache_[c]
-    }
-    var cc = c.charCodeAt(0);
-    var rv = "\\u";
-    if(cc < 16) {
-      rv += "000"
-    }else {
-      if(cc < 256) {
-        rv += "00"
-      }else {
-        if(cc < 4096) {
-          rv += "0"
-        }
-      }
-    }
-    return goog.json.Serializer.charToJsonCharCache_[c] = rv + cc.toString(16)
-  }), '"')
-};
-goog.json.Serializer.prototype.serializeNumber_ = function(n, sb) {
-  sb.push(isFinite(n) && !isNaN(n) ? n : "null")
-};
-goog.json.Serializer.prototype.serializeArray_ = function(arr, sb) {
-  var l = arr.length;
-  sb.push("[");
-  var sep = "";
-  for(var i = 0;i < l;i++) {
-    sb.push(sep);
-    this.serialize_(arr[i], sb);
-    sep = ","
-  }
-  sb.push("]")
-};
-goog.json.Serializer.prototype.serializeObject_ = function(obj, sb) {
-  sb.push("{");
-  var sep = "";
-  for(var key in obj) {
-    if(Object.prototype.hasOwnProperty.call(obj, key)) {
-      var value = obj[key];
-      if(typeof value != "function") {
-        sb.push(sep);
-        this.serializeString_(key, sb);
-        sb.push(":");
-        this.serialize_(value, sb);
-        sep = ","
-      }
-    }
-  }
-  sb.push("}")
-};
-goog.provide("goog.net.ErrorCode");
-goog.net.ErrorCode = {NO_ERROR:0, ACCESS_DENIED:1, FILE_NOT_FOUND:2, FF_SILENT_ERROR:3, CUSTOM_ERROR:4, EXCEPTION:5, HTTP_ERROR:6, ABORT:7, TIMEOUT:8, OFFLINE:9};
-goog.net.ErrorCode.getDebugMessage = function(errorCode) {
-  switch(errorCode) {
-    case goog.net.ErrorCode.NO_ERROR:
-      return"No Error";
-    case goog.net.ErrorCode.ACCESS_DENIED:
-      return"Access denied to content document";
-    case goog.net.ErrorCode.FILE_NOT_FOUND:
-      return"File not found";
-    case goog.net.ErrorCode.FF_SILENT_ERROR:
-      return"Firefox silently errored";
-    case goog.net.ErrorCode.CUSTOM_ERROR:
-      return"Application custom error";
-    case goog.net.ErrorCode.EXCEPTION:
-      return"An exception occurred";
-    case goog.net.ErrorCode.HTTP_ERROR:
-      return"Http response at 400 or 500 level";
-    case goog.net.ErrorCode.ABORT:
-      return"Request was aborted";
-    case goog.net.ErrorCode.TIMEOUT:
-      return"Request timed out";
-    case goog.net.ErrorCode.OFFLINE:
-      return"The resource is not available offline";
-    default:
-      return"Unrecognized error code"
-  }
-};
-goog.provide("goog.net.EventType");
-goog.net.EventType = {COMPLETE:"complete", SUCCESS:"success", ERROR:"error", ABORT:"abort", READY:"ready", READY_STATE_CHANGE:"readystatechange", TIMEOUT:"timeout", INCREMENTAL_DATA:"incrementaldata", PROGRESS:"progress"};
-goog.provide("goog.net.HttpStatus");
-goog.net.HttpStatus = {CONTINUE:100, SWITCHING_PROTOCOLS:101, OK:200, CREATED:201, ACCEPTED:202, NON_AUTHORITATIVE_INFORMATION:203, NO_CONTENT:204, RESET_CONTENT:205, PARTIAL_CONTENT:206, MULTIPLE_CHOICES:300, MOVED_PERMANENTLY:301, FOUND:302, SEE_OTHER:303, NOT_MODIFIED:304, USE_PROXY:305, TEMPORARY_REDIRECT:307, BAD_REQUEST:400, UNAUTHORIZED:401, PAYMENT_REQUIRED:402, FORBIDDEN:403, NOT_FOUND:404, METHOD_NOT_ALLOWED:405, NOT_ACCEPTABLE:406, PROXY_AUTHENTICATION_REQUIRED:407, REQUEST_TIMEOUT:408, 
-CONFLICT:409, GONE:410, LENGTH_REQUIRED:411, PRECONDITION_FAILED:412, REQUEST_ENTITY_TOO_LARGE:413, REQUEST_URI_TOO_LONG:414, UNSUPPORTED_MEDIA_TYPE:415, REQUEST_RANGE_NOT_SATISFIABLE:416, EXPECTATION_FAILED:417, INTERNAL_SERVER_ERROR:500, NOT_IMPLEMENTED:501, BAD_GATEWAY:502, SERVICE_UNAVAILABLE:503, GATEWAY_TIMEOUT:504, HTTP_VERSION_NOT_SUPPORTED:505};
-goog.provide("goog.net.XmlHttpFactory");
-goog.net.XmlHttpFactory = function() {
-};
-goog.net.XmlHttpFactory.prototype.cachedOptions_ = null;
-goog.net.XmlHttpFactory.prototype.createInstance = goog.abstractMethod;
-goog.net.XmlHttpFactory.prototype.getOptions = function() {
-  return this.cachedOptions_ || (this.cachedOptions_ = this.internalGetOptions())
-};
-goog.net.XmlHttpFactory.prototype.internalGetOptions = goog.abstractMethod;
-goog.provide("goog.net.WrapperXmlHttpFactory");
-goog.require("goog.net.XmlHttpFactory");
-goog.net.WrapperXmlHttpFactory = function(xhrFactory, optionsFactory) {
-  goog.net.XmlHttpFactory.call(this);
-  this.xhrFactory_ = xhrFactory;
-  this.optionsFactory_ = optionsFactory
-};
-goog.inherits(goog.net.WrapperXmlHttpFactory, goog.net.XmlHttpFactory);
-goog.net.WrapperXmlHttpFactory.prototype.createInstance = function() {
-  return this.xhrFactory_()
-};
-goog.net.WrapperXmlHttpFactory.prototype.getOptions = function() {
-  return this.optionsFactory_()
-};
-goog.provide("goog.net.DefaultXmlHttpFactory");
-goog.provide("goog.net.XmlHttp");
-goog.provide("goog.net.XmlHttp.OptionType");
-goog.provide("goog.net.XmlHttp.ReadyState");
-goog.require("goog.net.WrapperXmlHttpFactory");
-goog.require("goog.net.XmlHttpFactory");
-goog.net.XmlHttp = function() {
-  return goog.net.XmlHttp.factory_.createInstance()
-};
-goog.net.XmlHttp.getOptions = function() {
-  return goog.net.XmlHttp.factory_.getOptions()
-};
-goog.net.XmlHttp.OptionType = {USE_NULL_FUNCTION:0, LOCAL_REQUEST_ERROR:1};
-goog.net.XmlHttp.ReadyState = {UNINITIALIZED:0, LOADING:1, LOADED:2, INTERACTIVE:3, COMPLETE:4};
-goog.net.XmlHttp.factory_;
-goog.net.XmlHttp.setFactory = function(factory, optionsFactory) {
-  goog.net.XmlHttp.setGlobalFactory(new goog.net.WrapperXmlHttpFactory(factory, optionsFactory))
-};
-goog.net.XmlHttp.setGlobalFactory = function(factory) {
-  goog.net.XmlHttp.factory_ = factory
-};
-goog.net.DefaultXmlHttpFactory = function() {
-  goog.net.XmlHttpFactory.call(this)
-};
-goog.inherits(goog.net.DefaultXmlHttpFactory, goog.net.XmlHttpFactory);
-goog.net.DefaultXmlHttpFactory.prototype.createInstance = function() {
-  var progId = this.getProgId_();
-  if(progId) {
-    return new ActiveXObject(progId)
-  }else {
-    return new XMLHttpRequest
-  }
-};
-goog.net.DefaultXmlHttpFactory.prototype.internalGetOptions = function() {
-  var progId = this.getProgId_();
-  var options = {};
-  if(progId) {
-    options[goog.net.XmlHttp.OptionType.USE_NULL_FUNCTION] = true;
-    options[goog.net.XmlHttp.OptionType.LOCAL_REQUEST_ERROR] = true
-  }
-  return options
-};
-goog.net.DefaultXmlHttpFactory.prototype.ieProgId_ = null;
-goog.net.DefaultXmlHttpFactory.prototype.getProgId_ = function() {
-  if(!this.ieProgId_ && typeof XMLHttpRequest == "undefined" && typeof ActiveXObject != "undefined") {
-    var ACTIVE_X_IDENTS = ["MSXML2.XMLHTTP.6.0", "MSXML2.XMLHTTP.3.0", "MSXML2.XMLHTTP", "Microsoft.XMLHTTP"];
-    for(var i = 0;i < ACTIVE_X_IDENTS.length;i++) {
-      var candidate = ACTIVE_X_IDENTS[i];
-      try {
-        new ActiveXObject(candidate);
-        this.ieProgId_ = candidate;
-        return candidate
-      }catch(e) {
-      }
-    }
-    throw Error("Could not create ActiveXObject. ActiveX might be disabled," + " or MSXML might not be installed");
-  }
-  return this.ieProgId_
-};
-goog.net.XmlHttp.setGlobalFactory(new goog.net.DefaultXmlHttpFactory);
-goog.provide("goog.net.xhrMonitor");
-goog.require("goog.array");
-goog.require("goog.debug.Logger");
-goog.require("goog.userAgent");
-goog.net.XhrMonitor_ = function() {
-  if(!goog.userAgent.GECKO) {
-    return
-  }
-  this.contextsToXhr_ = {};
-  this.xhrToContexts_ = {};
-  this.stack_ = []
-};
-goog.net.XhrMonitor_.getKey = function(obj) {
-  return goog.isString(obj) ? obj : goog.isObject(obj) ? goog.getUid(obj) : ""
-};
-goog.net.XhrMonitor_.prototype.logger_ = goog.debug.Logger.getLogger("goog.net.xhrMonitor");
-goog.net.XhrMonitor_.prototype.enabled_ = goog.userAgent.GECKO;
-goog.net.XhrMonitor_.prototype.setEnabled = function(val) {
-  this.enabled_ = goog.userAgent.GECKO && val
-};
-goog.net.XhrMonitor_.prototype.pushContext = function(context) {
-  if(!this.enabled_) {
-    return
-  }
-  var key = goog.net.XhrMonitor_.getKey(context);
-  this.logger_.finest("Pushing context: " + context + " (" + key + ")");
-  this.stack_.push(key)
-};
-goog.net.XhrMonitor_.prototype.popContext = function() {
-  if(!this.enabled_) {
-    return
-  }
-  var context = this.stack_.pop();
-  this.logger_.finest("Popping context: " + context);
-  this.updateDependentContexts_(context)
-};
-goog.net.XhrMonitor_.prototype.isContextSafe = function(context) {
-  if(!this.enabled_) {
-    return true
-  }
-  var deps = this.contextsToXhr_[goog.net.XhrMonitor_.getKey(context)];
-  this.logger_.fine("Context is safe : " + context + " - " + deps);
-  return!deps
-};
-goog.net.XhrMonitor_.prototype.markXhrOpen = function(xhr) {
-  if(!this.enabled_) {
-    return
-  }
-  var uid = goog.getUid(xhr);
-  this.logger_.fine("Opening XHR : " + uid);
-  for(var i = 0;i < this.stack_.length;i++) {
-    var context = this.stack_[i];
-    this.addToMap_(this.contextsToXhr_, context, uid);
-    this.addToMap_(this.xhrToContexts_, uid, context)
-  }
-};
-goog.net.XhrMonitor_.prototype.markXhrClosed = function(xhr) {
-  if(!this.enabled_) {
-    return
-  }
-  var uid = goog.getUid(xhr);
-  this.logger_.fine("Closing XHR : " + uid);
-  delete this.xhrToContexts_[uid];
-  for(var context in this.contextsToXhr_) {
-    goog.array.remove(this.contextsToXhr_[context], uid);
-    if(this.contextsToXhr_[context].length == 0) {
-      delete this.contextsToXhr_[context]
-    }
-  }
-};
-goog.net.XhrMonitor_.prototype.updateDependentContexts_ = function(xhrUid) {
-  var contexts = this.xhrToContexts_[xhrUid];
-  var xhrs = this.contextsToXhr_[xhrUid];
-  if(contexts && xhrs) {
-    this.logger_.finest("Updating dependent contexts");
-    goog.array.forEach(contexts, function(context) {
-      goog.array.forEach(xhrs, function(xhr) {
-        this.addToMap_(this.contextsToXhr_, context, xhr);
-        this.addToMap_(this.xhrToContexts_, xhr, context)
-      }, this)
-    }, this)
-  }
-};
-goog.net.XhrMonitor_.prototype.addToMap_ = function(map, key, value) {
-  if(!map[key]) {
-    map[key] = []
-  }
-  if(!goog.array.contains(map[key], value)) {
-    map[key].push(value)
-  }
-};
-goog.net.xhrMonitor = new goog.net.XhrMonitor_;
-goog.provide("goog.uri.utils");
-goog.provide("goog.uri.utils.ComponentIndex");
-goog.require("goog.asserts");
-goog.require("goog.string");
-goog.uri.utils.CharCode_ = {AMPERSAND:38, EQUAL:61, HASH:35, QUESTION:63};
-goog.uri.utils.buildFromEncodedParts = function(opt_scheme, opt_userInfo, opt_domain, opt_port, opt_path, opt_queryData, opt_fragment) {
-  var out = [];
-  if(opt_scheme) {
-    out.push(opt_scheme, ":")
-  }
-  if(opt_domain) {
-    out.push("//");
-    if(opt_userInfo) {
-      out.push(opt_userInfo, "@")
-    }
-    out.push(opt_domain);
-    if(opt_port) {
-      out.push(":", opt_port)
-    }
-  }
-  if(opt_path) {
-    out.push(opt_path)
-  }
-  if(opt_queryData) {
-    out.push("?", opt_queryData)
-  }
-  if(opt_fragment) {
-    out.push("#", opt_fragment)
-  }
-  return out.join("")
-};
-goog.uri.utils.splitRe_ = new RegExp("^" + "(?:" + "([^:/?#.]+)" + ":)?" + "(?://" + "(?:([^/?#]*)@)?" + "([\\w\\d\\-\\u0100-\\uffff.%]*)" + "(?::([0-9]+))?" + ")?" + "([^?#]+)?" + "(?:\\?([^#]*))?" + "(?:#(.*))?" + "$");
-goog.uri.utils.ComponentIndex = {SCHEME:1, USER_INFO:2, DOMAIN:3, PORT:4, PATH:5, QUERY_DATA:6, FRAGMENT:7};
-goog.uri.utils.split = function(uri) {
-  return uri.match(goog.uri.utils.splitRe_)
-};
-goog.uri.utils.decodeIfPossible_ = function(uri) {
-  return uri && decodeURIComponent(uri)
-};
-goog.uri.utils.getComponentByIndex_ = function(componentIndex, uri) {
-  return goog.uri.utils.split(uri)[componentIndex] || null
-};
-goog.uri.utils.getScheme = function(uri) {
-  return goog.uri.utils.getComponentByIndex_(goog.uri.utils.ComponentIndex.SCHEME, uri)
-};
-goog.uri.utils.getUserInfoEncoded = function(uri) {
-  return goog.uri.utils.getComponentByIndex_(goog.uri.utils.ComponentIndex.USER_INFO, uri)
-};
-goog.uri.utils.getUserInfo = function(uri) {
-  return goog.uri.utils.decodeIfPossible_(goog.uri.utils.getUserInfoEncoded(uri))
-};
-goog.uri.utils.getDomainEncoded = function(uri) {
-  return goog.uri.utils.getComponentByIndex_(goog.uri.utils.ComponentIndex.DOMAIN, uri)
-};
-goog.uri.utils.getDomain = function(uri) {
-  return goog.uri.utils.decodeIfPossible_(goog.uri.utils.getDomainEncoded(uri))
-};
-goog.uri.utils.getPort = function(uri) {
-  return Number(goog.uri.utils.getComponentByIndex_(goog.uri.utils.ComponentIndex.PORT, uri)) || null
-};
-goog.uri.utils.getPathEncoded = function(uri) {
-  return goog.uri.utils.getComponentByIndex_(goog.uri.utils.ComponentIndex.PATH, uri)
-};
-goog.uri.utils.getPath = function(uri) {
-  return goog.uri.utils.decodeIfPossible_(goog.uri.utils.getPathEncoded(uri))
-};
-goog.uri.utils.getQueryData = function(uri) {
-  return goog.uri.utils.getComponentByIndex_(goog.uri.utils.ComponentIndex.QUERY_DATA, uri)
-};
-goog.uri.utils.getFragmentEncoded = function(uri) {
-  var hashIndex = uri.indexOf("#");
-  return hashIndex < 0 ? null : uri.substr(hashIndex + 1)
-};
-goog.uri.utils.setFragmentEncoded = function(uri, fragment) {
-  return goog.uri.utils.removeFragment(uri) + (fragment ? "#" + fragment : "")
-};
-goog.uri.utils.getFragment = function(uri) {
-  return goog.uri.utils.decodeIfPossible_(goog.uri.utils.getFragmentEncoded(uri))
-};
-goog.uri.utils.getHost = function(uri) {
-  var pieces = goog.uri.utils.split(uri);
-  return goog.uri.utils.buildFromEncodedParts(pieces[goog.uri.utils.ComponentIndex.SCHEME], pieces[goog.uri.utils.ComponentIndex.USER_INFO], pieces[goog.uri.utils.ComponentIndex.DOMAIN], pieces[goog.uri.utils.ComponentIndex.PORT])
-};
-goog.uri.utils.getPathAndAfter = function(uri) {
-  var pieces = goog.uri.utils.split(uri);
-  return goog.uri.utils.buildFromEncodedParts(null, null, null, null, pieces[goog.uri.utils.ComponentIndex.PATH], pieces[goog.uri.utils.ComponentIndex.QUERY_DATA], pieces[goog.uri.utils.ComponentIndex.FRAGMENT])
-};
-goog.uri.utils.removeFragment = function(uri) {
-  var hashIndex = uri.indexOf("#");
-  return hashIndex < 0 ? uri : uri.substr(0, hashIndex)
-};
-goog.uri.utils.haveSameDomain = function(uri1, uri2) {
-  var pieces1 = goog.uri.utils.split(uri1);
-  var pieces2 = goog.uri.utils.split(uri2);
-  return pieces1[goog.uri.utils.ComponentIndex.DOMAIN] == pieces2[goog.uri.utils.ComponentIndex.DOMAIN] && pieces1[goog.uri.utils.ComponentIndex.SCHEME] == pieces2[goog.uri.utils.ComponentIndex.SCHEME] && pieces1[goog.uri.utils.ComponentIndex.PORT] == pieces2[goog.uri.utils.ComponentIndex.PORT]
-};
-goog.uri.utils.assertNoFragmentsOrQueries_ = function(uri) {
-  if(goog.DEBUG && (uri.indexOf("#") >= 0 || uri.indexOf("?") >= 0)) {
-    throw Error("goog.uri.utils: Fragment or query identifiers are not " + "supported: [" + uri + "]");
-  }
-};
-goog.uri.utils.QueryValue;
-goog.uri.utils.QueryArray;
-goog.uri.utils.appendQueryData_ = function(buffer) {
-  if(buffer[1]) {
-    var baseUri = buffer[0];
-    var hashIndex = baseUri.indexOf("#");
-    if(hashIndex >= 0) {
-      buffer.push(baseUri.substr(hashIndex));
-      buffer[0] = baseUri = baseUri.substr(0, hashIndex)
-    }
-    var questionIndex = baseUri.indexOf("?");
-    if(questionIndex < 0) {
-      buffer[1] = "?"
-    }else {
-      if(questionIndex == baseUri.length - 1) {
-        buffer[1] = undefined
-      }
-    }
-  }
-  return buffer.join("")
-};
-goog.uri.utils.appendKeyValuePairs_ = function(key, value, pairs) {
-  if(goog.isArray(value)) {
-    value = value;
-    for(var j = 0;j < value.length;j++) {
-      pairs.push("&", key);
-      if(value[j] !== "") {
-        pairs.push("=", goog.string.urlEncode(value[j]))
-      }
-    }
-  }else {
-    if(value != null) {
-      pairs.push("&", key);
-      if(value !== "") {
-        pairs.push("=", goog.string.urlEncode(value))
-      }
-    }
-  }
-};
-goog.uri.utils.buildQueryDataBuffer_ = function(buffer, keysAndValues, opt_startIndex) {
-  goog.asserts.assert(Math.max(keysAndValues.length - (opt_startIndex || 0), 0) % 2 == 0, "goog.uri.utils: Key/value lists must be even in length.");
-  for(var i = opt_startIndex || 0;i < keysAndValues.length;i += 2) {
-    goog.uri.utils.appendKeyValuePairs_(keysAndValues[i], keysAndValues[i + 1], buffer)
-  }
-  return buffer
-};
-goog.uri.utils.buildQueryData = function(keysAndValues, opt_startIndex) {
-  var buffer = goog.uri.utils.buildQueryDataBuffer_([], keysAndValues, opt_startIndex);
-  buffer[0] = "";
-  return buffer.join("")
-};
-goog.uri.utils.buildQueryDataBufferFromMap_ = function(buffer, map) {
-  for(var key in map) {
-    goog.uri.utils.appendKeyValuePairs_(key, map[key], buffer)
-  }
-  return buffer
-};
-goog.uri.utils.buildQueryDataFromMap = function(map) {
-  var buffer = goog.uri.utils.buildQueryDataBufferFromMap_([], map);
-  buffer[0] = "";
-  return buffer.join("")
-};
-goog.uri.utils.appendParams = function(uri, var_args) {
-  return goog.uri.utils.appendQueryData_(arguments.length == 2 ? goog.uri.utils.buildQueryDataBuffer_([uri], arguments[1], 0) : goog.uri.utils.buildQueryDataBuffer_([uri], arguments, 1))
-};
-goog.uri.utils.appendParamsFromMap = function(uri, map) {
-  return goog.uri.utils.appendQueryData_(goog.uri.utils.buildQueryDataBufferFromMap_([uri], map))
-};
-goog.uri.utils.appendParam = function(uri, key, value) {
-  return goog.uri.utils.appendQueryData_([uri, "&", key, "=", goog.string.urlEncode(value)])
-};
-goog.uri.utils.findParam_ = function(uri, startIndex, keyEncoded, hashOrEndIndex) {
-  var index = startIndex;
-  var keyLength = keyEncoded.length;
-  while((index = uri.indexOf(keyEncoded, index)) >= 0 && index < hashOrEndIndex) {
-    var precedingChar = uri.charCodeAt(index - 1);
-    if(precedingChar == goog.uri.utils.CharCode_.AMPERSAND || precedingChar == goog.uri.utils.CharCode_.QUESTION) {
-      var followingChar = uri.charCodeAt(index + keyLength);
-      if(!followingChar || followingChar == goog.uri.utils.CharCode_.EQUAL || followingChar == goog.uri.utils.CharCode_.AMPERSAND || followingChar == goog.uri.utils.CharCode_.HASH) {
-        return index
-      }
-    }
-    index += keyLength + 1
-  }
-  return-1
-};
-goog.uri.utils.hashOrEndRe_ = /#|$/;
-goog.uri.utils.hasParam = function(uri, keyEncoded) {
-  return goog.uri.utils.findParam_(uri, 0, keyEncoded, uri.search(goog.uri.utils.hashOrEndRe_)) >= 0
-};
-goog.uri.utils.getParamValue = function(uri, keyEncoded) {
-  var hashOrEndIndex = uri.search(goog.uri.utils.hashOrEndRe_);
-  var foundIndex = goog.uri.utils.findParam_(uri, 0, keyEncoded, hashOrEndIndex);
-  if(foundIndex < 0) {
-    return null
-  }else {
-    var endPosition = uri.indexOf("&", foundIndex);
-    if(endPosition < 0 || endPosition > hashOrEndIndex) {
-      endPosition = hashOrEndIndex
-    }
-    foundIndex += keyEncoded.length + 1;
-    return goog.string.urlDecode(uri.substr(foundIndex, endPosition - foundIndex))
-  }
-};
-goog.uri.utils.getParamValues = function(uri, keyEncoded) {
-  var hashOrEndIndex = uri.search(goog.uri.utils.hashOrEndRe_);
-  var position = 0;
-  var foundIndex;
-  var result = [];
-  while((foundIndex = goog.uri.utils.findParam_(uri, position, keyEncoded, hashOrEndIndex)) >= 0) {
-    position = uri.indexOf("&", foundIndex);
-    if(position < 0 || position > hashOrEndIndex) {
-      position = hashOrEndIndex
-    }
-    foundIndex += keyEncoded.length + 1;
-    result.push(goog.string.urlDecode(uri.substr(foundIndex, position - foundIndex)))
-  }
-  return result
-};
-goog.uri.utils.trailingQueryPunctuationRe_ = /[?&]($|#)/;
-goog.uri.utils.removeParam = function(uri, keyEncoded) {
-  var hashOrEndIndex = uri.search(goog.uri.utils.hashOrEndRe_);
-  var position = 0;
-  var foundIndex;
-  var buffer = [];
-  while((foundIndex = goog.uri.utils.findParam_(uri, position, keyEncoded, hashOrEndIndex)) >= 0) {
-    buffer.push(uri.substring(position, foundIndex));
-    position = Math.min(uri.indexOf("&", foundIndex) + 1 || hashOrEndIndex, hashOrEndIndex)
-  }
-  buffer.push(uri.substr(position));
-  return buffer.join("").replace(goog.uri.utils.trailingQueryPunctuationRe_, "$1")
-};
-goog.uri.utils.setParam = function(uri, keyEncoded, value) {
-  return goog.uri.utils.appendParam(goog.uri.utils.removeParam(uri, keyEncoded), keyEncoded, value)
-};
-goog.uri.utils.appendPath = function(baseUri, path) {
-  goog.uri.utils.assertNoFragmentsOrQueries_(baseUri);
-  if(goog.string.endsWith(baseUri, "/")) {
-    baseUri = baseUri.substr(0, baseUri.length - 1)
-  }
-  if(goog.string.startsWith(path, "/")) {
-    path = path.substr(1)
-  }
-  return goog.string.buildString(baseUri, "/", path)
-};
-goog.uri.utils.StandardQueryParam = {RANDOM:"zx"};
-goog.uri.utils.makeUnique = function(uri) {
-  return goog.uri.utils.setParam(uri, goog.uri.utils.StandardQueryParam.RANDOM, goog.string.getRandomString())
-};
-goog.provide("goog.net.XhrIo");
-goog.provide("goog.net.XhrIo.ResponseType");
-goog.require("goog.Timer");
-goog.require("goog.debug.Logger");
-goog.require("goog.debug.entryPointRegistry");
-goog.require("goog.debug.errorHandlerWeakDep");
-goog.require("goog.events.EventTarget");
-goog.require("goog.json");
-goog.require("goog.net.ErrorCode");
-goog.require("goog.net.EventType");
-goog.require("goog.net.HttpStatus");
-goog.require("goog.net.XmlHttp");
-goog.require("goog.net.xhrMonitor");
-goog.require("goog.object");
-goog.require("goog.structs");
-goog.require("goog.structs.Map");
-goog.require("goog.uri.utils");
-goog.net.XhrIo = function(opt_xmlHttpFactory) {
-  goog.events.EventTarget.call(this);
-  this.headers = new goog.structs.Map;
-  this.xmlHttpFactory_ = opt_xmlHttpFactory || null
-};
-goog.inherits(goog.net.XhrIo, goog.events.EventTarget);
-goog.net.XhrIo.ResponseType = {DEFAULT:"", TEXT:"text", DOCUMENT:"document", BLOB:"blob", ARRAY_BUFFER:"arraybuffer"};
-goog.net.XhrIo.prototype.logger_ = goog.debug.Logger.getLogger("goog.net.XhrIo");
-goog.net.XhrIo.CONTENT_TYPE_HEADER = "Content-Type";
-goog.net.XhrIo.HTTP_SCHEME_PATTERN = /^https?:?$/i;
-goog.net.XhrIo.FORM_CONTENT_TYPE = "application/x-www-form-urlencoded;charset=utf-8";
-goog.net.XhrIo.sendInstances_ = [];
-goog.net.XhrIo.send = function(url, opt_callback, opt_method, opt_content, opt_headers, opt_timeoutInterval) {
-  var x = new goog.net.XhrIo;
-  goog.net.XhrIo.sendInstances_.push(x);
-  if(opt_callback) {
-    goog.events.listen(x, goog.net.EventType.COMPLETE, opt_callback)
-  }
-  goog.events.listen(x, goog.net.EventType.READY, goog.partial(goog.net.XhrIo.cleanupSend_, x));
-  if(opt_timeoutInterval) {
-    x.setTimeoutInterval(opt_timeoutInterval)
-  }
-  x.send(url, opt_method, opt_content, opt_headers)
-};
-goog.net.XhrIo.cleanup = function() {
-  var instances = goog.net.XhrIo.sendInstances_;
-  while(instances.length) {
-    instances.pop().dispose()
-  }
-};
-goog.net.XhrIo.protectEntryPoints = function(errorHandler) {
-  goog.net.XhrIo.prototype.onReadyStateChangeEntryPoint_ = errorHandler.protectEntryPoint(goog.net.XhrIo.prototype.onReadyStateChangeEntryPoint_)
-};
-goog.net.XhrIo.cleanupSend_ = function(XhrIo) {
-  XhrIo.dispose();
-  goog.array.remove(goog.net.XhrIo.sendInstances_, XhrIo)
-};
-goog.net.XhrIo.prototype.active_ = false;
-goog.net.XhrIo.prototype.xhr_ = null;
-goog.net.XhrIo.prototype.xhrOptions_ = null;
-goog.net.XhrIo.prototype.lastUri_ = "";
-goog.net.XhrIo.prototype.lastMethod_ = "";
-goog.net.XhrIo.prototype.lastErrorCode_ = goog.net.ErrorCode.NO_ERROR;
-goog.net.XhrIo.prototype.lastError_ = "";
-goog.net.XhrIo.prototype.errorDispatched_ = false;
-goog.net.XhrIo.prototype.inSend_ = false;
-goog.net.XhrIo.prototype.inOpen_ = false;
-goog.net.XhrIo.prototype.inAbort_ = false;
-goog.net.XhrIo.prototype.timeoutInterval_ = 0;
-goog.net.XhrIo.prototype.timeoutId_ = null;
-goog.net.XhrIo.prototype.responseType_ = goog.net.XhrIo.ResponseType.DEFAULT;
-goog.net.XhrIo.prototype.withCredentials_ = false;
-goog.net.XhrIo.prototype.getTimeoutInterval = function() {
-  return this.timeoutInterval_
-};
-goog.net.XhrIo.prototype.setTimeoutInterval = function(ms) {
-  this.timeoutInterval_ = Math.max(0, ms)
-};
-goog.net.XhrIo.prototype.setResponseType = function(type) {
-  this.responseType_ = type
-};
-goog.net.XhrIo.prototype.getResponseType = function() {
-  return this.responseType_
-};
-goog.net.XhrIo.prototype.setWithCredentials = function(withCredentials) {
-  this.withCredentials_ = withCredentials
-};
-goog.net.XhrIo.prototype.getWithCredentials = function() {
-  return this.withCredentials_
-};
-goog.net.XhrIo.prototype.send = function(url, opt_method, opt_content, opt_headers) {
-  if(this.xhr_) {
-    throw Error("[goog.net.XhrIo] Object is active with another request");
-  }
-  var method = opt_method || "GET";
-  this.lastUri_ = url;
-  this.lastError_ = "";
-  this.lastErrorCode_ = goog.net.ErrorCode.NO_ERROR;
-  this.lastMethod_ = method;
-  this.errorDispatched_ = false;
-  this.active_ = true;
-  this.xhr_ = this.createXhr();
-  this.xhrOptions_ = this.xmlHttpFactory_ ? this.xmlHttpFactory_.getOptions() : goog.net.XmlHttp.getOptions();
-  goog.net.xhrMonitor.markXhrOpen(this.xhr_);
-  this.xhr_.onreadystatechange = goog.bind(this.onReadyStateChange_, this);
-  try {
-    this.logger_.fine(this.formatMsg_("Opening Xhr"));
-    this.inOpen_ = true;
-    this.xhr_.open(method, url, true);
-    this.inOpen_ = false
-  }catch(err) {
-    this.logger_.fine(this.formatMsg_("Error opening Xhr: " + err.message));
-    this.error_(goog.net.ErrorCode.EXCEPTION, err);
-    return
-  }
-  var content = opt_content || "";
-  var headers = this.headers.clone();
-  if(opt_headers) {
-    goog.structs.forEach(opt_headers, function(value, key) {
-      headers.set(key, value)
-    })
-  }
-  if(method == "POST" && !headers.containsKey(goog.net.XhrIo.CONTENT_TYPE_HEADER)) {
-    headers.set(goog.net.XhrIo.CONTENT_TYPE_HEADER, goog.net.XhrIo.FORM_CONTENT_TYPE)
-  }
-  goog.structs.forEach(headers, function(value, key) {
-    this.xhr_.setRequestHeader(key, value)
-  }, this);
-  if(this.responseType_) {
-    this.xhr_.responseType = this.responseType_
-  }
-  if(goog.object.containsKey(this.xhr_, "withCredentials")) {
-    this.xhr_.withCredentials = this.withCredentials_
-  }
-  try {
-    if(this.timeoutId_) {
-      goog.Timer.defaultTimerObject.clearTimeout(this.timeoutId_);
-      this.timeoutId_ = null
-    }
-    if(this.timeoutInterval_ > 0) {
-      this.logger_.fine(this.formatMsg_("Will abort after " + this.timeoutInterval_ + "ms if incomplete"));
-      this.timeoutId_ = goog.Timer.defaultTimerObject.setTimeout(goog.bind(this.timeout_, this), this.timeoutInterval_)
-    }
-    this.logger_.fine(this.formatMsg_("Sending request"));
-    this.inSend_ = true;
-    this.xhr_.send(content);
-    this.inSend_ = false
-  }catch(err) {
-    this.logger_.fine(this.formatMsg_("Send error: " + err.message));
-    this.error_(goog.net.ErrorCode.EXCEPTION, err)
-  }
-};
-goog.net.XhrIo.prototype.createXhr = function() {
-  return this.xmlHttpFactory_ ? this.xmlHttpFactory_.createInstance() : new goog.net.XmlHttp
-};
-goog.net.XhrIo.prototype.dispatchEvent = function(e) {
-  if(this.xhr_) {
-    goog.net.xhrMonitor.pushContext(this.xhr_);
-    try {
-      return goog.net.XhrIo.superClass_.dispatchEvent.call(this, e)
-    }finally {
-      goog.net.xhrMonitor.popContext()
-    }
-  }else {
-    return goog.net.XhrIo.superClass_.dispatchEvent.call(this, e)
-  }
-};
-goog.net.XhrIo.prototype.timeout_ = function() {
-  if(typeof goog == "undefined") {
-  }else {
-    if(this.xhr_) {
-      this.lastError_ = "Timed out after " + this.timeoutInterval_ + "ms, aborting";
-      this.lastErrorCode_ = goog.net.ErrorCode.TIMEOUT;
-      this.logger_.fine(this.formatMsg_(this.lastError_));
-      this.dispatchEvent(goog.net.EventType.TIMEOUT);
-      this.abort(goog.net.ErrorCode.TIMEOUT)
-    }
-  }
-};
-goog.net.XhrIo.prototype.error_ = function(errorCode, err) {
-  this.active_ = false;
-  if(this.xhr_) {
-    this.inAbort_ = true;
-    this.xhr_.abort();
-    this.inAbort_ = false
-  }
-  this.lastError_ = err;
-  this.lastErrorCode_ = errorCode;
-  this.dispatchErrors_();
-  this.cleanUpXhr_()
-};
-goog.net.XhrIo.prototype.dispatchErrors_ = function() {
-  if(!this.errorDispatched_) {
-    this.errorDispatched_ = true;
-    this.dispatchEvent(goog.net.EventType.COMPLETE);
-    this.dispatchEvent(goog.net.EventType.ERROR)
-  }
-};
-goog.net.XhrIo.prototype.abort = function(opt_failureCode) {
-  if(this.xhr_ && this.active_) {
-    this.logger_.fine(this.formatMsg_("Aborting"));
-    this.active_ = false;
-    this.inAbort_ = true;
-    this.xhr_.abort();
-    this.inAbort_ = false;
-    this.lastErrorCode_ = opt_failureCode || goog.net.ErrorCode.ABORT;
-    this.dispatchEvent(goog.net.EventType.COMPLETE);
-    this.dispatchEvent(goog.net.EventType.ABORT);
-    this.cleanUpXhr_()
-  }
-};
-goog.net.XhrIo.prototype.disposeInternal = function() {
-  if(this.xhr_) {
-    if(this.active_) {
-      this.active_ = false;
-      this.inAbort_ = true;
-      this.xhr_.abort();
-      this.inAbort_ = false
-    }
-    this.cleanUpXhr_(true)
-  }
-  goog.net.XhrIo.superClass_.disposeInternal.call(this)
-};
-goog.net.XhrIo.prototype.onReadyStateChange_ = function() {
-  if(!this.inOpen_ && !this.inSend_ && !this.inAbort_) {
-    this.onReadyStateChangeEntryPoint_()
-  }else {
-    this.onReadyStateChangeHelper_()
-  }
-};
-goog.net.XhrIo.prototype.onReadyStateChangeEntryPoint_ = function() {
-  this.onReadyStateChangeHelper_()
-};
-goog.net.XhrIo.prototype.onReadyStateChangeHelper_ = function() {
-  if(!this.active_) {
-    return
-  }
-  if(typeof goog == "undefined") {
-  }else {
-    if(this.xhrOptions_[goog.net.XmlHttp.OptionType.LOCAL_REQUEST_ERROR] && this.getReadyState() == goog.net.XmlHttp.ReadyState.COMPLETE && this.getStatus() == 2) {
-      this.logger_.fine(this.formatMsg_("Local request error detected and ignored"))
-    }else {
-      if(this.inSend_ && this.getReadyState() == goog.net.XmlHttp.ReadyState.COMPLETE) {
-        goog.Timer.defaultTimerObject.setTimeout(goog.bind(this.onReadyStateChange_, this), 0);
-        return
-      }
-      this.dispatchEvent(goog.net.EventType.READY_STATE_CHANGE);
-      if(this.isComplete()) {
-        this.logger_.fine(this.formatMsg_("Request complete"));
-        this.active_ = false;
-        if(this.isSuccess()) {
-          this.dispatchEvent(goog.net.EventType.COMPLETE);
-          this.dispatchEvent(goog.net.EventType.SUCCESS)
-        }else {
-          this.lastErrorCode_ = goog.net.ErrorCode.HTTP_ERROR;
-          this.lastError_ = this.getStatusText() + " [" + this.getStatus() + "]";
-          this.dispatchErrors_()
-        }
-        this.cleanUpXhr_()
-      }
-    }
-  }
-};
-goog.net.XhrIo.prototype.cleanUpXhr_ = function(opt_fromDispose) {
-  if(this.xhr_) {
-    var xhr = this.xhr_;
-    var clearedOnReadyStateChange = this.xhrOptions_[goog.net.XmlHttp.OptionType.USE_NULL_FUNCTION] ? goog.nullFunction : null;
-    this.xhr_ = null;
-    this.xhrOptions_ = null;
-    if(this.timeoutId_) {
-      goog.Timer.defaultTimerObject.clearTimeout(this.timeoutId_);
-      this.timeoutId_ = null
-    }
-    if(!opt_fromDispose) {
-      goog.net.xhrMonitor.pushContext(xhr);
-      this.dispatchEvent(goog.net.EventType.READY);
-      goog.net.xhrMonitor.popContext()
-    }
-    goog.net.xhrMonitor.markXhrClosed(xhr);
-    try {
-      xhr.onreadystatechange = clearedOnReadyStateChange
-    }catch(e) {
-      this.logger_.severe("Problem encountered resetting onreadystatechange: " + e.message)
-    }
-  }
-};
-goog.net.XhrIo.prototype.isActive = function() {
-  return!!this.xhr_
-};
-goog.net.XhrIo.prototype.isComplete = function() {
-  return this.getReadyState() == goog.net.XmlHttp.ReadyState.COMPLETE
-};
-goog.net.XhrIo.prototype.isSuccess = function() {
-  switch(this.getStatus()) {
-    case 0:
-      return!this.isLastUriEffectiveSchemeHttp_();
-    case goog.net.HttpStatus.OK:
-    ;
-    case goog.net.HttpStatus.NO_CONTENT:
-    ;
-    case goog.net.HttpStatus.NOT_MODIFIED:
-      return true;
-    default:
-      return false
-  }
-};
-goog.net.XhrIo.prototype.isLastUriEffectiveSchemeHttp_ = function() {
-  var lastUriScheme = goog.isString(this.lastUri_) ? goog.uri.utils.getScheme(this.lastUri_) : this.lastUri_.getScheme();
-  if(lastUriScheme) {
-    return goog.net.XhrIo.HTTP_SCHEME_PATTERN.test(lastUriScheme)
-  }
-  if(self.location) {
-    return goog.net.XhrIo.HTTP_SCHEME_PATTERN.test(self.location.protocol)
-  }else {
-    return true
-  }
-};
-goog.net.XhrIo.prototype.getReadyState = function() {
-  return this.xhr_ ? this.xhr_.readyState : goog.net.XmlHttp.ReadyState.UNINITIALIZED
-};
-goog.net.XhrIo.prototype.getStatus = function() {
-  try {
-    return this.getReadyState() > goog.net.XmlHttp.ReadyState.LOADED ? this.xhr_.status : -1
-  }catch(e) {
-    this.logger_.warning("Can not get status: " + e.message);
-    return-1
-  }
-};
-goog.net.XhrIo.prototype.getStatusText = function() {
-  try {
-    return this.getReadyState() > goog.net.XmlHttp.ReadyState.LOADED ? this.xhr_.statusText : ""
-  }catch(e) {
-    this.logger_.fine("Can not get status: " + e.message);
-    return""
-  }
-};
-goog.net.XhrIo.prototype.getLastUri = function() {
-  return String(this.lastUri_)
-};
-goog.net.XhrIo.prototype.getResponseText = function() {
-  try {
-    return this.xhr_ ? this.xhr_.responseText : ""
-  }catch(e) {
-    this.logger_.fine("Can not get responseText: " + e.message);
-    return""
-  }
-};
-goog.net.XhrIo.prototype.getResponseXml = function() {
-  try {
-    return this.xhr_ ? this.xhr_.responseXML : null
-  }catch(e) {
-    this.logger_.fine("Can not get responseXML: " + e.message);
-    return null
-  }
-};
-goog.net.XhrIo.prototype.getResponseJson = function(opt_xssiPrefix) {
-  if(!this.xhr_) {
-    return undefined
-  }
-  var responseText = this.xhr_.responseText;
-  if(opt_xssiPrefix && responseText.indexOf(opt_xssiPrefix) == 0) {
-    responseText = responseText.substring(opt_xssiPrefix.length)
-  }
-  return goog.json.parse(responseText)
-};
-goog.net.XhrIo.prototype.getResponse = function() {
-  try {
-    return this.xhr_ && this.xhr_.response
-  }catch(e) {
-    this.logger_.fine("Can not get response: " + e.message);
-    return null
-  }
-};
-goog.net.XhrIo.prototype.getResponseHeader = function(key) {
-  return this.xhr_ && this.isComplete() ? this.xhr_.getResponseHeader(key) : undefined
-};
-goog.net.XhrIo.prototype.getAllResponseHeaders = function() {
-  return this.xhr_ && this.isComplete() ? this.xhr_.getAllResponseHeaders() : ""
-};
-goog.net.XhrIo.prototype.getLastErrorCode = function() {
-  return this.lastErrorCode_
-};
-goog.net.XhrIo.prototype.getLastError = function() {
-  return goog.isString(this.lastError_) ? this.lastError_ : String(this.lastError_)
-};
-goog.net.XhrIo.prototype.formatMsg_ = function(msg) {
-  return msg + " [" + this.lastMethod_ + " " + this.lastUri_ + " " + this.getStatus() + "]"
-};
-goog.debug.entryPointRegistry.register(function(transformer) {
-  goog.net.XhrIo.prototype.onReadyStateChangeEntryPoint_ = transformer(goog.net.XhrIo.prototype.onReadyStateChangeEntryPoint_)
-});
-goog.provide("goog.string.StringBuffer");
-goog.require("goog.userAgent.jscript");
-goog.string.StringBuffer = function(opt_a1, var_args) {
-  this.buffer_ = goog.userAgent.jscript.HAS_JSCRIPT ? [] : "";
-  if(opt_a1 != null) {
-    this.append.apply(this, arguments)
-  }
-};
-goog.string.StringBuffer.prototype.set = function(s) {
-  this.clear();
-  this.append(s)
-};
-if(goog.userAgent.jscript.HAS_JSCRIPT) {
-  goog.string.StringBuffer.prototype.bufferLength_ = 0;
-  goog.string.StringBuffer.prototype.append = function(a1, opt_a2, var_args) {
-    if(opt_a2 == null) {
-      this.buffer_[this.bufferLength_++] = a1
-    }else {
-      this.buffer_.push.apply(this.buffer_, arguments);
-      this.bufferLength_ = this.buffer_.length
-    }
-    return this
-  }
-}else {
-  goog.string.StringBuffer.prototype.append = function(a1, opt_a2, var_args) {
-    this.buffer_ += a1;
-    if(opt_a2 != null) {
-      for(var i = 1;i < arguments.length;i++) {
-        this.buffer_ += arguments[i]
-      }
-    }
-    return this
-  }
-}
-goog.string.StringBuffer.prototype.clear = function() {
-  if(goog.userAgent.jscript.HAS_JSCRIPT) {
-    this.buffer_.length = 0;
-    this.bufferLength_ = 0
-  }else {
-    this.buffer_ = ""
-  }
-};
-goog.string.StringBuffer.prototype.getLength = function() {
-  return this.toString().length
-};
-goog.string.StringBuffer.prototype.toString = function() {
-  if(goog.userAgent.jscript.HAS_JSCRIPT) {
-    var str = this.buffer_.join("");
-    this.clear();
-    if(str) {
-      this.append(str)
-    }
-    return str
-  }else {
-    return this.buffer_
-  }
-};
-goog.provide("goog.messaging.MessageChannel");
-goog.messaging.MessageChannel = function() {
-};
-goog.messaging.MessageChannel.prototype.connect = function(opt_connectCb) {
-};
-goog.messaging.MessageChannel.prototype.isConnected = function() {
-};
-goog.messaging.MessageChannel.prototype.registerService = function(serviceName, callback, opt_objectPayload) {
-};
-goog.messaging.MessageChannel.prototype.registerDefaultService = function(callback) {
-};
-goog.messaging.MessageChannel.prototype.send = function(serviceName, payload) {
-};
-goog.provide("goog.net.xpc");
-goog.provide("goog.net.xpc.CfgFields");
-goog.provide("goog.net.xpc.ChannelStates");
-goog.provide("goog.net.xpc.TransportNames");
-goog.provide("goog.net.xpc.TransportTypes");
-goog.provide("goog.net.xpc.UriCfgFields");
-goog.require("goog.debug.Logger");
-goog.net.xpc.TransportTypes = {NATIVE_MESSAGING:1, FRAME_ELEMENT_METHOD:2, IFRAME_RELAY:3, IFRAME_POLLING:4, FLASH:5, NIX:6};
-goog.net.xpc.TransportNames = {1:"NativeMessagingTransport", 2:"FrameElementMethodTransport", 3:"IframeRelayTransport", 4:"IframePollingTransport", 5:"FlashTransport", 6:"NixTransport"};
-goog.net.xpc.CfgFields = {CHANNEL_NAME:"cn", AUTH_TOKEN:"at", REMOTE_AUTH_TOKEN:"rat", PEER_URI:"pu", IFRAME_ID:"ifrid", TRANSPORT:"tp", LOCAL_RELAY_URI:"lru", PEER_RELAY_URI:"pru", LOCAL_POLL_URI:"lpu", PEER_POLL_URI:"ppu", PEER_HOSTNAME:"ph"};
-goog.net.xpc.UriCfgFields = [goog.net.xpc.CfgFields.PEER_URI, goog.net.xpc.CfgFields.LOCAL_RELAY_URI, goog.net.xpc.CfgFields.PEER_RELAY_URI, goog.net.xpc.CfgFields.LOCAL_POLL_URI, goog.net.xpc.CfgFields.PEER_POLL_URI];
-goog.net.xpc.ChannelStates = {NOT_CONNECTED:1, CONNECTED:2, CLOSED:3};
-goog.net.xpc.TRANSPORT_SERVICE_ = "tp";
-goog.net.xpc.SETUP = "SETUP";
-goog.net.xpc.SETUP_ACK_ = "SETUP_ACK";
-goog.net.xpc.channels_ = {};
-goog.net.xpc.getRandomString = function(length, opt_characters) {
-  var chars = opt_characters || goog.net.xpc.randomStringCharacters_;
-  var charsLength = chars.length;
-  var s = "";
-  while(length-- > 0) {
-    s += chars.charAt(Math.floor(Math.random() * charsLength))
-  }
-  return s
-};
-goog.net.xpc.randomStringCharacters_ = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-goog.net.xpc.logger = goog.debug.Logger.getLogger("goog.net.xpc");
-goog.provide("goog.Uri");
-goog.provide("goog.Uri.QueryData");
-goog.require("goog.array");
-goog.require("goog.string");
-goog.require("goog.structs");
-goog.require("goog.structs.Map");
-goog.require("goog.uri.utils");
-goog.require("goog.uri.utils.ComponentIndex");
-goog.Uri = function(opt_uri, opt_ignoreCase) {
-  var m;
-  if(opt_uri instanceof goog.Uri) {
-    this.setIgnoreCase(opt_ignoreCase == null ? opt_uri.getIgnoreCase() : opt_ignoreCase);
-    this.setScheme(opt_uri.getScheme());
-    this.setUserInfo(opt_uri.getUserInfo());
-    this.setDomain(opt_uri.getDomain());
-    this.setPort(opt_uri.getPort());
-    this.setPath(opt_uri.getPath());
-    this.setQueryData(opt_uri.getQueryData().clone());
-    this.setFragment(opt_uri.getFragment())
-  }else {
-    if(opt_uri && (m = goog.uri.utils.split(String(opt_uri)))) {
-      this.setIgnoreCase(!!opt_ignoreCase);
-      this.setScheme(m[goog.uri.utils.ComponentIndex.SCHEME] || "", true);
-      this.setUserInfo(m[goog.uri.utils.ComponentIndex.USER_INFO] || "", true);
-      this.setDomain(m[goog.uri.utils.ComponentIndex.DOMAIN] || "", true);
-      this.setPort(m[goog.uri.utils.ComponentIndex.PORT]);
-      this.setPath(m[goog.uri.utils.ComponentIndex.PATH] || "", true);
-      this.setQuery(m[goog.uri.utils.ComponentIndex.QUERY_DATA] || "", true);
-      this.setFragment(m[goog.uri.utils.ComponentIndex.FRAGMENT] || "", true)
-    }else {
-      this.setIgnoreCase(!!opt_ignoreCase);
-      this.queryData_ = new goog.Uri.QueryData(null, this, this.ignoreCase_)
-    }
-  }
-};
-goog.Uri.RANDOM_PARAM = goog.uri.utils.StandardQueryParam.RANDOM;
-goog.Uri.prototype.scheme_ = "";
-goog.Uri.prototype.userInfo_ = "";
-goog.Uri.prototype.domain_ = "";
-goog.Uri.prototype.port_ = null;
-goog.Uri.prototype.path_ = "";
-goog.Uri.prototype.queryData_;
-goog.Uri.prototype.fragment_ = "";
-goog.Uri.prototype.isReadOnly_ = false;
-goog.Uri.prototype.ignoreCase_ = false;
-goog.Uri.prototype.toString = function() {
-  if(this.cachedToString_) {
-    return this.cachedToString_
-  }
-  var out = [];
-  if(this.scheme_) {
-    out.push(goog.Uri.encodeSpecialChars_(this.scheme_, goog.Uri.reDisallowedInSchemeOrUserInfo_), ":")
-  }
-  if(this.domain_) {
-    out.push("//");
-    if(this.userInfo_) {
-      out.push(goog.Uri.encodeSpecialChars_(this.userInfo_, goog.Uri.reDisallowedInSchemeOrUserInfo_), "@")
-    }
-    out.push(goog.Uri.encodeString_(this.domain_));
-    if(this.port_ != null) {
-      out.push(":", String(this.getPort()))
-    }
-  }
-  if(this.path_) {
-    if(this.hasDomain() && this.path_.charAt(0) != "/") {
-      out.push("/")
-    }
-    out.push(goog.Uri.encodeSpecialChars_(this.path_, goog.Uri.reDisallowedInPath_))
-  }
-  var query = String(this.queryData_);
-  if(query) {
-    out.push("?", query)
-  }
-  if(this.fragment_) {
-    out.push("#", goog.Uri.encodeSpecialChars_(this.fragment_, goog.Uri.reDisallowedInFragment_))
-  }
-  return this.cachedToString_ = out.join("")
-};
-goog.Uri.prototype.resolve = function(relativeUri) {
-  var absoluteUri = this.clone();
-  var overridden = relativeUri.hasScheme();
-  if(overridden) {
-    absoluteUri.setScheme(relativeUri.getScheme())
-  }else {
-    overridden = relativeUri.hasUserInfo()
-  }
-  if(overridden) {
-    absoluteUri.setUserInfo(relativeUri.getUserInfo())
-  }else {
-    overridden = relativeUri.hasDomain()
-  }
-  if(overridden) {
-    absoluteUri.setDomain(relativeUri.getDomain())
-  }else {
-    overridden = relativeUri.hasPort()
-  }
-  var path = relativeUri.getPath();
-  if(overridden) {
-    absoluteUri.setPort(relativeUri.getPort())
-  }else {
-    overridden = relativeUri.hasPath();
-    if(overridden) {
-      if(path.charAt(0) != "/") {
-        if(this.hasDomain() && !this.hasPath()) {
-          path = "/" + path
-        }else {
-          var lastSlashIndex = absoluteUri.getPath().lastIndexOf("/");
-          if(lastSlashIndex != -1) {
-            path = absoluteUri.getPath().substr(0, lastSlashIndex + 1) + path
-          }
-        }
-      }
-      path = goog.Uri.removeDotSegments(path)
-    }
-  }
-  if(overridden) {
-    absoluteUri.setPath(path)
-  }else {
-    overridden = relativeUri.hasQuery()
-  }
-  if(overridden) {
-    absoluteUri.setQuery(relativeUri.getDecodedQuery())
-  }else {
-    overridden = relativeUri.hasFragment()
-  }
-  if(overridden) {
-    absoluteUri.setFragment(relativeUri.getFragment())
-  }
-  return absoluteUri
-};
-goog.Uri.prototype.clone = function() {
-  return goog.Uri.create(this.scheme_, this.userInfo_, this.domain_, this.port_, this.path_, this.queryData_.clone(), this.fragment_, this.ignoreCase_)
-};
-goog.Uri.prototype.getScheme = function() {
-  return this.scheme_
-};
-goog.Uri.prototype.setScheme = function(newScheme, opt_decode) {
-  this.enforceReadOnly();
-  delete this.cachedToString_;
-  this.scheme_ = opt_decode ? goog.Uri.decodeOrEmpty_(newScheme) : newScheme;
-  if(this.scheme_) {
-    this.scheme_ = this.scheme_.replace(/:$/, "")
-  }
-  return this
-};
-goog.Uri.prototype.hasScheme = function() {
-  return!!this.scheme_
-};
-goog.Uri.prototype.getUserInfo = function() {
-  return this.userInfo_
-};
-goog.Uri.prototype.setUserInfo = function(newUserInfo, opt_decode) {
-  this.enforceReadOnly();
-  delete this.cachedToString_;
-  this.userInfo_ = opt_decode ? goog.Uri.decodeOrEmpty_(newUserInfo) : newUserInfo;
-  return this
-};
-goog.Uri.prototype.hasUserInfo = function() {
-  return!!this.userInfo_
-};
-goog.Uri.prototype.getDomain = function() {
-  return this.domain_
-};
-goog.Uri.prototype.setDomain = function(newDomain, opt_decode) {
-  this.enforceReadOnly();
-  delete this.cachedToString_;
-  this.domain_ = opt_decode ? goog.Uri.decodeOrEmpty_(newDomain) : newDomain;
-  return this
-};
-goog.Uri.prototype.hasDomain = function() {
-  return!!this.domain_
-};
-goog.Uri.prototype.getPort = function() {
-  return this.port_
-};
-goog.Uri.prototype.setPort = function(newPort) {
-  this.enforceReadOnly();
-  delete this.cachedToString_;
-  if(newPort) {
-    newPort = Number(newPort);
-    if(isNaN(newPort) || newPort < 0) {
-      throw Error("Bad port number " + newPort);
-    }
-    this.port_ = newPort
-  }else {
-    this.port_ = null
-  }
-  return this
-};
-goog.Uri.prototype.hasPort = function() {
-  return this.port_ != null
-};
-goog.Uri.prototype.getPath = function() {
-  return this.path_
-};
-goog.Uri.prototype.setPath = function(newPath, opt_decode) {
-  this.enforceReadOnly();
-  delete this.cachedToString_;
-  this.path_ = opt_decode ? goog.Uri.decodeOrEmpty_(newPath) : newPath;
-  return this
-};
-goog.Uri.prototype.hasPath = function() {
-  return!!this.path_
-};
-goog.Uri.prototype.hasQuery = function() {
-  return this.queryData_.toString() !== ""
-};
-goog.Uri.prototype.setQueryData = function(queryData, opt_decode) {
-  this.enforceReadOnly();
-  delete this.cachedToString_;
-  if(queryData instanceof goog.Uri.QueryData) {
-    this.queryData_ = queryData;
-    this.queryData_.uri_ = this;
-    this.queryData_.setIgnoreCase(this.ignoreCase_)
-  }else {
-    if(!opt_decode) {
-      queryData = goog.Uri.encodeSpecialChars_(queryData, goog.Uri.reDisallowedInQuery_)
-    }
-    this.queryData_ = new goog.Uri.QueryData(queryData, this, this.ignoreCase_)
-  }
-  return this
-};
-goog.Uri.prototype.setQuery = function(newQuery, opt_decode) {
-  return this.setQueryData(newQuery, opt_decode)
-};
-goog.Uri.prototype.getEncodedQuery = function() {
-  return this.queryData_.toString()
-};
-goog.Uri.prototype.getDecodedQuery = function() {
-  return this.queryData_.toDecodedString()
-};
-goog.Uri.prototype.getQueryData = function() {
-  return this.queryData_
-};
-goog.Uri.prototype.getQuery = function() {
-  return this.getEncodedQuery()
-};
-goog.Uri.prototype.setParameterValue = function(key, value) {
-  this.enforceReadOnly();
-  delete this.cachedToString_;
-  this.queryData_.set(key, value);
-  return this
-};
-goog.Uri.prototype.setParameterValues = function(key, values) {
-  this.enforceReadOnly();
-  delete this.cachedToString_;
-  if(!goog.isArray(values)) {
-    values = [String(values)]
-  }
-  this.queryData_.setValues(key, values);
-  return this
-};
-goog.Uri.prototype.getParameterValues = function(name) {
-  return this.queryData_.getValues(name)
-};
-goog.Uri.prototype.getParameterValue = function(paramName) {
-  return this.queryData_.get(paramName)
-};
-goog.Uri.prototype.getFragment = function() {
-  return this.fragment_
-};
-goog.Uri.prototype.setFragment = function(newFragment, opt_decode) {
-  this.enforceReadOnly();
-  delete this.cachedToString_;
-  this.fragment_ = opt_decode ? goog.Uri.decodeOrEmpty_(newFragment) : newFragment;
-  return this
-};
-goog.Uri.prototype.hasFragment = function() {
-  return!!this.fragment_
-};
-goog.Uri.prototype.hasSameDomainAs = function(uri2) {
-  return(!this.hasDomain() && !uri2.hasDomain() || this.getDomain() == uri2.getDomain()) && (!this.hasPort() && !uri2.hasPort() || this.getPort() == uri2.getPort())
-};
-goog.Uri.prototype.makeUnique = function() {
-  this.enforceReadOnly();
-  this.setParameterValue(goog.Uri.RANDOM_PARAM, goog.string.getRandomString());
-  return this
-};
-goog.Uri.prototype.removeParameter = function(key) {
-  this.enforceReadOnly();
-  this.queryData_.remove(key);
-  return this
-};
-goog.Uri.prototype.setReadOnly = function(isReadOnly) {
-  this.isReadOnly_ = isReadOnly;
-  return this
-};
-goog.Uri.prototype.isReadOnly = function() {
-  return this.isReadOnly_
-};
-goog.Uri.prototype.enforceReadOnly = function() {
-  if(this.isReadOnly_) {
-    throw Error("Tried to modify a read-only Uri");
-  }
-};
-goog.Uri.prototype.setIgnoreCase = function(ignoreCase) {
-  this.ignoreCase_ = ignoreCase;
-  if(this.queryData_) {
-    this.queryData_.setIgnoreCase(ignoreCase)
-  }
-  return this
-};
-goog.Uri.prototype.getIgnoreCase = function() {
-  return this.ignoreCase_
-};
-goog.Uri.parse = function(uri, opt_ignoreCase) {
-  return uri instanceof goog.Uri ? uri.clone() : new goog.Uri(uri, opt_ignoreCase)
-};
-goog.Uri.create = function(opt_scheme, opt_userInfo, opt_domain, opt_port, opt_path, opt_query, opt_fragment, opt_ignoreCase) {
-  var uri = new goog.Uri(null, opt_ignoreCase);
-  opt_scheme && uri.setScheme(opt_scheme);
-  opt_userInfo && uri.setUserInfo(opt_userInfo);
-  opt_domain && uri.setDomain(opt_domain);
-  opt_port && uri.setPort(opt_port);
-  opt_path && uri.setPath(opt_path);
-  opt_query && uri.setQueryData(opt_query);
-  opt_fragment && uri.setFragment(opt_fragment);
-  return uri
-};
-goog.Uri.resolve = function(base, rel) {
-  if(!(base instanceof goog.Uri)) {
-    base = goog.Uri.parse(base)
-  }
-  if(!(rel instanceof goog.Uri)) {
-    rel = goog.Uri.parse(rel)
-  }
-  return base.resolve(rel)
-};
-goog.Uri.removeDotSegments = function(path) {
-  if(path == ".." || path == ".") {
-    return""
-  }else {
-    if(!goog.string.contains(path, "./") && !goog.string.contains(path, "/.")) {
-      return path
-    }else {
-      var leadingSlash = goog.string.startsWith(path, "/");
-      var segments = path.split("/");
-      var out = [];
-      for(var pos = 0;pos < segments.length;) {
-        var segment = segments[pos++];
-        if(segment == ".") {
-          if(leadingSlash && pos == segments.length) {
-            out.push("")
-          }
-        }else {
-          if(segment == "..") {
-            if(out.length > 1 || out.length == 1 && out[0] != "") {
-              out.pop()
-            }
-            if(leadingSlash && pos == segments.length) {
-              out.push("")
-            }
-          }else {
-            out.push(segment);
-            leadingSlash = true
-          }
-        }
-      }
-      return out.join("/")
-    }
-  }
-};
-goog.Uri.decodeOrEmpty_ = function(val) {
-  return val ? decodeURIComponent(val) : ""
-};
-goog.Uri.encodeString_ = function(unescapedPart) {
-  if(goog.isString(unescapedPart)) {
-    return encodeURIComponent(unescapedPart)
-  }
-  return null
-};
-goog.Uri.encodeSpecialRegExp_ = /^[a-zA-Z0-9\-_.!~*'():\/;?]*$/;
-goog.Uri.encodeSpecialChars_ = function(unescapedPart, extra) {
-  var ret = null;
-  if(goog.isString(unescapedPart)) {
-    ret = unescapedPart;
-    if(!goog.Uri.encodeSpecialRegExp_.test(ret)) {
-      ret = encodeURI(unescapedPart)
-    }
-    if(ret.search(extra) >= 0) {
-      ret = ret.replace(extra, goog.Uri.encodeChar_)
-    }
-  }
-  return ret
-};
-goog.Uri.encodeChar_ = function(ch) {
-  var n = ch.charCodeAt(0);
-  return"%" + (n >> 4 & 15).toString(16) + (n & 15).toString(16)
-};
-goog.Uri.reDisallowedInSchemeOrUserInfo_ = /[#\/\?@]/g;
-goog.Uri.reDisallowedInPath_ = /[\#\?]/g;
-goog.Uri.reDisallowedInQuery_ = /[\#\?@]/g;
-goog.Uri.reDisallowedInFragment_ = /#/g;
-goog.Uri.haveSameDomain = function(uri1String, uri2String) {
-  var pieces1 = goog.uri.utils.split(uri1String);
-  var pieces2 = goog.uri.utils.split(uri2String);
-  return pieces1[goog.uri.utils.ComponentIndex.DOMAIN] == pieces2[goog.uri.utils.ComponentIndex.DOMAIN] && pieces1[goog.uri.utils.ComponentIndex.PORT] == pieces2[goog.uri.utils.ComponentIndex.PORT]
-};
-goog.Uri.QueryData = function(opt_query, opt_uri, opt_ignoreCase) {
-  this.encodedQuery_ = opt_query || null;
-  this.uri_ = opt_uri || null;
-  this.ignoreCase_ = !!opt_ignoreCase
-};
-goog.Uri.QueryData.prototype.ensureKeyMapInitialized_ = function() {
-  if(!this.keyMap_) {
-    this.keyMap_ = new goog.structs.Map;
-    if(this.encodedQuery_) {
-      var pairs = this.encodedQuery_.split("&");
-      for(var i = 0;i < pairs.length;i++) {
-        var indexOfEquals = pairs[i].indexOf("=");
-        var name = null;
-        var value = null;
-        if(indexOfEquals >= 0) {
-          name = pairs[i].substring(0, indexOfEquals);
-          value = pairs[i].substring(indexOfEquals + 1)
-        }else {
-          name = pairs[i]
-        }
-        name = goog.string.urlDecode(name);
-        name = this.getKeyName_(name);
-        this.add(name, value ? goog.string.urlDecode(value) : "")
-      }
-    }
-  }
-};
-goog.Uri.QueryData.createFromMap = function(map, opt_uri, opt_ignoreCase) {
-  var keys = goog.structs.getKeys(map);
-  if(typeof keys == "undefined") {
-    throw Error("Keys are undefined");
-  }
-  return goog.Uri.QueryData.createFromKeysValues(keys, goog.structs.getValues(map), opt_uri, opt_ignoreCase)
-};
-goog.Uri.QueryData.createFromKeysValues = function(keys, values, opt_uri, opt_ignoreCase) {
-  if(keys.length != values.length) {
-    throw Error("Mismatched lengths for keys/values");
-  }
-  var queryData = new goog.Uri.QueryData(null, opt_uri, opt_ignoreCase);
-  for(var i = 0;i < keys.length;i++) {
-    queryData.add(keys[i], values[i])
-  }
-  return queryData
-};
-goog.Uri.QueryData.prototype.keyMap_ = null;
-goog.Uri.QueryData.prototype.count_ = null;
-goog.Uri.QueryData.decodedQuery_ = null;
-goog.Uri.QueryData.prototype.getCount = function() {
-  this.ensureKeyMapInitialized_();
-  return this.count_
-};
-goog.Uri.QueryData.prototype.add = function(key, value) {
-  this.ensureKeyMapInitialized_();
-  this.invalidateCache_();
-  key = this.getKeyName_(key);
-  if(!this.containsKey(key)) {
-    this.keyMap_.set(key, value)
-  }else {
-    var current = this.keyMap_.get(key);
-    if(goog.isArray(current)) {
-      current.push(value)
-    }else {
-      this.keyMap_.set(key, [current, value])
-    }
-  }
-  this.count_++;
-  return this
-};
-goog.Uri.QueryData.prototype.remove = function(key) {
-  this.ensureKeyMapInitialized_();
-  key = this.getKeyName_(key);
-  if(this.keyMap_.containsKey(key)) {
-    this.invalidateCache_();
-    var old = this.keyMap_.get(key);
-    if(goog.isArray(old)) {
-      this.count_ -= old.length
-    }else {
-      this.count_--
-    }
-    return this.keyMap_.remove(key)
-  }
-  return false
-};
-goog.Uri.QueryData.prototype.clear = function() {
-  this.invalidateCache_();
-  if(this.keyMap_) {
-    this.keyMap_.clear()
-  }
-  this.count_ = 0
-};
-goog.Uri.QueryData.prototype.isEmpty = function() {
-  this.ensureKeyMapInitialized_();
-  return this.count_ == 0
-};
-goog.Uri.QueryData.prototype.containsKey = function(key) {
-  this.ensureKeyMapInitialized_();
-  key = this.getKeyName_(key);
-  return this.keyMap_.containsKey(key)
-};
-goog.Uri.QueryData.prototype.containsValue = function(value) {
-  var vals = this.getValues();
-  return goog.array.contains(vals, value)
-};
-goog.Uri.QueryData.prototype.getKeys = function() {
-  this.ensureKeyMapInitialized_();
-  var vals = this.keyMap_.getValues();
-  var keys = this.keyMap_.getKeys();
-  var rv = [];
-  for(var i = 0;i < keys.length;i++) {
-    var val = vals[i];
-    if(goog.isArray(val)) {
-      for(var j = 0;j < val.length;j++) {
-        rv.push(keys[i])
-      }
-    }else {
-      rv.push(keys[i])
-    }
-  }
-  return rv
-};
-goog.Uri.QueryData.prototype.getValues = function(opt_key) {
-  this.ensureKeyMapInitialized_();
-  var rv;
-  if(opt_key) {
-    var key = this.getKeyName_(opt_key);
-    if(this.containsKey(key)) {
-      var value = this.keyMap_.get(key);
-      if(goog.isArray(value)) {
-        return value
-      }else {
-        rv = [];
-        rv.push(value)
-      }
-    }else {
-      rv = []
-    }
-  }else {
-    var vals = this.keyMap_.getValues();
-    rv = [];
-    for(var i = 0;i < vals.length;i++) {
-      var val = vals[i];
-      if(goog.isArray(val)) {
-        goog.array.extend(rv, val)
-      }else {
-        rv.push(val)
-      }
-    }
-  }
-  return rv
-};
-goog.Uri.QueryData.prototype.set = function(key, value) {
-  this.ensureKeyMapInitialized_();
-  this.invalidateCache_();
-  key = this.getKeyName_(key);
-  if(this.containsKey(key)) {
-    var old = this.keyMap_.get(key);
-    if(goog.isArray(old)) {
-      this.count_ -= old.length
-    }else {
-      this.count_--
-    }
-  }
-  this.keyMap_.set(key, value);
-  this.count_++;
-  return this
-};
-goog.Uri.QueryData.prototype.get = function(key, opt_default) {
-  this.ensureKeyMapInitialized_();
-  key = this.getKeyName_(key);
-  if(this.containsKey(key)) {
-    var val = this.keyMap_.get(key);
-    if(goog.isArray(val)) {
-      return val[0]
-    }else {
-      return val
-    }
-  }else {
-    return opt_default
-  }
-};
-goog.Uri.QueryData.prototype.setValues = function(key, values) {
-  this.ensureKeyMapInitialized_();
-  this.invalidateCache_();
-  key = this.getKeyName_(key);
-  if(this.containsKey(key)) {
-    var old = this.keyMap_.get(key);
-    if(goog.isArray(old)) {
-      this.count_ -= old.length
-    }else {
-      this.count_--
-    }
-  }
-  if(values.length > 0) {
-    this.keyMap_.set(key, values);
-    this.count_ += values.length
-  }
-};
-goog.Uri.QueryData.prototype.toString = function() {
-  if(this.encodedQuery_) {
-    return this.encodedQuery_
-  }
-  if(!this.keyMap_) {
-    return""
-  }
-  var sb = [];
-  var count = 0;
-  var keys = this.keyMap_.getKeys();
-  for(var i = 0;i < keys.length;i++) {
-    var key = keys[i];
-    var encodedKey = goog.string.urlEncode(key);
-    var val = this.keyMap_.get(key);
-    if(goog.isArray(val)) {
-      for(var j = 0;j < val.length;j++) {
-        if(count > 0) {
-          sb.push("&")
-        }
-        sb.push(encodedKey);
-        if(val[j] !== "") {
-          sb.push("=", goog.string.urlEncode(val[j]))
-        }
-        count++
-      }
-    }else {
-      if(count > 0) {
-        sb.push("&")
-      }
-      sb.push(encodedKey);
-      if(val !== "") {
-        sb.push("=", goog.string.urlEncode(val))
-      }
-      count++
-    }
-  }
-  return this.encodedQuery_ = sb.join("")
-};
-goog.Uri.QueryData.prototype.toDecodedString = function() {
-  if(!this.decodedQuery_) {
-    this.decodedQuery_ = goog.Uri.decodeOrEmpty_(this.toString())
-  }
-  return this.decodedQuery_
-};
-goog.Uri.QueryData.prototype.invalidateCache_ = function() {
-  delete this.decodedQuery_;
-  delete this.encodedQuery_;
-  if(this.uri_) {
-    delete this.uri_.cachedToString_
-  }
-};
-goog.Uri.QueryData.prototype.filterKeys = function(keys) {
-  this.ensureKeyMapInitialized_();
-  goog.structs.forEach(this.keyMap_, function(value, key, map) {
-    if(!goog.array.contains(keys, key)) {
-      this.remove(key)
-    }
-  }, this);
-  return this
-};
-goog.Uri.QueryData.prototype.clone = function() {
-  var rv = new goog.Uri.QueryData;
-  if(this.decodedQuery_) {
-    rv.decodedQuery_ = this.decodedQuery_
-  }
-  if(this.encodedQuery_) {
-    rv.encodedQuery_ = this.encodedQuery_
-  }
-  if(this.keyMap_) {
-    rv.keyMap_ = this.keyMap_.clone()
-  }
-  return rv
-};
-goog.Uri.QueryData.prototype.getKeyName_ = function(arg) {
-  var keyName = String(arg);
-  if(this.ignoreCase_) {
-    keyName = keyName.toLowerCase()
-  }
-  return keyName
-};
-goog.Uri.QueryData.prototype.setIgnoreCase = function(ignoreCase) {
-  var resetKeys = ignoreCase && !this.ignoreCase_;
-  if(resetKeys) {
-    this.ensureKeyMapInitialized_();
-    this.invalidateCache_();
-    goog.structs.forEach(this.keyMap_, function(value, key, map) {
-      var lowerCase = key.toLowerCase();
-      if(key != lowerCase) {
-        this.remove(key);
-        this.add(lowerCase, value)
-      }
-    }, this)
-  }
-  this.ignoreCase_ = ignoreCase
-};
-goog.Uri.QueryData.prototype.extend = function(var_args) {
-  for(var i = 0;i < arguments.length;i++) {
-    var data = arguments[i];
-    goog.structs.forEach(data, function(value, key) {
-      this.add(key, value)
-    }, this)
-  }
-};
-goog.provide("goog.net.xpc.Transport");
-goog.require("goog.Disposable");
-goog.require("goog.net.xpc");
-goog.net.xpc.Transport = function(opt_domHelper) {
-  goog.Disposable.call(this);
-  this.domHelper_ = opt_domHelper || goog.dom.getDomHelper()
-};
-goog.inherits(goog.net.xpc.Transport, goog.Disposable);
-goog.net.xpc.Transport.prototype.transportType = 0;
-goog.net.xpc.Transport.prototype.getType = function() {
-  return this.transportType
-};
-goog.net.xpc.Transport.prototype.getWindow = function() {
-  return this.domHelper_.getWindow()
-};
-goog.net.xpc.Transport.prototype.getName = function() {
-  return goog.net.xpc.TransportNames[this.transportType] || ""
-};
-goog.net.xpc.Transport.prototype.transportServiceHandler = goog.abstractMethod;
-goog.net.xpc.Transport.prototype.connect = goog.abstractMethod;
-goog.net.xpc.Transport.prototype.send = goog.abstractMethod;
-goog.provide("goog.net.xpc.FrameElementMethodTransport");
-goog.require("goog.net.xpc");
-goog.require("goog.net.xpc.Transport");
-goog.net.xpc.FrameElementMethodTransport = function(channel, opt_domHelper) {
-  goog.base(this, opt_domHelper);
-  this.channel_ = channel;
-  this.queue_ = [];
-  this.deliverQueuedCb_ = goog.bind(this.deliverQueued_, this)
-};
-goog.inherits(goog.net.xpc.FrameElementMethodTransport, goog.net.xpc.Transport);
-goog.net.xpc.FrameElementMethodTransport.prototype.transportType = goog.net.xpc.TransportTypes.FRAME_ELEMENT_METHOD;
-goog.net.xpc.FrameElementMethodTransport.prototype.recursive_ = false;
-goog.net.xpc.FrameElementMethodTransport.prototype.timer_ = 0;
-goog.net.xpc.FrameElementMethodTransport.outgoing_ = null;
-goog.net.xpc.FrameElementMethodTransport.prototype.connect = function() {
-  if(this.channel_.getRole() == goog.net.xpc.CrossPageChannel.Role.OUTER) {
-    this.iframeElm_ = this.channel_.iframeElement_;
-    this.iframeElm_["XPC_toOuter"] = goog.bind(this.incoming_, this)
-  }else {
-    this.attemptSetup_()
-  }
-};
-goog.net.xpc.FrameElementMethodTransport.prototype.attemptSetup_ = function() {
-  var retry = true;
-  try {
-    if(!this.iframeElm_) {
-      this.iframeElm_ = this.getWindow().frameElement
-    }
-    if(this.iframeElm_ && this.iframeElm_["XPC_toOuter"]) {
-      this.outgoing_ = this.iframeElm_["XPC_toOuter"];
-      this.iframeElm_["XPC_toOuter"]["XPC_toInner"] = goog.bind(this.incoming_, this);
-      retry = false;
-      this.send(goog.net.xpc.TRANSPORT_SERVICE_, goog.net.xpc.SETUP_ACK_);
-      this.channel_.notifyConnected_()
-    }
-  }catch(e) {
-    goog.net.xpc.logger.severe("exception caught while attempting setup: " + e)
-  }
-  if(retry) {
-    if(!this.attemptSetupCb_) {
-      this.attemptSetupCb_ = goog.bind(this.attemptSetup_, this)
-    }
-    this.getWindow().setTimeout(this.attemptSetupCb_, 100)
-  }
-};
-goog.net.xpc.FrameElementMethodTransport.prototype.transportServiceHandler = function(payload) {
-  if(this.channel_.getRole() == goog.net.xpc.CrossPageChannel.Role.OUTER && !this.channel_.isConnected() && payload == goog.net.xpc.SETUP_ACK_) {
-    this.outgoing_ = this.iframeElm_["XPC_toOuter"]["XPC_toInner"];
-    this.channel_.notifyConnected_()
-  }else {
-    throw Error("Got unexpected transport message.");
-  }
-};
-goog.net.xpc.FrameElementMethodTransport.prototype.incoming_ = function(serviceName, payload) {
-  if(!this.recursive_ && this.queue_.length == 0) {
-    this.channel_.deliver_(serviceName, payload)
-  }else {
-    this.queue_.push({serviceName:serviceName, payload:payload});
-    if(this.queue_.length == 1) {
-      this.timer_ = this.getWindow().setTimeout(this.deliverQueuedCb_, 1)
-    }
-  }
-};
-goog.net.xpc.FrameElementMethodTransport.prototype.deliverQueued_ = function() {
-  while(this.queue_.length) {
-    var msg = this.queue_.shift();
-    this.channel_.deliver_(msg.serviceName, msg.payload)
-  }
-};
-goog.net.xpc.FrameElementMethodTransport.prototype.send = function(service, payload) {
-  this.recursive_ = true;
-  this.outgoing_(service, payload);
-  this.recursive_ = false
-};
-goog.net.xpc.FrameElementMethodTransport.prototype.disposeInternal = function() {
-  goog.net.xpc.FrameElementMethodTransport.superClass_.disposeInternal.call(this);
-  this.outgoing_ = null;
-  this.iframeElm_ = null
-};
-goog.provide("goog.dom.BrowserFeature");
-goog.require("goog.userAgent");
-goog.dom.BrowserFeature = {CAN_ADD_NAME_OR_TYPE_ATTRIBUTES:!goog.userAgent.IE || goog.userAgent.isVersion("9"), CAN_USE_CHILDREN_ATTRIBUTE:!goog.userAgent.GECKO && !goog.userAgent.IE || goog.userAgent.IE && goog.userAgent.isVersion("9") || goog.userAgent.GECKO && goog.userAgent.isVersion("1.9.1"), CAN_USE_INNER_TEXT:goog.userAgent.IE && !goog.userAgent.isVersion("9"), INNER_HTML_NEEDS_SCOPED_ELEMENT:goog.userAgent.IE};
-goog.provide("goog.dom.TagName");
-goog.dom.TagName = {A:"A", ABBR:"ABBR", ACRONYM:"ACRONYM", ADDRESS:"ADDRESS", APPLET:"APPLET", AREA:"AREA", B:"B", BASE:"BASE", BASEFONT:"BASEFONT", BDO:"BDO", BIG:"BIG", BLOCKQUOTE:"BLOCKQUOTE", BODY:"BODY", BR:"BR", BUTTON:"BUTTON", CANVAS:"CANVAS", CAPTION:"CAPTION", CENTER:"CENTER", CITE:"CITE", CODE:"CODE", COL:"COL", COLGROUP:"COLGROUP", DD:"DD", DEL:"DEL", DFN:"DFN", DIR:"DIR", DIV:"DIV", DL:"DL", DT:"DT", EM:"EM", FIELDSET:"FIELDSET", FONT:"FONT", FORM:"FORM", FRAME:"FRAME", FRAMESET:"FRAMESET", 
-H1:"H1", H2:"H2", H3:"H3", H4:"H4", H5:"H5", H6:"H6", HEAD:"HEAD", HR:"HR", HTML:"HTML", I:"I", IFRAME:"IFRAME", IMG:"IMG", INPUT:"INPUT", INS:"INS", ISINDEX:"ISINDEX", KBD:"KBD", LABEL:"LABEL", LEGEND:"LEGEND", LI:"LI", LINK:"LINK", MAP:"MAP", MENU:"MENU", META:"META", NOFRAMES:"NOFRAMES", NOSCRIPT:"NOSCRIPT", OBJECT:"OBJECT", OL:"OL", OPTGROUP:"OPTGROUP", OPTION:"OPTION", P:"P", PARAM:"PARAM", PRE:"PRE", Q:"Q", S:"S", SAMP:"SAMP", SCRIPT:"SCRIPT", SELECT:"SELECT", SMALL:"SMALL", SPAN:"SPAN", STRIKE:"STRIKE", 
-STRONG:"STRONG", STYLE:"STYLE", SUB:"SUB", SUP:"SUP", TABLE:"TABLE", TBODY:"TBODY", TD:"TD", TEXTAREA:"TEXTAREA", TFOOT:"TFOOT", TH:"TH", THEAD:"THEAD", TITLE:"TITLE", TR:"TR", TT:"TT", U:"U", UL:"UL", VAR:"VAR"};
-goog.provide("goog.dom.classes");
-goog.require("goog.array");
-goog.dom.classes.set = function(element, className) {
-  element.className = className
-};
-goog.dom.classes.get = function(element) {
-  var className = element.className;
-  return className && typeof className.split == "function" ? className.split(/\s+/) : []
-};
-goog.dom.classes.add = function(element, var_args) {
-  var classes = goog.dom.classes.get(element);
-  var args = goog.array.slice(arguments, 1);
-  var b = goog.dom.classes.add_(classes, args);
-  element.className = classes.join(" ");
-  return b
-};
-goog.dom.classes.remove = function(element, var_args) {
-  var classes = goog.dom.classes.get(element);
-  var args = goog.array.slice(arguments, 1);
-  var b = goog.dom.classes.remove_(classes, args);
-  element.className = classes.join(" ");
-  return b
-};
-goog.dom.classes.add_ = function(classes, args) {
-  var rv = 0;
-  for(var i = 0;i < args.length;i++) {
-    if(!goog.array.contains(classes, args[i])) {
-      classes.push(args[i]);
-      rv++
-    }
-  }
-  return rv == args.length
-};
-goog.dom.classes.remove_ = function(classes, args) {
-  var rv = 0;
-  for(var i = 0;i < classes.length;i++) {
-    if(goog.array.contains(args, classes[i])) {
-      goog.array.splice(classes, i--, 1);
-      rv++
-    }
-  }
-  return rv == args.length
-};
-goog.dom.classes.swap = function(element, fromClass, toClass) {
-  var classes = goog.dom.classes.get(element);
-  var removed = false;
-  for(var i = 0;i < classes.length;i++) {
-    if(classes[i] == fromClass) {
-      goog.array.splice(classes, i--, 1);
-      removed = true
-    }
-  }
-  if(removed) {
-    classes.push(toClass);
-    element.className = classes.join(" ")
-  }
-  return removed
-};
-goog.dom.classes.addRemove = function(element, classesToRemove, classesToAdd) {
-  var classes = goog.dom.classes.get(element);
-  if(goog.isString(classesToRemove)) {
-    goog.array.remove(classes, classesToRemove)
-  }else {
-    if(goog.isArray(classesToRemove)) {
-      goog.dom.classes.remove_(classes, classesToRemove)
-    }
-  }
-  if(goog.isString(classesToAdd) && !goog.array.contains(classes, classesToAdd)) {
-    classes.push(classesToAdd)
-  }else {
-    if(goog.isArray(classesToAdd)) {
-      goog.dom.classes.add_(classes, classesToAdd)
-    }
-  }
-  element.className = classes.join(" ")
-};
-goog.dom.classes.has = function(element, className) {
-  return goog.array.contains(goog.dom.classes.get(element), className)
-};
-goog.dom.classes.enable = function(element, className, enabled) {
-  if(enabled) {
-    goog.dom.classes.add(element, className)
-  }else {
-    goog.dom.classes.remove(element, className)
-  }
-};
-goog.dom.classes.toggle = function(element, className) {
-  var add = !goog.dom.classes.has(element, className);
-  goog.dom.classes.enable(element, className, add);
-  return add
-};
-goog.provide("goog.math.Coordinate");
-goog.math.Coordinate = function(opt_x, opt_y) {
-  this.x = goog.isDef(opt_x) ? opt_x : 0;
-  this.y = goog.isDef(opt_y) ? opt_y : 0
-};
-goog.math.Coordinate.prototype.clone = function() {
-  return new goog.math.Coordinate(this.x, this.y)
-};
-if(goog.DEBUG) {
-  goog.math.Coordinate.prototype.toString = function() {
-    return"(" + this.x + ", " + this.y + ")"
-  }
-}
-goog.math.Coordinate.equals = function(a, b) {
-  if(a == b) {
-    return true
-  }
-  if(!a || !b) {
-    return false
-  }
-  return a.x == b.x && a.y == b.y
-};
-goog.math.Coordinate.distance = function(a, b) {
-  var dx = a.x - b.x;
-  var dy = a.y - b.y;
-  return Math.sqrt(dx * dx + dy * dy)
-};
-goog.math.Coordinate.squaredDistance = function(a, b) {
-  var dx = a.x - b.x;
-  var dy = a.y - b.y;
-  return dx * dx + dy * dy
-};
-goog.math.Coordinate.difference = function(a, b) {
-  return new goog.math.Coordinate(a.x - b.x, a.y - b.y)
-};
-goog.math.Coordinate.sum = function(a, b) {
-  return new goog.math.Coordinate(a.x + b.x, a.y + b.y)
-};
-goog.provide("goog.math.Size");
-goog.math.Size = function(width, height) {
-  this.width = width;
-  this.height = height
-};
-goog.math.Size.equals = function(a, b) {
-  if(a == b) {
-    return true
-  }
-  if(!a || !b) {
-    return false
-  }
-  return a.width == b.width && a.height == b.height
-};
-goog.math.Size.prototype.clone = function() {
-  return new goog.math.Size(this.width, this.height)
-};
-if(goog.DEBUG) {
-  goog.math.Size.prototype.toString = function() {
-    return"(" + this.width + " x " + this.height + ")"
-  }
-}
-goog.math.Size.prototype.getLongest = function() {
-  return Math.max(this.width, this.height)
-};
-goog.math.Size.prototype.getShortest = function() {
-  return Math.min(this.width, this.height)
-};
-goog.math.Size.prototype.area = function() {
-  return this.width * this.height
-};
-goog.math.Size.prototype.perimeter = function() {
-  return(this.width + this.height) * 2
-};
-goog.math.Size.prototype.aspectRatio = function() {
-  return this.width / this.height
-};
-goog.math.Size.prototype.isEmpty = function() {
-  return!this.area()
-};
-goog.math.Size.prototype.ceil = function() {
-  this.width = Math.ceil(this.width);
-  this.height = Math.ceil(this.height);
-  return this
-};
-goog.math.Size.prototype.fitsInside = function(target) {
-  return this.width <= target.width && this.height <= target.height
-};
-goog.math.Size.prototype.floor = function() {
-  this.width = Math.floor(this.width);
-  this.height = Math.floor(this.height);
-  return this
-};
-goog.math.Size.prototype.round = function() {
-  this.width = Math.round(this.width);
-  this.height = Math.round(this.height);
-  return this
-};
-goog.math.Size.prototype.scale = function(s) {
-  this.width *= s;
-  this.height *= s;
-  return this
-};
-goog.math.Size.prototype.scaleToFit = function(target) {
-  var s = this.aspectRatio() > target.aspectRatio() ? target.width / this.width : target.height / this.height;
-  return this.scale(s)
 };
 goog.provide("goog.dom");
 goog.provide("goog.dom.DomHelper");
@@ -8093,6 +3845,689 @@ goog.style.getScrollbarWidth = function() {
   goog.dom.removeNode(mockElement);
   return width
 };
+goog.provide("goog.iter");
+goog.provide("goog.iter.Iterator");
+goog.provide("goog.iter.StopIteration");
+goog.require("goog.array");
+goog.require("goog.asserts");
+goog.iter.Iterable;
+if("StopIteration" in goog.global) {
+  goog.iter.StopIteration = goog.global["StopIteration"]
+}else {
+  goog.iter.StopIteration = Error("StopIteration")
+}
+goog.iter.Iterator = function() {
+};
+goog.iter.Iterator.prototype.next = function() {
+  throw goog.iter.StopIteration;
+};
+goog.iter.Iterator.prototype.__iterator__ = function(opt_keys) {
+  return this
+};
+goog.iter.toIterator = function(iterable) {
+  if(iterable instanceof goog.iter.Iterator) {
+    return iterable
+  }
+  if(typeof iterable.__iterator__ == "function") {
+    return iterable.__iterator__(false)
+  }
+  if(goog.isArrayLike(iterable)) {
+    var i = 0;
+    var newIter = new goog.iter.Iterator;
+    newIter.next = function() {
+      while(true) {
+        if(i >= iterable.length) {
+          throw goog.iter.StopIteration;
+        }
+        if(!(i in iterable)) {
+          i++;
+          continue
+        }
+        return iterable[i++]
+      }
+    };
+    return newIter
+  }
+  throw Error("Not implemented");
+};
+goog.iter.forEach = function(iterable, f, opt_obj) {
+  if(goog.isArrayLike(iterable)) {
+    try {
+      goog.array.forEach(iterable, f, opt_obj)
+    }catch(ex) {
+      if(ex !== goog.iter.StopIteration) {
+        throw ex;
+      }
+    }
+  }else {
+    iterable = goog.iter.toIterator(iterable);
+    try {
+      while(true) {
+        f.call(opt_obj, iterable.next(), undefined, iterable)
+      }
+    }catch(ex) {
+      if(ex !== goog.iter.StopIteration) {
+        throw ex;
+      }
+    }
+  }
+};
+goog.iter.filter = function(iterable, f, opt_obj) {
+  iterable = goog.iter.toIterator(iterable);
+  var newIter = new goog.iter.Iterator;
+  newIter.next = function() {
+    while(true) {
+      var val = iterable.next();
+      if(f.call(opt_obj, val, undefined, iterable)) {
+        return val
+      }
+    }
+  };
+  return newIter
+};
+goog.iter.range = function(startOrStop, opt_stop, opt_step) {
+  var start = 0;
+  var stop = startOrStop;
+  var step = opt_step || 1;
+  if(arguments.length > 1) {
+    start = startOrStop;
+    stop = opt_stop
+  }
+  if(step == 0) {
+    throw Error("Range step argument must not be zero");
+  }
+  var newIter = new goog.iter.Iterator;
+  newIter.next = function() {
+    if(step > 0 && start >= stop || step < 0 && start <= stop) {
+      throw goog.iter.StopIteration;
+    }
+    var rv = start;
+    start += step;
+    return rv
+  };
+  return newIter
+};
+goog.iter.join = function(iterable, deliminator) {
+  return goog.iter.toArray(iterable).join(deliminator)
+};
+goog.iter.map = function(iterable, f, opt_obj) {
+  iterable = goog.iter.toIterator(iterable);
+  var newIter = new goog.iter.Iterator;
+  newIter.next = function() {
+    while(true) {
+      var val = iterable.next();
+      return f.call(opt_obj, val, undefined, iterable)
+    }
+  };
+  return newIter
+};
+goog.iter.reduce = function(iterable, f, val, opt_obj) {
+  var rval = val;
+  goog.iter.forEach(iterable, function(val) {
+    rval = f.call(opt_obj, rval, val)
+  });
+  return rval
+};
+goog.iter.some = function(iterable, f, opt_obj) {
+  iterable = goog.iter.toIterator(iterable);
+  try {
+    while(true) {
+      if(f.call(opt_obj, iterable.next(), undefined, iterable)) {
+        return true
+      }
+    }
+  }catch(ex) {
+    if(ex !== goog.iter.StopIteration) {
+      throw ex;
+    }
+  }
+  return false
+};
+goog.iter.every = function(iterable, f, opt_obj) {
+  iterable = goog.iter.toIterator(iterable);
+  try {
+    while(true) {
+      if(!f.call(opt_obj, iterable.next(), undefined, iterable)) {
+        return false
+      }
+    }
+  }catch(ex) {
+    if(ex !== goog.iter.StopIteration) {
+      throw ex;
+    }
+  }
+  return true
+};
+goog.iter.chain = function(var_args) {
+  var args = arguments;
+  var length = args.length;
+  var i = 0;
+  var newIter = new goog.iter.Iterator;
+  newIter.next = function() {
+    try {
+      if(i >= length) {
+        throw goog.iter.StopIteration;
+      }
+      var current = goog.iter.toIterator(args[i]);
+      return current.next()
+    }catch(ex) {
+      if(ex !== goog.iter.StopIteration || i >= length) {
+        throw ex;
+      }else {
+        i++;
+        return this.next()
+      }
+    }
+  };
+  return newIter
+};
+goog.iter.dropWhile = function(iterable, f, opt_obj) {
+  iterable = goog.iter.toIterator(iterable);
+  var newIter = new goog.iter.Iterator;
+  var dropping = true;
+  newIter.next = function() {
+    while(true) {
+      var val = iterable.next();
+      if(dropping && f.call(opt_obj, val, undefined, iterable)) {
+        continue
+      }else {
+        dropping = false
+      }
+      return val
+    }
+  };
+  return newIter
+};
+goog.iter.takeWhile = function(iterable, f, opt_obj) {
+  iterable = goog.iter.toIterator(iterable);
+  var newIter = new goog.iter.Iterator;
+  var taking = true;
+  newIter.next = function() {
+    while(true) {
+      if(taking) {
+        var val = iterable.next();
+        if(f.call(opt_obj, val, undefined, iterable)) {
+          return val
+        }else {
+          taking = false
+        }
+      }else {
+        throw goog.iter.StopIteration;
+      }
+    }
+  };
+  return newIter
+};
+goog.iter.toArray = function(iterable) {
+  if(goog.isArrayLike(iterable)) {
+    return goog.array.toArray(iterable)
+  }
+  iterable = goog.iter.toIterator(iterable);
+  var array = [];
+  goog.iter.forEach(iterable, function(val) {
+    array.push(val)
+  });
+  return array
+};
+goog.iter.equals = function(iterable1, iterable2) {
+  iterable1 = goog.iter.toIterator(iterable1);
+  iterable2 = goog.iter.toIterator(iterable2);
+  var b1, b2;
+  try {
+    while(true) {
+      b1 = b2 = false;
+      var val1 = iterable1.next();
+      b1 = true;
+      var val2 = iterable2.next();
+      b2 = true;
+      if(val1 != val2) {
+        return false
+      }
+    }
+  }catch(ex) {
+    if(ex !== goog.iter.StopIteration) {
+      throw ex;
+    }else {
+      if(b1 && !b2) {
+        return false
+      }
+      if(!b2) {
+        try {
+          val2 = iterable2.next();
+          return false
+        }catch(ex1) {
+          if(ex1 !== goog.iter.StopIteration) {
+            throw ex1;
+          }
+          return true
+        }
+      }
+    }
+  }
+  return false
+};
+goog.iter.nextOrValue = function(iterable, defaultValue) {
+  try {
+    return goog.iter.toIterator(iterable).next()
+  }catch(e) {
+    if(e != goog.iter.StopIteration) {
+      throw e;
+    }
+    return defaultValue
+  }
+};
+goog.iter.product = function(var_args) {
+  var someArrayEmpty = goog.array.some(arguments, function(arr) {
+    return!arr.length
+  });
+  if(someArrayEmpty || !arguments.length) {
+    return new goog.iter.Iterator
+  }
+  var iter = new goog.iter.Iterator;
+  var arrays = arguments;
+  var indicies = goog.array.repeat(0, arrays.length);
+  iter.next = function() {
+    if(indicies) {
+      var retVal = goog.array.map(indicies, function(valueIndex, arrayIndex) {
+        return arrays[arrayIndex][valueIndex]
+      });
+      for(var i = indicies.length - 1;i >= 0;i--) {
+        goog.asserts.assert(indicies);
+        if(indicies[i] < arrays[i].length - 1) {
+          indicies[i]++;
+          break
+        }
+        if(i == 0) {
+          indicies = null;
+          break
+        }
+        indicies[i] = 0
+      }
+      return retVal
+    }
+    throw goog.iter.StopIteration;
+  };
+  return iter
+};
+goog.provide("goog.structs");
+goog.require("goog.array");
+goog.require("goog.object");
+goog.structs.getCount = function(col) {
+  if(typeof col.getCount == "function") {
+    return col.getCount()
+  }
+  if(goog.isArrayLike(col) || goog.isString(col)) {
+    return col.length
+  }
+  return goog.object.getCount(col)
+};
+goog.structs.getValues = function(col) {
+  if(typeof col.getValues == "function") {
+    return col.getValues()
+  }
+  if(goog.isString(col)) {
+    return col.split("")
+  }
+  if(goog.isArrayLike(col)) {
+    var rv = [];
+    var l = col.length;
+    for(var i = 0;i < l;i++) {
+      rv.push(col[i])
+    }
+    return rv
+  }
+  return goog.object.getValues(col)
+};
+goog.structs.getKeys = function(col) {
+  if(typeof col.getKeys == "function") {
+    return col.getKeys()
+  }
+  if(typeof col.getValues == "function") {
+    return undefined
+  }
+  if(goog.isArrayLike(col) || goog.isString(col)) {
+    var rv = [];
+    var l = col.length;
+    for(var i = 0;i < l;i++) {
+      rv.push(i)
+    }
+    return rv
+  }
+  return goog.object.getKeys(col)
+};
+goog.structs.contains = function(col, val) {
+  if(typeof col.contains == "function") {
+    return col.contains(val)
+  }
+  if(typeof col.containsValue == "function") {
+    return col.containsValue(val)
+  }
+  if(goog.isArrayLike(col) || goog.isString(col)) {
+    return goog.array.contains(col, val)
+  }
+  return goog.object.containsValue(col, val)
+};
+goog.structs.isEmpty = function(col) {
+  if(typeof col.isEmpty == "function") {
+    return col.isEmpty()
+  }
+  if(goog.isArrayLike(col) || goog.isString(col)) {
+    return goog.array.isEmpty(col)
+  }
+  return goog.object.isEmpty(col)
+};
+goog.structs.clear = function(col) {
+  if(typeof col.clear == "function") {
+    col.clear()
+  }else {
+    if(goog.isArrayLike(col)) {
+      goog.array.clear(col)
+    }else {
+      goog.object.clear(col)
+    }
+  }
+};
+goog.structs.forEach = function(col, f, opt_obj) {
+  if(typeof col.forEach == "function") {
+    col.forEach(f, opt_obj)
+  }else {
+    if(goog.isArrayLike(col) || goog.isString(col)) {
+      goog.array.forEach(col, f, opt_obj)
+    }else {
+      var keys = goog.structs.getKeys(col);
+      var values = goog.structs.getValues(col);
+      var l = values.length;
+      for(var i = 0;i < l;i++) {
+        f.call(opt_obj, values[i], keys && keys[i], col)
+      }
+    }
+  }
+};
+goog.structs.filter = function(col, f, opt_obj) {
+  if(typeof col.filter == "function") {
+    return col.filter(f, opt_obj)
+  }
+  if(goog.isArrayLike(col) || goog.isString(col)) {
+    return goog.array.filter(col, f, opt_obj)
+  }
+  var rv;
+  var keys = goog.structs.getKeys(col);
+  var values = goog.structs.getValues(col);
+  var l = values.length;
+  if(keys) {
+    rv = {};
+    for(var i = 0;i < l;i++) {
+      if(f.call(opt_obj, values[i], keys[i], col)) {
+        rv[keys[i]] = values[i]
+      }
+    }
+  }else {
+    rv = [];
+    for(var i = 0;i < l;i++) {
+      if(f.call(opt_obj, values[i], undefined, col)) {
+        rv.push(values[i])
+      }
+    }
+  }
+  return rv
+};
+goog.structs.map = function(col, f, opt_obj) {
+  if(typeof col.map == "function") {
+    return col.map(f, opt_obj)
+  }
+  if(goog.isArrayLike(col) || goog.isString(col)) {
+    return goog.array.map(col, f, opt_obj)
+  }
+  var rv;
+  var keys = goog.structs.getKeys(col);
+  var values = goog.structs.getValues(col);
+  var l = values.length;
+  if(keys) {
+    rv = {};
+    for(var i = 0;i < l;i++) {
+      rv[keys[i]] = f.call(opt_obj, values[i], keys[i], col)
+    }
+  }else {
+    rv = [];
+    for(var i = 0;i < l;i++) {
+      rv[i] = f.call(opt_obj, values[i], undefined, col)
+    }
+  }
+  return rv
+};
+goog.structs.some = function(col, f, opt_obj) {
+  if(typeof col.some == "function") {
+    return col.some(f, opt_obj)
+  }
+  if(goog.isArrayLike(col) || goog.isString(col)) {
+    return goog.array.some(col, f, opt_obj)
+  }
+  var keys = goog.structs.getKeys(col);
+  var values = goog.structs.getValues(col);
+  var l = values.length;
+  for(var i = 0;i < l;i++) {
+    if(f.call(opt_obj, values[i], keys && keys[i], col)) {
+      return true
+    }
+  }
+  return false
+};
+goog.structs.every = function(col, f, opt_obj) {
+  if(typeof col.every == "function") {
+    return col.every(f, opt_obj)
+  }
+  if(goog.isArrayLike(col) || goog.isString(col)) {
+    return goog.array.every(col, f, opt_obj)
+  }
+  var keys = goog.structs.getKeys(col);
+  var values = goog.structs.getValues(col);
+  var l = values.length;
+  for(var i = 0;i < l;i++) {
+    if(!f.call(opt_obj, values[i], keys && keys[i], col)) {
+      return false
+    }
+  }
+  return true
+};
+goog.provide("goog.structs.Map");
+goog.require("goog.iter.Iterator");
+goog.require("goog.iter.StopIteration");
+goog.require("goog.object");
+goog.require("goog.structs");
+goog.structs.Map = function(opt_map, var_args) {
+  this.map_ = {};
+  this.keys_ = [];
+  var argLength = arguments.length;
+  if(argLength > 1) {
+    if(argLength % 2) {
+      throw Error("Uneven number of arguments");
+    }
+    for(var i = 0;i < argLength;i += 2) {
+      this.set(arguments[i], arguments[i + 1])
+    }
+  }else {
+    if(opt_map) {
+      this.addAll(opt_map)
+    }
+  }
+};
+goog.structs.Map.prototype.count_ = 0;
+goog.structs.Map.prototype.version_ = 0;
+goog.structs.Map.prototype.getCount = function() {
+  return this.count_
+};
+goog.structs.Map.prototype.getValues = function() {
+  this.cleanupKeysArray_();
+  var rv = [];
+  for(var i = 0;i < this.keys_.length;i++) {
+    var key = this.keys_[i];
+    rv.push(this.map_[key])
+  }
+  return rv
+};
+goog.structs.Map.prototype.getKeys = function() {
+  this.cleanupKeysArray_();
+  return this.keys_.concat()
+};
+goog.structs.Map.prototype.containsKey = function(key) {
+  return goog.structs.Map.hasKey_(this.map_, key)
+};
+goog.structs.Map.prototype.containsValue = function(val) {
+  for(var i = 0;i < this.keys_.length;i++) {
+    var key = this.keys_[i];
+    if(goog.structs.Map.hasKey_(this.map_, key) && this.map_[key] == val) {
+      return true
+    }
+  }
+  return false
+};
+goog.structs.Map.prototype.equals = function(otherMap, opt_equalityFn) {
+  if(this === otherMap) {
+    return true
+  }
+  if(this.count_ != otherMap.getCount()) {
+    return false
+  }
+  var equalityFn = opt_equalityFn || goog.structs.Map.defaultEquals;
+  this.cleanupKeysArray_();
+  for(var key, i = 0;key = this.keys_[i];i++) {
+    if(!equalityFn(this.get(key), otherMap.get(key))) {
+      return false
+    }
+  }
+  return true
+};
+goog.structs.Map.defaultEquals = function(a, b) {
+  return a === b
+};
+goog.structs.Map.prototype.isEmpty = function() {
+  return this.count_ == 0
+};
+goog.structs.Map.prototype.clear = function() {
+  this.map_ = {};
+  this.keys_.length = 0;
+  this.count_ = 0;
+  this.version_ = 0
+};
+goog.structs.Map.prototype.remove = function(key) {
+  if(goog.structs.Map.hasKey_(this.map_, key)) {
+    delete this.map_[key];
+    this.count_--;
+    this.version_++;
+    if(this.keys_.length > 2 * this.count_) {
+      this.cleanupKeysArray_()
+    }
+    return true
+  }
+  return false
+};
+goog.structs.Map.prototype.cleanupKeysArray_ = function() {
+  if(this.count_ != this.keys_.length) {
+    var srcIndex = 0;
+    var destIndex = 0;
+    while(srcIndex < this.keys_.length) {
+      var key = this.keys_[srcIndex];
+      if(goog.structs.Map.hasKey_(this.map_, key)) {
+        this.keys_[destIndex++] = key
+      }
+      srcIndex++
+    }
+    this.keys_.length = destIndex
+  }
+  if(this.count_ != this.keys_.length) {
+    var seen = {};
+    var srcIndex = 0;
+    var destIndex = 0;
+    while(srcIndex < this.keys_.length) {
+      var key = this.keys_[srcIndex];
+      if(!goog.structs.Map.hasKey_(seen, key)) {
+        this.keys_[destIndex++] = key;
+        seen[key] = 1
+      }
+      srcIndex++
+    }
+    this.keys_.length = destIndex
+  }
+};
+goog.structs.Map.prototype.get = function(key, opt_val) {
+  if(goog.structs.Map.hasKey_(this.map_, key)) {
+    return this.map_[key]
+  }
+  return opt_val
+};
+goog.structs.Map.prototype.set = function(key, value) {
+  if(!goog.structs.Map.hasKey_(this.map_, key)) {
+    this.count_++;
+    this.keys_.push(key);
+    this.version_++
+  }
+  this.map_[key] = value
+};
+goog.structs.Map.prototype.addAll = function(map) {
+  var keys, values;
+  if(map instanceof goog.structs.Map) {
+    keys = map.getKeys();
+    values = map.getValues()
+  }else {
+    keys = goog.object.getKeys(map);
+    values = goog.object.getValues(map)
+  }
+  for(var i = 0;i < keys.length;i++) {
+    this.set(keys[i], values[i])
+  }
+};
+goog.structs.Map.prototype.clone = function() {
+  return new goog.structs.Map(this)
+};
+goog.structs.Map.prototype.transpose = function() {
+  var transposed = new goog.structs.Map;
+  for(var i = 0;i < this.keys_.length;i++) {
+    var key = this.keys_[i];
+    var value = this.map_[key];
+    transposed.set(value, key)
+  }
+  return transposed
+};
+goog.structs.Map.prototype.toObject = function() {
+  this.cleanupKeysArray_();
+  var obj = {};
+  for(var i = 0;i < this.keys_.length;i++) {
+    var key = this.keys_[i];
+    obj[key] = this.map_[key]
+  }
+  return obj
+};
+goog.structs.Map.prototype.getKeyIterator = function() {
+  return this.__iterator__(true)
+};
+goog.structs.Map.prototype.getValueIterator = function() {
+  return this.__iterator__(false)
+};
+goog.structs.Map.prototype.__iterator__ = function(opt_keys) {
+  this.cleanupKeysArray_();
+  var i = 0;
+  var keys = this.keys_;
+  var map = this.map_;
+  var version = this.version_;
+  var selfObj = this;
+  var newIter = new goog.iter.Iterator;
+  newIter.next = function() {
+    while(true) {
+      if(version != selfObj.version_) {
+        throw Error("The map has changed since the iterator was created");
+      }
+      if(i >= keys.length) {
+        throw goog.iter.StopIteration;
+      }
+      var key = keys[i++];
+      return opt_keys ? key : map[key]
+    }
+  };
+  return newIter
+};
+goog.structs.Map.hasKey_ = function(obj, key) {
+  return Object.prototype.hasOwnProperty.call(obj, key)
+};
 goog.provide("goog.dom.forms");
 goog.require("goog.structs.Map");
 goog.dom.forms.getFormDataMap = function(form) {
@@ -8289,1074 +4724,6 @@ goog.dom.forms.setSelectMultiple_ = function(el, opt_value) {
           option.selected = true
         }
       }
-    }
-  }
-};
-goog.provide("goog.net.xpc.NixTransport");
-goog.require("goog.net.xpc");
-goog.require("goog.net.xpc.Transport");
-goog.net.xpc.NixTransport = function(channel, opt_domHelper) {
-  goog.base(this, opt_domHelper);
-  this.channel_ = channel;
-  this.authToken_ = channel[goog.net.xpc.CfgFields.AUTH_TOKEN] || "";
-  this.remoteAuthToken_ = channel[goog.net.xpc.CfgFields.REMOTE_AUTH_TOKEN] || "";
-  goog.net.xpc.NixTransport.conductGlobalSetup_(this.getWindow());
-  this[goog.net.xpc.NixTransport.NIX_HANDLE_MESSAGE] = this.handleMessage_;
-  this[goog.net.xpc.NixTransport.NIX_CREATE_CHANNEL] = this.createChannel_
-};
-goog.inherits(goog.net.xpc.NixTransport, goog.net.xpc.Transport);
-goog.net.xpc.NixTransport.NIX_WRAPPER = "GCXPC____NIXVBS_wrapper";
-goog.net.xpc.NixTransport.NIX_GET_WRAPPER = "GCXPC____NIXVBS_get_wrapper";
-goog.net.xpc.NixTransport.NIX_HANDLE_MESSAGE = "GCXPC____NIXJS_handle_message";
-goog.net.xpc.NixTransport.NIX_CREATE_CHANNEL = "GCXPC____NIXJS_create_channel";
-goog.net.xpc.NixTransport.NIX_ID_FIELD = "GCXPC____NIXVBS_container";
-goog.net.xpc.NixTransport.conductGlobalSetup_ = function(listenWindow) {
-  if(listenWindow["nix_setup_complete"]) {
-    return
-  }
-  var vbscript = "Class " + goog.net.xpc.NixTransport.NIX_WRAPPER + "\n " + "Private m_Transport\n" + "Private m_Auth\n" + "Public Sub SetTransport(transport)\n" + "If isEmpty(m_Transport) Then\n" + "Set m_Transport = transport\n" + "End If\n" + "End Sub\n" + "Public Sub SetAuth(auth)\n" + "If isEmpty(m_Auth) Then\n" + "m_Auth = auth\n" + "End If\n" + "End Sub\n" + "Public Function GetAuthToken()\n " + "GetAuthToken = m_Auth\n" + "End Function\n" + "Public Sub SendMessage(service, payload)\n " + 
-  "Call m_Transport." + goog.net.xpc.NixTransport.NIX_HANDLE_MESSAGE + "(service, payload)\n" + "End Sub\n" + "Public Sub CreateChannel(channel)\n " + "Call m_Transport." + goog.net.xpc.NixTransport.NIX_CREATE_CHANNEL + "(channel)\n" + "End Sub\n" + "Public Sub " + goog.net.xpc.NixTransport.NIX_ID_FIELD + "()\n " + "End Sub\n" + "End Class\n " + "Function " + goog.net.xpc.NixTransport.NIX_GET_WRAPPER + "(transport, auth)\n" + "Dim wrap\n" + "Set wrap = New " + goog.net.xpc.NixTransport.NIX_WRAPPER + 
-  "\n" + "wrap.SetTransport transport\n" + "wrap.SetAuth auth\n" + "Set " + goog.net.xpc.NixTransport.NIX_GET_WRAPPER + " = wrap\n" + "End Function";
-  try {
-    listenWindow.execScript(vbscript, "vbscript");
-    listenWindow["nix_setup_complete"] = true
-  }catch(e) {
-    goog.net.xpc.logger.severe("exception caught while attempting global setup: " + e)
-  }
-};
-goog.net.xpc.NixTransport.prototype.transportType = goog.net.xpc.TransportTypes.NIX;
-goog.net.xpc.NixTransport.prototype.localSetupCompleted_ = false;
-goog.net.xpc.NixTransport.prototype.nixChannel_ = null;
-goog.net.xpc.NixTransport.prototype.connect = function() {
-  if(this.channel_.getRole() == goog.net.xpc.CrossPageChannel.Role.OUTER) {
-    this.attemptOuterSetup_()
-  }else {
-    this.attemptInnerSetup_()
-  }
-};
-goog.net.xpc.NixTransport.prototype.attemptOuterSetup_ = function() {
-  if(this.localSetupCompleted_) {
-    return
-  }
-  var innerFrame = this.channel_.iframeElement_;
-  try {
-    innerFrame.contentWindow.opener = this.getWindow()[goog.net.xpc.NixTransport.NIX_GET_WRAPPER](this, this.authToken_);
-    this.localSetupCompleted_ = true
-  }catch(e) {
-    goog.net.xpc.logger.severe("exception caught while attempting setup: " + e)
-  }
-  if(!this.localSetupCompleted_) {
-    this.getWindow().setTimeout(goog.bind(this.attemptOuterSetup_, this), 100)
-  }
-};
-goog.net.xpc.NixTransport.prototype.attemptInnerSetup_ = function() {
-  if(this.localSetupCompleted_) {
-    return
-  }
-  try {
-    var opener = this.getWindow().opener;
-    if(opener && goog.net.xpc.NixTransport.NIX_ID_FIELD in opener) {
-      this.nixChannel_ = opener;
-      var remoteAuthToken = this.nixChannel_["GetAuthToken"]();
-      if(remoteAuthToken != this.remoteAuthToken_) {
-        goog.net.xpc.logger.severe("Invalid auth token from other party");
-        return
-      }
-      this.nixChannel_["CreateChannel"](this.getWindow()[goog.net.xpc.NixTransport.NIX_GET_WRAPPER](this, this.authToken_));
-      this.localSetupCompleted_ = true;
-      this.channel_.notifyConnected_()
-    }
-  }catch(e) {
-    goog.net.xpc.logger.severe("exception caught while attempting setup: " + e);
-    return
-  }
-  if(!this.localSetupCompleted_) {
-    this.getWindow().setTimeout(goog.bind(this.attemptInnerSetup_, this), 100)
-  }
-};
-goog.net.xpc.NixTransport.prototype.createChannel_ = function(channel) {
-  if(typeof channel != "unknown" || !(goog.net.xpc.NixTransport.NIX_ID_FIELD in channel)) {
-    goog.net.xpc.logger.severe("Invalid NIX channel given to createChannel_")
-  }
-  this.nixChannel_ = channel;
-  var remoteAuthToken = this.nixChannel_["GetAuthToken"]();
-  if(remoteAuthToken != this.remoteAuthToken_) {
-    goog.net.xpc.logger.severe("Invalid auth token from other party");
-    return
-  }
-  this.channel_.notifyConnected_()
-};
-goog.net.xpc.NixTransport.prototype.handleMessage_ = function(serviceName, payload) {
-  function deliveryHandler() {
-    this.channel_.deliver_(serviceName, payload)
-  }
-  this.getWindow().setTimeout(goog.bind(deliveryHandler, this), 1)
-};
-goog.net.xpc.NixTransport.prototype.send = function(service, payload) {
-  if(typeof this.nixChannel_ !== "unknown") {
-    goog.net.xpc.logger.severe("NIX channel not connected")
-  }
-  this.nixChannel_["SendMessage"](service, payload)
-};
-goog.net.xpc.NixTransport.prototype.disposeInternal = function() {
-  goog.base(this, "disposeInternal");
-  this.nixChannel_ = null
-};
-goog.provide("goog.net.xpc.IframePollingTransport");
-goog.provide("goog.net.xpc.IframePollingTransport.Receiver");
-goog.provide("goog.net.xpc.IframePollingTransport.Sender");
-goog.require("goog.array");
-goog.require("goog.dom");
-goog.require("goog.net.xpc");
-goog.require("goog.net.xpc.Transport");
-goog.require("goog.userAgent");
-goog.net.xpc.IframePollingTransport = function(channel, opt_domHelper) {
-  goog.base(this, opt_domHelper);
-  this.channel_ = channel;
-  this.sendUri_ = this.channel_.cfg_[goog.net.xpc.CfgFields.PEER_POLL_URI];
-  this.rcvUri_ = this.channel_.cfg_[goog.net.xpc.CfgFields.LOCAL_POLL_URI];
-  this.sendQueue_ = []
-};
-goog.inherits(goog.net.xpc.IframePollingTransport, goog.net.xpc.Transport);
-goog.net.xpc.IframePollingTransport.prototype.transportType = goog.net.xpc.TransportTypes.IFRAME_POLLING;
-goog.net.xpc.IframePollingTransport.prototype.sequence_ = 0;
-goog.net.xpc.IframePollingTransport.prototype.waitForAck_ = false;
-goog.net.xpc.IframePollingTransport.prototype.initialized_ = false;
-goog.net.xpc.IframePollingTransport.IFRAME_PREFIX = "googlexpc";
-goog.net.xpc.IframePollingTransport.prototype.getMsgFrameName_ = function() {
-  return goog.net.xpc.IframePollingTransport.IFRAME_PREFIX + "_" + this.channel_.name + "_msg"
-};
-goog.net.xpc.IframePollingTransport.prototype.getAckFrameName_ = function() {
-  return goog.net.xpc.IframePollingTransport.IFRAME_PREFIX + "_" + this.channel_.name + "_ack"
-};
-goog.net.xpc.IframePollingTransport.prototype.connect = function() {
-  goog.net.xpc.logger.fine("transport connect called");
-  if(!this.initialized_) {
-    goog.net.xpc.logger.fine("initializing...");
-    this.constructSenderFrames_();
-    this.initialized_ = true
-  }
-  this.checkForeignFramesReady_()
-};
-goog.net.xpc.IframePollingTransport.prototype.constructSenderFrames_ = function() {
-  var name = this.getMsgFrameName_();
-  this.msgIframeElm_ = this.constructSenderFrame_(name);
-  this.msgWinObj_ = this.getWindow().frames[name];
-  name = this.getAckFrameName_();
-  this.ackIframeElm_ = this.constructSenderFrame_(name);
-  this.ackWinObj_ = this.getWindow().frames[name]
-};
-goog.net.xpc.IframePollingTransport.prototype.constructSenderFrame_ = function(id) {
-  goog.net.xpc.logger.finest("constructing sender frame: " + id);
-  var ifr = goog.dom.createElement("iframe");
-  var s = ifr.style;
-  s.position = "absolute";
-  s.top = "-10px";
-  s.left = "10px";
-  s.width = "1px";
-  s.height = "1px";
-  ifr.id = ifr.name = id;
-  ifr.src = this.sendUri_ + "#INITIAL";
-  this.getWindow().document.body.appendChild(ifr);
-  return ifr
-};
-goog.net.xpc.IframePollingTransport.prototype.innerPeerReconnect_ = function() {
-  goog.net.xpc.logger.finest("innerPeerReconnect called");
-  this.channel_.name = goog.net.xpc.getRandomString(10);
-  goog.net.xpc.logger.finest("switching channels: " + this.channel_.name);
-  this.deconstructSenderFrames_();
-  this.initialized_ = false;
-  this.reconnectFrame_ = this.constructSenderFrame_(goog.net.xpc.IframePollingTransport.IFRAME_PREFIX + "_reconnect_" + this.channel_.name)
-};
-goog.net.xpc.IframePollingTransport.prototype.outerPeerReconnect_ = function() {
-  goog.net.xpc.logger.finest("outerPeerReconnect called");
-  var frames = this.channel_.peerWindowObject_.frames;
-  var length = frames.length;
-  for(var i = 0;i < length;i++) {
-    var frameName;
-    try {
-      if(frames[i] && frames[i].name) {
-        frameName = frames[i].name
-      }
-    }catch(e) {
-    }
-    if(!frameName) {
-      continue
-    }
-    var message = frameName.split("_");
-    if(message.length == 3 && message[0] == goog.net.xpc.IframePollingTransport.IFRAME_PREFIX && message[1] == "reconnect") {
-      this.channel_.name = message[2];
-      this.deconstructSenderFrames_();
-      this.initialized_ = false;
-      break
-    }
-  }
-};
-goog.net.xpc.IframePollingTransport.prototype.deconstructSenderFrames_ = function() {
-  goog.net.xpc.logger.finest("deconstructSenderFrames called");
-  if(this.msgIframeElm_) {
-    this.msgIframeElm_.parentNode.removeChild(this.msgIframeElm_);
-    this.msgIframeElm_ = null;
-    this.msgWinObj_ = null
-  }
-  if(this.ackIframeElm_) {
-    this.ackIframeElm_.parentNode.removeChild(this.ackIframeElm_);
-    this.ackIframeElm_ = null;
-    this.ackWinObj_ = null
-  }
-};
-goog.net.xpc.IframePollingTransport.prototype.checkForeignFramesReady_ = function() {
-  if(!(this.isRcvFrameReady_(this.getMsgFrameName_()) && this.isRcvFrameReady_(this.getAckFrameName_()))) {
-    goog.net.xpc.logger.finest("foreign frames not (yet) present");
-    if(this.channel_.getRole() == goog.net.xpc.CrossPageChannel.Role.INNER && !this.reconnectFrame_) {
-      this.innerPeerReconnect_()
-    }else {
-      if(this.channel_.getRole() == goog.net.xpc.CrossPageChannel.Role.OUTER) {
-        this.outerPeerReconnect_()
-      }
-    }
-    this.getWindow().setTimeout(goog.bind(this.connect, this), 100)
-  }else {
-    goog.net.xpc.logger.fine("foreign frames present");
-    this.msgReceiver_ = new goog.net.xpc.IframePollingTransport.Receiver(this, this.channel_.peerWindowObject_.frames[this.getMsgFrameName_()], goog.bind(this.processIncomingMsg, this));
-    this.ackReceiver_ = new goog.net.xpc.IframePollingTransport.Receiver(this, this.channel_.peerWindowObject_.frames[this.getAckFrameName_()], goog.bind(this.processIncomingAck, this));
-    this.checkLocalFramesPresent_()
-  }
-};
-goog.net.xpc.IframePollingTransport.prototype.isRcvFrameReady_ = function(frameName) {
-  goog.net.xpc.logger.finest("checking for receive frame: " + frameName);
-  try {
-    var winObj = this.channel_.peerWindowObject_.frames[frameName];
-    if(!winObj || winObj.location.href.indexOf(this.rcvUri_) != 0) {
-      return false
-    }
-  }catch(e) {
-    return false
-  }
-  return true
-};
-goog.net.xpc.IframePollingTransport.prototype.checkLocalFramesPresent_ = function() {
-  var frames = this.channel_.peerWindowObject_.frames;
-  if(!(frames[this.getAckFrameName_()] && frames[this.getMsgFrameName_()])) {
-    if(!this.checkLocalFramesPresentCb_) {
-      this.checkLocalFramesPresentCb_ = goog.bind(this.checkLocalFramesPresent_, this)
-    }
-    this.getWindow().setTimeout(this.checkLocalFramesPresentCb_, 100);
-    goog.net.xpc.logger.fine("local frames not (yet) present")
-  }else {
-    this.msgSender_ = new goog.net.xpc.IframePollingTransport.Sender(this.sendUri_, this.msgWinObj_);
-    this.ackSender_ = new goog.net.xpc.IframePollingTransport.Sender(this.sendUri_, this.ackWinObj_);
-    goog.net.xpc.logger.fine("local frames ready");
-    this.getWindow().setTimeout(goog.bind(function() {
-      this.msgSender_.send(goog.net.xpc.SETUP);
-      this.sentConnectionSetup_ = true;
-      this.waitForAck_ = true;
-      goog.net.xpc.logger.fine("SETUP sent")
-    }, this), 100)
-  }
-};
-goog.net.xpc.IframePollingTransport.prototype.checkIfConnected_ = function() {
-  if(this.sentConnectionSetupAck_ && this.rcvdConnectionSetupAck_) {
-    this.channel_.notifyConnected_();
-    if(this.deliveryQueue_) {
-      goog.net.xpc.logger.fine("delivering queued messages " + "(" + this.deliveryQueue_.length + ")");
-      for(var i = 0, m;i < this.deliveryQueue_.length;i++) {
-        m = this.deliveryQueue_[i];
-        this.channel_.deliver_(m.service, m.payload)
-      }
-      delete this.deliveryQueue_
-    }
-  }else {
-    goog.net.xpc.logger.finest("checking if connected: " + "ack sent:" + this.sentConnectionSetupAck_ + ", ack rcvd: " + this.rcvdConnectionSetupAck_)
-  }
-};
-goog.net.xpc.IframePollingTransport.prototype.processIncomingMsg = function(raw) {
-  goog.net.xpc.logger.finest("msg received: " + raw);
-  if(raw == goog.net.xpc.SETUP) {
-    if(!this.ackSender_) {
-      return
-    }
-    this.ackSender_.send(goog.net.xpc.SETUP_ACK_);
-    goog.net.xpc.logger.finest("SETUP_ACK sent");
-    this.sentConnectionSetupAck_ = true;
-    this.checkIfConnected_()
-  }else {
-    if(this.channel_.isConnected() || this.sentConnectionSetupAck_) {
-      var pos = raw.indexOf("|");
-      var head = raw.substring(0, pos);
-      var frame = raw.substring(pos + 1);
-      pos = head.indexOf(",");
-      if(pos == -1) {
-        var seq = head;
-        this.ackSender_.send("ACK:" + seq);
-        this.deliverPayload_(frame)
-      }else {
-        var seq = head.substring(0, pos);
-        this.ackSender_.send("ACK:" + seq);
-        var partInfo = head.substring(pos + 1).split("/");
-        var part0 = parseInt(partInfo[0], 10);
-        var part1 = parseInt(partInfo[1], 10);
-        if(part0 == 1) {
-          this.parts_ = []
-        }
-        this.parts_.push(frame);
-        if(part0 == part1) {
-          this.deliverPayload_(this.parts_.join(""));
-          delete this.parts_
-        }
-      }
-    }else {
-      goog.net.xpc.logger.warning("received msg, but channel is not connected")
-    }
-  }
-};
-goog.net.xpc.IframePollingTransport.prototype.processIncomingAck = function(msgStr) {
-  goog.net.xpc.logger.finest("ack received: " + msgStr);
-  if(msgStr == goog.net.xpc.SETUP_ACK_) {
-    this.waitForAck_ = false;
-    this.rcvdConnectionSetupAck_ = true;
-    this.checkIfConnected_()
-  }else {
-    if(this.channel_.isConnected()) {
-      if(!this.waitForAck_) {
-        goog.net.xpc.logger.warning("got unexpected ack");
-        return
-      }
-      var seq = parseInt(msgStr.split(":")[1], 10);
-      if(seq == this.sequence_) {
-        this.waitForAck_ = false;
-        this.sendNextFrame_()
-      }else {
-        goog.net.xpc.logger.warning("got ack with wrong sequence")
-      }
-    }else {
-      goog.net.xpc.logger.warning("received ack, but channel not connected")
-    }
-  }
-};
-goog.net.xpc.IframePollingTransport.prototype.sendNextFrame_ = function() {
-  if(this.waitForAck_ || !this.sendQueue_.length) {
-    return
-  }
-  var s = this.sendQueue_.shift();
-  ++this.sequence_;
-  this.msgSender_.send(this.sequence_ + s);
-  goog.net.xpc.logger.finest("msg sent: " + this.sequence_ + s);
-  this.waitForAck_ = true
-};
-goog.net.xpc.IframePollingTransport.prototype.deliverPayload_ = function(s) {
-  var pos = s.indexOf(":");
-  var service = s.substr(0, pos);
-  var payload = s.substring(pos + 1);
-  if(!this.channel_.isConnected()) {
-    (this.deliveryQueue_ || (this.deliveryQueue_ = [])).push({service:service, payload:payload});
-    goog.net.xpc.logger.finest("queued delivery")
-  }else {
-    this.channel_.deliver_(service, payload)
-  }
-};
-goog.net.xpc.IframePollingTransport.prototype.MAX_FRAME_LENGTH_ = 3800;
-goog.net.xpc.IframePollingTransport.prototype.send = function(service, payload) {
-  var frame = service + ":" + payload;
-  if(!goog.userAgent.IE || payload.length <= this.MAX_FRAME_LENGTH_) {
-    this.sendQueue_.push("|" + frame)
-  }else {
-    var l = payload.length;
-    var num = Math.ceil(l / this.MAX_FRAME_LENGTH_);
-    var pos = 0;
-    var i = 1;
-    while(pos < l) {
-      this.sendQueue_.push("," + i + "/" + num + "|" + frame.substr(pos, this.MAX_FRAME_LENGTH_));
-      i++;
-      pos += this.MAX_FRAME_LENGTH_
-    }
-  }
-  this.sendNextFrame_()
-};
-goog.net.xpc.IframePollingTransport.prototype.disposeInternal = function() {
-  goog.base(this, "disposeInternal");
-  var receivers = goog.net.xpc.IframePollingTransport.receivers_;
-  goog.array.remove(receivers, this.msgReceiver_);
-  goog.array.remove(receivers, this.ackReceiver_);
-  this.msgReceiver_ = this.ackReceiver_ = null;
-  goog.dom.removeNode(this.msgIframeElm_);
-  goog.dom.removeNode(this.ackIframeElm_);
-  this.msgIframeElm_ = this.ackIframeElm_ = null;
-  this.msgWinObj_ = this.ackWinObj_ = null
-};
-goog.net.xpc.IframePollingTransport.receivers_ = [];
-goog.net.xpc.IframePollingTransport.TIME_POLL_SHORT_ = 10;
-goog.net.xpc.IframePollingTransport.TIME_POLL_LONG_ = 100;
-goog.net.xpc.IframePollingTransport.TIME_SHORT_POLL_AFTER_ACTIVITY_ = 1E3;
-goog.net.xpc.IframePollingTransport.receive_ = function() {
-  var rcvd = false;
-  try {
-    for(var i = 0, l = goog.net.xpc.IframePollingTransport.receivers_.length;i < l;i++) {
-      rcvd = rcvd || goog.net.xpc.IframePollingTransport.receivers_[i].receive()
-    }
-  }catch(e) {
-    goog.net.xpc.logger.info("receive_() failed: " + e);
-    goog.net.xpc.IframePollingTransport.receivers_[i].transport_.channel_.notifyTransportError_();
-    if(!goog.net.xpc.IframePollingTransport.receivers_.length) {
-      return
-    }
-  }
-  var now = goog.now();
-  if(rcvd) {
-    goog.net.xpc.IframePollingTransport.lastActivity_ = now
-  }
-  var t = now - goog.net.xpc.IframePollingTransport.lastActivity_ < goog.net.xpc.IframePollingTransport.TIME_SHORT_POLL_AFTER_ACTIVITY_ ? goog.net.xpc.IframePollingTransport.TIME_POLL_SHORT_ : goog.net.xpc.IframePollingTransport.TIME_POLL_LONG_;
-  goog.net.xpc.IframePollingTransport.rcvTimer_ = window.setTimeout(goog.net.xpc.IframePollingTransport.receiveCb_, t)
-};
-goog.net.xpc.IframePollingTransport.receiveCb_ = goog.bind(goog.net.xpc.IframePollingTransport.receive_, goog.net.xpc.IframePollingTransport);
-goog.net.xpc.IframePollingTransport.startRcvTimer_ = function() {
-  goog.net.xpc.logger.fine("starting receive-timer");
-  goog.net.xpc.IframePollingTransport.lastActivity_ = goog.now();
-  if(goog.net.xpc.IframePollingTransport.rcvTimer_) {
-    window.clearTimeout(goog.net.xpc.IframePollingTransport.rcvTimer_)
-  }
-  goog.net.xpc.IframePollingTransport.rcvTimer_ = window.setTimeout(goog.net.xpc.IframePollingTransport.receiveCb_, goog.net.xpc.IframePollingTransport.TIME_POLL_SHORT_)
-};
-goog.net.xpc.IframePollingTransport.Sender = function(url, windowObj) {
-  this.sendUri_ = url;
-  this.sendFrame_ = windowObj;
-  this.cycle_ = 0
-};
-goog.net.xpc.IframePollingTransport.Sender.prototype.send = function(payload) {
-  this.cycle_ = ++this.cycle_ % 2;
-  var url = this.sendUri_ + "#" + this.cycle_ + encodeURIComponent(payload);
-  try {
-    if(goog.userAgent.WEBKIT) {
-      this.sendFrame_.location.href = url
-    }else {
-      this.sendFrame_.location.replace(url)
-    }
-  }catch(e) {
-    goog.net.xpc.logger.severe("sending failed", e)
-  }
-  goog.net.xpc.IframePollingTransport.startRcvTimer_()
-};
-goog.net.xpc.IframePollingTransport.Receiver = function(transport, windowObj, callback) {
-  this.transport_ = transport;
-  this.rcvFrame_ = windowObj;
-  this.cb_ = callback;
-  this.currentLoc_ = this.rcvFrame_.location.href.split("#")[0] + "#INITIAL";
-  goog.net.xpc.IframePollingTransport.receivers_.push(this);
-  goog.net.xpc.IframePollingTransport.startRcvTimer_()
-};
-goog.net.xpc.IframePollingTransport.Receiver.prototype.receive = function() {
-  var loc = this.rcvFrame_.location.href;
-  if(loc != this.currentLoc_) {
-    this.currentLoc_ = loc;
-    var payload = loc.split("#")[1];
-    if(payload) {
-      payload = payload.substr(1);
-      this.cb_(decodeURIComponent(payload))
-    }
-    return true
-  }else {
-    return false
-  }
-};
-goog.provide("goog.messaging.AbstractChannel");
-goog.require("goog.Disposable");
-goog.require("goog.debug");
-goog.require("goog.debug.Logger");
-goog.require("goog.json");
-goog.require("goog.messaging.MessageChannel");
-goog.messaging.AbstractChannel = function() {
-  goog.base(this);
-  this.services_ = {}
-};
-goog.inherits(goog.messaging.AbstractChannel, goog.Disposable);
-goog.messaging.AbstractChannel.prototype.defaultService_;
-goog.messaging.AbstractChannel.prototype.logger = goog.debug.Logger.getLogger("goog.messaging.AbstractChannel");
-goog.messaging.AbstractChannel.prototype.connect = function(opt_connectCb) {
-  if(opt_connectCb) {
-    opt_connectCb()
-  }
-};
-goog.messaging.AbstractChannel.prototype.isConnected = function() {
-  return true
-};
-goog.messaging.AbstractChannel.prototype.registerService = function(serviceName, callback, opt_objectPayload) {
-  this.services_[serviceName] = {callback:callback, objectPayload:!!opt_objectPayload}
-};
-goog.messaging.AbstractChannel.prototype.registerDefaultService = function(callback) {
-  this.defaultService_ = callback
-};
-goog.messaging.AbstractChannel.prototype.send = goog.abstractMethod;
-goog.messaging.AbstractChannel.prototype.deliver = function(serviceName, payload) {
-  var service = this.getService(serviceName, payload);
-  if(!service) {
-    return
-  }
-  payload = this.decodePayload(serviceName, payload, service.objectPayload);
-  if(goog.isDefAndNotNull(payload)) {
-    service.callback(payload)
-  }
-};
-goog.messaging.AbstractChannel.prototype.getService = function(serviceName, payload) {
-  var service = this.services_[serviceName];
-  if(service) {
-    return service
-  }else {
-    if(this.defaultService_) {
-      var callback = goog.partial(this.defaultService_, serviceName);
-      var objectPayload = goog.isObject(payload);
-      return{callback:callback, objectPayload:objectPayload}
-    }
-  }
-  this.logger.warning('Unknown service name "' + serviceName + '"');
-  return null
-};
-goog.messaging.AbstractChannel.prototype.decodePayload = function(serviceName, payload, objectPayload) {
-  if(objectPayload && goog.isString(payload)) {
-    try {
-      return goog.json.parse(payload)
-    }catch(err) {
-      this.logger.warning("Expected JSON payload for " + serviceName + ', was "' + payload + '"');
-      return null
-    }
-  }else {
-    if(!objectPayload && !goog.isString(payload)) {
-      return goog.json.serialize(payload)
-    }
-  }
-  return payload
-};
-goog.messaging.AbstractChannel.prototype.disposeInternal = function() {
-  goog.base(this, "disposeInternal");
-  goog.dispose(this.logger);
-  delete this.logger;
-  delete this.services_;
-  delete this.defaultService_
-};
-goog.provide("goog.net.xpc.IframeRelayTransport");
-goog.require("goog.dom");
-goog.require("goog.events");
-goog.require("goog.net.xpc");
-goog.require("goog.net.xpc.Transport");
-goog.require("goog.userAgent");
-goog.net.xpc.IframeRelayTransport = function(channel, opt_domHelper) {
-  goog.base(this, opt_domHelper);
-  this.channel_ = channel;
-  this.peerRelayUri_ = this.channel_.cfg_[goog.net.xpc.CfgFields.PEER_RELAY_URI];
-  this.peerIframeId_ = this.channel_.cfg_[goog.net.xpc.CfgFields.IFRAME_ID];
-  if(goog.userAgent.WEBKIT) {
-    goog.net.xpc.IframeRelayTransport.startCleanupTimer_()
-  }
-};
-goog.inherits(goog.net.xpc.IframeRelayTransport, goog.net.xpc.Transport);
-if(goog.userAgent.WEBKIT) {
-  goog.net.xpc.IframeRelayTransport.iframeRefs_ = [];
-  goog.net.xpc.IframeRelayTransport.CLEANUP_INTERVAL_ = 1E3;
-  goog.net.xpc.IframeRelayTransport.IFRAME_MAX_AGE_ = 3E3;
-  goog.net.xpc.IframeRelayTransport.cleanupTimer_ = 0;
-  goog.net.xpc.IframeRelayTransport.startCleanupTimer_ = function() {
-    if(!goog.net.xpc.IframeRelayTransport.cleanupTimer_) {
-      goog.net.xpc.IframeRelayTransport.cleanupTimer_ = window.setTimeout(function() {
-        goog.net.xpc.IframeRelayTransport.cleanup_()
-      }, goog.net.xpc.IframeRelayTransport.CLEANUP_INTERVAL_)
-    }
-  };
-  goog.net.xpc.IframeRelayTransport.cleanup_ = function(opt_maxAge) {
-    var now = goog.now();
-    var maxAge = opt_maxAge || goog.net.xpc.IframeRelayTransport.IFRAME_MAX_AGE_;
-    while(goog.net.xpc.IframeRelayTransport.iframeRefs_.length && now - goog.net.xpc.IframeRelayTransport.iframeRefs_[0].timestamp >= maxAge) {
-      var ifr = goog.net.xpc.IframeRelayTransport.iframeRefs_.shift().iframeElement;
-      goog.dom.removeNode(ifr);
-      goog.net.xpc.logger.finest("iframe removed")
-    }
-    goog.net.xpc.IframeRelayTransport.cleanupTimer_ = window.setTimeout(goog.net.xpc.IframeRelayTransport.cleanupCb_, goog.net.xpc.IframeRelayTransport.CLEANUP_INTERVAL_)
-  };
-  goog.net.xpc.IframeRelayTransport.cleanupCb_ = function() {
-    goog.net.xpc.IframeRelayTransport.cleanup_()
-  }
-}
-goog.net.xpc.IframeRelayTransport.IE_PAYLOAD_MAX_SIZE_ = 1800;
-goog.net.xpc.IframeRelayTransport.FragmentInfo;
-goog.net.xpc.IframeRelayTransport.fragmentMap_ = {};
-goog.net.xpc.IframeRelayTransport.prototype.transportType = goog.net.xpc.TransportTypes.IFRAME_RELAY;
-goog.net.xpc.IframeRelayTransport.prototype.connect = function() {
-  if(!this.getWindow()["xpcRelay"]) {
-    this.getWindow()["xpcRelay"] = goog.net.xpc.IframeRelayTransport.receiveMessage_
-  }
-  this.send(goog.net.xpc.TRANSPORT_SERVICE_, goog.net.xpc.SETUP)
-};
-goog.net.xpc.IframeRelayTransport.receiveMessage_ = function(channelName, frame) {
-  var pos = frame.indexOf(":");
-  var header = frame.substr(0, pos);
-  var payload = frame.substr(pos + 1);
-  if(!goog.userAgent.IE || (pos = header.indexOf("|")) == -1) {
-    var service = header
-  }else {
-    var service = header.substr(0, pos);
-    var fragmentIdStr = header.substr(pos + 1);
-    pos = fragmentIdStr.indexOf("+");
-    var messageIdStr = fragmentIdStr.substr(0, pos);
-    var fragmentNum = parseInt(fragmentIdStr.substr(pos + 1), 10);
-    var fragmentInfo = goog.net.xpc.IframeRelayTransport.fragmentMap_[messageIdStr];
-    if(!fragmentInfo) {
-      fragmentInfo = goog.net.xpc.IframeRelayTransport.fragmentMap_[messageIdStr] = {fragments:[], received:0, expected:0}
-    }
-    if(goog.string.contains(fragmentIdStr, "++")) {
-      fragmentInfo.expected = fragmentNum + 1
-    }
-    fragmentInfo.fragments[fragmentNum] = payload;
-    fragmentInfo.received++;
-    if(fragmentInfo.received != fragmentInfo.expected) {
-      return
-    }
-    payload = fragmentInfo.fragments.join("");
-    delete goog.net.xpc.IframeRelayTransport.fragmentMap_[messageIdStr]
-  }
-  goog.net.xpc.channels_[channelName].deliver_(service, decodeURIComponent(payload))
-};
-goog.net.xpc.IframeRelayTransport.prototype.transportServiceHandler = function(payload) {
-  if(payload == goog.net.xpc.SETUP) {
-    this.send(goog.net.xpc.TRANSPORT_SERVICE_, goog.net.xpc.SETUP_ACK_);
-    this.channel_.notifyConnected_()
-  }else {
-    if(payload == goog.net.xpc.SETUP_ACK_) {
-      this.channel_.notifyConnected_()
-    }
-  }
-};
-goog.net.xpc.IframeRelayTransport.prototype.send = function(service, payload) {
-  var encodedPayload = encodeURIComponent(payload);
-  var encodedLen = encodedPayload.length;
-  var maxSize = goog.net.xpc.IframeRelayTransport.IE_PAYLOAD_MAX_SIZE_;
-  if(goog.userAgent.IE && encodedLen > maxSize) {
-    var messageIdStr = goog.string.getRandomString();
-    for(var startIndex = 0, fragmentNum = 0;startIndex < encodedLen;fragmentNum++) {
-      var payloadFragment = encodedPayload.substr(startIndex, maxSize);
-      startIndex += maxSize;
-      var fragmentIdStr = messageIdStr + (startIndex >= encodedLen ? "++" : "+") + fragmentNum;
-      this.send_(service, payloadFragment, fragmentIdStr)
-    }
-  }else {
-    this.send_(service, encodedPayload)
-  }
-};
-goog.net.xpc.IframeRelayTransport.prototype.send_ = function(service, encodedPayload, opt_fragmentIdStr) {
-  if(goog.userAgent.IE) {
-    var div = this.getWindow().document.createElement("div");
-    div.innerHTML = '<iframe onload="this.xpcOnload()"></iframe>';
-    var ifr = div.childNodes[0];
-    div = null;
-    ifr["xpcOnload"] = goog.net.xpc.IframeRelayTransport.iframeLoadHandler_
-  }else {
-    var ifr = this.getWindow().document.createElement("iframe");
-    if(goog.userAgent.WEBKIT) {
-      goog.net.xpc.IframeRelayTransport.iframeRefs_.push({timestamp:goog.now(), iframeElement:ifr})
-    }else {
-      goog.events.listen(ifr, "load", goog.net.xpc.IframeRelayTransport.iframeLoadHandler_)
-    }
-  }
-  var style = ifr.style;
-  style.visibility = "hidden";
-  style.width = ifr.style.height = "0px";
-  style.position = "absolute";
-  var url = this.peerRelayUri_;
-  url += "#" + this.channel_.name;
-  if(this.peerIframeId_) {
-    url += "," + this.peerIframeId_
-  }
-  url += "|" + service;
-  if(opt_fragmentIdStr) {
-    url += "|" + opt_fragmentIdStr
-  }
-  url += ":" + encodedPayload;
-  ifr.src = url;
-  this.getWindow().document.body.appendChild(ifr);
-  goog.net.xpc.logger.finest("msg sent: " + url)
-};
-goog.net.xpc.IframeRelayTransport.iframeLoadHandler_ = function() {
-  goog.net.xpc.logger.finest("iframe-load");
-  goog.dom.removeNode(this);
-  this.xpcOnload = null
-};
-goog.net.xpc.IframeRelayTransport.prototype.disposeInternal = function() {
-  goog.base(this, "disposeInternal");
-  if(goog.userAgent.WEBKIT) {
-    goog.net.xpc.IframeRelayTransport.cleanup_(0)
-  }
-};
-goog.provide("goog.net.xpc.NativeMessagingTransport");
-goog.require("goog.events");
-goog.require("goog.net.xpc");
-goog.require("goog.net.xpc.Transport");
-goog.net.xpc.NativeMessagingTransport = function(channel, peerHostname, opt_domHelper) {
-  goog.base(this, opt_domHelper);
-  this.channel_ = channel;
-  this.peerHostname_ = peerHostname || "*"
-};
-goog.inherits(goog.net.xpc.NativeMessagingTransport, goog.net.xpc.Transport);
-goog.net.xpc.NativeMessagingTransport.prototype.initialized_ = false;
-goog.net.xpc.NativeMessagingTransport.prototype.transportType = goog.net.xpc.TransportTypes.NATIVE_MESSAGING;
-goog.net.xpc.NativeMessagingTransport.activeCount_ = {};
-goog.net.xpc.NativeMessagingTransport.initialize_ = function(listenWindow) {
-  var uid = goog.getUid(listenWindow);
-  var value = goog.net.xpc.NativeMessagingTransport.activeCount_[uid];
-  if(!goog.isNumber(value)) {
-    value = 0
-  }
-  if(value == 0) {
-    goog.events.listen(listenWindow.postMessage ? listenWindow : listenWindow.document, "message", goog.net.xpc.NativeMessagingTransport.messageReceived_, false, goog.net.xpc.NativeMessagingTransport)
-  }
-  goog.net.xpc.NativeMessagingTransport.activeCount_[uid] = value + 1
-};
-goog.net.xpc.NativeMessagingTransport.messageReceived_ = function(msgEvt) {
-  var data = msgEvt.getBrowserEvent().data;
-  var headDelim = data.indexOf("|");
-  var serviceDelim = data.indexOf(":");
-  if(headDelim == -1 || serviceDelim == -1) {
-    return false
-  }
-  var channelName = data.substring(0, headDelim);
-  var service = data.substring(headDelim + 1, serviceDelim);
-  var payload = data.substring(serviceDelim + 1);
-  goog.net.xpc.logger.fine("messageReceived: channel=" + channelName + ", service=" + service + ", payload=" + payload);
-  var channel = goog.net.xpc.channels_[channelName];
-  if(channel) {
-    channel.deliver_(service, payload, msgEvt.getBrowserEvent().origin);
-    return true
-  }
-  for(var staleChannelName in goog.net.xpc.channels_) {
-    var staleChannel = goog.net.xpc.channels_[staleChannelName];
-    if(staleChannel.getRole() == goog.net.xpc.CrossPageChannel.Role.INNER && !staleChannel.isConnected() && service == goog.net.xpc.TRANSPORT_SERVICE_ && payload == goog.net.xpc.SETUP) {
-      goog.net.xpc.logger.fine("changing channel name to " + channelName);
-      staleChannel.name = channelName;
-      delete goog.net.xpc.channels_[staleChannelName];
-      goog.net.xpc.channels_[channelName] = staleChannel;
-      staleChannel.deliver_(service, payload);
-      return true
-    }
-  }
-  goog.net.xpc.logger.info('channel name mismatch; message ignored"');
-  return false
-};
-goog.net.xpc.NativeMessagingTransport.prototype.transportServiceHandler = function(payload) {
-  switch(payload) {
-    case goog.net.xpc.SETUP:
-      this.send(goog.net.xpc.TRANSPORT_SERVICE_, goog.net.xpc.SETUP_ACK_);
-      break;
-    case goog.net.xpc.SETUP_ACK_:
-      this.channel_.notifyConnected_();
-      break
-  }
-};
-goog.net.xpc.NativeMessagingTransport.prototype.connect = function() {
-  goog.net.xpc.NativeMessagingTransport.initialize_(this.getWindow());
-  this.initialized_ = true;
-  this.connectWithRetries_()
-};
-goog.net.xpc.NativeMessagingTransport.prototype.connectWithRetries_ = function() {
-  if(this.channel_.isConnected() || this.isDisposed()) {
-    return
-  }
-  this.send(goog.net.xpc.TRANSPORT_SERVICE_, goog.net.xpc.SETUP);
-  this.getWindow().setTimeout(goog.bind(this.connectWithRetries_, this), 100)
-};
-goog.net.xpc.NativeMessagingTransport.prototype.send = function(service, payload) {
-  var win = this.channel_.peerWindowObject_;
-  if(!win) {
-    goog.net.xpc.logger.fine("send(): window not ready");
-    return
-  }
-  var obj = win.postMessage ? win : win.document;
-  this.send = function(service, payload) {
-    goog.net.xpc.logger.fine("send(): payload=" + payload + " to hostname=" + this.peerHostname_);
-    obj.postMessage(this.channel_.name + "|" + service + ":" + payload, this.peerHostname_)
-  };
-  this.send(service, payload)
-};
-goog.net.xpc.NativeMessagingTransport.prototype.disposeInternal = function() {
-  goog.base(this, "disposeInternal");
-  if(this.initialized_) {
-    var listenWindow = this.getWindow();
-    var uid = goog.getUid(listenWindow);
-    var value = goog.net.xpc.NativeMessagingTransport.activeCount_[uid];
-    goog.net.xpc.NativeMessagingTransport.activeCount_[uid] = value - 1;
-    if(value == 1) {
-      goog.events.unlisten(listenWindow.postMessage ? listenWindow : listenWindow.document, "message", goog.net.xpc.NativeMessagingTransport.messageReceived_, false, goog.net.xpc.NativeMessagingTransport)
-    }
-  }
-};
-goog.provide("goog.net.xpc.CrossPageChannel");
-goog.provide("goog.net.xpc.CrossPageChannel.Role");
-goog.require("goog.Disposable");
-goog.require("goog.Uri");
-goog.require("goog.dom");
-goog.require("goog.events");
-goog.require("goog.json");
-goog.require("goog.messaging.AbstractChannel");
-goog.require("goog.net.xpc");
-goog.require("goog.net.xpc.FrameElementMethodTransport");
-goog.require("goog.net.xpc.IframePollingTransport");
-goog.require("goog.net.xpc.IframeRelayTransport");
-goog.require("goog.net.xpc.NativeMessagingTransport");
-goog.require("goog.net.xpc.NixTransport");
-goog.require("goog.net.xpc.Transport");
-goog.require("goog.userAgent");
-goog.net.xpc.CrossPageChannel = function(cfg, opt_domHelper) {
-  goog.base(this);
-  for(var i = 0, uriField;uriField = goog.net.xpc.UriCfgFields[i];i++) {
-    if(uriField in cfg && !/^https?:\/\//.test(cfg[uriField])) {
-      throw Error("URI " + cfg[uriField] + " is invalid for field " + uriField);
-    }
-  }
-  this.cfg_ = cfg;
-  this.name = this.cfg_[goog.net.xpc.CfgFields.CHANNEL_NAME] || goog.net.xpc.getRandomString(10);
-  this.domHelper_ = opt_domHelper || goog.dom.getDomHelper();
-  goog.net.xpc.channels_[this.name] = this;
-  goog.events.listen(window, "unload", goog.net.xpc.CrossPageChannel.disposeAll_);
-  goog.net.xpc.logger.info("CrossPageChannel created: " + this.name)
-};
-goog.inherits(goog.net.xpc.CrossPageChannel, goog.messaging.AbstractChannel);
-goog.net.xpc.CrossPageChannel.TRANSPORT_SERVICE_ESCAPE_RE_ = new RegExp("^%*" + goog.net.xpc.TRANSPORT_SERVICE_ + "$");
-goog.net.xpc.CrossPageChannel.TRANSPORT_SERVICE_UNESCAPE_RE_ = new RegExp("^%+" + goog.net.xpc.TRANSPORT_SERVICE_ + "$");
-goog.net.xpc.CrossPageChannel.prototype.transport_ = null;
-goog.net.xpc.CrossPageChannel.prototype.state_ = goog.net.xpc.ChannelStates.NOT_CONNECTED;
-goog.net.xpc.CrossPageChannel.prototype.isConnected = function() {
-  return this.state_ == goog.net.xpc.ChannelStates.CONNECTED
-};
-goog.net.xpc.CrossPageChannel.prototype.peerWindowObject_ = null;
-goog.net.xpc.CrossPageChannel.prototype.iframeElement_ = null;
-goog.net.xpc.CrossPageChannel.prototype.setPeerWindowObject = function(peerWindowObject) {
-  this.peerWindowObject_ = peerWindowObject
-};
-goog.net.xpc.CrossPageChannel.prototype.determineTransportType_ = function() {
-  var transportType;
-  if(goog.isFunction(document.postMessage) || goog.isFunction(window.postMessage) || goog.userAgent.IE && window.postMessage) {
-    transportType = goog.net.xpc.TransportTypes.NATIVE_MESSAGING
-  }else {
-    if(goog.userAgent.GECKO) {
-      transportType = goog.net.xpc.TransportTypes.FRAME_ELEMENT_METHOD
-    }else {
-      if(goog.userAgent.IE && this.cfg_[goog.net.xpc.CfgFields.PEER_RELAY_URI]) {
-        transportType = goog.net.xpc.TransportTypes.IFRAME_RELAY
-      }else {
-        if(goog.userAgent.IE) {
-          transportType = goog.net.xpc.TransportTypes.NIX
-        }else {
-          if(this.cfg_[goog.net.xpc.CfgFields.LOCAL_POLL_URI] && this.cfg_[goog.net.xpc.CfgFields.PEER_POLL_URI]) {
-            transportType = goog.net.xpc.TransportTypes.IFRAME_POLLING
-          }
-        }
-      }
-    }
-  }
-  return transportType
-};
-goog.net.xpc.CrossPageChannel.prototype.createTransport_ = function() {
-  if(this.transport_) {
-    return
-  }
-  if(!this.cfg_[goog.net.xpc.CfgFields.TRANSPORT]) {
-    this.cfg_[goog.net.xpc.CfgFields.TRANSPORT] = this.determineTransportType_()
-  }
-  switch(this.cfg_[goog.net.xpc.CfgFields.TRANSPORT]) {
-    case goog.net.xpc.TransportTypes.NATIVE_MESSAGING:
-      this.transport_ = new goog.net.xpc.NativeMessagingTransport(this, this.cfg_[goog.net.xpc.CfgFields.PEER_HOSTNAME], this.domHelper_);
-      break;
-    case goog.net.xpc.TransportTypes.NIX:
-      this.transport_ = new goog.net.xpc.NixTransport(this, this.domHelper_);
-      break;
-    case goog.net.xpc.TransportTypes.FRAME_ELEMENT_METHOD:
-      this.transport_ = new goog.net.xpc.FrameElementMethodTransport(this, this.domHelper_);
-      break;
-    case goog.net.xpc.TransportTypes.IFRAME_RELAY:
-      this.transport_ = new goog.net.xpc.IframeRelayTransport(this, this.domHelper_);
-      break;
-    case goog.net.xpc.TransportTypes.IFRAME_POLLING:
-      this.transport_ = new goog.net.xpc.IframePollingTransport(this, this.domHelper_);
-      break
-  }
-  if(this.transport_) {
-    goog.net.xpc.logger.info("Transport created: " + this.transport_.getName())
-  }else {
-    throw Error("CrossPageChannel: No suitable transport found!");
-  }
-};
-goog.net.xpc.CrossPageChannel.prototype.getTransportType = function() {
-  return this.transport_.getType()
-};
-goog.net.xpc.CrossPageChannel.prototype.getTransportName = function() {
-  return this.transport_.getName()
-};
-goog.net.xpc.CrossPageChannel.prototype.getPeerConfiguration = function() {
-  var peerCfg = {};
-  peerCfg[goog.net.xpc.CfgFields.CHANNEL_NAME] = this.name;
-  peerCfg[goog.net.xpc.CfgFields.TRANSPORT] = this.cfg_[goog.net.xpc.CfgFields.TRANSPORT];
-  if(this.cfg_[goog.net.xpc.CfgFields.LOCAL_RELAY_URI]) {
-    peerCfg[goog.net.xpc.CfgFields.PEER_RELAY_URI] = this.cfg_[goog.net.xpc.CfgFields.LOCAL_RELAY_URI]
-  }
-  if(this.cfg_[goog.net.xpc.CfgFields.LOCAL_POLL_URI]) {
-    peerCfg[goog.net.xpc.CfgFields.PEER_POLL_URI] = this.cfg_[goog.net.xpc.CfgFields.LOCAL_POLL_URI]
-  }
-  if(this.cfg_[goog.net.xpc.CfgFields.PEER_POLL_URI]) {
-    peerCfg[goog.net.xpc.CfgFields.LOCAL_POLL_URI] = this.cfg_[goog.net.xpc.CfgFields.PEER_POLL_URI]
-  }
-  return peerCfg
-};
-goog.net.xpc.CrossPageChannel.prototype.createPeerIframe = function(parentElm, opt_configureIframeCb, opt_addCfgParam) {
-  var iframeId = this.cfg_[goog.net.xpc.CfgFields.IFRAME_ID];
-  if(!iframeId) {
-    iframeId = this.cfg_[goog.net.xpc.CfgFields.IFRAME_ID] = "xpcpeer" + goog.net.xpc.getRandomString(4)
-  }
-  var iframeElm = goog.dom.createElement("IFRAME");
-  iframeElm.id = iframeElm.name = iframeId;
-  if(opt_configureIframeCb) {
-    opt_configureIframeCb(iframeElm)
-  }else {
-    iframeElm.style.width = iframeElm.style.height = "100%"
-  }
-  var peerUri = this.cfg_[goog.net.xpc.CfgFields.PEER_URI];
-  if(goog.isString(peerUri)) {
-    peerUri = this.cfg_[goog.net.xpc.CfgFields.PEER_URI] = new goog.Uri(peerUri)
-  }
-  if(opt_addCfgParam !== false) {
-    peerUri.setParameterValue("xpc", goog.json.serialize(this.getPeerConfiguration()))
-  }
-  if(goog.userAgent.GECKO || goog.userAgent.WEBKIT) {
-    this.deferConnect_ = true;
-    window.setTimeout(goog.bind(function() {
-      this.deferConnect_ = false;
-      parentElm.appendChild(iframeElm);
-      iframeElm.src = peerUri.toString();
-      goog.net.xpc.logger.info("peer iframe created (" + iframeId + ")");
-      if(this.connectDeferred_) {
-        this.connect(this.connectCb_)
-      }
-    }, this), 1)
-  }else {
-    iframeElm.src = peerUri.toString();
-    parentElm.appendChild(iframeElm);
-    goog.net.xpc.logger.info("peer iframe created (" + iframeId + ")")
-  }
-  return iframeElm
-};
-goog.net.xpc.CrossPageChannel.prototype.deferConnect_ = false;
-goog.net.xpc.CrossPageChannel.prototype.connectDeferred_ = false;
-goog.net.xpc.CrossPageChannel.prototype.connect = function(opt_connectCb) {
-  this.connectCb_ = opt_connectCb || goog.nullFunction;
-  if(this.deferConnect_) {
-    goog.net.xpc.logger.info("connect() deferred");
-    this.connectDeferred_ = true;
-    return
-  }
-  goog.net.xpc.logger.info("connect()");
-  if(this.cfg_[goog.net.xpc.CfgFields.IFRAME_ID]) {
-    this.iframeElement_ = this.domHelper_.getElement(this.cfg_[goog.net.xpc.CfgFields.IFRAME_ID])
-  }
-  if(this.iframeElement_) {
-    var winObj = this.iframeElement_.contentWindow;
-    if(!winObj) {
-      winObj = window.frames[this.cfg_[goog.net.xpc.CfgFields.IFRAME_ID]]
-    }
-    this.setPeerWindowObject(winObj)
-  }
-  if(!this.peerWindowObject_) {
-    if(window == top) {
-      throw Error("CrossPageChannel: Can't connect, peer window-object not set.");
-    }else {
-      this.setPeerWindowObject(window.parent)
-    }
-  }
-  this.createTransport_();
-  this.transport_.connect()
-};
-goog.net.xpc.CrossPageChannel.prototype.close = function() {
-  if(!this.isConnected()) {
-    return
-  }
-  this.state_ = goog.net.xpc.ChannelStates.CLOSED;
-  this.transport_.dispose();
-  this.transport_ = null;
-  goog.net.xpc.logger.info('Channel "' + this.name + '" closed')
-};
-goog.net.xpc.CrossPageChannel.prototype.notifyConnected_ = function() {
-  if(this.isConnected()) {
-    return
-  }
-  this.state_ = goog.net.xpc.ChannelStates.CONNECTED;
-  goog.net.xpc.logger.info('Channel "' + this.name + '" connected');
-  this.connectCb_()
-};
-goog.net.xpc.CrossPageChannel.prototype.notifyTransportError_ = function() {
-  goog.net.xpc.logger.info("Transport Error");
-  this.close()
-};
-goog.net.xpc.CrossPageChannel.prototype.send = function(serviceName, payload) {
-  if(!this.isConnected()) {
-    goog.net.xpc.logger.severe("Can't send. Channel not connected.");
-    return
-  }
-  if(this.peerWindowObject_.closed) {
-    goog.net.xpc.logger.severe("Peer has disappeared.");
-    this.close();
-    return
-  }
-  if(goog.isObject(payload)) {
-    payload = goog.json.serialize(payload)
-  }
-  this.transport_.send(this.escapeServiceName_(serviceName), payload)
-};
-goog.net.xpc.CrossPageChannel.prototype.deliver_ = function(serviceName, payload, opt_origin) {
-  if(!this.isMessageOriginAcceptable_(opt_origin)) {
-    goog.net.xpc.logger.warning('Message received from unapproved origin "' + opt_origin + '" - rejected.');
-    return
-  }
-  if(this.isDisposed()) {
-    goog.net.xpc.logger.warning("CrossPageChannel::deliver_(): Disposed.")
-  }else {
-    if(!serviceName || serviceName == goog.net.xpc.TRANSPORT_SERVICE_) {
-      this.transport_.transportServiceHandler(payload)
-    }else {
-      if(this.isConnected()) {
-        this.deliver(this.unescapeServiceName_(serviceName), payload)
-      }else {
-        goog.net.xpc.logger.info("CrossPageChannel::deliver_(): Not connected.")
-      }
-    }
-  }
-};
-goog.net.xpc.CrossPageChannel.prototype.escapeServiceName_ = function(name) {
-  if(goog.net.xpc.CrossPageChannel.TRANSPORT_SERVICE_ESCAPE_RE_.test(name)) {
-    name = "%" + name
-  }
-  return name.replace(/[%:|]/g, encodeURIComponent)
-};
-goog.net.xpc.CrossPageChannel.prototype.unescapeServiceName_ = function(name) {
-  name = name.replace(/%[0-9a-f]{2}/gi, decodeURIComponent);
-  if(goog.net.xpc.CrossPageChannel.TRANSPORT_SERVICE_UNESCAPE_RE_.test(name)) {
-    return name.substring(1)
-  }else {
-    return name
-  }
-};
-goog.net.xpc.CrossPageChannel.Role = {OUTER:0, INNER:1};
-goog.net.xpc.CrossPageChannel.prototype.getRole = function() {
-  return window.parent == this.peerWindowObject_ ? goog.net.xpc.CrossPageChannel.Role.INNER : goog.net.xpc.CrossPageChannel.Role.OUTER
-};
-goog.net.xpc.CrossPageChannel.prototype.isMessageOriginAcceptable_ = function(opt_origin) {
-  var peerHostname = this.cfg_[goog.net.xpc.CfgFields.PEER_HOSTNAME];
-  return goog.string.isEmptySafe(opt_origin) || goog.string.isEmptySafe(peerHostname) || opt_origin == this.cfg_[goog.net.xpc.CfgFields.PEER_HOSTNAME]
-};
-goog.net.xpc.CrossPageChannel.prototype.disposeInternal = function() {
-  goog.base(this, "disposeInternal");
-  this.close();
-  this.peerWindowObject_ = null;
-  this.iframeElement_ = null;
-  delete goog.net.xpc.channels_[this.name]
-};
-goog.net.xpc.CrossPageChannel.disposeAll_ = function() {
-  for(var name in goog.net.xpc.channels_) {
-    var ch = goog.net.xpc.channels_[name];
-    if(ch) {
-      ch.dispose()
     }
   }
 };
@@ -18981,767 +14348,6 @@ cljs.core.get_method = function get_method(multifn, dispatch_val) {
 cljs.core.prefers = function prefers(multifn) {
   return cljs.core._prefers.call(null, multifn)
 };
-goog.provide("clojure.browser.event");
-goog.require("cljs.core");
-goog.require("goog.events");
-goog.require("goog.events.EventTarget");
-goog.require("goog.events.EventType");
-clojure.browser.event.EventType = {};
-clojure.browser.event.event_types = function event_types(this$) {
-  if(cljs.core.truth_(function() {
-    var and__3546__auto____6137 = this$;
-    if(cljs.core.truth_(and__3546__auto____6137)) {
-      return this$.clojure$browser$event$EventType$event_types
-    }else {
-      return and__3546__auto____6137
-    }
-  }())) {
-    return this$.clojure$browser$event$EventType$event_types(this$)
-  }else {
-    return function() {
-      var or__3548__auto____6138 = clojure.browser.event.event_types[goog.typeOf.call(null, this$)];
-      if(cljs.core.truth_(or__3548__auto____6138)) {
-        return or__3548__auto____6138
-      }else {
-        var or__3548__auto____6139 = clojure.browser.event.event_types["_"];
-        if(cljs.core.truth_(or__3548__auto____6139)) {
-          return or__3548__auto____6139
-        }else {
-          throw cljs.core.missing_protocol.call(null, "EventType.event-types", this$);
-        }
-      }
-    }().call(null, this$)
-  }
-};
-Element.prototype.clojure$browser$event$EventType$ = true;
-Element.prototype.clojure$browser$event$EventType$event_types = function(this$) {
-  return cljs.core.into.call(null, cljs.core.ObjMap.fromObject([], {}), cljs.core.map.call(null, function(p__6140) {
-    var vec__6141__6142 = p__6140;
-    var k__6143 = cljs.core.nth.call(null, vec__6141__6142, 0, null);
-    var v__6144 = cljs.core.nth.call(null, vec__6141__6142, 1, null);
-    return cljs.core.Vector.fromArray([cljs.core.keyword.call(null, k__6143.toLowerCase()), v__6144])
-  }, cljs.core.merge.call(null, cljs.core.js__GT_clj.call(null, goog.events.EventType))))
-};
-goog.events.EventTarget.prototype.clojure$browser$event$EventType$ = true;
-goog.events.EventTarget.prototype.clojure$browser$event$EventType$event_types = function(this$) {
-  return cljs.core.into.call(null, cljs.core.ObjMap.fromObject([], {}), cljs.core.map.call(null, function(p__6145) {
-    var vec__6146__6147 = p__6145;
-    var k__6148 = cljs.core.nth.call(null, vec__6146__6147, 0, null);
-    var v__6149 = cljs.core.nth.call(null, vec__6146__6147, 1, null);
-    return cljs.core.Vector.fromArray([cljs.core.keyword.call(null, k__6148.toLowerCase()), v__6149])
-  }, cljs.core.merge.call(null, cljs.core.js__GT_clj.call(null, goog.events.EventType))))
-};
-clojure.browser.event.listen = function() {
-  var listen = null;
-  var listen__6150 = function(src, type, fn) {
-    return listen.call(null, src, type, fn, false)
-  };
-  var listen__6151 = function(src, type, fn, capture_QMARK_) {
-    return goog.events.listen.call(null, src, cljs.core.get.call(null, clojure.browser.event.event_types.call(null, src), type, type), fn, capture_QMARK_)
-  };
-  listen = function(src, type, fn, capture_QMARK_) {
-    switch(arguments.length) {
-      case 3:
-        return listen__6150.call(this, src, type, fn);
-      case 4:
-        return listen__6151.call(this, src, type, fn, capture_QMARK_)
-    }
-    throw"Invalid arity: " + arguments.length;
-  };
-  return listen
-}();
-clojure.browser.event.listen_once = function() {
-  var listen_once = null;
-  var listen_once__6153 = function(src, type, fn) {
-    return listen_once.call(null, src, type, fn, false)
-  };
-  var listen_once__6154 = function(src, type, fn, capture_QMARK_) {
-    return goog.events.listenOnce.call(null, src, cljs.core.get.call(null, clojure.browser.event.event_types.call(null, src), type, type), fn, capture_QMARK_)
-  };
-  listen_once = function(src, type, fn, capture_QMARK_) {
-    switch(arguments.length) {
-      case 3:
-        return listen_once__6153.call(this, src, type, fn);
-      case 4:
-        return listen_once__6154.call(this, src, type, fn, capture_QMARK_)
-    }
-    throw"Invalid arity: " + arguments.length;
-  };
-  return listen_once
-}();
-clojure.browser.event.unlisten = function() {
-  var unlisten = null;
-  var unlisten__6156 = function(src, type, fn) {
-    return unlisten.call(null, src, type, fn, false)
-  };
-  var unlisten__6157 = function(src, type, fn, capture_QMARK_) {
-    return goog.events.unlisten.call(null, src, cljs.core.get.call(null, clojure.browser.event.event_types.call(null, src), type, type), fn, capture_QMARK_)
-  };
-  unlisten = function(src, type, fn, capture_QMARK_) {
-    switch(arguments.length) {
-      case 3:
-        return unlisten__6156.call(this, src, type, fn);
-      case 4:
-        return unlisten__6157.call(this, src, type, fn, capture_QMARK_)
-    }
-    throw"Invalid arity: " + arguments.length;
-  };
-  return unlisten
-}();
-clojure.browser.event.unlisten_by_key = function unlisten_by_key(key) {
-  return goog.events.unlistenByKey.call(null, key)
-};
-clojure.browser.event.dispatch_event = function dispatch_event(src, event) {
-  return goog.events.dispatchEvent.call(null, src, event)
-};
-clojure.browser.event.expose = function expose(e) {
-  return goog.events.expose.call(null, e)
-};
-clojure.browser.event.fire_listeners = function fire_listeners(obj, type, capture, event) {
-  return null
-};
-clojure.browser.event.total_listener_count = function total_listener_count() {
-  return goog.events.getTotalListenerCount.call(null)
-};
-clojure.browser.event.get_listener = function get_listener(src, type, listener, opt_capt, opt_handler) {
-  return null
-};
-clojure.browser.event.all_listeners = function all_listeners(obj, type, capture) {
-  return null
-};
-clojure.browser.event.unique_event_id = function unique_event_id(event_type) {
-  return null
-};
-clojure.browser.event.has_listener = function has_listener(obj, opt_type, opt_capture) {
-  return null
-};
-clojure.browser.event.remove_all = function remove_all(opt_obj, opt_type, opt_capt) {
-  return null
-};
-goog.provide("clojure.browser.net");
-goog.require("cljs.core");
-goog.require("clojure.browser.event");
-goog.require("goog.net.XhrIo");
-goog.require("goog.net.EventType");
-goog.require("goog.net.xpc.CfgFields");
-goog.require("goog.net.xpc.CrossPageChannel");
-goog.require("goog.json");
-clojure.browser.net._STAR_timeout_STAR_ = 1E4;
-clojure.browser.net.event_types = cljs.core.into.call(null, cljs.core.ObjMap.fromObject([], {}), cljs.core.map.call(null, function(p__6043) {
-  var vec__6044__6045 = p__6043;
-  var k__6046 = cljs.core.nth.call(null, vec__6044__6045, 0, null);
-  var v__6047 = cljs.core.nth.call(null, vec__6044__6045, 1, null);
-  return cljs.core.Vector.fromArray([cljs.core.keyword.call(null, k__6046.toLowerCase()), v__6047])
-}, cljs.core.merge.call(null, cljs.core.js__GT_clj.call(null, goog.net.EventType))));
-clojure.browser.net.IConnection = {};
-clojure.browser.net.connect = function() {
-  var connect = null;
-  var connect__6078 = function(this$) {
-    if(cljs.core.truth_(function() {
-      var and__3546__auto____6048 = this$;
-      if(cljs.core.truth_(and__3546__auto____6048)) {
-        return this$.clojure$browser$net$IConnection$connect
-      }else {
-        return and__3546__auto____6048
-      }
-    }())) {
-      return this$.clojure$browser$net$IConnection$connect(this$)
-    }else {
-      return function() {
-        var or__3548__auto____6049 = clojure.browser.net.connect[goog.typeOf.call(null, this$)];
-        if(cljs.core.truth_(or__3548__auto____6049)) {
-          return or__3548__auto____6049
-        }else {
-          var or__3548__auto____6050 = clojure.browser.net.connect["_"];
-          if(cljs.core.truth_(or__3548__auto____6050)) {
-            return or__3548__auto____6050
-          }else {
-            throw cljs.core.missing_protocol.call(null, "IConnection.connect", this$);
-          }
-        }
-      }().call(null, this$)
-    }
-  };
-  var connect__6079 = function(this$, opt1) {
-    if(cljs.core.truth_(function() {
-      var and__3546__auto____6051 = this$;
-      if(cljs.core.truth_(and__3546__auto____6051)) {
-        return this$.clojure$browser$net$IConnection$connect
-      }else {
-        return and__3546__auto____6051
-      }
-    }())) {
-      return this$.clojure$browser$net$IConnection$connect(this$, opt1)
-    }else {
-      return function() {
-        var or__3548__auto____6052 = clojure.browser.net.connect[goog.typeOf.call(null, this$)];
-        if(cljs.core.truth_(or__3548__auto____6052)) {
-          return or__3548__auto____6052
-        }else {
-          var or__3548__auto____6053 = clojure.browser.net.connect["_"];
-          if(cljs.core.truth_(or__3548__auto____6053)) {
-            return or__3548__auto____6053
-          }else {
-            throw cljs.core.missing_protocol.call(null, "IConnection.connect", this$);
-          }
-        }
-      }().call(null, this$, opt1)
-    }
-  };
-  var connect__6080 = function(this$, opt1, opt2) {
-    if(cljs.core.truth_(function() {
-      var and__3546__auto____6054 = this$;
-      if(cljs.core.truth_(and__3546__auto____6054)) {
-        return this$.clojure$browser$net$IConnection$connect
-      }else {
-        return and__3546__auto____6054
-      }
-    }())) {
-      return this$.clojure$browser$net$IConnection$connect(this$, opt1, opt2)
-    }else {
-      return function() {
-        var or__3548__auto____6055 = clojure.browser.net.connect[goog.typeOf.call(null, this$)];
-        if(cljs.core.truth_(or__3548__auto____6055)) {
-          return or__3548__auto____6055
-        }else {
-          var or__3548__auto____6056 = clojure.browser.net.connect["_"];
-          if(cljs.core.truth_(or__3548__auto____6056)) {
-            return or__3548__auto____6056
-          }else {
-            throw cljs.core.missing_protocol.call(null, "IConnection.connect", this$);
-          }
-        }
-      }().call(null, this$, opt1, opt2)
-    }
-  };
-  var connect__6081 = function(this$, opt1, opt2, opt3) {
-    if(cljs.core.truth_(function() {
-      var and__3546__auto____6057 = this$;
-      if(cljs.core.truth_(and__3546__auto____6057)) {
-        return this$.clojure$browser$net$IConnection$connect
-      }else {
-        return and__3546__auto____6057
-      }
-    }())) {
-      return this$.clojure$browser$net$IConnection$connect(this$, opt1, opt2, opt3)
-    }else {
-      return function() {
-        var or__3548__auto____6058 = clojure.browser.net.connect[goog.typeOf.call(null, this$)];
-        if(cljs.core.truth_(or__3548__auto____6058)) {
-          return or__3548__auto____6058
-        }else {
-          var or__3548__auto____6059 = clojure.browser.net.connect["_"];
-          if(cljs.core.truth_(or__3548__auto____6059)) {
-            return or__3548__auto____6059
-          }else {
-            throw cljs.core.missing_protocol.call(null, "IConnection.connect", this$);
-          }
-        }
-      }().call(null, this$, opt1, opt2, opt3)
-    }
-  };
-  connect = function(this$, opt1, opt2, opt3) {
-    switch(arguments.length) {
-      case 1:
-        return connect__6078.call(this, this$);
-      case 2:
-        return connect__6079.call(this, this$, opt1);
-      case 3:
-        return connect__6080.call(this, this$, opt1, opt2);
-      case 4:
-        return connect__6081.call(this, this$, opt1, opt2, opt3)
-    }
-    throw"Invalid arity: " + arguments.length;
-  };
-  return connect
-}();
-clojure.browser.net.transmit = function() {
-  var transmit = null;
-  var transmit__6083 = function(this$, opt) {
-    if(cljs.core.truth_(function() {
-      var and__3546__auto____6060 = this$;
-      if(cljs.core.truth_(and__3546__auto____6060)) {
-        return this$.clojure$browser$net$IConnection$transmit
-      }else {
-        return and__3546__auto____6060
-      }
-    }())) {
-      return this$.clojure$browser$net$IConnection$transmit(this$, opt)
-    }else {
-      return function() {
-        var or__3548__auto____6061 = clojure.browser.net.transmit[goog.typeOf.call(null, this$)];
-        if(cljs.core.truth_(or__3548__auto____6061)) {
-          return or__3548__auto____6061
-        }else {
-          var or__3548__auto____6062 = clojure.browser.net.transmit["_"];
-          if(cljs.core.truth_(or__3548__auto____6062)) {
-            return or__3548__auto____6062
-          }else {
-            throw cljs.core.missing_protocol.call(null, "IConnection.transmit", this$);
-          }
-        }
-      }().call(null, this$, opt)
-    }
-  };
-  var transmit__6084 = function(this$, opt, opt2) {
-    if(cljs.core.truth_(function() {
-      var and__3546__auto____6063 = this$;
-      if(cljs.core.truth_(and__3546__auto____6063)) {
-        return this$.clojure$browser$net$IConnection$transmit
-      }else {
-        return and__3546__auto____6063
-      }
-    }())) {
-      return this$.clojure$browser$net$IConnection$transmit(this$, opt, opt2)
-    }else {
-      return function() {
-        var or__3548__auto____6064 = clojure.browser.net.transmit[goog.typeOf.call(null, this$)];
-        if(cljs.core.truth_(or__3548__auto____6064)) {
-          return or__3548__auto____6064
-        }else {
-          var or__3548__auto____6065 = clojure.browser.net.transmit["_"];
-          if(cljs.core.truth_(or__3548__auto____6065)) {
-            return or__3548__auto____6065
-          }else {
-            throw cljs.core.missing_protocol.call(null, "IConnection.transmit", this$);
-          }
-        }
-      }().call(null, this$, opt, opt2)
-    }
-  };
-  var transmit__6085 = function(this$, opt, opt2, opt3) {
-    if(cljs.core.truth_(function() {
-      var and__3546__auto____6066 = this$;
-      if(cljs.core.truth_(and__3546__auto____6066)) {
-        return this$.clojure$browser$net$IConnection$transmit
-      }else {
-        return and__3546__auto____6066
-      }
-    }())) {
-      return this$.clojure$browser$net$IConnection$transmit(this$, opt, opt2, opt3)
-    }else {
-      return function() {
-        var or__3548__auto____6067 = clojure.browser.net.transmit[goog.typeOf.call(null, this$)];
-        if(cljs.core.truth_(or__3548__auto____6067)) {
-          return or__3548__auto____6067
-        }else {
-          var or__3548__auto____6068 = clojure.browser.net.transmit["_"];
-          if(cljs.core.truth_(or__3548__auto____6068)) {
-            return or__3548__auto____6068
-          }else {
-            throw cljs.core.missing_protocol.call(null, "IConnection.transmit", this$);
-          }
-        }
-      }().call(null, this$, opt, opt2, opt3)
-    }
-  };
-  var transmit__6086 = function(this$, opt, opt2, opt3, opt4) {
-    if(cljs.core.truth_(function() {
-      var and__3546__auto____6069 = this$;
-      if(cljs.core.truth_(and__3546__auto____6069)) {
-        return this$.clojure$browser$net$IConnection$transmit
-      }else {
-        return and__3546__auto____6069
-      }
-    }())) {
-      return this$.clojure$browser$net$IConnection$transmit(this$, opt, opt2, opt3, opt4)
-    }else {
-      return function() {
-        var or__3548__auto____6070 = clojure.browser.net.transmit[goog.typeOf.call(null, this$)];
-        if(cljs.core.truth_(or__3548__auto____6070)) {
-          return or__3548__auto____6070
-        }else {
-          var or__3548__auto____6071 = clojure.browser.net.transmit["_"];
-          if(cljs.core.truth_(or__3548__auto____6071)) {
-            return or__3548__auto____6071
-          }else {
-            throw cljs.core.missing_protocol.call(null, "IConnection.transmit", this$);
-          }
-        }
-      }().call(null, this$, opt, opt2, opt3, opt4)
-    }
-  };
-  var transmit__6087 = function(this$, opt, opt2, opt3, opt4, opt5) {
-    if(cljs.core.truth_(function() {
-      var and__3546__auto____6072 = this$;
-      if(cljs.core.truth_(and__3546__auto____6072)) {
-        return this$.clojure$browser$net$IConnection$transmit
-      }else {
-        return and__3546__auto____6072
-      }
-    }())) {
-      return this$.clojure$browser$net$IConnection$transmit(this$, opt, opt2, opt3, opt4, opt5)
-    }else {
-      return function() {
-        var or__3548__auto____6073 = clojure.browser.net.transmit[goog.typeOf.call(null, this$)];
-        if(cljs.core.truth_(or__3548__auto____6073)) {
-          return or__3548__auto____6073
-        }else {
-          var or__3548__auto____6074 = clojure.browser.net.transmit["_"];
-          if(cljs.core.truth_(or__3548__auto____6074)) {
-            return or__3548__auto____6074
-          }else {
-            throw cljs.core.missing_protocol.call(null, "IConnection.transmit", this$);
-          }
-        }
-      }().call(null, this$, opt, opt2, opt3, opt4, opt5)
-    }
-  };
-  transmit = function(this$, opt, opt2, opt3, opt4, opt5) {
-    switch(arguments.length) {
-      case 2:
-        return transmit__6083.call(this, this$, opt);
-      case 3:
-        return transmit__6084.call(this, this$, opt, opt2);
-      case 4:
-        return transmit__6085.call(this, this$, opt, opt2, opt3);
-      case 5:
-        return transmit__6086.call(this, this$, opt, opt2, opt3, opt4);
-      case 6:
-        return transmit__6087.call(this, this$, opt, opt2, opt3, opt4, opt5)
-    }
-    throw"Invalid arity: " + arguments.length;
-  };
-  return transmit
-}();
-clojure.browser.net.close = function close(this$) {
-  if(cljs.core.truth_(function() {
-    var and__3546__auto____6075 = this$;
-    if(cljs.core.truth_(and__3546__auto____6075)) {
-      return this$.clojure$browser$net$IConnection$close
-    }else {
-      return and__3546__auto____6075
-    }
-  }())) {
-    return this$.clojure$browser$net$IConnection$close(this$)
-  }else {
-    return function() {
-      var or__3548__auto____6076 = clojure.browser.net.close[goog.typeOf.call(null, this$)];
-      if(cljs.core.truth_(or__3548__auto____6076)) {
-        return or__3548__auto____6076
-      }else {
-        var or__3548__auto____6077 = clojure.browser.net.close["_"];
-        if(cljs.core.truth_(or__3548__auto____6077)) {
-          return or__3548__auto____6077
-        }else {
-          throw cljs.core.missing_protocol.call(null, "IConnection.close", this$);
-        }
-      }
-    }().call(null, this$)
-  }
-};
-goog.net.XhrIo.prototype.clojure$browser$event$EventType$ = true;
-goog.net.XhrIo.prototype.clojure$browser$event$EventType$event_types = function(this$) {
-  return cljs.core.into.call(null, cljs.core.ObjMap.fromObject([], {}), cljs.core.map.call(null, function(p__6089) {
-    var vec__6090__6091 = p__6089;
-    var k__6092 = cljs.core.nth.call(null, vec__6090__6091, 0, null);
-    var v__6093 = cljs.core.nth.call(null, vec__6090__6091, 1, null);
-    return cljs.core.Vector.fromArray([cljs.core.keyword.call(null, k__6092.toLowerCase()), v__6093])
-  }, cljs.core.merge.call(null, cljs.core.js__GT_clj.call(null, goog.net.EventType))))
-};
-goog.net.XhrIo.prototype.clojure$browser$net$IConnection$ = true;
-goog.net.XhrIo.prototype.clojure$browser$net$IConnection$transmit = function() {
-  var G__6094 = null;
-  var G__6094__6095 = function(this$, uri) {
-    return clojure.browser.net.transmit.call(null, this$, uri, "GET", null, null, clojure.browser.net._STAR_timeout_STAR_)
-  };
-  var G__6094__6096 = function(this$, uri, method) {
-    return clojure.browser.net.transmit.call(null, this$, uri, method, null, null, clojure.browser.net._STAR_timeout_STAR_)
-  };
-  var G__6094__6097 = function(this$, uri, method, content) {
-    return clojure.browser.net.transmit.call(null, this$, uri, method, content, null, clojure.browser.net._STAR_timeout_STAR_)
-  };
-  var G__6094__6098 = function(this$, uri, method, content, headers) {
-    return clojure.browser.net.transmit.call(null, this$, uri, method, content, headers, clojure.browser.net._STAR_timeout_STAR_)
-  };
-  var G__6094__6099 = function(this$, uri, method, content, headers, timeout) {
-    this$.setTimeoutInterval(timeout);
-    return this$.send(uri, method, content, headers)
-  };
-  G__6094 = function(this$, uri, method, content, headers, timeout) {
-    switch(arguments.length) {
-      case 2:
-        return G__6094__6095.call(this, this$, uri);
-      case 3:
-        return G__6094__6096.call(this, this$, uri, method);
-      case 4:
-        return G__6094__6097.call(this, this$, uri, method, content);
-      case 5:
-        return G__6094__6098.call(this, this$, uri, method, content, headers);
-      case 6:
-        return G__6094__6099.call(this, this$, uri, method, content, headers, timeout)
-    }
-    throw"Invalid arity: " + arguments.length;
-  };
-  return G__6094
-}();
-clojure.browser.net.xpc_config_fields = cljs.core.into.call(null, cljs.core.ObjMap.fromObject([], {}), cljs.core.map.call(null, function(p__6101) {
-  var vec__6102__6103 = p__6101;
-  var k__6104 = cljs.core.nth.call(null, vec__6102__6103, 0, null);
-  var v__6105 = cljs.core.nth.call(null, vec__6102__6103, 1, null);
-  return cljs.core.Vector.fromArray([cljs.core.keyword.call(null, k__6104.toLowerCase()), v__6105])
-}, cljs.core.js__GT_clj.call(null, goog.net.xpc.CfgFields)));
-clojure.browser.net.xhr_connection = function xhr_connection() {
-  return new goog.net.XhrIo
-};
-clojure.browser.net.ICrossPageChannel = {};
-clojure.browser.net.register_service = function() {
-  var register_service = null;
-  var register_service__6112 = function(this$, service_name, fn) {
-    if(cljs.core.truth_(function() {
-      var and__3546__auto____6106 = this$;
-      if(cljs.core.truth_(and__3546__auto____6106)) {
-        return this$.clojure$browser$net$ICrossPageChannel$register_service
-      }else {
-        return and__3546__auto____6106
-      }
-    }())) {
-      return this$.clojure$browser$net$ICrossPageChannel$register_service(this$, service_name, fn)
-    }else {
-      return function() {
-        var or__3548__auto____6107 = clojure.browser.net.register_service[goog.typeOf.call(null, this$)];
-        if(cljs.core.truth_(or__3548__auto____6107)) {
-          return or__3548__auto____6107
-        }else {
-          var or__3548__auto____6108 = clojure.browser.net.register_service["_"];
-          if(cljs.core.truth_(or__3548__auto____6108)) {
-            return or__3548__auto____6108
-          }else {
-            throw cljs.core.missing_protocol.call(null, "ICrossPageChannel.register-service", this$);
-          }
-        }
-      }().call(null, this$, service_name, fn)
-    }
-  };
-  var register_service__6113 = function(this$, service_name, fn, encode_json_QMARK_) {
-    if(cljs.core.truth_(function() {
-      var and__3546__auto____6109 = this$;
-      if(cljs.core.truth_(and__3546__auto____6109)) {
-        return this$.clojure$browser$net$ICrossPageChannel$register_service
-      }else {
-        return and__3546__auto____6109
-      }
-    }())) {
-      return this$.clojure$browser$net$ICrossPageChannel$register_service(this$, service_name, fn, encode_json_QMARK_)
-    }else {
-      return function() {
-        var or__3548__auto____6110 = clojure.browser.net.register_service[goog.typeOf.call(null, this$)];
-        if(cljs.core.truth_(or__3548__auto____6110)) {
-          return or__3548__auto____6110
-        }else {
-          var or__3548__auto____6111 = clojure.browser.net.register_service["_"];
-          if(cljs.core.truth_(or__3548__auto____6111)) {
-            return or__3548__auto____6111
-          }else {
-            throw cljs.core.missing_protocol.call(null, "ICrossPageChannel.register-service", this$);
-          }
-        }
-      }().call(null, this$, service_name, fn, encode_json_QMARK_)
-    }
-  };
-  register_service = function(this$, service_name, fn, encode_json_QMARK_) {
-    switch(arguments.length) {
-      case 3:
-        return register_service__6112.call(this, this$, service_name, fn);
-      case 4:
-        return register_service__6113.call(this, this$, service_name, fn, encode_json_QMARK_)
-    }
-    throw"Invalid arity: " + arguments.length;
-  };
-  return register_service
-}();
-goog.net.xpc.CrossPageChannel.prototype.clojure$browser$net$IConnection$ = true;
-goog.net.xpc.CrossPageChannel.prototype.clojure$browser$net$IConnection$connect = function() {
-  var G__6115 = null;
-  var G__6115__6116 = function(this$) {
-    return clojure.browser.net.connect.call(null, this$, null)
-  };
-  var G__6115__6117 = function(this$, on_connect_fn) {
-    return this$.connect(on_connect_fn)
-  };
-  var G__6115__6118 = function(this$, on_connect_fn, config_iframe_fn) {
-    return clojure.browser.net.connect.call(null, this$, on_connect_fn, config_iframe_fn, document.body)
-  };
-  var G__6115__6119 = function(this$, on_connect_fn, config_iframe_fn, iframe_parent) {
-    this$.createPeerIframe(iframe_parent, config_iframe_fn);
-    return this$.connect(on_connect_fn)
-  };
-  G__6115 = function(this$, on_connect_fn, config_iframe_fn, iframe_parent) {
-    switch(arguments.length) {
-      case 1:
-        return G__6115__6116.call(this, this$);
-      case 2:
-        return G__6115__6117.call(this, this$, on_connect_fn);
-      case 3:
-        return G__6115__6118.call(this, this$, on_connect_fn, config_iframe_fn);
-      case 4:
-        return G__6115__6119.call(this, this$, on_connect_fn, config_iframe_fn, iframe_parent)
-    }
-    throw"Invalid arity: " + arguments.length;
-  };
-  return G__6115
-}();
-goog.net.xpc.CrossPageChannel.prototype.clojure$browser$net$IConnection$transmit = function(this$, service_name, payload) {
-  return this$.send(cljs.core.name.call(null, service_name), payload)
-};
-goog.net.xpc.CrossPageChannel.prototype.clojure$browser$net$IConnection$close = function(this$) {
-  return this$.close(cljs.core.List.EMPTY)
-};
-goog.net.xpc.CrossPageChannel.prototype.clojure$browser$net$ICrossPageChannel$ = true;
-goog.net.xpc.CrossPageChannel.prototype.clojure$browser$net$ICrossPageChannel$register_service = function() {
-  var G__6121 = null;
-  var G__6121__6122 = function(this$, service_name, fn) {
-    return clojure.browser.net.register_service.call(null, this$, service_name, fn, false)
-  };
-  var G__6121__6123 = function(this$, service_name, fn, encode_json_QMARK_) {
-    return this$.registerService(cljs.core.name.call(null, service_name), fn, encode_json_QMARK_)
-  };
-  G__6121 = function(this$, service_name, fn, encode_json_QMARK_) {
-    switch(arguments.length) {
-      case 3:
-        return G__6121__6122.call(this, this$, service_name, fn);
-      case 4:
-        return G__6121__6123.call(this, this$, service_name, fn, encode_json_QMARK_)
-    }
-    throw"Invalid arity: " + arguments.length;
-  };
-  return G__6121
-}();
-clojure.browser.net.xpc_connection = function() {
-  var xpc_connection = null;
-  var xpc_connection__6134 = function() {
-    var temp__3698__auto____6125 = (new goog.Uri(window.location.href)).getParameterValue("xpc");
-    if(cljs.core.truth_(temp__3698__auto____6125)) {
-      var config__6126 = temp__3698__auto____6125;
-      return new goog.net.xpc.CrossPageChannel(goog.json.parse.call(null, config__6126))
-    }else {
-      return null
-    }
-  };
-  var xpc_connection__6135 = function(config) {
-    return new goog.net.xpc.CrossPageChannel(cljs.core.reduce.call(null, function(sum, p__6127) {
-      var vec__6128__6129 = p__6127;
-      var k__6130 = cljs.core.nth.call(null, vec__6128__6129, 0, null);
-      var v__6131 = cljs.core.nth.call(null, vec__6128__6129, 1, null);
-      var temp__3698__auto____6132 = cljs.core.get.call(null, clojure.browser.net.xpc_config_fields, k__6130);
-      if(cljs.core.truth_(temp__3698__auto____6132)) {
-        var field__6133 = temp__3698__auto____6132;
-        return cljs.core.assoc.call(null, sum, field__6133, v__6131)
-      }else {
-        return null
-      }
-    }, cljs.core.ObjMap.fromObject([], {}), config).strobj)
-  };
-  xpc_connection = function(config) {
-    switch(arguments.length) {
-      case 0:
-        return xpc_connection__6134.call(this);
-      case 1:
-        return xpc_connection__6135.call(this, config)
-    }
-    throw"Invalid arity: " + arguments.length;
-  };
-  return xpc_connection
-}();
-goog.provide("clojure.browser.repl");
-goog.require("cljs.core");
-goog.require("clojure.browser.net");
-goog.require("clojure.browser.event");
-clojure.browser.repl.xpc_connection = cljs.core.atom.call(null, null);
-clojure.browser.repl.repl_print = function repl_print(data) {
-  var temp__3695__auto____6030 = cljs.core.deref.call(null, clojure.browser.repl.xpc_connection);
-  if(cljs.core.truth_(temp__3695__auto____6030)) {
-    var conn__6031 = temp__3695__auto____6030;
-    return clojure.browser.net.transmit.call(null, conn__6031, "\ufdd0'print", cljs.core.pr_str.call(null, data))
-  }else {
-    return null
-  }
-};
-clojure.browser.repl.evaluate_javascript = function evaluate_javascript(conn, block) {
-  var result__6034 = function() {
-    try {
-      return cljs.core.ObjMap.fromObject(["\ufdd0'status", "\ufdd0'value"], {"\ufdd0'status":"\ufdd0'success", "\ufdd0'value":cljs.core.str.call(null, eval(block))})
-    }catch(e6032) {
-      if(cljs.core.truth_(cljs.core.instance_QMARK_.call(null, Error, e6032))) {
-        var e__6033 = e6032;
-        return cljs.core.ObjMap.fromObject(["\ufdd0'status", "\ufdd0'value", "\ufdd0'stacktrace"], {"\ufdd0'status":"\ufdd0'exception", "\ufdd0'value":cljs.core.pr_str.call(null, e__6033), "\ufdd0'stacktrace":cljs.core.truth_(e__6033.hasOwnProperty("stack")) ? e__6033.stack : "No stacktrace available."})
-      }else {
-        if(cljs.core.truth_("\ufdd0'else")) {
-          throw e6032;
-        }else {
-          return null
-        }
-      }
-    }
-  }();
-  return cljs.core.pr_str.call(null, result__6034)
-};
-clojure.browser.repl.send_result = function send_result(connection, url, data) {
-  return clojure.browser.net.transmit.call(null, connection, url, "POST", data, null, 0)
-};
-clojure.browser.repl.send_print = function() {
-  var send_print = null;
-  var send_print__6036 = function(url, data) {
-    return send_print.call(null, url, data, 0)
-  };
-  var send_print__6037 = function(url, data, n) {
-    var conn__6035 = clojure.browser.net.xhr_connection.call(null);
-    clojure.browser.event.listen.call(null, conn__6035, "\ufdd0'error", function(_) {
-      if(cljs.core.truth_(n < 10)) {
-        return send_print.call(null, url, data, n + 1)
-      }else {
-        return console.log(cljs.core.str.call(null, "Could not send ", data, " after ", n, " attempts."))
-      }
-    });
-    return clojure.browser.net.transmit.call(null, conn__6035, url, "POST", data, null, 0)
-  };
-  send_print = function(url, data, n) {
-    switch(arguments.length) {
-      case 2:
-        return send_print__6036.call(this, url, data);
-      case 3:
-        return send_print__6037.call(this, url, data, n)
-    }
-    throw"Invalid arity: " + arguments.length;
-  };
-  return send_print
-}();
-clojure.browser.repl.order = cljs.core.atom.call(null, 0);
-clojure.browser.repl.wrap_message = function wrap_message(t, data) {
-  return cljs.core.pr_str.call(null, cljs.core.ObjMap.fromObject(["\ufdd0'type", "\ufdd0'content", "\ufdd0'order"], {"\ufdd0'type":t, "\ufdd0'content":data, "\ufdd0'order":cljs.core.swap_BANG_.call(null, clojure.browser.repl.order, cljs.core.inc)}))
-};
-clojure.browser.repl.start_evaluator = function start_evaluator(url) {
-  var temp__3695__auto____6039 = clojure.browser.net.xpc_connection.call(null);
-  if(cljs.core.truth_(temp__3695__auto____6039)) {
-    var repl_connection__6040 = temp__3695__auto____6039;
-    var connection__6041 = clojure.browser.net.xhr_connection.call(null);
-    clojure.browser.event.listen.call(null, connection__6041, "\ufdd0'success", function(e) {
-      return clojure.browser.net.transmit.call(null, repl_connection__6040, "\ufdd0'evaluate-javascript", e.currentTarget.getResponseText(cljs.core.List.EMPTY))
-    });
-    clojure.browser.net.register_service.call(null, repl_connection__6040, "\ufdd0'send-result", function(data) {
-      return clojure.browser.repl.send_result.call(null, connection__6041, url, clojure.browser.repl.wrap_message.call(null, "\ufdd0'result", data))
-    });
-    clojure.browser.net.register_service.call(null, repl_connection__6040, "\ufdd0'print", function(data) {
-      return clojure.browser.repl.send_print.call(null, url, clojure.browser.repl.wrap_message.call(null, "\ufdd0'print", data))
-    });
-    clojure.browser.net.connect.call(null, repl_connection__6040, cljs.core.constantly.call(null, null));
-    return setTimeout.call(null, function() {
-      return clojure.browser.repl.send_result.call(null, connection__6041, url, clojure.browser.repl.wrap_message.call(null, "\ufdd0'ready", "ready"))
-    }, 50)
-  }else {
-    return alert.call(null, "No 'xpc' param provided to child iframe.")
-  }
-};
-clojure.browser.repl.connect = function connect(repl_server_url) {
-  var repl_connection__6042 = clojure.browser.net.xpc_connection.call(null, cljs.core.ObjMap.fromObject(["\ufdd0'peer_uri"], {"\ufdd0'peer_uri":repl_server_url}));
-  cljs.core.swap_BANG_.call(null, clojure.browser.repl.xpc_connection, cljs.core.constantly.call(null, repl_connection__6042));
-  clojure.browser.net.register_service.call(null, repl_connection__6042, "\ufdd0'evaluate-javascript", function(js) {
-    return clojure.browser.net.transmit.call(null, repl_connection__6042, "\ufdd0'send-result", clojure.browser.repl.evaluate_javascript.call(null, repl_connection__6042, js))
-  });
-  return clojure.browser.net.connect.call(null, repl_connection__6042, cljs.core.constantly.call(null, null), function(iframe) {
-    return iframe.style.display = "none"
-  })
-};
 goog.provide("domina");
 goog.require("cljs.core");
 goog.require("goog.dom");
@@ -19751,27 +14357,26 @@ goog.require("goog.dom.forms");
 goog.require("goog.style");
 goog.require("goog.string");
 goog.require("cljs.core");
-goog.require("clojure.browser.repl");
 domina.DomContent = {};
 domina.nodes = function nodes(content) {
   if(cljs.core.truth_(function() {
-    var and__3546__auto____5859 = content;
-    if(cljs.core.truth_(and__3546__auto____5859)) {
+    var and__3546__auto____2668 = content;
+    if(cljs.core.truth_(and__3546__auto____2668)) {
       return content.domina$DomContent$nodes
     }else {
-      return and__3546__auto____5859
+      return and__3546__auto____2668
     }
   }())) {
     return content.domina$DomContent$nodes(content)
   }else {
     return function() {
-      var or__3548__auto____5860 = domina.nodes[goog.typeOf.call(null, content)];
-      if(cljs.core.truth_(or__3548__auto____5860)) {
-        return or__3548__auto____5860
+      var or__3548__auto____2669 = domina.nodes[goog.typeOf.call(null, content)];
+      if(cljs.core.truth_(or__3548__auto____2669)) {
+        return or__3548__auto____2669
       }else {
-        var or__3548__auto____5861 = domina.nodes["_"];
-        if(cljs.core.truth_(or__3548__auto____5861)) {
-          return or__3548__auto____5861
+        var or__3548__auto____2670 = domina.nodes["_"];
+        if(cljs.core.truth_(or__3548__auto____2670)) {
+          return or__3548__auto____2670
         }else {
           throw cljs.core.missing_protocol.call(null, "DomContent.nodes", content);
         }
@@ -19781,23 +14386,23 @@ domina.nodes = function nodes(content) {
 };
 domina.single_node = function single_node(nodeseq) {
   if(cljs.core.truth_(function() {
-    var and__3546__auto____5862 = nodeseq;
-    if(cljs.core.truth_(and__3546__auto____5862)) {
+    var and__3546__auto____2671 = nodeseq;
+    if(cljs.core.truth_(and__3546__auto____2671)) {
       return nodeseq.domina$DomContent$single_node
     }else {
-      return and__3546__auto____5862
+      return and__3546__auto____2671
     }
   }())) {
     return nodeseq.domina$DomContent$single_node(nodeseq)
   }else {
     return function() {
-      var or__3548__auto____5863 = domina.single_node[goog.typeOf.call(null, nodeseq)];
-      if(cljs.core.truth_(or__3548__auto____5863)) {
-        return or__3548__auto____5863
+      var or__3548__auto____2672 = domina.single_node[goog.typeOf.call(null, nodeseq)];
+      if(cljs.core.truth_(or__3548__auto____2672)) {
+        return or__3548__auto____2672
       }else {
-        var or__3548__auto____5864 = domina.single_node["_"];
-        if(cljs.core.truth_(or__3548__auto____5864)) {
-          return or__3548__auto____5864
+        var or__3548__auto____2673 = domina.single_node["_"];
+        if(cljs.core.truth_(or__3548__auto____2673)) {
+          return or__3548__auto____2673
         }else {
           throw cljs.core.missing_protocol.call(null, "DomContent.single-node", nodeseq);
         }
@@ -19807,39 +14412,39 @@ domina.single_node = function single_node(nodeseq) {
 };
 domina.xpath = function() {
   var xpath = null;
-  var xpath__5868 = function(expr) {
+  var xpath__2677 = function(expr) {
     return xpath.call(null, document, expr)
   };
-  var xpath__5869 = function(base, expr) {
-    if(cljs.core.truth_(cljs.core.undefined_QMARK_.call(null, domina.t5865))) {
-      domina.t5865 = function(expr, base, xpath) {
+  var xpath__2678 = function(base, expr) {
+    if(cljs.core.truth_(cljs.core.undefined_QMARK_.call(null, domina.t2674))) {
+      domina.t2674 = function(expr, base, xpath) {
         this.expr = expr;
         this.base = base;
         this.xpath = xpath
       };
-      domina.t5865.prototype.domina$DomContent$ = true;
-      domina.t5865.prototype.domina$DomContent$nodes = function(_) {
-        var this__5866 = this;
-        return cljs.core.mapcat.call(null, function(p1__5857_SHARP_) {
-          return goog.dom.xml.selectNodes.call(null, p1__5857_SHARP_, this__5866.expr)
-        }, domina.nodes.call(null, this__5866.base))
+      domina.t2674.prototype.domina$DomContent$ = true;
+      domina.t2674.prototype.domina$DomContent$nodes = function(_) {
+        var this__2675 = this;
+        return cljs.core.mapcat.call(null, function(p1__2666_SHARP_) {
+          return goog.dom.xml.selectNodes.call(null, p1__2666_SHARP_, this__2675.expr)
+        }, domina.nodes.call(null, this__2675.base))
       };
-      domina.t5865.prototype.domina$DomContent$single_node = function(_) {
-        var this__5867 = this;
-        return cljs.core.first.call(null, cljs.core.filter.call(null, cljs.core.complement.call(null, cljs.core.nil_QMARK_), cljs.core.map.call(null, function(p1__5858_SHARP_) {
-          return goog.dom.xml.selectSingleNode.call(null, p1__5858_SHARP_, this__5867.expr)
-        }, domina.nodes.call(null, this__5867.base))))
+      domina.t2674.prototype.domina$DomContent$single_node = function(_) {
+        var this__2676 = this;
+        return cljs.core.first.call(null, cljs.core.filter.call(null, cljs.core.complement.call(null, cljs.core.nil_QMARK_), cljs.core.map.call(null, function(p1__2667_SHARP_) {
+          return goog.dom.xml.selectSingleNode.call(null, p1__2667_SHARP_, this__2676.expr)
+        }, domina.nodes.call(null, this__2676.base))))
       }
     }else {
     }
-    return new domina.t5865(expr, base, xpath)
+    return new domina.t2674(expr, base, xpath)
   };
   xpath = function(base, expr) {
     switch(arguments.length) {
       case 1:
-        return xpath__5868.call(this, base);
+        return xpath__2677.call(this, base);
       case 2:
-        return xpath__5869.call(this, base, expr)
+        return xpath__2678.call(this, base, expr)
     }
     throw"Invalid arity: " + arguments.length;
   };
@@ -19849,30 +14454,30 @@ domina.by_id = function by_id(id) {
   return goog.dom.getElement.call(null, cljs.core.name.call(null, id))
 };
 domina.by_class = function by_class(class_name) {
-  if(cljs.core.truth_(cljs.core.undefined_QMARK_.call(null, domina.t5871))) {
-    domina.t5871 = function(class_name, by_class) {
+  if(cljs.core.truth_(cljs.core.undefined_QMARK_.call(null, domina.t2680))) {
+    domina.t2680 = function(class_name, by_class) {
       this.class_name = class_name;
       this.by_class = by_class
     };
-    domina.t5871.prototype.domina$DomContent$ = true;
-    domina.t5871.prototype.domina$DomContent$nodes = function(_) {
-      var this__5872 = this;
-      return goog.dom.getElementsByClass.call(null, cljs.core.name.call(null, this__5872.class_name))
+    domina.t2680.prototype.domina$DomContent$ = true;
+    domina.t2680.prototype.domina$DomContent$nodes = function(_) {
+      var this__2681 = this;
+      return goog.dom.getElementsByClass.call(null, cljs.core.name.call(null, this__2681.class_name))
     };
-    domina.t5871.prototype.domina$DomContent$single_node = function(_) {
-      var this__5873 = this;
-      return goog.dom.getElementByClass.call(null, cljs.core.name.call(null, this__5873.class_name))
+    domina.t2680.prototype.domina$DomContent$single_node = function(_) {
+      var this__2682 = this;
+      return goog.dom.getElementByClass.call(null, cljs.core.name.call(null, this__2682.class_name))
     }
   }else {
   }
-  return new domina.t5871(class_name, by_class)
+  return new domina.t2680(class_name, by_class)
 };
 domina.children = function children(content) {
   return cljs.core.mapcat.call(null, goog.dom.getChildren, domina.nodes.call(null, content))
 };
 domina.clone = function clone(content) {
-  return cljs.core.map.call(null, function(p1__5874_SHARP_) {
-    return p1__5874_SHARP_.cloneNode(true)
+  return cljs.core.map.call(null, function(p1__2683_SHARP_) {
+    return p1__2683_SHARP_.cloneNode(true)
   }, domina.nodes.call(null, content))
 };
 domina.append_BANG_ = function append_BANG_(parent_content, child_content) {
@@ -19880,8 +14485,8 @@ domina.append_BANG_ = function append_BANG_(parent_content, child_content) {
   return parent_content
 };
 domina.insert_BANG_ = function insert_BANG_(parent_content, child_content, idx) {
-  domina.apply_with_cloning.call(null, function(p1__5875_SHARP_, p2__5876_SHARP_) {
-    return goog.dom.insertChildAt.call(null, p1__5875_SHARP_, p2__5876_SHARP_, idx)
+  domina.apply_with_cloning.call(null, function(p1__2684_SHARP_, p2__2685_SHARP_) {
+    return goog.dom.insertChildAt.call(null, p1__2684_SHARP_, p2__2685_SHARP_, idx)
   }, parent_content, child_content);
   return parent_content
 };
@@ -19890,20 +14495,20 @@ domina.prepend_BANG_ = function prepend_BANG_(parent_content, child_content) {
   return parent_content
 };
 domina.insert_before_BANG_ = function insert_before_BANG_(content, new_content) {
-  domina.apply_with_cloning.call(null, function(p1__5878_SHARP_, p2__5877_SHARP_) {
-    return goog.dom.insertSiblingBefore.call(null, p2__5877_SHARP_, p1__5878_SHARP_)
+  domina.apply_with_cloning.call(null, function(p1__2687_SHARP_, p2__2686_SHARP_) {
+    return goog.dom.insertSiblingBefore.call(null, p2__2686_SHARP_, p1__2687_SHARP_)
   }, content, new_content);
   return content
 };
 domina.insert_after_BANG_ = function insert_after_BANG_(content, new_content) {
-  domina.apply_with_cloning.call(null, function(p1__5880_SHARP_, p2__5879_SHARP_) {
-    return goog.dom.insertSiblingAfter.call(null, p2__5879_SHARP_, p1__5880_SHARP_)
+  domina.apply_with_cloning.call(null, function(p1__2689_SHARP_, p2__2688_SHARP_) {
+    return goog.dom.insertSiblingAfter.call(null, p2__2688_SHARP_, p1__2689_SHARP_)
   }, content, new_content);
   return content
 };
 domina.swap_content_BANG_ = function swap_content_BANG_(old_content, new_content) {
-  domina.apply_with_cloning.call(null, function(p1__5882_SHARP_, p2__5881_SHARP_) {
-    return goog.dom.replaceNode.call(null, p2__5881_SHARP_, p1__5882_SHARP_)
+  domina.apply_with_cloning.call(null, function(p1__2691_SHARP_, p2__2690_SHARP_) {
+    return goog.dom.replaceNode.call(null, p2__2690_SHARP_, p1__2691_SHARP_)
   }, old_content, new_content);
   return old_content
 };
@@ -19918,9 +14523,9 @@ domina.destroy_children_BANG_ = function destroy_children_BANG_(content) {
   return content
 };
 domina.style = function style(content, name) {
-  var s__5883 = goog.style.getStyle.call(null, domina.single_node.call(null, content), cljs.core.name.call(null, name));
-  if(cljs.core.truth_(cljs.core.not.call(null, goog.string.isEmptySafe.call(null, s__5883)))) {
-    return s__5883
+  var s__2692 = goog.style.getStyle.call(null, domina.single_node.call(null, content), cljs.core.name.call(null, name));
+  if(cljs.core.truth_(cljs.core.not.call(null, goog.string.isEmptySafe.call(null, s__2692)))) {
+    return s__2692
   }else {
     return null
   }
@@ -19929,19 +14534,19 @@ domina.attr = function attr(content, name) {
   return domina.single_node.call(null, content).getAttribute(cljs.core.name.call(null, name))
 };
 domina.set_style_BANG_ = function set_style_BANG_(content, name, value) {
-  var G__5884__5885 = cljs.core.seq.call(null, domina.nodes.call(null, content));
-  if(cljs.core.truth_(G__5884__5885)) {
-    var n__5886 = cljs.core.first.call(null, G__5884__5885);
-    var G__5884__5887 = G__5884__5885;
+  var G__2693__2694 = cljs.core.seq.call(null, domina.nodes.call(null, content));
+  if(cljs.core.truth_(G__2693__2694)) {
+    var n__2695 = cljs.core.first.call(null, G__2693__2694);
+    var G__2693__2696 = G__2693__2694;
     while(true) {
-      goog.style.setStyle.call(null, n__5886, cljs.core.name.call(null, name), value);
-      var temp__3698__auto____5888 = cljs.core.next.call(null, G__5884__5887);
-      if(cljs.core.truth_(temp__3698__auto____5888)) {
-        var G__5884__5889 = temp__3698__auto____5888;
-        var G__5890 = cljs.core.first.call(null, G__5884__5889);
-        var G__5891 = G__5884__5889;
-        n__5886 = G__5890;
-        G__5884__5887 = G__5891;
+      goog.style.setStyle.call(null, n__2695, cljs.core.name.call(null, name), value);
+      var temp__3698__auto____2697 = cljs.core.next.call(null, G__2693__2696);
+      if(cljs.core.truth_(temp__3698__auto____2697)) {
+        var G__2693__2698 = temp__3698__auto____2697;
+        var G__2699 = cljs.core.first.call(null, G__2693__2698);
+        var G__2700 = G__2693__2698;
+        n__2695 = G__2699;
+        G__2693__2696 = G__2700;
         continue
       }else {
       }
@@ -19952,19 +14557,19 @@ domina.set_style_BANG_ = function set_style_BANG_(content, name, value) {
   return content
 };
 domina.set_attr_BANG_ = function set_attr_BANG_(content, name, value) {
-  var G__5892__5893 = cljs.core.seq.call(null, domina.nodes.call(null, content));
-  if(cljs.core.truth_(G__5892__5893)) {
-    var n__5894 = cljs.core.first.call(null, G__5892__5893);
-    var G__5892__5895 = G__5892__5893;
+  var G__2701__2702 = cljs.core.seq.call(null, domina.nodes.call(null, content));
+  if(cljs.core.truth_(G__2701__2702)) {
+    var n__2703 = cljs.core.first.call(null, G__2701__2702);
+    var G__2701__2704 = G__2701__2702;
     while(true) {
-      n__5894.setAttribute(cljs.core.name.call(null, name), value);
-      var temp__3698__auto____5896 = cljs.core.next.call(null, G__5892__5895);
-      if(cljs.core.truth_(temp__3698__auto____5896)) {
-        var G__5892__5897 = temp__3698__auto____5896;
-        var G__5898 = cljs.core.first.call(null, G__5892__5897);
-        var G__5899 = G__5892__5897;
-        n__5894 = G__5898;
-        G__5892__5895 = G__5899;
+      n__2703.setAttribute(cljs.core.name.call(null, name), value);
+      var temp__3698__auto____2705 = cljs.core.next.call(null, G__2701__2704);
+      if(cljs.core.truth_(temp__3698__auto____2705)) {
+        var G__2701__2706 = temp__3698__auto____2705;
+        var G__2707 = cljs.core.first.call(null, G__2701__2706);
+        var G__2708 = G__2701__2706;
+        n__2703 = G__2707;
+        G__2701__2704 = G__2708;
         continue
       }else {
       }
@@ -19976,18 +14581,18 @@ domina.set_attr_BANG_ = function set_attr_BANG_(content, name, value) {
 };
 domina.parse_style_attributes = function parse_style_attributes(style) {
   return cljs.core.reduce.call(null, function(acc, pair) {
-    var vec__5900__5901 = pair.split(/\s*:\s*/);
-    var k__5902 = cljs.core.nth.call(null, vec__5900__5901, 0, null);
-    var v__5903 = cljs.core.nth.call(null, vec__5900__5901, 1, null);
+    var vec__2709__2710 = pair.split(/\s*:\s*/);
+    var k__2711 = cljs.core.nth.call(null, vec__2709__2710, 0, null);
+    var v__2712 = cljs.core.nth.call(null, vec__2709__2710, 1, null);
     if(cljs.core.truth_(function() {
-      var and__3546__auto____5904 = k__5902;
-      if(cljs.core.truth_(and__3546__auto____5904)) {
-        return v__5903
+      var and__3546__auto____2713 = k__2711;
+      if(cljs.core.truth_(and__3546__auto____2713)) {
+        return v__2712
       }else {
-        return and__3546__auto____5904
+        return and__3546__auto____2713
       }
     }())) {
-      return cljs.core.assoc.call(null, acc, cljs.core.keyword.call(null, k__5902.toLowerCase()), v__5903)
+      return cljs.core.assoc.call(null, acc, cljs.core.keyword.call(null, k__2711.toLowerCase()), v__2712)
     }else {
       return acc
     }
@@ -19997,36 +14602,36 @@ domina.styles = function styles(content) {
   return domina.parse_style_attributes.call(null, domina.attr.call(null, content, "style"))
 };
 domina.attrs = function attrs(content) {
-  var node__5906 = domina.single_node.call(null, content);
-  var attrs__5907 = node__5906.attributes;
-  return cljs.core.reduce.call(null, cljs.core.conj, cljs.core.map.call(null, function(p1__5905_SHARP_) {
-    var attr__5908 = attrs__5907.item(p1__5905_SHARP_);
-    return cljs.core.HashMap.fromArrays([cljs.core.keyword.call(null, attr__5908.nodeName.toLowerCase())], [attr__5908.nodeValue])
-  }, cljs.core.range.call(null, attrs__5907.length)))
+  var node__2715 = domina.single_node.call(null, content);
+  var attrs__2716 = node__2715.attributes;
+  return cljs.core.reduce.call(null, cljs.core.conj, cljs.core.map.call(null, function(p1__2714_SHARP_) {
+    var attr__2717 = attrs__2716.item(p1__2714_SHARP_);
+    return cljs.core.HashMap.fromArrays([cljs.core.keyword.call(null, attr__2717.nodeName.toLowerCase())], [attr__2717.nodeValue])
+  }, cljs.core.range.call(null, attrs__2716.length)))
 };
 domina.set_styles_BANG_ = function set_styles_BANG_(content, styles) {
-  var G__5909__5910 = cljs.core.seq.call(null, styles);
-  if(cljs.core.truth_(G__5909__5910)) {
-    var G__5912__5914 = cljs.core.first.call(null, G__5909__5910);
-    var vec__5913__5915 = G__5912__5914;
-    var name__5916 = cljs.core.nth.call(null, vec__5913__5915, 0, null);
-    var value__5917 = cljs.core.nth.call(null, vec__5913__5915, 1, null);
-    var G__5909__5918 = G__5909__5910;
-    var G__5912__5919 = G__5912__5914;
-    var G__5909__5920 = G__5909__5918;
+  var G__2718__2719 = cljs.core.seq.call(null, styles);
+  if(cljs.core.truth_(G__2718__2719)) {
+    var G__2721__2723 = cljs.core.first.call(null, G__2718__2719);
+    var vec__2722__2724 = G__2721__2723;
+    var name__2725 = cljs.core.nth.call(null, vec__2722__2724, 0, null);
+    var value__2726 = cljs.core.nth.call(null, vec__2722__2724, 1, null);
+    var G__2718__2727 = G__2718__2719;
+    var G__2721__2728 = G__2721__2723;
+    var G__2718__2729 = G__2718__2727;
     while(true) {
-      var vec__5921__5922 = G__5912__5919;
-      var name__5923 = cljs.core.nth.call(null, vec__5921__5922, 0, null);
-      var value__5924 = cljs.core.nth.call(null, vec__5921__5922, 1, null);
-      var G__5909__5925 = G__5909__5920;
-      domina.set_style_BANG_.call(null, content, name__5923, value__5924);
-      var temp__3698__auto____5926 = cljs.core.next.call(null, G__5909__5925);
-      if(cljs.core.truth_(temp__3698__auto____5926)) {
-        var G__5909__5927 = temp__3698__auto____5926;
-        var G__5928 = cljs.core.first.call(null, G__5909__5927);
-        var G__5929 = G__5909__5927;
-        G__5912__5919 = G__5928;
-        G__5909__5920 = G__5929;
+      var vec__2730__2731 = G__2721__2728;
+      var name__2732 = cljs.core.nth.call(null, vec__2730__2731, 0, null);
+      var value__2733 = cljs.core.nth.call(null, vec__2730__2731, 1, null);
+      var G__2718__2734 = G__2718__2729;
+      domina.set_style_BANG_.call(null, content, name__2732, value__2733);
+      var temp__3698__auto____2735 = cljs.core.next.call(null, G__2718__2734);
+      if(cljs.core.truth_(temp__3698__auto____2735)) {
+        var G__2718__2736 = temp__3698__auto____2735;
+        var G__2737 = cljs.core.first.call(null, G__2718__2736);
+        var G__2738 = G__2718__2736;
+        G__2721__2728 = G__2737;
+        G__2718__2729 = G__2738;
         continue
       }else {
       }
@@ -20037,28 +14642,28 @@ domina.set_styles_BANG_ = function set_styles_BANG_(content, styles) {
   return content
 };
 domina.set_attrs_BANG_ = function set_attrs_BANG_(content, attrs) {
-  var G__5930__5931 = cljs.core.seq.call(null, attrs);
-  if(cljs.core.truth_(G__5930__5931)) {
-    var G__5933__5935 = cljs.core.first.call(null, G__5930__5931);
-    var vec__5934__5936 = G__5933__5935;
-    var name__5937 = cljs.core.nth.call(null, vec__5934__5936, 0, null);
-    var value__5938 = cljs.core.nth.call(null, vec__5934__5936, 1, null);
-    var G__5930__5939 = G__5930__5931;
-    var G__5933__5940 = G__5933__5935;
-    var G__5930__5941 = G__5930__5939;
+  var G__2739__2740 = cljs.core.seq.call(null, attrs);
+  if(cljs.core.truth_(G__2739__2740)) {
+    var G__2742__2744 = cljs.core.first.call(null, G__2739__2740);
+    var vec__2743__2745 = G__2742__2744;
+    var name__2746 = cljs.core.nth.call(null, vec__2743__2745, 0, null);
+    var value__2747 = cljs.core.nth.call(null, vec__2743__2745, 1, null);
+    var G__2739__2748 = G__2739__2740;
+    var G__2742__2749 = G__2742__2744;
+    var G__2739__2750 = G__2739__2748;
     while(true) {
-      var vec__5942__5943 = G__5933__5940;
-      var name__5944 = cljs.core.nth.call(null, vec__5942__5943, 0, null);
-      var value__5945 = cljs.core.nth.call(null, vec__5942__5943, 1, null);
-      var G__5930__5946 = G__5930__5941;
-      domina.set_attr_BANG_.call(null, content, name__5944, value__5945);
-      var temp__3698__auto____5947 = cljs.core.next.call(null, G__5930__5946);
-      if(cljs.core.truth_(temp__3698__auto____5947)) {
-        var G__5930__5948 = temp__3698__auto____5947;
-        var G__5949 = cljs.core.first.call(null, G__5930__5948);
-        var G__5950 = G__5930__5948;
-        G__5933__5940 = G__5949;
-        G__5930__5941 = G__5950;
+      var vec__2751__2752 = G__2742__2749;
+      var name__2753 = cljs.core.nth.call(null, vec__2751__2752, 0, null);
+      var value__2754 = cljs.core.nth.call(null, vec__2751__2752, 1, null);
+      var G__2739__2755 = G__2739__2750;
+      domina.set_attr_BANG_.call(null, content, name__2753, value__2754);
+      var temp__3698__auto____2756 = cljs.core.next.call(null, G__2739__2755);
+      if(cljs.core.truth_(temp__3698__auto____2756)) {
+        var G__2739__2757 = temp__3698__auto____2756;
+        var G__2758 = cljs.core.first.call(null, G__2739__2757);
+        var G__2759 = G__2739__2757;
+        G__2742__2749 = G__2758;
+        G__2739__2750 = G__2759;
         continue
       }else {
       }
@@ -20072,19 +14677,19 @@ domina.has_class_QMARK_ = function has_class_QMARK_(content, class$) {
   return goog.dom.classes.has.call(null, domina.single_node.call(null, content), class$)
 };
 domina.add_class_BANG_ = function add_class_BANG_(content, class$) {
-  var G__5951__5952 = cljs.core.seq.call(null, domina.nodes.call(null, content));
-  if(cljs.core.truth_(G__5951__5952)) {
-    var node__5953 = cljs.core.first.call(null, G__5951__5952);
-    var G__5951__5954 = G__5951__5952;
+  var G__2760__2761 = cljs.core.seq.call(null, domina.nodes.call(null, content));
+  if(cljs.core.truth_(G__2760__2761)) {
+    var node__2762 = cljs.core.first.call(null, G__2760__2761);
+    var G__2760__2763 = G__2760__2761;
     while(true) {
-      goog.dom.classes.add.call(null, node__5953, class$);
-      var temp__3698__auto____5955 = cljs.core.next.call(null, G__5951__5954);
-      if(cljs.core.truth_(temp__3698__auto____5955)) {
-        var G__5951__5956 = temp__3698__auto____5955;
-        var G__5957 = cljs.core.first.call(null, G__5951__5956);
-        var G__5958 = G__5951__5956;
-        node__5953 = G__5957;
-        G__5951__5954 = G__5958;
+      goog.dom.classes.add.call(null, node__2762, class$);
+      var temp__3698__auto____2764 = cljs.core.next.call(null, G__2760__2763);
+      if(cljs.core.truth_(temp__3698__auto____2764)) {
+        var G__2760__2765 = temp__3698__auto____2764;
+        var G__2766 = cljs.core.first.call(null, G__2760__2765);
+        var G__2767 = G__2760__2765;
+        node__2762 = G__2766;
+        G__2760__2763 = G__2767;
         continue
       }else {
       }
@@ -20095,19 +14700,19 @@ domina.add_class_BANG_ = function add_class_BANG_(content, class$) {
   return content
 };
 domina.remove_class_BANG_ = function remove_class_BANG_(content, class$) {
-  var G__5959__5960 = cljs.core.seq.call(null, domina.nodes.call(null, content));
-  if(cljs.core.truth_(G__5959__5960)) {
-    var node__5961 = cljs.core.first.call(null, G__5959__5960);
-    var G__5959__5962 = G__5959__5960;
+  var G__2768__2769 = cljs.core.seq.call(null, domina.nodes.call(null, content));
+  if(cljs.core.truth_(G__2768__2769)) {
+    var node__2770 = cljs.core.first.call(null, G__2768__2769);
+    var G__2768__2771 = G__2768__2769;
     while(true) {
-      goog.dom.classes.remove.call(null, node__5961, class$);
-      var temp__3698__auto____5963 = cljs.core.next.call(null, G__5959__5962);
-      if(cljs.core.truth_(temp__3698__auto____5963)) {
-        var G__5959__5964 = temp__3698__auto____5963;
-        var G__5965 = cljs.core.first.call(null, G__5959__5964);
-        var G__5966 = G__5959__5964;
-        node__5961 = G__5965;
-        G__5959__5962 = G__5966;
+      goog.dom.classes.remove.call(null, node__2770, class$);
+      var temp__3698__auto____2772 = cljs.core.next.call(null, G__2768__2771);
+      if(cljs.core.truth_(temp__3698__auto____2772)) {
+        var G__2768__2773 = temp__3698__auto____2772;
+        var G__2774 = cljs.core.first.call(null, G__2768__2773);
+        var G__2775 = G__2768__2773;
+        node__2770 = G__2774;
+        G__2768__2771 = G__2775;
         continue
       }else {
       }
@@ -20122,10 +14727,10 @@ domina.classes = function classes(content) {
 };
 domina.text = function() {
   var text = null;
-  var text__5967 = function(content) {
+  var text__2776 = function(content) {
     return text.call(null, content, true)
   };
-  var text__5968 = function(content, normalize) {
+  var text__2777 = function(content, normalize) {
     if(cljs.core.truth_(normalize)) {
       return goog.dom.getTextContent.call(null, domina.single_node.call(null, content))
     }else {
@@ -20135,28 +14740,28 @@ domina.text = function() {
   text = function(content, normalize) {
     switch(arguments.length) {
       case 1:
-        return text__5967.call(this, content);
+        return text__2776.call(this, content);
       case 2:
-        return text__5968.call(this, content, normalize)
+        return text__2777.call(this, content, normalize)
     }
     throw"Invalid arity: " + arguments.length;
   };
   return text
 }();
 domina.set_text_BANG_ = function set_text_BANG_(content, value) {
-  var G__5970__5971 = cljs.core.seq.call(null, domina.nodes.call(null, content));
-  if(cljs.core.truth_(G__5970__5971)) {
-    var node__5972 = cljs.core.first.call(null, G__5970__5971);
-    var G__5970__5973 = G__5970__5971;
+  var G__2779__2780 = cljs.core.seq.call(null, domina.nodes.call(null, content));
+  if(cljs.core.truth_(G__2779__2780)) {
+    var node__2781 = cljs.core.first.call(null, G__2779__2780);
+    var G__2779__2782 = G__2779__2780;
     while(true) {
-      goog.dom.setTextContent.call(null, node__5972, value);
-      var temp__3698__auto____5974 = cljs.core.next.call(null, G__5970__5973);
-      if(cljs.core.truth_(temp__3698__auto____5974)) {
-        var G__5970__5975 = temp__3698__auto____5974;
-        var G__5976 = cljs.core.first.call(null, G__5970__5975);
-        var G__5977 = G__5970__5975;
-        node__5972 = G__5976;
-        G__5970__5973 = G__5977;
+      goog.dom.setTextContent.call(null, node__2781, value);
+      var temp__3698__auto____2783 = cljs.core.next.call(null, G__2779__2782);
+      if(cljs.core.truth_(temp__3698__auto____2783)) {
+        var G__2779__2784 = temp__3698__auto____2783;
+        var G__2785 = cljs.core.first.call(null, G__2779__2784);
+        var G__2786 = G__2779__2784;
+        node__2781 = G__2785;
+        G__2779__2782 = G__2786;
         continue
       }else {
       }
@@ -20170,19 +14775,19 @@ domina.value = function value(content) {
   return goog.dom.forms.getValue.call(null, domina.single_node.call(null, content))
 };
 domina.set_value_BANG_ = function set_value_BANG_(content, value) {
-  var G__5978__5979 = cljs.core.seq.call(null, domina.nodes.call(null, content));
-  if(cljs.core.truth_(G__5978__5979)) {
-    var node__5980 = cljs.core.first.call(null, G__5978__5979);
-    var G__5978__5981 = G__5978__5979;
+  var G__2787__2788 = cljs.core.seq.call(null, domina.nodes.call(null, content));
+  if(cljs.core.truth_(G__2787__2788)) {
+    var node__2789 = cljs.core.first.call(null, G__2787__2788);
+    var G__2787__2790 = G__2787__2788;
     while(true) {
-      goog.dom.forms.setValue.call(null, node__5980, value);
-      var temp__3698__auto____5982 = cljs.core.next.call(null, G__5978__5981);
-      if(cljs.core.truth_(temp__3698__auto____5982)) {
-        var G__5978__5983 = temp__3698__auto____5982;
-        var G__5984 = cljs.core.first.call(null, G__5978__5983);
-        var G__5985 = G__5978__5983;
-        node__5980 = G__5984;
-        G__5978__5981 = G__5985;
+      goog.dom.forms.setValue.call(null, node__2789, value);
+      var temp__3698__auto____2791 = cljs.core.next.call(null, G__2787__2790);
+      if(cljs.core.truth_(temp__3698__auto____2791)) {
+        var G__2787__2792 = temp__3698__auto____2791;
+        var G__2793 = cljs.core.first.call(null, G__2787__2792);
+        var G__2794 = G__2787__2792;
+        node__2789 = G__2793;
+        G__2787__2790 = G__2794;
         continue
       }else {
       }
@@ -20196,19 +14801,19 @@ domina.html = function html(content) {
   return domina.single_node.call(null, content).innerHTML
 };
 domina.set_html_BANG_ = function set_html_BANG_(content, value) {
-  var G__5986__5987 = cljs.core.seq.call(null, domina.nodes.call(null, content));
-  if(cljs.core.truth_(G__5986__5987)) {
-    var node__5988 = cljs.core.first.call(null, G__5986__5987);
-    var G__5986__5989 = G__5986__5987;
+  var G__2795__2796 = cljs.core.seq.call(null, domina.nodes.call(null, content));
+  if(cljs.core.truth_(G__2795__2796)) {
+    var node__2797 = cljs.core.first.call(null, G__2795__2796);
+    var G__2795__2798 = G__2795__2796;
     while(true) {
-      node__5988.innerHTML = value;
-      var temp__3698__auto____5990 = cljs.core.next.call(null, G__5986__5989);
-      if(cljs.core.truth_(temp__3698__auto____5990)) {
-        var G__5986__5991 = temp__3698__auto____5990;
-        var G__5992 = cljs.core.first.call(null, G__5986__5991);
-        var G__5993 = G__5986__5991;
-        node__5988 = G__5992;
-        G__5986__5989 = G__5993;
+      node__2797.innerHTML = value;
+      var temp__3698__auto____2799 = cljs.core.next.call(null, G__2795__2798);
+      if(cljs.core.truth_(temp__3698__auto____2799)) {
+        var G__2795__2800 = temp__3698__auto____2799;
+        var G__2801 = cljs.core.first.call(null, G__2795__2800);
+        var G__2802 = G__2795__2800;
+        node__2797 = G__2801;
+        G__2795__2798 = G__2802;
         continue
       }else {
       }
@@ -20219,21 +14824,21 @@ domina.set_html_BANG_ = function set_html_BANG_(content, value) {
   return content
 };
 domina.apply_with_cloning = function apply_with_cloning(f, parent_content, child_content) {
-  var parents__5994 = domina.nodes.call(null, parent_content);
-  if(cljs.core.truth_(cljs.core.not.call(null, cljs.core.empty_QMARK_.call(null, parents__5994)))) {
-    var G__5995__5996 = cljs.core.seq.call(null, domina.nodes.call(null, child_content));
-    if(cljs.core.truth_(G__5995__5996)) {
-      var child__5997 = cljs.core.first.call(null, G__5995__5996);
-      var G__5995__5998 = G__5995__5996;
+  var parents__2803 = domina.nodes.call(null, parent_content);
+  if(cljs.core.truth_(cljs.core.not.call(null, cljs.core.empty_QMARK_.call(null, parents__2803)))) {
+    var G__2804__2805 = cljs.core.seq.call(null, domina.nodes.call(null, child_content));
+    if(cljs.core.truth_(G__2804__2805)) {
+      var child__2806 = cljs.core.first.call(null, G__2804__2805);
+      var G__2804__2807 = G__2804__2805;
       while(true) {
-        f.call(null, cljs.core.first.call(null, parents__5994), child__5997);
-        var temp__3698__auto____5999 = cljs.core.next.call(null, G__5995__5998);
-        if(cljs.core.truth_(temp__3698__auto____5999)) {
-          var G__5995__6000 = temp__3698__auto____5999;
-          var G__6013 = cljs.core.first.call(null, G__5995__6000);
-          var G__6014 = G__5995__6000;
-          child__5997 = G__6013;
-          G__5995__5998 = G__6014;
+        f.call(null, cljs.core.first.call(null, parents__2803), child__2806);
+        var temp__3698__auto____2808 = cljs.core.next.call(null, G__2804__2807);
+        if(cljs.core.truth_(temp__3698__auto____2808)) {
+          var G__2804__2809 = temp__3698__auto____2808;
+          var G__2822 = cljs.core.first.call(null, G__2804__2809);
+          var G__2823 = G__2804__2809;
+          child__2806 = G__2822;
+          G__2804__2807 = G__2823;
           continue
         }else {
         }
@@ -20241,24 +14846,24 @@ domina.apply_with_cloning = function apply_with_cloning(f, parent_content, child
       }
     }else {
     }
-    var G__6001__6003 = cljs.core.seq.call(null, cljs.core.rest.call(null, parents__5994));
-    if(cljs.core.truth_(G__6001__6003)) {
-      var parent__6004 = cljs.core.first.call(null, G__6001__6003);
-      var G__6001__6005 = G__6001__6003;
+    var G__2810__2812 = cljs.core.seq.call(null, cljs.core.rest.call(null, parents__2803));
+    if(cljs.core.truth_(G__2810__2812)) {
+      var parent__2813 = cljs.core.first.call(null, G__2810__2812);
+      var G__2810__2814 = G__2810__2812;
       while(true) {
-        var G__6002__6006 = cljs.core.seq.call(null, domina.nodes.call(null, domina.clone.call(null, child_content)));
-        if(cljs.core.truth_(G__6002__6006)) {
-          var child__6007 = cljs.core.first.call(null, G__6002__6006);
-          var G__6002__6008 = G__6002__6006;
+        var G__2811__2815 = cljs.core.seq.call(null, domina.nodes.call(null, domina.clone.call(null, child_content)));
+        if(cljs.core.truth_(G__2811__2815)) {
+          var child__2816 = cljs.core.first.call(null, G__2811__2815);
+          var G__2811__2817 = G__2811__2815;
           while(true) {
-            f.call(null, parent__6004, child__6007);
-            var temp__3698__auto____6009 = cljs.core.next.call(null, G__6002__6008);
-            if(cljs.core.truth_(temp__3698__auto____6009)) {
-              var G__6002__6010 = temp__3698__auto____6009;
-              var G__6015 = cljs.core.first.call(null, G__6002__6010);
-              var G__6016 = G__6002__6010;
-              child__6007 = G__6015;
-              G__6002__6008 = G__6016;
+            f.call(null, parent__2813, child__2816);
+            var temp__3698__auto____2818 = cljs.core.next.call(null, G__2811__2817);
+            if(cljs.core.truth_(temp__3698__auto____2818)) {
+              var G__2811__2819 = temp__3698__auto____2818;
+              var G__2824 = cljs.core.first.call(null, G__2811__2819);
+              var G__2825 = G__2811__2819;
+              child__2816 = G__2824;
+              G__2811__2817 = G__2825;
               continue
             }else {
             }
@@ -20266,13 +14871,13 @@ domina.apply_with_cloning = function apply_with_cloning(f, parent_content, child
           }
         }else {
         }
-        var temp__3698__auto____6011 = cljs.core.next.call(null, G__6001__6005);
-        if(cljs.core.truth_(temp__3698__auto____6011)) {
-          var G__6001__6012 = temp__3698__auto____6011;
-          var G__6017 = cljs.core.first.call(null, G__6001__6012);
-          var G__6018 = G__6001__6012;
-          parent__6004 = G__6017;
-          G__6001__6005 = G__6018;
+        var temp__3698__auto____2820 = cljs.core.next.call(null, G__2810__2814);
+        if(cljs.core.truth_(temp__3698__auto____2820)) {
+          var G__2810__2821 = temp__3698__auto____2820;
+          var G__2826 = cljs.core.first.call(null, G__2810__2821);
+          var G__2827 = G__2810__2821;
+          parent__2813 = G__2826;
+          G__2810__2814 = G__2827;
           continue
         }else {
           return null
@@ -20288,10 +14893,10 @@ domina.apply_with_cloning = function apply_with_cloning(f, parent_content, child
 };
 domina.lazy_nodelist = function() {
   var lazy_nodelist = null;
-  var lazy_nodelist__6019 = function(nl) {
+  var lazy_nodelist__2828 = function(nl) {
     return lazy_nodelist.call(null, nl, 0)
   };
-  var lazy_nodelist__6020 = function(nl, n) {
+  var lazy_nodelist__2829 = function(nl, n) {
     if(cljs.core.truth_(n < nl.length)) {
       return new cljs.core.LazySeq(null, false, function() {
         return cljs.core.cons.call(null, nl.item(n), lazy_nodelist.call(null, nl, n + 1))
@@ -20303,9 +14908,9 @@ domina.lazy_nodelist = function() {
   lazy_nodelist = function(nl, n) {
     switch(arguments.length) {
       case 1:
-        return lazy_nodelist__6019.call(this, nl);
+        return lazy_nodelist__2828.call(this, nl);
       case 2:
-        return lazy_nodelist__6020.call(this, nl, n)
+        return lazy_nodelist__2829.call(this, nl, n)
     }
     throw"Invalid arity: " + arguments.length;
   };
@@ -20338,27 +14943,27 @@ NodeList.prototype.cljs$core$ISeqable$_seq = function(nodelist) {
 };
 NodeList.prototype.cljs$core$IIndexed$ = true;
 NodeList.prototype.cljs$core$IIndexed$_nth = function() {
-  var G__6022 = null;
-  var G__6022__6023 = function(nodelist, n) {
+  var G__2831 = null;
+  var G__2831__2832 = function(nodelist, n) {
     return nodelist.item(n)
   };
-  var G__6022__6024 = function(nodelist, n, not_found) {
+  var G__2831__2833 = function(nodelist, n, not_found) {
     if(cljs.core.truth_(nodelist.length <= n)) {
       return not_found
     }else {
       return cljs.core.nth.call(null, nodelist, n)
     }
   };
-  G__6022 = function(nodelist, n, not_found) {
+  G__2831 = function(nodelist, n, not_found) {
     switch(arguments.length) {
       case 2:
-        return G__6022__6023.call(this, nodelist, n);
+        return G__2831__2832.call(this, nodelist, n);
       case 3:
-        return G__6022__6024.call(this, nodelist, n, not_found)
+        return G__2831__2833.call(this, nodelist, n, not_found)
     }
     throw"Invalid arity: " + arguments.length;
   };
-  return G__6022
+  return G__2831
 }();
 NodeList.prototype.cljs$core$ICounted$ = true;
 NodeList.prototype.cljs$core$ICounted$_count = function(nodelist) {
@@ -20370,27 +14975,27 @@ HTMLCollection.prototype.cljs$core$ISeqable$_seq = function(coll) {
 };
 HTMLCollection.prototype.cljs$core$IIndexed$ = true;
 HTMLCollection.prototype.cljs$core$IIndexed$_nth = function() {
-  var G__6026 = null;
-  var G__6026__6027 = function(coll, n) {
+  var G__2835 = null;
+  var G__2835__2836 = function(coll, n) {
     return coll.item(n)
   };
-  var G__6026__6028 = function(coll, n, not_found) {
+  var G__2835__2837 = function(coll, n, not_found) {
     if(cljs.core.truth_(coll.length <= n)) {
       return not_found
     }else {
       return cljs.core.nth.call(null, coll, n)
     }
   };
-  G__6026 = function(coll, n, not_found) {
+  G__2835 = function(coll, n, not_found) {
     switch(arguments.length) {
       case 2:
-        return G__6026__6027.call(this, coll, n);
+        return G__2835__2836.call(this, coll, n);
       case 3:
-        return G__6026__6028.call(this, coll, n, not_found)
+        return G__2835__2837.call(this, coll, n, not_found)
     }
     throw"Invalid arity: " + arguments.length;
   };
-  return G__6026
+  return G__2835
 }();
 HTMLCollection.prototype.cljs$core$ICounted$ = true;
 HTMLCollection.prototype.cljs$core$ICounted$_count = function(coll) {
@@ -20432,7 +15037,6 @@ goog.require("domina");
 goog.require("domina");
 goog.require("domina");
 goog.require("domina");
-goog.require("clojure.browser.repl");
 window["tryfn"] = function(f) {
   try {
     return f.call()
@@ -20448,11 +15052,11 @@ domina.test.run_test = function run_test(testfn) {
   return tryfn.call(null, testfn)
 };
 domina.test.run_tests = function run_tests() {
-  return cljs.core.map.call(null, function(p__4288) {
-    var vec__4289__4290 = p__4288;
-    var name__4291 = cljs.core.nth.call(null, vec__4289__4290, 0, null);
-    var testfn__4292 = cljs.core.nth.call(null, vec__4289__4290, 1, null);
-    return cljs.core.Vector.fromArray([name__4291, domina.test.run_test.call(null, testfn__4292)])
+  return cljs.core.map.call(null, function(p__2628) {
+    var vec__2629__2630 = p__2628;
+    var name__2631 = cljs.core.nth.call(null, vec__2629__2630, 0, null);
+    var testfn__2632 = cljs.core.nth.call(null, vec__2629__2630, 1, null);
+    return cljs.core.Vector.fromArray([name__2631, domina.test.run_test.call(null, testfn__2632)])
   }, cljs.core.deref.call(null, domina.test.tests))
 };
 domina.test.reset = function reset() {
@@ -20467,7 +15071,7 @@ domina.test.add_test.call(null, "basic xpath selection", function() {
   if(cljs.core.truth_(cljs.core._EQ_.call(null, 3, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.call(null, "//p")))))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 3, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p"), cljs.core.hash_map("\ufdd0'line", 52))), cljs.core.hash_map("\ufdd0'line", 52))), cljs.core.hash_map("\ufdd0'line", 52))), cljs.core.hash_map("\ufdd0'line", 52)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 3, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p"), cljs.core.hash_map("\ufdd0'line", 51))), cljs.core.hash_map("\ufdd0'line", 51))), cljs.core.hash_map("\ufdd0'line", 51))), cljs.core.hash_map("\ufdd0'line", 51)))));
   }
 });
 domina.test.add_test.call(null, "basic xpath selection (single node)", function() {
@@ -20476,7 +15080,7 @@ domina.test.add_test.call(null, "basic xpath selection (single node)", function(
   if(cljs.core.truth_(cljs.core.instance_QMARK_.call(null, Element, domina.single_node.call(null, domina.xpath.call(null, "//p"))))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'instance?", "\ufdd1'js/Element", cljs.core.with_meta(cljs.core.list("\ufdd1'single-node", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p"), cljs.core.hash_map("\ufdd0'line", 57))), cljs.core.hash_map("\ufdd0'line", 57))), cljs.core.hash_map("\ufdd0'line", 57)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'instance?", "\ufdd1'js/Element", cljs.core.with_meta(cljs.core.list("\ufdd1'single-node", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p"), cljs.core.hash_map("\ufdd0'line", 56))), cljs.core.hash_map("\ufdd0'line", 56))), cljs.core.hash_map("\ufdd0'line", 56)))));
   }
 });
 domina.test.add_test.call(null, "xpath selection with class specification", function() {
@@ -20485,7 +15089,7 @@ domina.test.add_test.call(null, "xpath selection with class specification", func
   if(cljs.core.truth_(cljs.core._EQ_.call(null, 1, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.call(null, "//div[@class='d1']")))))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 1, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[@class='d1']"), cljs.core.hash_map("\ufdd0'line", 62))), cljs.core.hash_map("\ufdd0'line", 62))), cljs.core.hash_map("\ufdd0'line", 62))), cljs.core.hash_map("\ufdd0'line", 62)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 1, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[@class='d1']"), cljs.core.hash_map("\ufdd0'line", 61))), cljs.core.hash_map("\ufdd0'line", 61))), cljs.core.hash_map("\ufdd0'line", 61))), cljs.core.hash_map("\ufdd0'line", 61)))));
   }
 });
 domina.test.add_test.call(null, "a relative xpath expression", function() {
@@ -20494,8 +15098,8 @@ domina.test.add_test.call(null, "a relative xpath expression", function() {
   if(cljs.core.truth_(cljs.core._EQ_.call(null, 3, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.call(null, domina.xpath.call(null, "//body/div[@class='d1']"), "p")))))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 3, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'->", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//body/div[@class='d1']"), cljs.core.hash_map("\ufdd0'line", 67)), cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "p"), cljs.core.hash_map("\ufdd0'line", 
-    68))), cljs.core.hash_map("\ufdd0'line", 67))), cljs.core.hash_map("\ufdd0'line", 67))), cljs.core.hash_map("\ufdd0'line", 67))), cljs.core.hash_map("\ufdd0'line", 67)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 3, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'->", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//body/div[@class='d1']"), cljs.core.hash_map("\ufdd0'line", 66)), cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "p"), cljs.core.hash_map("\ufdd0'line", 
+    67))), cljs.core.hash_map("\ufdd0'line", 66))), cljs.core.hash_map("\ufdd0'line", 66))), cljs.core.hash_map("\ufdd0'line", 66))), cljs.core.hash_map("\ufdd0'line", 66)))));
   }
 });
 domina.test.add_test.call(null, "extended selection chaining", function() {
@@ -20504,8 +15108,8 @@ domina.test.add_test.call(null, "extended selection chaining", function() {
   if(cljs.core.truth_(cljs.core._EQ_.call(null, 2, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.call(null, domina.xpath.call(null, domina.xpath.call(null, domina.xpath.call(null, "//body"), "div"), "p"), "span")))))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 2, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'->", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//body"), cljs.core.hash_map("\ufdd0'line", 74)), cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "div"), cljs.core.hash_map("\ufdd0'line", 75)), cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", 
-    "p"), cljs.core.hash_map("\ufdd0'line", 76)), cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "span"), cljs.core.hash_map("\ufdd0'line", 77))), cljs.core.hash_map("\ufdd0'line", 74))), cljs.core.hash_map("\ufdd0'line", 74))), cljs.core.hash_map("\ufdd0'line", 74))), cljs.core.hash_map("\ufdd0'line", 74)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 2, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'->", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//body"), cljs.core.hash_map("\ufdd0'line", 73)), cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "div"), cljs.core.hash_map("\ufdd0'line", 74)), cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", 
+    "p"), cljs.core.hash_map("\ufdd0'line", 75)), cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "span"), cljs.core.hash_map("\ufdd0'line", 76))), cljs.core.hash_map("\ufdd0'line", 73))), cljs.core.hash_map("\ufdd0'line", 73))), cljs.core.hash_map("\ufdd0'line", 73))), cljs.core.hash_map("\ufdd0'line", 73)))));
   }
 });
 domina.test.add_test.call(null, "advanced xpath", function() {
@@ -20514,7 +15118,7 @@ domina.test.add_test.call(null, "advanced xpath", function() {
   if(cljs.core.truth_(cljs.core._EQ_.call(null, 2, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.call(null, "//p[following-sibling::p[@class='p3']]")))))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 2, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p[following-sibling::p[@class='p3']]"), cljs.core.hash_map("\ufdd0'line", 81))), cljs.core.hash_map("\ufdd0'line", 81))), cljs.core.hash_map("\ufdd0'line", 81))), cljs.core.hash_map("\ufdd0'line", 81)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 2, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p[following-sibling::p[@class='p3']]"), cljs.core.hash_map("\ufdd0'line", 80))), cljs.core.hash_map("\ufdd0'line", 80))), cljs.core.hash_map("\ufdd0'line", 80))), cljs.core.hash_map("\ufdd0'line", 80)))));
   }
 });
 domina.test.add_test.call(null, "look up node by id", function() {
@@ -20523,7 +15127,7 @@ domina.test.add_test.call(null, "look up node by id", function() {
   if(cljs.core.truth_(cljs.core._EQ_.call(null, 1, cljs.core.count.call(null, domina.nodes.call(null, domina.by_id.call(null, "id1")))))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 1, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'by-id", "id1"), cljs.core.hash_map("\ufdd0'line", 86))), cljs.core.hash_map("\ufdd0'line", 86))), cljs.core.hash_map("\ufdd0'line", 86))), cljs.core.hash_map("\ufdd0'line", 86)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 1, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'by-id", "id1"), cljs.core.hash_map("\ufdd0'line", 85))), cljs.core.hash_map("\ufdd0'line", 85))), cljs.core.hash_map("\ufdd0'line", 85))), cljs.core.hash_map("\ufdd0'line", 85)))));
   }
 });
 domina.test.add_test.call(null, "look up nodes by class", function() {
@@ -20532,7 +15136,7 @@ domina.test.add_test.call(null, "look up nodes by class", function() {
   if(cljs.core.truth_(cljs.core._EQ_.call(null, 1, cljs.core.count.call(null, domina.nodes.call(null, domina.by_class.call(null, "p3")))))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 1, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'by-class", "p3"), cljs.core.hash_map("\ufdd0'line", 91))), cljs.core.hash_map("\ufdd0'line", 91))), cljs.core.hash_map("\ufdd0'line", 91))), cljs.core.hash_map("\ufdd0'line", 91)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 1, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'by-class", "p3"), cljs.core.hash_map("\ufdd0'line", 90))), cljs.core.hash_map("\ufdd0'line", 90))), cljs.core.hash_map("\ufdd0'line", 90))), cljs.core.hash_map("\ufdd0'line", 90)))));
   }
 });
 domina.test.add_test.call(null, "child selection", function() {
@@ -20541,7 +15145,7 @@ domina.test.add_test.call(null, "child selection", function() {
   if(cljs.core.truth_(cljs.core._EQ_.call(null, 3, cljs.core.count.call(null, domina.children.call(null, domina.xpath.call(null, "//div[@class='d1']")))))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 3, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'children", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[@class='d1']"), cljs.core.hash_map("\ufdd0'line", 96))), cljs.core.hash_map("\ufdd0'line", 96))), cljs.core.hash_map("\ufdd0'line", 96))), cljs.core.hash_map("\ufdd0'line", 96)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 3, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'children", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[@class='d1']"), cljs.core.hash_map("\ufdd0'line", 95))), cljs.core.hash_map("\ufdd0'line", 95))), cljs.core.hash_map("\ufdd0'line", 95))), cljs.core.hash_map("\ufdd0'line", 95)))));
   }
 });
 domina.test.add_test.call(null, "clone a single node", function() {
@@ -20550,8 +15154,8 @@ domina.test.add_test.call(null, "clone a single node", function() {
   if(cljs.core.truth_(cljs.core._EQ_.call(null, 1, cljs.core.count.call(null, domina.clone.call(null, domina.single_node.call(null, domina.xpath.call(null, "//p"))))))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 1, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'clone", cljs.core.with_meta(cljs.core.list("\ufdd1'single-node", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p"), cljs.core.hash_map("\ufdd0'line", 101))), cljs.core.hash_map("\ufdd0'line", 101))), cljs.core.hash_map("\ufdd0'line", 101))), cljs.core.hash_map("\ufdd0'line", 
-    101))), cljs.core.hash_map("\ufdd0'line", 101)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 1, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'clone", cljs.core.with_meta(cljs.core.list("\ufdd1'single-node", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p"), cljs.core.hash_map("\ufdd0'line", 100))), cljs.core.hash_map("\ufdd0'line", 100))), cljs.core.hash_map("\ufdd0'line", 100))), cljs.core.hash_map("\ufdd0'line", 
+    100))), cljs.core.hash_map("\ufdd0'line", 100)))));
   }
 });
 domina.test.add_test.call(null, "clone multiple nodes", function() {
@@ -20560,8 +15164,8 @@ domina.test.add_test.call(null, "clone multiple nodes", function() {
   if(cljs.core.truth_(cljs.core._EQ_.call(null, 3, cljs.core.count.call(null, domina.clone.call(null, domina.nodes.call(null, domina.xpath.call(null, "//p"))))))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 3, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'clone", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p"), cljs.core.hash_map("\ufdd0'line", 106))), cljs.core.hash_map("\ufdd0'line", 106))), cljs.core.hash_map("\ufdd0'line", 106))), cljs.core.hash_map("\ufdd0'line", 
-    106))), cljs.core.hash_map("\ufdd0'line", 106)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 3, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'clone", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p"), cljs.core.hash_map("\ufdd0'line", 105))), cljs.core.hash_map("\ufdd0'line", 105))), cljs.core.hash_map("\ufdd0'line", 105))), cljs.core.hash_map("\ufdd0'line", 
+    105))), cljs.core.hash_map("\ufdd0'line", 105)))));
   }
 });
 domina.test.add_test.call(null, "append a single child to a single parent", function() {
@@ -20570,7 +15174,7 @@ domina.test.add_test.call(null, "append a single child to a single parent", func
   if(cljs.core.truth_(cljs.core._EQ_.call(null, 1, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.call(null, "//body/p[@class='appended1']")))))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 1, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//body/p[@class='appended1']"), cljs.core.hash_map("\ufdd0'line", 112))), cljs.core.hash_map("\ufdd0'line", 112))), cljs.core.hash_map("\ufdd0'line", 112))), cljs.core.hash_map("\ufdd0'line", 112)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 1, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//body/p[@class='appended1']"), cljs.core.hash_map("\ufdd0'line", 111))), cljs.core.hash_map("\ufdd0'line", 111))), cljs.core.hash_map("\ufdd0'line", 111))), cljs.core.hash_map("\ufdd0'line", 111)))));
   }
 });
 domina.test.add_test.call(null, "append multiple children to a single parent", function() {
@@ -20579,7 +15183,7 @@ domina.test.add_test.call(null, "append multiple children to a single parent", f
   if(cljs.core.truth_(cljs.core._EQ_.call(null, 2, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.call(null, "//body/p[@class='appended2']")))))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 2, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//body/p[@class='appended2']"), cljs.core.hash_map("\ufdd0'line", 118))), cljs.core.hash_map("\ufdd0'line", 118))), cljs.core.hash_map("\ufdd0'line", 118))), cljs.core.hash_map("\ufdd0'line", 118)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 2, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//body/p[@class='appended2']"), cljs.core.hash_map("\ufdd0'line", 117))), cljs.core.hash_map("\ufdd0'line", 117))), cljs.core.hash_map("\ufdd0'line", 117))), cljs.core.hash_map("\ufdd0'line", 117)))));
   }
 });
 domina.test.add_test.call(null, "append a single child to multiple parents", function() {
@@ -20589,7 +15193,7 @@ domina.test.add_test.call(null, "append a single child to multiple parents", fun
   if(cljs.core.truth_(cljs.core._EQ_.call(null, 3, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.call(null, "//div/p/span")))))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 3, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div/p/span"), cljs.core.hash_map("\ufdd0'line", 125))), cljs.core.hash_map("\ufdd0'line", 125))), cljs.core.hash_map("\ufdd0'line", 125))), cljs.core.hash_map("\ufdd0'line", 125)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 3, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div/p/span"), cljs.core.hash_map("\ufdd0'line", 124))), cljs.core.hash_map("\ufdd0'line", 124))), cljs.core.hash_map("\ufdd0'line", 124))), cljs.core.hash_map("\ufdd0'line", 124)))));
   }
 });
 domina.test.add_test.call(null, "append multiple children to multiple parents", function() {
@@ -20598,12 +15202,12 @@ domina.test.add_test.call(null, "append multiple children to multiple parents", 
   domina.append_BANG_.call(null, domina.xpath.call(null, "//body/div/p"), "some <span class='foo'>more</span> text");
   if(cljs.core.truth_(cljs.core._EQ_.call(null, 3, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.call(null, "//div/p/span[@class='foo']")))))) {
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 3, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div/p/span[@class='foo']"), cljs.core.hash_map("\ufdd0'line", 132))), cljs.core.hash_map("\ufdd0'line", 132))), cljs.core.hash_map("\ufdd0'line", 132))), cljs.core.hash_map("\ufdd0'line", 132)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 3, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div/p/span[@class='foo']"), cljs.core.hash_map("\ufdd0'line", 131))), cljs.core.hash_map("\ufdd0'line", 131))), cljs.core.hash_map("\ufdd0'line", 131))), cljs.core.hash_map("\ufdd0'line", 131)))));
   }
   if(cljs.core.truth_(cljs.core._EQ_.call(null, 9, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.call(null, "//div/p/text()")))))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 9, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div/p/text()"), cljs.core.hash_map("\ufdd0'line", 133))), cljs.core.hash_map("\ufdd0'line", 133))), cljs.core.hash_map("\ufdd0'line", 133))), cljs.core.hash_map("\ufdd0'line", 133)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 9, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div/p/text()"), cljs.core.hash_map("\ufdd0'line", 132))), cljs.core.hash_map("\ufdd0'line", 132))), cljs.core.hash_map("\ufdd0'line", 132))), cljs.core.hash_map("\ufdd0'line", 132)))));
   }
 });
 domina.test.add_test.call(null, "prepend a single child to a single parent", function() {
@@ -20612,16 +15216,16 @@ domina.test.add_test.call(null, "prepend a single child to a single parent", fun
   domina.prepend_BANG_.call(null, domina.xpath.call(null, "//body"), "<div>1</div>");
   if(cljs.core.truth_(cljs.core._EQ_.call(null, "1", domina.text.call(null, domina.xpath.call(null, "//body/div[1]"))))) {
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "1", cljs.core.with_meta(cljs.core.list("\ufdd1'text", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//body/div[1]"), cljs.core.hash_map("\ufdd0'line", 139))), cljs.core.hash_map("\ufdd0'line", 139))), cljs.core.hash_map("\ufdd0'line", 139)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "1", cljs.core.with_meta(cljs.core.list("\ufdd1'text", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//body/div[1]"), cljs.core.hash_map("\ufdd0'line", 138))), cljs.core.hash_map("\ufdd0'line", 138))), cljs.core.hash_map("\ufdd0'line", 138)))));
   }
   if(cljs.core.truth_(cljs.core._EQ_.call(null, "2", domina.text.call(null, domina.xpath.call(null, "//body/div[2]"))))) {
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "2", cljs.core.with_meta(cljs.core.list("\ufdd1'text", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//body/div[2]"), cljs.core.hash_map("\ufdd0'line", 140))), cljs.core.hash_map("\ufdd0'line", 140))), cljs.core.hash_map("\ufdd0'line", 140)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "2", cljs.core.with_meta(cljs.core.list("\ufdd1'text", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//body/div[2]"), cljs.core.hash_map("\ufdd0'line", 139))), cljs.core.hash_map("\ufdd0'line", 139))), cljs.core.hash_map("\ufdd0'line", 139)))));
   }
   if(cljs.core.truth_(cljs.core._EQ_.call(null, "3", domina.text.call(null, domina.xpath.call(null, "//body/div[3]"))))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "3", cljs.core.with_meta(cljs.core.list("\ufdd1'text", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//body/div[3]"), cljs.core.hash_map("\ufdd0'line", 141))), cljs.core.hash_map("\ufdd0'line", 141))), cljs.core.hash_map("\ufdd0'line", 141)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "3", cljs.core.with_meta(cljs.core.list("\ufdd1'text", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//body/div[3]"), cljs.core.hash_map("\ufdd0'line", 140))), cljs.core.hash_map("\ufdd0'line", 140))), cljs.core.hash_map("\ufdd0'line", 140)))));
   }
 });
 domina.test.add_test.call(null, "prepend a single child to multiple parents", function() {
@@ -20631,7 +15235,7 @@ domina.test.add_test.call(null, "prepend a single child to multiple parents", fu
   if(cljs.core.truth_(cljs.core._EQ_.call(null, 2, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.call(null, "//body/div/p[text()='2']")))))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 2, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//body/div/p[text()='2']"), cljs.core.hash_map("\ufdd0'line", 147))), cljs.core.hash_map("\ufdd0'line", 147))), cljs.core.hash_map("\ufdd0'line", 147))), cljs.core.hash_map("\ufdd0'line", 147)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 2, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//body/div/p[text()='2']"), cljs.core.hash_map("\ufdd0'line", 146))), cljs.core.hash_map("\ufdd0'line", 146))), cljs.core.hash_map("\ufdd0'line", 146))), cljs.core.hash_map("\ufdd0'line", 146)))));
   }
 });
 domina.test.add_test.call(null, "Insert a single child to a single parent", function() {
@@ -20642,16 +15246,16 @@ domina.test.add_test.call(null, "Insert a single child to a single parent", func
   domina.insert_BANG_.call(null, domina.xpath.call(null, "//div[@class='testInserts']"), "<p class='i2'></p>", 1);
   if(cljs.core.truth_(cljs.core._EQ_.call(null, 3, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.call(null, "//div[@class='testInserts']/p")))))) {
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 3, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[@class='testInserts']/p"), cljs.core.hash_map("\ufdd0'line", 159))), cljs.core.hash_map("\ufdd0'line", 159))), cljs.core.hash_map("\ufdd0'line", 159))), cljs.core.hash_map("\ufdd0'line", 159)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 3, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[@class='testInserts']/p"), cljs.core.hash_map("\ufdd0'line", 158))), cljs.core.hash_map("\ufdd0'line", 158))), cljs.core.hash_map("\ufdd0'line", 158))), cljs.core.hash_map("\ufdd0'line", 158)))));
   }
   if(cljs.core.truth_(cljs.core._EQ_.call(null, 1, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.call(null, "//p[@class='i2']/preceding-sibling::*")))))) {
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 1, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p[@class='i2']/preceding-sibling::*"), cljs.core.hash_map("\ufdd0'line", 160))), cljs.core.hash_map("\ufdd0'line", 160))), cljs.core.hash_map("\ufdd0'line", 160))), cljs.core.hash_map("\ufdd0'line", 160)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 1, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p[@class='i2']/preceding-sibling::*"), cljs.core.hash_map("\ufdd0'line", 159))), cljs.core.hash_map("\ufdd0'line", 159))), cljs.core.hash_map("\ufdd0'line", 159))), cljs.core.hash_map("\ufdd0'line", 159)))));
   }
   if(cljs.core.truth_(cljs.core._EQ_.call(null, 1, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.call(null, "//p[@class='i2']/following-sibling::*")))))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 1, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p[@class='i2']/following-sibling::*"), cljs.core.hash_map("\ufdd0'line", 161))), cljs.core.hash_map("\ufdd0'line", 161))), cljs.core.hash_map("\ufdd0'line", 161))), cljs.core.hash_map("\ufdd0'line", 161)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 1, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p[@class='i2']/following-sibling::*"), cljs.core.hash_map("\ufdd0'line", 160))), cljs.core.hash_map("\ufdd0'line", 160))), cljs.core.hash_map("\ufdd0'line", 160))), cljs.core.hash_map("\ufdd0'line", 160)))));
   }
 });
 domina.test.add_test.call(null, "Insert a single child to multiple parents", function() {
@@ -20661,32 +15265,32 @@ domina.test.add_test.call(null, "Insert a single child to multiple parents", fun
   domina.append_BANG_.call(null, domina.xpath.call(null, "//div[@class='testInserts']"), "<p class='i1'></p>");
   domina.append_BANG_.call(null, domina.xpath.call(null, "//div[@class='testInserts']"), "<p class='i3'></p>");
   domina.insert_BANG_.call(null, domina.xpath.call(null, "//div[@class='testInserts']"), "<p class='i2'></p>", 1);
-  var G__4293__4294 = cljs.core.seq.call(null, cljs.core.Vector.fromArray([domina.xpath.call(null, "//div[@id='testInsert1']"), domina.xpath.call(null, "//div[@id='testInsert2']")]));
-  if(cljs.core.truth_(G__4293__4294)) {
-    var children__4295 = cljs.core.first.call(null, G__4293__4294);
-    var G__4293__4296 = G__4293__4294;
+  var G__2633__2634 = cljs.core.seq.call(null, cljs.core.Vector.fromArray([domina.xpath.call(null, "//div[@id='testInsert1']"), domina.xpath.call(null, "//div[@id='testInsert2']")]));
+  if(cljs.core.truth_(G__2633__2634)) {
+    var children__2635 = cljs.core.first.call(null, G__2633__2634);
+    var G__2633__2636 = G__2633__2634;
     while(true) {
-      if(cljs.core.truth_(cljs.core._EQ_.call(null, 3, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.call(null, children__4295, "p")))))) {
+      if(cljs.core.truth_(cljs.core._EQ_.call(null, 3, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.call(null, children__2635, "p")))))) {
       }else {
-        throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 3, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "\ufdd1'children", "p"), cljs.core.hash_map("\ufdd0'line", 177))), cljs.core.hash_map("\ufdd0'line", 177))), cljs.core.hash_map("\ufdd0'line", 177))), cljs.core.hash_map("\ufdd0'line", 177)))));
+        throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 3, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "\ufdd1'children", "p"), cljs.core.hash_map("\ufdd0'line", 176))), cljs.core.hash_map("\ufdd0'line", 176))), cljs.core.hash_map("\ufdd0'line", 176))), cljs.core.hash_map("\ufdd0'line", 176)))));
       }
-      if(cljs.core.truth_(cljs.core._EQ_.call(null, 1, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.call(null, children__4295, "p[@class='i2']/preceding-sibling::*")))))) {
+      if(cljs.core.truth_(cljs.core._EQ_.call(null, 1, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.call(null, children__2635, "p[@class='i2']/preceding-sibling::*")))))) {
       }else {
-        throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 1, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "\ufdd1'children", "p[@class='i2']/preceding-sibling::*"), cljs.core.hash_map("\ufdd0'line", 178))), cljs.core.hash_map("\ufdd0'line", 178))), cljs.core.hash_map("\ufdd0'line", 178))), cljs.core.hash_map("\ufdd0'line", 
-        178)))));
+        throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 1, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "\ufdd1'children", "p[@class='i2']/preceding-sibling::*"), cljs.core.hash_map("\ufdd0'line", 177))), cljs.core.hash_map("\ufdd0'line", 177))), cljs.core.hash_map("\ufdd0'line", 177))), cljs.core.hash_map("\ufdd0'line", 
+        177)))));
       }
-      if(cljs.core.truth_(cljs.core._EQ_.call(null, 1, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.call(null, children__4295, "p[@class='i2']/following-sibling::*")))))) {
+      if(cljs.core.truth_(cljs.core._EQ_.call(null, 1, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.call(null, children__2635, "p[@class='i2']/following-sibling::*")))))) {
       }else {
-        throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 1, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "\ufdd1'children", "p[@class='i2']/following-sibling::*"), cljs.core.hash_map("\ufdd0'line", 180))), cljs.core.hash_map("\ufdd0'line", 180))), cljs.core.hash_map("\ufdd0'line", 180))), cljs.core.hash_map("\ufdd0'line", 
-        180)))));
+        throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 1, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "\ufdd1'children", "p[@class='i2']/following-sibling::*"), cljs.core.hash_map("\ufdd0'line", 179))), cljs.core.hash_map("\ufdd0'line", 179))), cljs.core.hash_map("\ufdd0'line", 179))), cljs.core.hash_map("\ufdd0'line", 
+        179)))));
       }
-      var temp__3698__auto____4297 = cljs.core.next.call(null, G__4293__4296);
-      if(cljs.core.truth_(temp__3698__auto____4297)) {
-        var G__4293__4298 = temp__3698__auto____4297;
-        var G__4299 = cljs.core.first.call(null, G__4293__4298);
-        var G__4300 = G__4293__4298;
-        children__4295 = G__4299;
-        G__4293__4296 = G__4300;
+      var temp__3698__auto____2637 = cljs.core.next.call(null, G__2633__2636);
+      if(cljs.core.truth_(temp__3698__auto____2637)) {
+        var G__2633__2638 = temp__3698__auto____2637;
+        var G__2639 = cljs.core.first.call(null, G__2633__2638);
+        var G__2640 = G__2633__2638;
+        children__2635 = G__2639;
+        G__2633__2636 = G__2640;
         continue
       }else {
         return null
@@ -20702,13 +15306,13 @@ domina.test.add_test.call(null, "destroy a single node", function() {
   domina.append_BANG_.call(null, domina.xpath.call(null, "//body"), "<p class='appended1'>app1</p>");
   if(cljs.core.truth_(cljs.core._EQ_.call(null, 1, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.call(null, "//body/p[@class='appended1']")))))) {
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 1, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//body/p[@class='appended1']"), cljs.core.hash_map("\ufdd0'line", 186))), cljs.core.hash_map("\ufdd0'line", 186))), cljs.core.hash_map("\ufdd0'line", 186))), cljs.core.hash_map("\ufdd0'line", 186)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 1, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//body/p[@class='appended1']"), cljs.core.hash_map("\ufdd0'line", 185))), cljs.core.hash_map("\ufdd0'line", 185))), cljs.core.hash_map("\ufdd0'line", 185))), cljs.core.hash_map("\ufdd0'line", 185)))));
   }
   domina.destroy_BANG_.call(null, domina.xpath.call(null, "//body/p[@class='appended1']"));
   if(cljs.core.truth_(cljs.core._EQ_.call(null, 0, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.call(null, "//body/p[@class='appended1']")))))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 0, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//body/p[@class='appended1']"), cljs.core.hash_map("\ufdd0'line", 188))), cljs.core.hash_map("\ufdd0'line", 188))), cljs.core.hash_map("\ufdd0'line", 188))), cljs.core.hash_map("\ufdd0'line", 188)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 0, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//body/p[@class='appended1']"), cljs.core.hash_map("\ufdd0'line", 187))), cljs.core.hash_map("\ufdd0'line", 187))), cljs.core.hash_map("\ufdd0'line", 187))), cljs.core.hash_map("\ufdd0'line", 187)))));
   }
 });
 domina.test.add_test.call(null, "destroy multiple nodes", function() {
@@ -20716,43 +15320,43 @@ domina.test.add_test.call(null, "destroy multiple nodes", function() {
   domina.append_BANG_.call(null, domina.xpath.call(null, "//body"), "<p class='appended2'>app1</p><p class='appended2'>app2</p>");
   if(cljs.core.truth_(cljs.core._EQ_.call(null, 2, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.call(null, "//body/p[@class='appended2']")))))) {
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 2, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//body/p[@class='appended2']"), cljs.core.hash_map("\ufdd0'line", 194))), cljs.core.hash_map("\ufdd0'line", 194))), cljs.core.hash_map("\ufdd0'line", 194))), cljs.core.hash_map("\ufdd0'line", 194)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 2, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//body/p[@class='appended2']"), cljs.core.hash_map("\ufdd0'line", 193))), cljs.core.hash_map("\ufdd0'line", 193))), cljs.core.hash_map("\ufdd0'line", 193))), cljs.core.hash_map("\ufdd0'line", 193)))));
   }
   domina.destroy_BANG_.call(null, domina.xpath.call(null, "//body/p[@class='appended2']"));
   if(cljs.core.truth_(cljs.core._EQ_.call(null, 0, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.call(null, "//body/p[@class='appended2']")))))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 0, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//body/p[@class='appended2']"), cljs.core.hash_map("\ufdd0'line", 196))), cljs.core.hash_map("\ufdd0'line", 196))), cljs.core.hash_map("\ufdd0'line", 196))), cljs.core.hash_map("\ufdd0'line", 196)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 0, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//body/p[@class='appended2']"), cljs.core.hash_map("\ufdd0'line", 195))), cljs.core.hash_map("\ufdd0'line", 195))), cljs.core.hash_map("\ufdd0'line", 195))), cljs.core.hash_map("\ufdd0'line", 195)))));
   }
 });
 domina.test.add_test.call(null, "detach and reattach a single node", function() {
   domina.test.reset.call(null);
   domina.test.standard_fixture.call(null);
-  var n__4301 = domina.detach_BANG_.call(null, domina.xpath.call(null, "//p[@class='p3']"));
+  var n__2641 = domina.detach_BANG_.call(null, domina.xpath.call(null, "//p[@class='p3']"));
   if(cljs.core.truth_(cljs.core._EQ_.call(null, 0, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.call(null, "//p[@class='p3']")))))) {
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 0, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p[@class='p3']"), cljs.core.hash_map("\ufdd0'line", 202))), cljs.core.hash_map("\ufdd0'line", 202))), cljs.core.hash_map("\ufdd0'line", 202))), cljs.core.hash_map("\ufdd0'line", 202)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 0, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p[@class='p3']"), cljs.core.hash_map("\ufdd0'line", 201))), cljs.core.hash_map("\ufdd0'line", 201))), cljs.core.hash_map("\ufdd0'line", 201))), cljs.core.hash_map("\ufdd0'line", 201)))));
   }
-  domina.append_BANG_.call(null, domina.xpath.call(null, "//div[@class='d1']"), n__4301);
+  domina.append_BANG_.call(null, domina.xpath.call(null, "//div[@class='d1']"), n__2641);
   if(cljs.core.truth_(cljs.core._EQ_.call(null, 1, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.call(null, "//p[@class='p3']")))))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 1, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p[@class='p3']"), cljs.core.hash_map("\ufdd0'line", 204))), cljs.core.hash_map("\ufdd0'line", 204))), cljs.core.hash_map("\ufdd0'line", 204))), cljs.core.hash_map("\ufdd0'line", 204)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 1, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p[@class='p3']"), cljs.core.hash_map("\ufdd0'line", 203))), cljs.core.hash_map("\ufdd0'line", 203))), cljs.core.hash_map("\ufdd0'line", 203))), cljs.core.hash_map("\ufdd0'line", 203)))));
   }
 });
 domina.test.add_test.call(null, "detach and reattach multiple nodes", function() {
   domina.test.reset.call(null);
   domina.test.standard_fixture.call(null);
-  var n__4302 = domina.detach_BANG_.call(null, domina.xpath.call(null, "//div[@class='d1']/p"));
+  var n__2642 = domina.detach_BANG_.call(null, domina.xpath.call(null, "//div[@class='d1']/p"));
   if(cljs.core.truth_(cljs.core._EQ_.call(null, 0, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.call(null, "//div[@class='d1']/p")))))) {
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 0, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[@class='d1']/p"), cljs.core.hash_map("\ufdd0'line", 210))), cljs.core.hash_map("\ufdd0'line", 210))), cljs.core.hash_map("\ufdd0'line", 210))), cljs.core.hash_map("\ufdd0'line", 210)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 0, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[@class='d1']/p"), cljs.core.hash_map("\ufdd0'line", 209))), cljs.core.hash_map("\ufdd0'line", 209))), cljs.core.hash_map("\ufdd0'line", 209))), cljs.core.hash_map("\ufdd0'line", 209)))));
   }
-  domina.append_BANG_.call(null, domina.xpath.call(null, "//div[@class='d1']"), n__4302);
+  domina.append_BANG_.call(null, domina.xpath.call(null, "//div[@class='d1']"), n__2642);
   if(cljs.core.truth_(cljs.core._EQ_.call(null, 3, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.call(null, "//div[@class='d1']/p")))))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 3, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[@class='d1']/p"), cljs.core.hash_map("\ufdd0'line", 212))), cljs.core.hash_map("\ufdd0'line", 212))), cljs.core.hash_map("\ufdd0'line", 212))), cljs.core.hash_map("\ufdd0'line", 212)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 3, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[@class='d1']/p"), cljs.core.hash_map("\ufdd0'line", 211))), cljs.core.hash_map("\ufdd0'line", 211))), cljs.core.hash_map("\ufdd0'line", 211))), cljs.core.hash_map("\ufdd0'line", 211)))));
   }
 });
 domina.test.add_test.call(null, "clear a node's contents", function() {
@@ -20761,12 +15365,12 @@ domina.test.add_test.call(null, "clear a node's contents", function() {
   domina.destroy_children_BANG_.call(null, domina.xpath.call(null, "//div[@class='d1']"));
   if(cljs.core.truth_(cljs.core._EQ_.call(null, 1, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.call(null, "//div[@class='d1']")))))) {
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 1, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[@class='d1']"), cljs.core.hash_map("\ufdd0'line", 218))), cljs.core.hash_map("\ufdd0'line", 218))), cljs.core.hash_map("\ufdd0'line", 218))), cljs.core.hash_map("\ufdd0'line", 218)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 1, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[@class='d1']"), cljs.core.hash_map("\ufdd0'line", 217))), cljs.core.hash_map("\ufdd0'line", 217))), cljs.core.hash_map("\ufdd0'line", 217))), cljs.core.hash_map("\ufdd0'line", 217)))));
   }
   if(cljs.core.truth_(cljs.core._EQ_.call(null, 0, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.call(null, "//div[@class='d1']/*")))))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 0, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[@class='d1']/*"), cljs.core.hash_map("\ufdd0'line", 219))), cljs.core.hash_map("\ufdd0'line", 219))), cljs.core.hash_map("\ufdd0'line", 219))), cljs.core.hash_map("\ufdd0'line", 219)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 0, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[@class='d1']/*"), cljs.core.hash_map("\ufdd0'line", 218))), cljs.core.hash_map("\ufdd0'line", 218))), cljs.core.hash_map("\ufdd0'line", 218))), cljs.core.hash_map("\ufdd0'line", 218)))));
   }
 });
 domina.test.add_test.call(null, "insert-before! with a single reference and single new node", function() {
@@ -20776,8 +15380,8 @@ domina.test.add_test.call(null, "insert-before! with a single reference and sing
   if(cljs.core.truth_(cljs.core._EQ_.call(null, 1, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.call(null, "//div[@id='ref']/preceding-sibling::*[text()='before']")))))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 1, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[@id='ref']/preceding-sibling::*[text()='before']"), cljs.core.hash_map("\ufdd0'line", 225))), cljs.core.hash_map("\ufdd0'line", 225))), cljs.core.hash_map("\ufdd0'line", 225))), cljs.core.hash_map("\ufdd0'line", 
-    225)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 1, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[@id='ref']/preceding-sibling::*[text()='before']"), cljs.core.hash_map("\ufdd0'line", 224))), cljs.core.hash_map("\ufdd0'line", 224))), cljs.core.hash_map("\ufdd0'line", 224))), cljs.core.hash_map("\ufdd0'line", 
+    224)))));
   }
 });
 domina.test.add_test.call(null, "insert-before! with a single reference and multiple new nodes", function() {
@@ -20786,14 +15390,14 @@ domina.test.add_test.call(null, "insert-before! with a single reference and mult
   domina.insert_before_BANG_.call(null, domina.nodes.call(null, domina.by_id.call(null, "ref")), "<p>before1</p><p>before2</p>");
   if(cljs.core.truth_(cljs.core._EQ_.call(null, 1, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.call(null, "//div[@id='ref']/preceding-sibling::*[text()='before2' and position()=1]")))))) {
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 1, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[@id='ref']/preceding-sibling::*[text()='before2' and position()=1]"), cljs.core.hash_map("\ufdd0'line", 231))), cljs.core.hash_map("\ufdd0'line", 231))), cljs.core.hash_map("\ufdd0'line", 231))), cljs.core.hash_map("\ufdd0'line", 
-    231)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 1, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[@id='ref']/preceding-sibling::*[text()='before2' and position()=1]"), cljs.core.hash_map("\ufdd0'line", 230))), cljs.core.hash_map("\ufdd0'line", 230))), cljs.core.hash_map("\ufdd0'line", 230))), cljs.core.hash_map("\ufdd0'line", 
+    230)))));
   }
   if(cljs.core.truth_(cljs.core._EQ_.call(null, 1, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.call(null, "//div[@id='ref']/preceding-sibling::*[text()='before1' and position()=2]")))))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 1, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[@id='ref']/preceding-sibling::*[text()='before1' and position()=2]"), cljs.core.hash_map("\ufdd0'line", 232))), cljs.core.hash_map("\ufdd0'line", 232))), cljs.core.hash_map("\ufdd0'line", 232))), cljs.core.hash_map("\ufdd0'line", 
-    232)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 1, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[@id='ref']/preceding-sibling::*[text()='before1' and position()=2]"), cljs.core.hash_map("\ufdd0'line", 231))), cljs.core.hash_map("\ufdd0'line", 231))), cljs.core.hash_map("\ufdd0'line", 231))), cljs.core.hash_map("\ufdd0'line", 
+    231)))));
   }
 });
 domina.test.add_test.call(null, "insert-before! with multiple reference nodes and a single new node", function() {
@@ -20803,16 +15407,16 @@ domina.test.add_test.call(null, "insert-before! with multiple reference nodes an
   domina.insert_before_BANG_.call(null, domina.nodes.call(null, domina.by_class.call(null, "ref")), "<p>before</p>");
   if(cljs.core.truth_(cljs.core._EQ_.call(null, 2, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.call(null, "//p")))))) {
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 2, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p"), cljs.core.hash_map("\ufdd0'line", 239))), cljs.core.hash_map("\ufdd0'line", 239))), cljs.core.hash_map("\ufdd0'line", 239))), cljs.core.hash_map("\ufdd0'line", 239)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 2, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p"), cljs.core.hash_map("\ufdd0'line", 238))), cljs.core.hash_map("\ufdd0'line", 238))), cljs.core.hash_map("\ufdd0'line", 238))), cljs.core.hash_map("\ufdd0'line", 238)))));
   }
   if(cljs.core.truth_(cljs.core._EQ_.call(null, 1, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.call(null, "//div[@id='ref1']/preceding-sibling::p")))))) {
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 1, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[@id='ref1']/preceding-sibling::p"), cljs.core.hash_map("\ufdd0'line", 240))), cljs.core.hash_map("\ufdd0'line", 240))), cljs.core.hash_map("\ufdd0'line", 240))), cljs.core.hash_map("\ufdd0'line", 240)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 1, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[@id='ref1']/preceding-sibling::p"), cljs.core.hash_map("\ufdd0'line", 239))), cljs.core.hash_map("\ufdd0'line", 239))), cljs.core.hash_map("\ufdd0'line", 239))), cljs.core.hash_map("\ufdd0'line", 239)))));
   }
   if(cljs.core.truth_(cljs.core._EQ_.call(null, 2, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.call(null, "//div[@id='ref2']/preceding-sibling::p")))))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 2, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[@id='ref2']/preceding-sibling::p"), cljs.core.hash_map("\ufdd0'line", 241))), cljs.core.hash_map("\ufdd0'line", 241))), cljs.core.hash_map("\ufdd0'line", 241))), cljs.core.hash_map("\ufdd0'line", 241)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 2, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[@id='ref2']/preceding-sibling::p"), cljs.core.hash_map("\ufdd0'line", 240))), cljs.core.hash_map("\ufdd0'line", 240))), cljs.core.hash_map("\ufdd0'line", 240))), cljs.core.hash_map("\ufdd0'line", 240)))));
   }
 });
 domina.test.add_test.call(null, "insert-after! with a single reference and single new node", function() {
@@ -20822,8 +15426,8 @@ domina.test.add_test.call(null, "insert-after! with a single reference and singl
   if(cljs.core.truth_(cljs.core._EQ_.call(null, 1, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.call(null, "//div[@id='ref']/following-sibling::*[text()='after']")))))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 1, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[@id='ref']/following-sibling::*[text()='after']"), cljs.core.hash_map("\ufdd0'line", 248))), cljs.core.hash_map("\ufdd0'line", 248))), cljs.core.hash_map("\ufdd0'line", 248))), cljs.core.hash_map("\ufdd0'line", 
-    248)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 1, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[@id='ref']/following-sibling::*[text()='after']"), cljs.core.hash_map("\ufdd0'line", 247))), cljs.core.hash_map("\ufdd0'line", 247))), cljs.core.hash_map("\ufdd0'line", 247))), cljs.core.hash_map("\ufdd0'line", 
+    247)))));
   }
 });
 domina.test.add_test.call(null, "insert-after! with a single reference and multiple new nodes", function() {
@@ -20832,14 +15436,14 @@ domina.test.add_test.call(null, "insert-after! with a single reference and multi
   domina.insert_after_BANG_.call(null, domina.nodes.call(null, domina.by_id.call(null, "ref")), "<p>after1</p><p>after2</p>");
   if(cljs.core.truth_(cljs.core._EQ_.call(null, 1, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.call(null, "//div[@id='ref']/following-sibling::*[text()='after1' and position()=1]")))))) {
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 1, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[@id='ref']/following-sibling::*[text()='after1' and position()=1]"), cljs.core.hash_map("\ufdd0'line", 254))), cljs.core.hash_map("\ufdd0'line", 254))), cljs.core.hash_map("\ufdd0'line", 254))), cljs.core.hash_map("\ufdd0'line", 
-    254)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 1, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[@id='ref']/following-sibling::*[text()='after1' and position()=1]"), cljs.core.hash_map("\ufdd0'line", 253))), cljs.core.hash_map("\ufdd0'line", 253))), cljs.core.hash_map("\ufdd0'line", 253))), cljs.core.hash_map("\ufdd0'line", 
+    253)))));
   }
   if(cljs.core.truth_(cljs.core._EQ_.call(null, 1, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.call(null, "//div[@id='ref']/following-sibling::*[text()='after2' and position()=2]")))))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 1, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[@id='ref']/following-sibling::*[text()='after2' and position()=2]"), cljs.core.hash_map("\ufdd0'line", 255))), cljs.core.hash_map("\ufdd0'line", 255))), cljs.core.hash_map("\ufdd0'line", 255))), cljs.core.hash_map("\ufdd0'line", 
-    255)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 1, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[@id='ref']/following-sibling::*[text()='after2' and position()=2]"), cljs.core.hash_map("\ufdd0'line", 254))), cljs.core.hash_map("\ufdd0'line", 254))), cljs.core.hash_map("\ufdd0'line", 254))), cljs.core.hash_map("\ufdd0'line", 
+    254)))));
   }
 });
 domina.test.add_test.call(null, "insert-after! with multiple reference nodes and a single new node", function() {
@@ -20849,16 +15453,16 @@ domina.test.add_test.call(null, "insert-after! with multiple reference nodes and
   domina.insert_after_BANG_.call(null, domina.nodes.call(null, domina.by_class.call(null, "ref")), "<p>after</p>");
   if(cljs.core.truth_(cljs.core._EQ_.call(null, 2, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.call(null, "//p")))))) {
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 2, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p"), cljs.core.hash_map("\ufdd0'line", 262))), cljs.core.hash_map("\ufdd0'line", 262))), cljs.core.hash_map("\ufdd0'line", 262))), cljs.core.hash_map("\ufdd0'line", 262)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 2, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p"), cljs.core.hash_map("\ufdd0'line", 261))), cljs.core.hash_map("\ufdd0'line", 261))), cljs.core.hash_map("\ufdd0'line", 261))), cljs.core.hash_map("\ufdd0'line", 261)))));
   }
   if(cljs.core.truth_(cljs.core._EQ_.call(null, 2, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.call(null, "//div[@id='ref1']/following-sibling::p")))))) {
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 2, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[@id='ref1']/following-sibling::p"), cljs.core.hash_map("\ufdd0'line", 263))), cljs.core.hash_map("\ufdd0'line", 263))), cljs.core.hash_map("\ufdd0'line", 263))), cljs.core.hash_map("\ufdd0'line", 263)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 2, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[@id='ref1']/following-sibling::p"), cljs.core.hash_map("\ufdd0'line", 262))), cljs.core.hash_map("\ufdd0'line", 262))), cljs.core.hash_map("\ufdd0'line", 262))), cljs.core.hash_map("\ufdd0'line", 262)))));
   }
   if(cljs.core.truth_(cljs.core._EQ_.call(null, 1, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.call(null, "//div[@id='ref2']/following-sibling::p")))))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 1, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[@id='ref2']/following-sibling::p"), cljs.core.hash_map("\ufdd0'line", 264))), cljs.core.hash_map("\ufdd0'line", 264))), cljs.core.hash_map("\ufdd0'line", 264))), cljs.core.hash_map("\ufdd0'line", 264)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 1, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[@id='ref2']/following-sibling::p"), cljs.core.hash_map("\ufdd0'line", 263))), cljs.core.hash_map("\ufdd0'line", 263))), cljs.core.hash_map("\ufdd0'line", 263))), cljs.core.hash_map("\ufdd0'line", 263)))));
   }
 });
 domina.test.add_test.call(null, "swap-content! with a single reference node and a single new node", function() {
@@ -20867,12 +15471,12 @@ domina.test.add_test.call(null, "swap-content! with a single reference node and 
   domina.swap_content_BANG_.call(null, domina.xpath.call(null, "//p[@id='before']"), "<p id='after'>fixed</p>");
   if(cljs.core.truth_(cljs.core._EQ_.call(null, 0, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.call(null, "//p[@id='before']")))))) {
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 0, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p[@id='before']"), cljs.core.hash_map("\ufdd0'line", 270))), cljs.core.hash_map("\ufdd0'line", 270))), cljs.core.hash_map("\ufdd0'line", 270))), cljs.core.hash_map("\ufdd0'line", 270)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 0, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p[@id='before']"), cljs.core.hash_map("\ufdd0'line", 269))), cljs.core.hash_map("\ufdd0'line", 269))), cljs.core.hash_map("\ufdd0'line", 269))), cljs.core.hash_map("\ufdd0'line", 269)))));
   }
   if(cljs.core.truth_(cljs.core._EQ_.call(null, 1, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.call(null, "//p[@id='after']")))))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 1, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p[@id='after']"), cljs.core.hash_map("\ufdd0'line", 271))), cljs.core.hash_map("\ufdd0'line", 271))), cljs.core.hash_map("\ufdd0'line", 271))), cljs.core.hash_map("\ufdd0'line", 271)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 1, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p[@id='after']"), cljs.core.hash_map("\ufdd0'line", 270))), cljs.core.hash_map("\ufdd0'line", 270))), cljs.core.hash_map("\ufdd0'line", 270))), cljs.core.hash_map("\ufdd0'line", 270)))));
   }
 });
 domina.test.add_test.call(null, "swap-content! with a single reference node and multiple new nodes", function() {
@@ -20881,12 +15485,12 @@ domina.test.add_test.call(null, "swap-content! with a single reference node and 
   domina.swap_content_BANG_.call(null, domina.xpath.call(null, "//p[@id='before']"), "<p class='after'>fixed1</p><p class='after'>fixed2</p>");
   if(cljs.core.truth_(cljs.core._EQ_.call(null, 0, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.call(null, "//p[@id='before']")))))) {
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 0, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p[@id='before']"), cljs.core.hash_map("\ufdd0'line", 277))), cljs.core.hash_map("\ufdd0'line", 277))), cljs.core.hash_map("\ufdd0'line", 277))), cljs.core.hash_map("\ufdd0'line", 277)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 0, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p[@id='before']"), cljs.core.hash_map("\ufdd0'line", 276))), cljs.core.hash_map("\ufdd0'line", 276))), cljs.core.hash_map("\ufdd0'line", 276))), cljs.core.hash_map("\ufdd0'line", 276)))));
   }
   if(cljs.core.truth_(cljs.core._EQ_.call(null, 2, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.call(null, "//p[@class='after']")))))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 2, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p[@class='after']"), cljs.core.hash_map("\ufdd0'line", 278))), cljs.core.hash_map("\ufdd0'line", 278))), cljs.core.hash_map("\ufdd0'line", 278))), cljs.core.hash_map("\ufdd0'line", 278)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 2, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p[@class='after']"), cljs.core.hash_map("\ufdd0'line", 277))), cljs.core.hash_map("\ufdd0'line", 277))), cljs.core.hash_map("\ufdd0'line", 277))), cljs.core.hash_map("\ufdd0'line", 277)))));
   }
 });
 domina.test.add_test.call(null, "swap-content! with multiple reference nodes and multiple new nodes", function() {
@@ -20896,12 +15500,12 @@ domina.test.add_test.call(null, "swap-content! with multiple reference nodes and
   domina.swap_content_BANG_.call(null, domina.xpath.call(null, "//p[@class='before']"), "<p class='after'>fixed1</p><p class='after'>fixed2</p>");
   if(cljs.core.truth_(cljs.core._EQ_.call(null, 0, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.call(null, "//p[@class='before']")))))) {
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 0, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p[@class='before']"), cljs.core.hash_map("\ufdd0'line", 285))), cljs.core.hash_map("\ufdd0'line", 285))), cljs.core.hash_map("\ufdd0'line", 285))), cljs.core.hash_map("\ufdd0'line", 285)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 0, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p[@class='before']"), cljs.core.hash_map("\ufdd0'line", 284))), cljs.core.hash_map("\ufdd0'line", 284))), cljs.core.hash_map("\ufdd0'line", 284))), cljs.core.hash_map("\ufdd0'line", 284)))));
   }
   if(cljs.core.truth_(cljs.core._EQ_.call(null, 4, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.call(null, "//p[@class='after']")))))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 4, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p[@class='after']"), cljs.core.hash_map("\ufdd0'line", 286))), cljs.core.hash_map("\ufdd0'line", 286))), cljs.core.hash_map("\ufdd0'line", 286))), cljs.core.hash_map("\ufdd0'line", 286)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 4, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p[@class='after']"), cljs.core.hash_map("\ufdd0'line", 285))), cljs.core.hash_map("\ufdd0'line", 285))), cljs.core.hash_map("\ufdd0'line", 285))), cljs.core.hash_map("\ufdd0'line", 285)))));
   }
 });
 domina.test.add_test.call(null, "can retrieve a css property value", function() {
@@ -20909,16 +15513,16 @@ domina.test.add_test.call(null, "can retrieve a css property value", function() 
   domina.append_BANG_.call(null, domina.xpath.call(null, "//body"), '<div style="background-color: maroon;">Test</div>');
   if(cljs.core.truth_(cljs.core._EQ_.call(null, "maroon", domina.style.call(null, domina.xpath.call(null, "//div"), "background-color")))) {
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "maroon", cljs.core.with_meta(cljs.core.list("\ufdd1'style", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div"), cljs.core.hash_map("\ufdd0'line", 293)), "background-color"), cljs.core.hash_map("\ufdd0'line", 293))), cljs.core.hash_map("\ufdd0'line", 293)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "maroon", cljs.core.with_meta(cljs.core.list("\ufdd1'style", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div"), cljs.core.hash_map("\ufdd0'line", 292)), "background-color"), cljs.core.hash_map("\ufdd0'line", 292))), cljs.core.hash_map("\ufdd0'line", 292)))));
   }
   if(cljs.core.truth_(cljs.core._EQ_.call(null, "maroon", domina.style.call(null, domina.xpath.call(null, "//div"), "\ufdd0'background-color")))) {
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "maroon", cljs.core.with_meta(cljs.core.list("\ufdd1'style", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div"), cljs.core.hash_map("\ufdd0'line", 294)), "\ufdd0'background-color"), cljs.core.hash_map("\ufdd0'line", 294))), cljs.core.hash_map("\ufdd0'line", 294)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "maroon", cljs.core.with_meta(cljs.core.list("\ufdd1'style", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div"), cljs.core.hash_map("\ufdd0'line", 293)), "\ufdd0'background-color"), cljs.core.hash_map("\ufdd0'line", 293))), cljs.core.hash_map("\ufdd0'line", 293)))));
   }
   if(cljs.core.truth_(cljs.core.nil_QMARK_.call(null, domina.style.call(null, domina.xpath.call(null, "//div"), "\ufdd0'no-such-style")))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'nil?", cljs.core.with_meta(cljs.core.list("\ufdd1'style", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div"), cljs.core.hash_map("\ufdd0'line", 295)), "\ufdd0'no-such-style"), cljs.core.hash_map("\ufdd0'line", 295))), cljs.core.hash_map("\ufdd0'line", 295)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'nil?", cljs.core.with_meta(cljs.core.list("\ufdd1'style", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div"), cljs.core.hash_map("\ufdd0'line", 294)), "\ufdd0'no-such-style"), cljs.core.hash_map("\ufdd0'line", 294))), cljs.core.hash_map("\ufdd0'line", 294)))));
   }
 });
 domina.test.add_test.call(null, "can retrieve an HTML attribute value", function() {
@@ -20926,16 +15530,16 @@ domina.test.add_test.call(null, "can retrieve an HTML attribute value", function
   domina.append_BANG_.call(null, domina.xpath.call(null, "//body"), '<div height="42">Content!</div>');
   if(cljs.core.truth_(cljs.core._EQ_.call(null, "42", domina.attr.call(null, domina.xpath.call(null, "//div"), "height")))) {
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "42", cljs.core.with_meta(cljs.core.list("\ufdd1'attr", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div"), cljs.core.hash_map("\ufdd0'line", 300)), "height"), cljs.core.hash_map("\ufdd0'line", 300))), cljs.core.hash_map("\ufdd0'line", 300)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "42", cljs.core.with_meta(cljs.core.list("\ufdd1'attr", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div"), cljs.core.hash_map("\ufdd0'line", 299)), "height"), cljs.core.hash_map("\ufdd0'line", 299))), cljs.core.hash_map("\ufdd0'line", 299)))));
   }
   if(cljs.core.truth_(cljs.core._EQ_.call(null, "42", domina.attr.call(null, domina.xpath.call(null, "//div"), "\ufdd0'height")))) {
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "42", cljs.core.with_meta(cljs.core.list("\ufdd1'attr", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div"), cljs.core.hash_map("\ufdd0'line", 301)), "\ufdd0'height"), cljs.core.hash_map("\ufdd0'line", 301))), cljs.core.hash_map("\ufdd0'line", 301)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "42", cljs.core.with_meta(cljs.core.list("\ufdd1'attr", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div"), cljs.core.hash_map("\ufdd0'line", 300)), "\ufdd0'height"), cljs.core.hash_map("\ufdd0'line", 300))), cljs.core.hash_map("\ufdd0'line", 300)))));
   }
   if(cljs.core.truth_(cljs.core.nil_QMARK_.call(null, domina.attr.call(null, domina.xpath.call(null, "//div"), "\ufdd0'no-such-attr:c")))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'nil?", cljs.core.with_meta(cljs.core.list("\ufdd1'attr", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div"), cljs.core.hash_map("\ufdd0'line", 302)), "\ufdd0'no-such-attr:c"), cljs.core.hash_map("\ufdd0'line", 302))), cljs.core.hash_map("\ufdd0'line", 302)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'nil?", cljs.core.with_meta(cljs.core.list("\ufdd1'attr", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div"), cljs.core.hash_map("\ufdd0'line", 301)), "\ufdd0'no-such-attr:c"), cljs.core.hash_map("\ufdd0'line", 301))), cljs.core.hash_map("\ufdd0'line", 301)))));
   }
 });
 domina.test.add_test.call(null, "can set a css property on a single node", function() {
@@ -20945,12 +15549,12 @@ domina.test.add_test.call(null, "can set a css property on a single node", funct
   domina.set_style_BANG_.call(null, domina.xpath.call(null, "//div[2]"), "\ufdd0'background-color", "green");
   if(cljs.core.truth_(cljs.core._EQ_.call(null, "red", domina.style.call(null, domina.xpath.call(null, "//div[1]"), "background-color")))) {
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "red", cljs.core.with_meta(cljs.core.list("\ufdd1'style", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[1]"), cljs.core.hash_map("\ufdd0'line", 309)), "background-color"), cljs.core.hash_map("\ufdd0'line", 309))), cljs.core.hash_map("\ufdd0'line", 309)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "red", cljs.core.with_meta(cljs.core.list("\ufdd1'style", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[1]"), cljs.core.hash_map("\ufdd0'line", 308)), "background-color"), cljs.core.hash_map("\ufdd0'line", 308))), cljs.core.hash_map("\ufdd0'line", 308)))));
   }
   if(cljs.core.truth_(cljs.core._EQ_.call(null, "green", domina.style.call(null, domina.xpath.call(null, "//div[2]"), "background-color")))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "green", cljs.core.with_meta(cljs.core.list("\ufdd1'style", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[2]"), cljs.core.hash_map("\ufdd0'line", 310)), "background-color"), cljs.core.hash_map("\ufdd0'line", 310))), cljs.core.hash_map("\ufdd0'line", 310)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "green", cljs.core.with_meta(cljs.core.list("\ufdd1'style", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[2]"), cljs.core.hash_map("\ufdd0'line", 309)), "background-color"), cljs.core.hash_map("\ufdd0'line", 309))), cljs.core.hash_map("\ufdd0'line", 309)))));
   }
 });
 domina.test.add_test.call(null, "can set a css property on multiple nodes", function() {
@@ -20959,12 +15563,12 @@ domina.test.add_test.call(null, "can set a css property on multiple nodes", func
   domina.set_style_BANG_.call(null, domina.xpath.call(null, "//div"), "color", "red");
   if(cljs.core.truth_(cljs.core._EQ_.call(null, "red", domina.style.call(null, domina.xpath.call(null, "//div[1]"), "color")))) {
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "red", cljs.core.with_meta(cljs.core.list("\ufdd1'style", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[1]"), cljs.core.hash_map("\ufdd0'line", 316)), "color"), cljs.core.hash_map("\ufdd0'line", 316))), cljs.core.hash_map("\ufdd0'line", 316)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "red", cljs.core.with_meta(cljs.core.list("\ufdd1'style", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[1]"), cljs.core.hash_map("\ufdd0'line", 315)), "color"), cljs.core.hash_map("\ufdd0'line", 315))), cljs.core.hash_map("\ufdd0'line", 315)))));
   }
   if(cljs.core.truth_(cljs.core._EQ_.call(null, "red", domina.style.call(null, domina.xpath.call(null, "//div[2]"), "color")))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "red", cljs.core.with_meta(cljs.core.list("\ufdd1'style", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[2]"), cljs.core.hash_map("\ufdd0'line", 317)), "color"), cljs.core.hash_map("\ufdd0'line", 317))), cljs.core.hash_map("\ufdd0'line", 317)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "red", cljs.core.with_meta(cljs.core.list("\ufdd1'style", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[2]"), cljs.core.hash_map("\ufdd0'line", 316)), "color"), cljs.core.hash_map("\ufdd0'line", 316))), cljs.core.hash_map("\ufdd0'line", 316)))));
   }
 });
 domina.test.add_test.call(null, "can set a html attribute on a single node", function() {
@@ -20974,12 +15578,12 @@ domina.test.add_test.call(null, "can set a html attribute on a single node", fun
   domina.set_attr_BANG_.call(null, domina.xpath.call(null, "//div[2]"), "\ufdd0'width", 42);
   if(cljs.core.truth_(cljs.core._EQ_.call(null, "42", domina.attr.call(null, domina.xpath.call(null, "//div[1]"), "width")))) {
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "42", cljs.core.with_meta(cljs.core.list("\ufdd1'attr", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[1]"), cljs.core.hash_map("\ufdd0'line", 324)), "width"), cljs.core.hash_map("\ufdd0'line", 324))), cljs.core.hash_map("\ufdd0'line", 324)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "42", cljs.core.with_meta(cljs.core.list("\ufdd1'attr", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[1]"), cljs.core.hash_map("\ufdd0'line", 323)), "width"), cljs.core.hash_map("\ufdd0'line", 323))), cljs.core.hash_map("\ufdd0'line", 323)))));
   }
   if(cljs.core.truth_(cljs.core._EQ_.call(null, "42", domina.attr.call(null, domina.xpath.call(null, "//div[2]"), "width")))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "42", cljs.core.with_meta(cljs.core.list("\ufdd1'attr", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[2]"), cljs.core.hash_map("\ufdd0'line", 325)), "width"), cljs.core.hash_map("\ufdd0'line", 325))), cljs.core.hash_map("\ufdd0'line", 325)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "42", cljs.core.with_meta(cljs.core.list("\ufdd1'attr", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[2]"), cljs.core.hash_map("\ufdd0'line", 324)), "width"), cljs.core.hash_map("\ufdd0'line", 324))), cljs.core.hash_map("\ufdd0'line", 324)))));
   }
 });
 domina.test.add_test.call(null, "can set a html attribute on a single node", function() {
@@ -20988,12 +15592,12 @@ domina.test.add_test.call(null, "can set a html attribute on a single node", fun
   domina.set_attr_BANG_.call(null, domina.xpath.call(null, "//div"), "width", 42);
   if(cljs.core.truth_(cljs.core._EQ_.call(null, "42", domina.attr.call(null, domina.xpath.call(null, "//div[1]"), "width")))) {
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "42", cljs.core.with_meta(cljs.core.list("\ufdd1'attr", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[1]"), cljs.core.hash_map("\ufdd0'line", 331)), "width"), cljs.core.hash_map("\ufdd0'line", 331))), cljs.core.hash_map("\ufdd0'line", 331)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "42", cljs.core.with_meta(cljs.core.list("\ufdd1'attr", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[1]"), cljs.core.hash_map("\ufdd0'line", 330)), "width"), cljs.core.hash_map("\ufdd0'line", 330))), cljs.core.hash_map("\ufdd0'line", 330)))));
   }
   if(cljs.core.truth_(cljs.core._EQ_.call(null, "42", domina.attr.call(null, domina.xpath.call(null, "//div[2]"), "width")))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "42", cljs.core.with_meta(cljs.core.list("\ufdd1'attr", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[2]"), cljs.core.hash_map("\ufdd0'line", 332)), "width"), cljs.core.hash_map("\ufdd0'line", 332))), cljs.core.hash_map("\ufdd0'line", 332)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "42", cljs.core.with_meta(cljs.core.list("\ufdd1'attr", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[2]"), cljs.core.hash_map("\ufdd0'line", 331)), "width"), cljs.core.hash_map("\ufdd0'line", 331))), cljs.core.hash_map("\ufdd0'line", 331)))));
   }
 });
 domina.test.add_test.call(null, "can get multiple CSS styles from a single node.", function() {
@@ -21004,7 +15608,7 @@ domina.test.add_test.call(null, "can get multiple CSS styles from a single node.
   if(cljs.core.truth_(cljs.core._EQ_.call(null, cljs.core.ObjMap.fromObject(["\ufdd0'color", "\ufdd0'background-color"], {"\ufdd0'color":"red", "\ufdd0'background-color":"black"}), domina.styles.call(null, domina.xpath.call(null, "//div"))))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", cljs.core.hash_map("\ufdd0'color", "red", "\ufdd0'background-color", "black"), cljs.core.with_meta(cljs.core.list("\ufdd1'styles", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div"), cljs.core.hash_map("\ufdd0'line", 340))), cljs.core.hash_map("\ufdd0'line", 340))), cljs.core.hash_map("\ufdd0'line", 339)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", cljs.core.hash_map("\ufdd0'color", "red", "\ufdd0'background-color", "black"), cljs.core.with_meta(cljs.core.list("\ufdd1'styles", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div"), cljs.core.hash_map("\ufdd0'line", 339))), cljs.core.hash_map("\ufdd0'line", 339))), cljs.core.hash_map("\ufdd0'line", 338)))));
   }
 });
 domina.test.add_test.call(null, "can get multiple HTML attributes from a single node.", function() {
@@ -21015,7 +15619,7 @@ domina.test.add_test.call(null, "can get multiple HTML attributes from a single 
   if(cljs.core.truth_(cljs.core._EQ_.call(null, cljs.core.ObjMap.fromObject(["\ufdd0'width", "\ufdd0'height"], {"\ufdd0'width":"42", "\ufdd0'height":"24"}), domina.attrs.call(null, domina.xpath.call(null, "//div"))))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", cljs.core.hash_map("\ufdd0'width", "42", "\ufdd0'height", "24"), cljs.core.with_meta(cljs.core.list("\ufdd1'attrs", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div"), cljs.core.hash_map("\ufdd0'line", 348))), cljs.core.hash_map("\ufdd0'line", 348))), cljs.core.hash_map("\ufdd0'line", 347)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", cljs.core.hash_map("\ufdd0'width", "42", "\ufdd0'height", "24"), cljs.core.with_meta(cljs.core.list("\ufdd1'attrs", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div"), cljs.core.hash_map("\ufdd0'line", 347))), cljs.core.hash_map("\ufdd0'line", 347))), cljs.core.hash_map("\ufdd0'line", 346)))));
   }
 });
 domina.test.add_test.call(null, "can set multiple CSS styles on a single node", function() {
@@ -21024,12 +15628,12 @@ domina.test.add_test.call(null, "can set multiple CSS styles on a single node", 
   domina.set_styles_BANG_.call(null, domina.xpath.call(null, "//div"), cljs.core.ObjMap.fromObject(["\ufdd0'color", "\ufdd0'background-color"], {"\ufdd0'color":"red", "\ufdd0'background-color":"black"}));
   if(cljs.core.truth_(cljs.core._EQ_.call(null, "black", domina.style.call(null, domina.xpath.call(null, "//div"), "background-color")))) {
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "black", cljs.core.with_meta(cljs.core.list("\ufdd1'style", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div"), cljs.core.hash_map("\ufdd0'line", 355)), "background-color"), cljs.core.hash_map("\ufdd0'line", 355))), cljs.core.hash_map("\ufdd0'line", 355)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "black", cljs.core.with_meta(cljs.core.list("\ufdd1'style", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div"), cljs.core.hash_map("\ufdd0'line", 354)), "background-color"), cljs.core.hash_map("\ufdd0'line", 354))), cljs.core.hash_map("\ufdd0'line", 354)))));
   }
   if(cljs.core.truth_(cljs.core._EQ_.call(null, "red", domina.style.call(null, domina.xpath.call(null, "//div"), "color")))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "red", cljs.core.with_meta(cljs.core.list("\ufdd1'style", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div"), cljs.core.hash_map("\ufdd0'line", 356)), "color"), cljs.core.hash_map("\ufdd0'line", 356))), cljs.core.hash_map("\ufdd0'line", 356)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "red", cljs.core.with_meta(cljs.core.list("\ufdd1'style", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div"), cljs.core.hash_map("\ufdd0'line", 355)), "color"), cljs.core.hash_map("\ufdd0'line", 355))), cljs.core.hash_map("\ufdd0'line", 355)))));
   }
 });
 domina.test.add_test.call(null, "can set multiple CSS styles on multiple nodes", function() {
@@ -21038,20 +15642,20 @@ domina.test.add_test.call(null, "can set multiple CSS styles on multiple nodes",
   domina.set_styles_BANG_.call(null, domina.xpath.call(null, "//div"), cljs.core.ObjMap.fromObject(["\ufdd0'color", "\ufdd0'background-color"], {"\ufdd0'color":"red", "\ufdd0'background-color":"black"}));
   if(cljs.core.truth_(cljs.core._EQ_.call(null, "black", domina.style.call(null, domina.xpath.call(null, "//div[1]"), "background-color")))) {
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "black", cljs.core.with_meta(cljs.core.list("\ufdd1'style", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[1]"), cljs.core.hash_map("\ufdd0'line", 363)), "background-color"), cljs.core.hash_map("\ufdd0'line", 363))), cljs.core.hash_map("\ufdd0'line", 363)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "black", cljs.core.with_meta(cljs.core.list("\ufdd1'style", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[1]"), cljs.core.hash_map("\ufdd0'line", 362)), "background-color"), cljs.core.hash_map("\ufdd0'line", 362))), cljs.core.hash_map("\ufdd0'line", 362)))));
   }
   if(cljs.core.truth_(cljs.core._EQ_.call(null, "red", domina.style.call(null, domina.xpath.call(null, "//div[1]"), "color")))) {
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "red", cljs.core.with_meta(cljs.core.list("\ufdd1'style", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[1]"), cljs.core.hash_map("\ufdd0'line", 364)), "color"), cljs.core.hash_map("\ufdd0'line", 364))), cljs.core.hash_map("\ufdd0'line", 364)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "red", cljs.core.with_meta(cljs.core.list("\ufdd1'style", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[1]"), cljs.core.hash_map("\ufdd0'line", 363)), "color"), cljs.core.hash_map("\ufdd0'line", 363))), cljs.core.hash_map("\ufdd0'line", 363)))));
   }
   if(cljs.core.truth_(cljs.core._EQ_.call(null, "black", domina.style.call(null, domina.xpath.call(null, "//div[2]"), "background-color")))) {
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "black", cljs.core.with_meta(cljs.core.list("\ufdd1'style", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[2]"), cljs.core.hash_map("\ufdd0'line", 365)), "background-color"), cljs.core.hash_map("\ufdd0'line", 365))), cljs.core.hash_map("\ufdd0'line", 365)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "black", cljs.core.with_meta(cljs.core.list("\ufdd1'style", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[2]"), cljs.core.hash_map("\ufdd0'line", 364)), "background-color"), cljs.core.hash_map("\ufdd0'line", 364))), cljs.core.hash_map("\ufdd0'line", 364)))));
   }
   if(cljs.core.truth_(cljs.core._EQ_.call(null, "red", domina.style.call(null, domina.xpath.call(null, "//div[2]"), "color")))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "red", cljs.core.with_meta(cljs.core.list("\ufdd1'style", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[2]"), cljs.core.hash_map("\ufdd0'line", 366)), "color"), cljs.core.hash_map("\ufdd0'line", 366))), cljs.core.hash_map("\ufdd0'line", 366)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "red", cljs.core.with_meta(cljs.core.list("\ufdd1'style", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[2]"), cljs.core.hash_map("\ufdd0'line", 365)), "color"), cljs.core.hash_map("\ufdd0'line", 365))), cljs.core.hash_map("\ufdd0'line", 365)))));
   }
 });
 domina.test.add_test.call(null, "can set multiple HTML attributes on a single node", function() {
@@ -21060,12 +15664,12 @@ domina.test.add_test.call(null, "can set multiple HTML attributes on a single no
   domina.set_attrs_BANG_.call(null, domina.xpath.call(null, "//div"), cljs.core.ObjMap.fromObject(["\ufdd0'width", "\ufdd0'height"], {"\ufdd0'width":42, "\ufdd0'height":24}));
   if(cljs.core.truth_(cljs.core._EQ_.call(null, "42", domina.attr.call(null, domina.xpath.call(null, "//div"), "width")))) {
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "42", cljs.core.with_meta(cljs.core.list("\ufdd1'attr", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div"), cljs.core.hash_map("\ufdd0'line", 373)), "width"), cljs.core.hash_map("\ufdd0'line", 373))), cljs.core.hash_map("\ufdd0'line", 373)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "42", cljs.core.with_meta(cljs.core.list("\ufdd1'attr", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div"), cljs.core.hash_map("\ufdd0'line", 372)), "width"), cljs.core.hash_map("\ufdd0'line", 372))), cljs.core.hash_map("\ufdd0'line", 372)))));
   }
   if(cljs.core.truth_(cljs.core._EQ_.call(null, "24", domina.attr.call(null, domina.xpath.call(null, "//div"), "height")))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "24", cljs.core.with_meta(cljs.core.list("\ufdd1'attr", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div"), cljs.core.hash_map("\ufdd0'line", 374)), "height"), cljs.core.hash_map("\ufdd0'line", 374))), cljs.core.hash_map("\ufdd0'line", 374)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "24", cljs.core.with_meta(cljs.core.list("\ufdd1'attr", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div"), cljs.core.hash_map("\ufdd0'line", 373)), "height"), cljs.core.hash_map("\ufdd0'line", 373))), cljs.core.hash_map("\ufdd0'line", 373)))));
   }
 });
 domina.test.add_test.call(null, "can set multiple CSS styles on multiple nodes", function() {
@@ -21074,20 +15678,20 @@ domina.test.add_test.call(null, "can set multiple CSS styles on multiple nodes",
   domina.set_attrs_BANG_.call(null, domina.xpath.call(null, "//div"), cljs.core.ObjMap.fromObject(["\ufdd0'width", "\ufdd0'height"], {"\ufdd0'width":42, "\ufdd0'height":24}));
   if(cljs.core.truth_(cljs.core._EQ_.call(null, "42", domina.attr.call(null, domina.xpath.call(null, "//div[1]"), "width")))) {
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "42", cljs.core.with_meta(cljs.core.list("\ufdd1'attr", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[1]"), cljs.core.hash_map("\ufdd0'line", 381)), "width"), cljs.core.hash_map("\ufdd0'line", 381))), cljs.core.hash_map("\ufdd0'line", 381)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "42", cljs.core.with_meta(cljs.core.list("\ufdd1'attr", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[1]"), cljs.core.hash_map("\ufdd0'line", 380)), "width"), cljs.core.hash_map("\ufdd0'line", 380))), cljs.core.hash_map("\ufdd0'line", 380)))));
   }
   if(cljs.core.truth_(cljs.core._EQ_.call(null, "24", domina.attr.call(null, domina.xpath.call(null, "//div[1]"), "height")))) {
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "24", cljs.core.with_meta(cljs.core.list("\ufdd1'attr", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[1]"), cljs.core.hash_map("\ufdd0'line", 382)), "height"), cljs.core.hash_map("\ufdd0'line", 382))), cljs.core.hash_map("\ufdd0'line", 382)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "24", cljs.core.with_meta(cljs.core.list("\ufdd1'attr", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[1]"), cljs.core.hash_map("\ufdd0'line", 381)), "height"), cljs.core.hash_map("\ufdd0'line", 381))), cljs.core.hash_map("\ufdd0'line", 381)))));
   }
   if(cljs.core.truth_(cljs.core._EQ_.call(null, "42", domina.attr.call(null, domina.xpath.call(null, "//div[2]"), "width")))) {
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "42", cljs.core.with_meta(cljs.core.list("\ufdd1'attr", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[2]"), cljs.core.hash_map("\ufdd0'line", 383)), "width"), cljs.core.hash_map("\ufdd0'line", 383))), cljs.core.hash_map("\ufdd0'line", 383)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "42", cljs.core.with_meta(cljs.core.list("\ufdd1'attr", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[2]"), cljs.core.hash_map("\ufdd0'line", 382)), "width"), cljs.core.hash_map("\ufdd0'line", 382))), cljs.core.hash_map("\ufdd0'line", 382)))));
   }
   if(cljs.core.truth_(cljs.core._EQ_.call(null, "24", domina.attr.call(null, domina.xpath.call(null, "//div[2]"), "height")))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "24", cljs.core.with_meta(cljs.core.list("\ufdd1'attr", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[2]"), cljs.core.hash_map("\ufdd0'line", 384)), "height"), cljs.core.hash_map("\ufdd0'line", 384))), cljs.core.hash_map("\ufdd0'line", 384)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "24", cljs.core.with_meta(cljs.core.list("\ufdd1'attr", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[2]"), cljs.core.hash_map("\ufdd0'line", 383)), "height"), cljs.core.hash_map("\ufdd0'line", 383))), cljs.core.hash_map("\ufdd0'line", 383)))));
   }
 });
 domina.test.add_test.call(null, "test the has-class? function", function() {
@@ -21096,20 +15700,20 @@ domina.test.add_test.call(null, "test the has-class? function", function() {
   domina.append_BANG_.call(null, domina.xpath.call(null, "//body"), "<div class='class2'>2</div>");
   if(cljs.core.truth_(cljs.core._EQ_.call(null, true, domina.has_class_QMARK_.call(null, domina.xpath.call(null, "//div[1]"), "class1")))) {
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", true, cljs.core.with_meta(cljs.core.list("\ufdd1'has-class?", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[1]"), cljs.core.hash_map("\ufdd0'line", 390)), "class1"), cljs.core.hash_map("\ufdd0'line", 390))), cljs.core.hash_map("\ufdd0'line", 390)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", true, cljs.core.with_meta(cljs.core.list("\ufdd1'has-class?", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[1]"), cljs.core.hash_map("\ufdd0'line", 389)), "class1"), cljs.core.hash_map("\ufdd0'line", 389))), cljs.core.hash_map("\ufdd0'line", 389)))));
   }
   if(cljs.core.truth_(cljs.core._EQ_.call(null, true, domina.has_class_QMARK_.call(null, domina.xpath.call(null, "//div[2]"), "class2")))) {
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", true, cljs.core.with_meta(cljs.core.list("\ufdd1'has-class?", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[2]"), cljs.core.hash_map("\ufdd0'line", 391)), "class2"), cljs.core.hash_map("\ufdd0'line", 391))), cljs.core.hash_map("\ufdd0'line", 391)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", true, cljs.core.with_meta(cljs.core.list("\ufdd1'has-class?", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[2]"), cljs.core.hash_map("\ufdd0'line", 390)), "class2"), cljs.core.hash_map("\ufdd0'line", 390))), cljs.core.hash_map("\ufdd0'line", 390)))));
   }
   if(cljs.core.truth_(cljs.core._EQ_.call(null, false, domina.has_class_QMARK_.call(null, domina.xpath.call(null, "//div[1]"), "class2")))) {
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", false, cljs.core.with_meta(cljs.core.list("\ufdd1'has-class?", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[1]"), cljs.core.hash_map("\ufdd0'line", 392)), "class2"), cljs.core.hash_map("\ufdd0'line", 392))), cljs.core.hash_map("\ufdd0'line", 392)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", false, cljs.core.with_meta(cljs.core.list("\ufdd1'has-class?", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[1]"), cljs.core.hash_map("\ufdd0'line", 391)), "class2"), cljs.core.hash_map("\ufdd0'line", 391))), cljs.core.hash_map("\ufdd0'line", 391)))));
   }
   if(cljs.core.truth_(cljs.core._EQ_.call(null, false, domina.has_class_QMARK_.call(null, domina.xpath.call(null, "//div[2]"), "class1")))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", false, cljs.core.with_meta(cljs.core.list("\ufdd1'has-class?", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[2]"), cljs.core.hash_map("\ufdd0'line", 393)), "class1"), cljs.core.hash_map("\ufdd0'line", 393))), cljs.core.hash_map("\ufdd0'line", 393)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", false, cljs.core.with_meta(cljs.core.list("\ufdd1'has-class?", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[2]"), cljs.core.hash_map("\ufdd0'line", 392)), "class1"), cljs.core.hash_map("\ufdd0'line", 392))), cljs.core.hash_map("\ufdd0'line", 392)))));
   }
 });
 domina.test.add_test.call(null, "can add a CSS class to a single node", function() {
@@ -21119,12 +15723,12 @@ domina.test.add_test.call(null, "can add a CSS class to a single node", function
   domina.add_class_BANG_.call(null, domina.xpath.call(null, "//div"), "class2");
   if(cljs.core.truth_(cljs.core._EQ_.call(null, true, domina.has_class_QMARK_.call(null, domina.xpath.call(null, "//div"), "class1")))) {
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", true, cljs.core.with_meta(cljs.core.list("\ufdd1'has-class?", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div"), cljs.core.hash_map("\ufdd0'line", 400)), "class1"), cljs.core.hash_map("\ufdd0'line", 400))), cljs.core.hash_map("\ufdd0'line", 400)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", true, cljs.core.with_meta(cljs.core.list("\ufdd1'has-class?", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div"), cljs.core.hash_map("\ufdd0'line", 399)), "class1"), cljs.core.hash_map("\ufdd0'line", 399))), cljs.core.hash_map("\ufdd0'line", 399)))));
   }
   if(cljs.core.truth_(cljs.core._EQ_.call(null, true, domina.has_class_QMARK_.call(null, domina.xpath.call(null, "//div"), "class2")))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", true, cljs.core.with_meta(cljs.core.list("\ufdd1'has-class?", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div"), cljs.core.hash_map("\ufdd0'line", 401)), "class2"), cljs.core.hash_map("\ufdd0'line", 401))), cljs.core.hash_map("\ufdd0'line", 401)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", true, cljs.core.with_meta(cljs.core.list("\ufdd1'has-class?", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div"), cljs.core.hash_map("\ufdd0'line", 400)), "class2"), cljs.core.hash_map("\ufdd0'line", 400))), cljs.core.hash_map("\ufdd0'line", 400)))));
   }
 });
 domina.test.add_test.call(null, "can add a CSS class to multiple nodes", function() {
@@ -21134,20 +15738,20 @@ domina.test.add_test.call(null, "can add a CSS class to multiple nodes", functio
   domina.add_class_BANG_.call(null, domina.xpath.call(null, "//div"), "class2");
   if(cljs.core.truth_(cljs.core._EQ_.call(null, true, domina.has_class_QMARK_.call(null, domina.xpath.call(null, "//div[1]"), "class1")))) {
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", true, cljs.core.with_meta(cljs.core.list("\ufdd1'has-class?", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[1]"), cljs.core.hash_map("\ufdd0'line", 408)), "class1"), cljs.core.hash_map("\ufdd0'line", 408))), cljs.core.hash_map("\ufdd0'line", 408)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", true, cljs.core.with_meta(cljs.core.list("\ufdd1'has-class?", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[1]"), cljs.core.hash_map("\ufdd0'line", 407)), "class1"), cljs.core.hash_map("\ufdd0'line", 407))), cljs.core.hash_map("\ufdd0'line", 407)))));
   }
   if(cljs.core.truth_(cljs.core._EQ_.call(null, true, domina.has_class_QMARK_.call(null, domina.xpath.call(null, "//div[2]"), "class1")))) {
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", true, cljs.core.with_meta(cljs.core.list("\ufdd1'has-class?", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[2]"), cljs.core.hash_map("\ufdd0'line", 409)), "class1"), cljs.core.hash_map("\ufdd0'line", 409))), cljs.core.hash_map("\ufdd0'line", 409)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", true, cljs.core.with_meta(cljs.core.list("\ufdd1'has-class?", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[2]"), cljs.core.hash_map("\ufdd0'line", 408)), "class1"), cljs.core.hash_map("\ufdd0'line", 408))), cljs.core.hash_map("\ufdd0'line", 408)))));
   }
   if(cljs.core.truth_(cljs.core._EQ_.call(null, true, domina.has_class_QMARK_.call(null, domina.xpath.call(null, "//div[1]"), "class2")))) {
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", true, cljs.core.with_meta(cljs.core.list("\ufdd1'has-class?", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[1]"), cljs.core.hash_map("\ufdd0'line", 410)), "class2"), cljs.core.hash_map("\ufdd0'line", 410))), cljs.core.hash_map("\ufdd0'line", 410)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", true, cljs.core.with_meta(cljs.core.list("\ufdd1'has-class?", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[1]"), cljs.core.hash_map("\ufdd0'line", 409)), "class2"), cljs.core.hash_map("\ufdd0'line", 409))), cljs.core.hash_map("\ufdd0'line", 409)))));
   }
   if(cljs.core.truth_(cljs.core._EQ_.call(null, true, domina.has_class_QMARK_.call(null, domina.xpath.call(null, "//div[2]"), "class2")))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", true, cljs.core.with_meta(cljs.core.list("\ufdd1'has-class?", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[2]"), cljs.core.hash_map("\ufdd0'line", 411)), "class2"), cljs.core.hash_map("\ufdd0'line", 411))), cljs.core.hash_map("\ufdd0'line", 411)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", true, cljs.core.with_meta(cljs.core.list("\ufdd1'has-class?", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[2]"), cljs.core.hash_map("\ufdd0'line", 410)), "class2"), cljs.core.hash_map("\ufdd0'line", 410))), cljs.core.hash_map("\ufdd0'line", 410)))));
   }
 });
 domina.test.add_test.call(null, "can remove a CSS class from a single node", function() {
@@ -21156,12 +15760,12 @@ domina.test.add_test.call(null, "can remove a CSS class from a single node", fun
   domina.remove_class_BANG_.call(null, domina.xpath.call(null, "//div"), "class1");
   if(cljs.core.truth_(cljs.core._EQ_.call(null, false, domina.has_class_QMARK_.call(null, domina.xpath.call(null, "//div"), "class1")))) {
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", false, cljs.core.with_meta(cljs.core.list("\ufdd1'has-class?", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div"), cljs.core.hash_map("\ufdd0'line", 417)), "class1"), cljs.core.hash_map("\ufdd0'line", 417))), cljs.core.hash_map("\ufdd0'line", 417)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", false, cljs.core.with_meta(cljs.core.list("\ufdd1'has-class?", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div"), cljs.core.hash_map("\ufdd0'line", 416)), "class1"), cljs.core.hash_map("\ufdd0'line", 416))), cljs.core.hash_map("\ufdd0'line", 416)))));
   }
   if(cljs.core.truth_(cljs.core._EQ_.call(null, true, domina.has_class_QMARK_.call(null, domina.xpath.call(null, "//div"), "class2")))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", true, cljs.core.with_meta(cljs.core.list("\ufdd1'has-class?", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div"), cljs.core.hash_map("\ufdd0'line", 418)), "class2"), cljs.core.hash_map("\ufdd0'line", 418))), cljs.core.hash_map("\ufdd0'line", 418)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", true, cljs.core.with_meta(cljs.core.list("\ufdd1'has-class?", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div"), cljs.core.hash_map("\ufdd0'line", 417)), "class2"), cljs.core.hash_map("\ufdd0'line", 417))), cljs.core.hash_map("\ufdd0'line", 417)))));
   }
 });
 domina.test.add_test.call(null, "can remove a CSS class from a multiple nodes", function() {
@@ -21170,20 +15774,20 @@ domina.test.add_test.call(null, "can remove a CSS class from a multiple nodes", 
   domina.remove_class_BANG_.call(null, domina.xpath.call(null, "//div"), "class1");
   if(cljs.core.truth_(cljs.core._EQ_.call(null, false, domina.has_class_QMARK_.call(null, domina.xpath.call(null, "//div[1]"), "class1")))) {
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", false, cljs.core.with_meta(cljs.core.list("\ufdd1'has-class?", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[1]"), cljs.core.hash_map("\ufdd0'line", 424)), "class1"), cljs.core.hash_map("\ufdd0'line", 424))), cljs.core.hash_map("\ufdd0'line", 424)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", false, cljs.core.with_meta(cljs.core.list("\ufdd1'has-class?", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[1]"), cljs.core.hash_map("\ufdd0'line", 423)), "class1"), cljs.core.hash_map("\ufdd0'line", 423))), cljs.core.hash_map("\ufdd0'line", 423)))));
   }
   if(cljs.core.truth_(cljs.core._EQ_.call(null, true, domina.has_class_QMARK_.call(null, domina.xpath.call(null, "//div[1]"), "class2")))) {
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", true, cljs.core.with_meta(cljs.core.list("\ufdd1'has-class?", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[1]"), cljs.core.hash_map("\ufdd0'line", 425)), "class2"), cljs.core.hash_map("\ufdd0'line", 425))), cljs.core.hash_map("\ufdd0'line", 425)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", true, cljs.core.with_meta(cljs.core.list("\ufdd1'has-class?", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[1]"), cljs.core.hash_map("\ufdd0'line", 424)), "class2"), cljs.core.hash_map("\ufdd0'line", 424))), cljs.core.hash_map("\ufdd0'line", 424)))));
   }
   if(cljs.core.truth_(cljs.core._EQ_.call(null, false, domina.has_class_QMARK_.call(null, domina.xpath.call(null, "//div[2]"), "class1")))) {
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", false, cljs.core.with_meta(cljs.core.list("\ufdd1'has-class?", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[2]"), cljs.core.hash_map("\ufdd0'line", 426)), "class1"), cljs.core.hash_map("\ufdd0'line", 426))), cljs.core.hash_map("\ufdd0'line", 426)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", false, cljs.core.with_meta(cljs.core.list("\ufdd1'has-class?", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[2]"), cljs.core.hash_map("\ufdd0'line", 425)), "class1"), cljs.core.hash_map("\ufdd0'line", 425))), cljs.core.hash_map("\ufdd0'line", 425)))));
   }
   if(cljs.core.truth_(cljs.core._EQ_.call(null, true, domina.has_class_QMARK_.call(null, domina.xpath.call(null, "//div[2]"), "class2")))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", true, cljs.core.with_meta(cljs.core.list("\ufdd1'has-class?", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[2]"), cljs.core.hash_map("\ufdd0'line", 427)), "class2"), cljs.core.hash_map("\ufdd0'line", 427))), cljs.core.hash_map("\ufdd0'line", 427)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", true, cljs.core.with_meta(cljs.core.list("\ufdd1'has-class?", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[2]"), cljs.core.hash_map("\ufdd0'line", 426)), "class2"), cljs.core.hash_map("\ufdd0'line", 426))), cljs.core.hash_map("\ufdd0'line", 426)))));
   }
 });
 domina.test.add_test.call(null, "can get a list of all css classes for a node", function() {
@@ -21192,7 +15796,7 @@ domina.test.add_test.call(null, "can get a list of all css classes for a node", 
   if(cljs.core.truth_(cljs.core._EQ_.call(null, cljs.core.Vector.fromArray(["class1", "class2", "class3"]), domina.classes.call(null, domina.xpath.call(null, "//div"))))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", new cljs.core.Vector(null, ["class1", "class2", "class3"]), cljs.core.with_meta(cljs.core.list("\ufdd1'classes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div"), cljs.core.hash_map("\ufdd0'line", 432))), cljs.core.hash_map("\ufdd0'line", 432))), cljs.core.hash_map("\ufdd0'line", 432)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", new cljs.core.Vector(null, ["class1", "class2", "class3"]), cljs.core.with_meta(cljs.core.list("\ufdd1'classes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div"), cljs.core.hash_map("\ufdd0'line", 431))), cljs.core.hash_map("\ufdd0'line", 431))), cljs.core.hash_map("\ufdd0'line", 431)))));
   }
 });
 domina.test.add_test.call(null, "can retrieve the text value of a node with normalization.", function() {
@@ -21200,12 +15804,12 @@ domina.test.add_test.call(null, "can retrieve the text value of a node with norm
   domina.append_BANG_.call(null, domina.xpath.call(null, "//body"), "<p>\n\n   Some text.  \n  </p>");
   if(cljs.core.truth_(cljs.core._EQ_.call(null, "Some text. ", domina.text.call(null, domina.xpath.call(null, "//p"))))) {
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "Some text. ", cljs.core.with_meta(cljs.core.list("\ufdd1'text", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p"), cljs.core.hash_map("\ufdd0'line", 437))), cljs.core.hash_map("\ufdd0'line", 437))), cljs.core.hash_map("\ufdd0'line", 437)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "Some text. ", cljs.core.with_meta(cljs.core.list("\ufdd1'text", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p"), cljs.core.hash_map("\ufdd0'line", 436))), cljs.core.hash_map("\ufdd0'line", 436))), cljs.core.hash_map("\ufdd0'line", 436)))));
   }
   if(cljs.core.truth_(cljs.core._EQ_.call(null, "Some text. ", domina.text.call(null, domina.xpath.call(null, "//p"), true)))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "Some text. ", cljs.core.with_meta(cljs.core.list("\ufdd1'text", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p"), cljs.core.hash_map("\ufdd0'line", 438)), true), cljs.core.hash_map("\ufdd0'line", 438))), cljs.core.hash_map("\ufdd0'line", 438)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "Some text. ", cljs.core.with_meta(cljs.core.list("\ufdd1'text", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p"), cljs.core.hash_map("\ufdd0'line", 437)), true), cljs.core.hash_map("\ufdd0'line", 437))), cljs.core.hash_map("\ufdd0'line", 437)))));
   }
 });
 domina.test.add_test.call(null, "can retrieve the text value of a node without normalization.", function() {
@@ -21214,7 +15818,7 @@ domina.test.add_test.call(null, "can retrieve the text value of a node without n
   if(cljs.core.truth_(cljs.core._EQ_.call(null, "\n\n   Some text.  \n  ", domina.text.call(null, domina.xpath.call(null, "//p"), false)))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "\n\n   Some text.  \n  ", cljs.core.with_meta(cljs.core.list("\ufdd1'text", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p"), cljs.core.hash_map("\ufdd0'line", 443)), false), cljs.core.hash_map("\ufdd0'line", 443))), cljs.core.hash_map("\ufdd0'line", 443)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "\n\n   Some text.  \n  ", cljs.core.with_meta(cljs.core.list("\ufdd1'text", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p"), cljs.core.hash_map("\ufdd0'line", 442)), false), cljs.core.hash_map("\ufdd0'line", 442))), cljs.core.hash_map("\ufdd0'line", 442)))));
   }
 });
 domina.test.add_test.call(null, "can set text on a single node", function() {
@@ -21224,7 +15828,7 @@ domina.test.add_test.call(null, "can set text on a single node", function() {
   if(cljs.core.truth_(cljs.core._EQ_.call(null, "Hello world!", domina.text.call(null, domina.xpath.call(null, "//p"))))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "Hello world!", cljs.core.with_meta(cljs.core.list("\ufdd1'text", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p"), cljs.core.hash_map("\ufdd0'line", 449))), cljs.core.hash_map("\ufdd0'line", 449))), cljs.core.hash_map("\ufdd0'line", 449)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "Hello world!", cljs.core.with_meta(cljs.core.list("\ufdd1'text", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p"), cljs.core.hash_map("\ufdd0'line", 448))), cljs.core.hash_map("\ufdd0'line", 448))), cljs.core.hash_map("\ufdd0'line", 448)))));
   }
 });
 domina.test.add_test.call(null, "can set text on a multiple nodes", function() {
@@ -21233,12 +15837,12 @@ domina.test.add_test.call(null, "can set text on a multiple nodes", function() {
   domina.set_text_BANG_.call(null, domina.xpath.call(null, "//p"), "Hello world!");
   if(cljs.core.truth_(cljs.core._EQ_.call(null, "Hello world!", domina.text.call(null, domina.xpath.call(null, "//p[1]"))))) {
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "Hello world!", cljs.core.with_meta(cljs.core.list("\ufdd1'text", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p[1]"), cljs.core.hash_map("\ufdd0'line", 455))), cljs.core.hash_map("\ufdd0'line", 455))), cljs.core.hash_map("\ufdd0'line", 455)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "Hello world!", cljs.core.with_meta(cljs.core.list("\ufdd1'text", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p[1]"), cljs.core.hash_map("\ufdd0'line", 454))), cljs.core.hash_map("\ufdd0'line", 454))), cljs.core.hash_map("\ufdd0'line", 454)))));
   }
   if(cljs.core.truth_(cljs.core._EQ_.call(null, "Hello world!", domina.text.call(null, domina.xpath.call(null, "//p[2]"))))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "Hello world!", cljs.core.with_meta(cljs.core.list("\ufdd1'text", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p[2]"), cljs.core.hash_map("\ufdd0'line", 456))), cljs.core.hash_map("\ufdd0'line", 456))), cljs.core.hash_map("\ufdd0'line", 456)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "Hello world!", cljs.core.with_meta(cljs.core.list("\ufdd1'text", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p[2]"), cljs.core.hash_map("\ufdd0'line", 455))), cljs.core.hash_map("\ufdd0'line", 455))), cljs.core.hash_map("\ufdd0'line", 455)))));
   }
 });
 domina.test.add_test.call(null, "can get a form field value", function() {
@@ -21247,7 +15851,7 @@ domina.test.add_test.call(null, "can get a form field value", function() {
   if(cljs.core.truth_(cljs.core._EQ_.call(null, "Test Value", domina.value.call(null, domina.xpath.call(null, "//input"))))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "Test Value", cljs.core.with_meta(cljs.core.list("\ufdd1'value", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//input"), cljs.core.hash_map("\ufdd0'line", 461))), cljs.core.hash_map("\ufdd0'line", 461))), cljs.core.hash_map("\ufdd0'line", 461)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "Test Value", cljs.core.with_meta(cljs.core.list("\ufdd1'value", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//input"), cljs.core.hash_map("\ufdd0'line", 460))), cljs.core.hash_map("\ufdd0'line", 460))), cljs.core.hash_map("\ufdd0'line", 460)))));
   }
 });
 domina.test.add_test.call(null, "can set a form field value", function() {
@@ -21257,7 +15861,7 @@ domina.test.add_test.call(null, "can set a form field value", function() {
   if(cljs.core.truth_(cljs.core._EQ_.call(null, "Test Value", domina.value.call(null, domina.xpath.call(null, "//input"))))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "Test Value", cljs.core.with_meta(cljs.core.list("\ufdd1'value", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//input"), cljs.core.hash_map("\ufdd0'line", 467))), cljs.core.hash_map("\ufdd0'line", 467))), cljs.core.hash_map("\ufdd0'line", 467)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "Test Value", cljs.core.with_meta(cljs.core.list("\ufdd1'value", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//input"), cljs.core.hash_map("\ufdd0'line", 466))), cljs.core.hash_map("\ufdd0'line", 466))), cljs.core.hash_map("\ufdd0'line", 466)))));
   }
 });
 domina.test.add_test.call(null, "can set multiple form field values", function() {
@@ -21266,12 +15870,12 @@ domina.test.add_test.call(null, "can set multiple form field values", function()
   domina.set_value_BANG_.call(null, domina.xpath.call(null, "//input"), "Test Value");
   if(cljs.core.truth_(cljs.core._EQ_.call(null, "Test Value", domina.value.call(null, domina.xpath.call(null, "//input[1]"))))) {
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "Test Value", cljs.core.with_meta(cljs.core.list("\ufdd1'value", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//input[1]"), cljs.core.hash_map("\ufdd0'line", 473))), cljs.core.hash_map("\ufdd0'line", 473))), cljs.core.hash_map("\ufdd0'line", 473)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "Test Value", cljs.core.with_meta(cljs.core.list("\ufdd1'value", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//input[1]"), cljs.core.hash_map("\ufdd0'line", 472))), cljs.core.hash_map("\ufdd0'line", 472))), cljs.core.hash_map("\ufdd0'line", 472)))));
   }
   if(cljs.core.truth_(cljs.core._EQ_.call(null, "Test Value", domina.value.call(null, domina.xpath.call(null, "//input[2]"))))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "Test Value", cljs.core.with_meta(cljs.core.list("\ufdd1'value", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//input[2]"), cljs.core.hash_map("\ufdd0'line", 474))), cljs.core.hash_map("\ufdd0'line", 474))), cljs.core.hash_map("\ufdd0'line", 474)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "Test Value", cljs.core.with_meta(cljs.core.list("\ufdd1'value", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//input[2]"), cljs.core.hash_map("\ufdd0'line", 473))), cljs.core.hash_map("\ufdd0'line", 473))), cljs.core.hash_map("\ufdd0'line", 473)))));
   }
 });
 domina.test.add_test.call(null, "can get a node's innerHTML", function() {
@@ -21280,7 +15884,7 @@ domina.test.add_test.call(null, "can get a node's innerHTML", function() {
   if(cljs.core.truth_(cljs.core._EQ_.call(null, '<p class="foobar">some text</p>', domina.html.call(null, domina.xpath.call(null, "//div"))))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", '<p class="foobar">some text</p>', cljs.core.with_meta(cljs.core.list("\ufdd1'html", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div"), cljs.core.hash_map("\ufdd0'line", 479))), cljs.core.hash_map("\ufdd0'line", 479))), cljs.core.hash_map("\ufdd0'line", 479)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", '<p class="foobar">some text</p>', cljs.core.with_meta(cljs.core.list("\ufdd1'html", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div"), cljs.core.hash_map("\ufdd0'line", 478))), cljs.core.hash_map("\ufdd0'line", 478))), cljs.core.hash_map("\ufdd0'line", 478)))));
   }
 });
 domina.test.add_test.call(null, "can set a node's innerHTML", function() {
@@ -21290,7 +15894,7 @@ domina.test.add_test.call(null, "can set a node's innerHTML", function() {
   if(cljs.core.truth_(cljs.core._EQ_.call(null, 1, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.call(null, "//body/div/p[@class='foobar']")))))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 1, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//body/div/p[@class='foobar']"), cljs.core.hash_map("\ufdd0'line", 485))), cljs.core.hash_map("\ufdd0'line", 485))), cljs.core.hash_map("\ufdd0'line", 485))), cljs.core.hash_map("\ufdd0'line", 485)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 1, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//body/div/p[@class='foobar']"), cljs.core.hash_map("\ufdd0'line", 484))), cljs.core.hash_map("\ufdd0'line", 484))), cljs.core.hash_map("\ufdd0'line", 484))), cljs.core.hash_map("\ufdd0'line", 484)))));
   }
 });
 domina.test.add_test.call(null, "can set multiple node's innerHTML", function() {
@@ -21300,41 +15904,41 @@ domina.test.add_test.call(null, "can set multiple node's innerHTML", function() 
   if(cljs.core.truth_(cljs.core._EQ_.call(null, 2, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.call(null, "//body/div/p[@class='foobar']")))))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 2, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//body/div/p[@class='foobar']"), cljs.core.hash_map("\ufdd0'line", 491))), cljs.core.hash_map("\ufdd0'line", 491))), cljs.core.hash_map("\ufdd0'line", 491))), cljs.core.hash_map("\ufdd0'line", 491)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 2, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//body/div/p[@class='foobar']"), cljs.core.hash_map("\ufdd0'line", 490))), cljs.core.hash_map("\ufdd0'line", 490))), cljs.core.hash_map("\ufdd0'line", 490))), cljs.core.hash_map("\ufdd0'line", 490)))));
   }
 });
 domina.test.report = function report(test_results) {
   domina.test.reset.call(null);
-  var G__4303__4304 = cljs.core.seq.call(null, test_results);
-  if(cljs.core.truth_(G__4303__4304)) {
-    var G__4306__4308 = cljs.core.first.call(null, G__4303__4304);
-    var vec__4307__4309 = G__4306__4308;
-    var name__4310 = cljs.core.nth.call(null, vec__4307__4309, 0, null);
-    var result__4311 = cljs.core.nth.call(null, vec__4307__4309, 1, null);
-    var G__4303__4312 = G__4303__4304;
-    var G__4306__4313 = G__4306__4308;
-    var G__4303__4314 = G__4303__4312;
+  var G__2643__2644 = cljs.core.seq.call(null, test_results);
+  if(cljs.core.truth_(G__2643__2644)) {
+    var G__2646__2648 = cljs.core.first.call(null, G__2643__2644);
+    var vec__2647__2649 = G__2646__2648;
+    var name__2650 = cljs.core.nth.call(null, vec__2647__2649, 0, null);
+    var result__2651 = cljs.core.nth.call(null, vec__2647__2649, 1, null);
+    var G__2643__2652 = G__2643__2644;
+    var G__2646__2653 = G__2646__2648;
+    var G__2643__2654 = G__2643__2652;
     while(true) {
-      var vec__4315__4316 = G__4306__4313;
-      var name__4317 = cljs.core.nth.call(null, vec__4315__4316, 0, null);
-      var result__4318 = cljs.core.nth.call(null, vec__4315__4316, 1, null);
-      var G__4303__4319 = G__4303__4314;
-      var result_div__4320 = domina.single_node.call(null, "<div class='test-result'></div>");
-      domina.set_text_BANG_.call(null, result_div__4320, name__4317);
-      if(cljs.core.truth_(cljs.core.not.call(null, cljs.core._EQ_.call(null, result__4318, null)))) {
-        domina.add_class_BANG_.call(null, result_div__4320, "failed");
-        domina.append_BANG_.call(null, result_div__4320, cljs.core.str.call(null, "<div class='message'>", result__4318, "</div>"))
+      var vec__2655__2656 = G__2646__2653;
+      var name__2657 = cljs.core.nth.call(null, vec__2655__2656, 0, null);
+      var result__2658 = cljs.core.nth.call(null, vec__2655__2656, 1, null);
+      var G__2643__2659 = G__2643__2654;
+      var result_div__2660 = domina.single_node.call(null, "<div class='test-result'></div>");
+      domina.set_text_BANG_.call(null, result_div__2660, name__2657);
+      if(cljs.core.truth_(cljs.core.not.call(null, cljs.core._EQ_.call(null, result__2658, null)))) {
+        domina.add_class_BANG_.call(null, result_div__2660, "failed");
+        domina.append_BANG_.call(null, result_div__2660, cljs.core.str.call(null, "<div class='message'>", result__2658, "</div>"))
       }else {
-        domina.add_class_BANG_.call(null, result_div__4320, "passed")
+        domina.add_class_BANG_.call(null, result_div__2660, "passed")
       }
-      domina.append_BANG_.call(null, domina.xpath.call(null, "//body"), result_div__4320);
-      var temp__3698__auto____4321 = cljs.core.next.call(null, G__4303__4319);
-      if(cljs.core.truth_(temp__3698__auto____4321)) {
-        var G__4303__4322 = temp__3698__auto____4321;
-        var G__4324 = cljs.core.first.call(null, G__4303__4322);
-        var G__4325 = G__4303__4322;
-        G__4306__4313 = G__4324;
-        G__4303__4314 = G__4325;
+      domina.append_BANG_.call(null, domina.xpath.call(null, "//body"), result_div__2660);
+      var temp__3698__auto____2661 = cljs.core.next.call(null, G__2643__2659);
+      if(cljs.core.truth_(temp__3698__auto____2661)) {
+        var G__2643__2662 = temp__3698__auto____2661;
+        var G__2664 = cljs.core.first.call(null, G__2643__2662);
+        var G__2665 = G__2643__2662;
+        G__2646__2653 = G__2664;
+        G__2643__2654 = G__2665;
         continue
       }else {
       }
@@ -21344,9 +15948,9 @@ domina.test.report = function report(test_results) {
   }
   domina.prepend_BANG_.call(null, domina.xpath.call(null, "//body"), "<div id='test-summary'>ran <span id='total-tests'></span> tests with <span id='total-failures'></span> failures");
   domina.set_text_BANG_.call(null, domina.by_id.call(null, "total-tests"), cljs.core.count.call(null, test_results));
-  var failure_count__4323 = cljs.core.count.call(null, cljs.core.filter.call(null, cljs.core.complement.call(null, cljs.core.nil_QMARK_), cljs.core.map.call(null, cljs.core.second, test_results)));
-  domina.set_text_BANG_.call(null, domina.by_id.call(null, "total-failures"), failure_count__4323);
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, 0, failure_count__4323))) {
+  var failure_count__2663 = cljs.core.count.call(null, cljs.core.filter.call(null, cljs.core.complement.call(null, cljs.core.nil_QMARK_), cljs.core.map.call(null, cljs.core.second, test_results)));
+  domina.set_text_BANG_.call(null, domina.by_id.call(null, "total-failures"), failure_count__2663);
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, 0, failure_count__2663))) {
     return domina.add_class_BANG_.call(null, domina.by_id.call(null, "test-summary"), "passed")
   }else {
     return domina.add_class_BANG_.call(null, domina.by_id.call(null, "test-summary"), "failed")

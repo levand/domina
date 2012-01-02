@@ -1,6 +1,6 @@
 (use 'cljs.closure)
 
-(def ^:dynamic *pretty-print* false)
+(def ^:dynamic *pretty-print* true)
 
 (time
  (do

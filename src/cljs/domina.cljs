@@ -5,8 +5,7 @@
             [goog.dom.forms :as forms]
             [goog.style :as style]
             [goog.string :as string]
-            [cljs.core :as core]
-            [clojure.browser.repl :as repl]))
+            [cljs.core :as core]))
 
 ;;;;;;;;;;;;;;;;;;; Protocols ;;;;;;;;;;;;;;;;;
 

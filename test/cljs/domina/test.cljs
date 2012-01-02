@@ -3,8 +3,7 @@
                        prepend! detach! destroy! destroy-children! insert! insert-before!
                        insert-after! swap-content! style attr set-style! set-attr! styles attrs
                        set-styles! set-attrs! has-class? add-class! remove-class! classes
-                       text set-text! value set-value! html set-html!]])
-  (:require [clojure.browser.repl :as repl]))
+                       text set-text! value set-value! html set-html!]]))
 
 (comment
   (repl/connect "http://localhost:9000/repl")

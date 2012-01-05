@@ -15114,11 +15114,11 @@ domina.test.run_test = function run_test(testfn) {
   return tryfn.call(null, testfn)
 };
 domina.test.run_tests = function run_tests() {
-  return cljs.core.map.call(null, function(p__4170) {
-    var vec__4171__4172 = p__4170;
-    var name__4173 = cljs.core.nth.call(null, vec__4171__4172, 0, null);
-    var testfn__4174 = cljs.core.nth.call(null, vec__4171__4172, 1, null);
-    return cljs.core.Vector.fromArray([name__4173, domina.test.run_test.call(null, testfn__4174)])
+  return cljs.core.map.call(null, function(p__2457) {
+    var vec__2458__2459 = p__2457;
+    var name__2460 = cljs.core.nth.call(null, vec__2458__2459, 0, null);
+    var testfn__2461 = cljs.core.nth.call(null, vec__2458__2459, 1, null);
+    return cljs.core.Vector.fromArray([name__2460, domina.test.run_test.call(null, testfn__2461)])
   }, cljs.core.deref.call(null, domina.test.tests))
 };
 domina.test.reset = function reset() {
@@ -15327,32 +15327,32 @@ domina.test.add_test.call(null, "Insert a single child to multiple parents", fun
   domina.append_BANG_.call(null, domina.xpath.xpath.call(null, "//div[@class='testInserts']"), "<p class='i1'></p>");
   domina.append_BANG_.call(null, domina.xpath.xpath.call(null, "//div[@class='testInserts']"), "<p class='i3'></p>");
   domina.insert_BANG_.call(null, domina.xpath.xpath.call(null, "//div[@class='testInserts']"), "<p class='i2'></p>", 1);
-  var G__4175__4176 = cljs.core.seq.call(null, cljs.core.Vector.fromArray([domina.xpath.xpath.call(null, "//div[@id='testInsert1']"), domina.xpath.xpath.call(null, "//div[@id='testInsert2']")]));
-  if(cljs.core.truth_(G__4175__4176)) {
-    var children__4177 = cljs.core.first.call(null, G__4175__4176);
-    var G__4175__4178 = G__4175__4176;
+  var G__2462__2463 = cljs.core.seq.call(null, cljs.core.Vector.fromArray([domina.xpath.xpath.call(null, "//div[@id='testInsert1']"), domina.xpath.xpath.call(null, "//div[@id='testInsert2']")]));
+  if(cljs.core.truth_(G__2462__2463)) {
+    var children__2464 = cljs.core.first.call(null, G__2462__2463);
+    var G__2462__2465 = G__2462__2463;
     while(true) {
-      if(cljs.core.truth_(cljs.core._EQ_.call(null, 3, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.xpath.call(null, children__4177, "p")))))) {
+      if(cljs.core.truth_(cljs.core._EQ_.call(null, 3, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.xpath.call(null, children__2464, "p")))))) {
       }else {
         throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 3, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "\ufdd1'children", "p"), cljs.core.hash_map("\ufdd0'line", 177))), cljs.core.hash_map("\ufdd0'line", 177))), cljs.core.hash_map("\ufdd0'line", 177))), cljs.core.hash_map("\ufdd0'line", 177)))));
       }
-      if(cljs.core.truth_(cljs.core._EQ_.call(null, 1, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.xpath.call(null, children__4177, "p[@class='i2']/preceding-sibling::*")))))) {
+      if(cljs.core.truth_(cljs.core._EQ_.call(null, 1, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.xpath.call(null, children__2464, "p[@class='i2']/preceding-sibling::*")))))) {
       }else {
         throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 1, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "\ufdd1'children", "p[@class='i2']/preceding-sibling::*"), cljs.core.hash_map("\ufdd0'line", 178))), cljs.core.hash_map("\ufdd0'line", 178))), cljs.core.hash_map("\ufdd0'line", 178))), cljs.core.hash_map("\ufdd0'line", 
         178)))));
       }
-      if(cljs.core.truth_(cljs.core._EQ_.call(null, 1, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.xpath.call(null, children__4177, "p[@class='i2']/following-sibling::*")))))) {
+      if(cljs.core.truth_(cljs.core._EQ_.call(null, 1, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.xpath.call(null, children__2464, "p[@class='i2']/following-sibling::*")))))) {
       }else {
         throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 1, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "\ufdd1'children", "p[@class='i2']/following-sibling::*"), cljs.core.hash_map("\ufdd0'line", 180))), cljs.core.hash_map("\ufdd0'line", 180))), cljs.core.hash_map("\ufdd0'line", 180))), cljs.core.hash_map("\ufdd0'line", 
         180)))));
       }
-      var temp__3698__auto____4179 = cljs.core.next.call(null, G__4175__4178);
-      if(cljs.core.truth_(temp__3698__auto____4179)) {
-        var G__4175__4180 = temp__3698__auto____4179;
-        var G__4181 = cljs.core.first.call(null, G__4175__4180);
-        var G__4182 = G__4175__4180;
-        children__4177 = G__4181;
-        G__4175__4178 = G__4182;
+      var temp__3698__auto____2466 = cljs.core.next.call(null, G__2462__2465);
+      if(cljs.core.truth_(temp__3698__auto____2466)) {
+        var G__2462__2467 = temp__3698__auto____2466;
+        var G__2468 = cljs.core.first.call(null, G__2462__2467);
+        var G__2469 = G__2462__2467;
+        children__2464 = G__2468;
+        G__2462__2465 = G__2469;
         continue
       }else {
         return null
@@ -15394,12 +15394,12 @@ domina.test.add_test.call(null, "destroy multiple nodes", function() {
 domina.test.add_test.call(null, "detach and reattach a single node", function() {
   domina.test.reset.call(null);
   domina.test.standard_fixture.call(null);
-  var n__4183 = domina.detach_BANG_.call(null, domina.xpath.xpath.call(null, "//p[@class='p3']"));
+  var n__2470 = domina.detach_BANG_.call(null, domina.xpath.xpath.call(null, "//p[@class='p3']"));
   if(cljs.core.truth_(cljs.core._EQ_.call(null, 0, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.xpath.call(null, "//p[@class='p3']")))))) {
   }else {
     throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 0, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p[@class='p3']"), cljs.core.hash_map("\ufdd0'line", 202))), cljs.core.hash_map("\ufdd0'line", 202))), cljs.core.hash_map("\ufdd0'line", 202))), cljs.core.hash_map("\ufdd0'line", 202)))));
   }
-  domina.append_BANG_.call(null, domina.xpath.xpath.call(null, "//div[@class='d1']"), n__4183);
+  domina.append_BANG_.call(null, domina.xpath.xpath.call(null, "//div[@class='d1']"), n__2470);
   if(cljs.core.truth_(cljs.core._EQ_.call(null, 1, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.xpath.call(null, "//p[@class='p3']")))))) {
     return null
   }else {
@@ -15409,12 +15409,12 @@ domina.test.add_test.call(null, "detach and reattach a single node", function() 
 domina.test.add_test.call(null, "detach and reattach multiple nodes", function() {
   domina.test.reset.call(null);
   domina.test.standard_fixture.call(null);
-  var n__4184 = domina.detach_BANG_.call(null, domina.xpath.xpath.call(null, "//div[@class='d1']/p"));
+  var n__2471 = domina.detach_BANG_.call(null, domina.xpath.xpath.call(null, "//div[@class='d1']/p"));
   if(cljs.core.truth_(cljs.core._EQ_.call(null, 0, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.xpath.call(null, "//div[@class='d1']/p")))))) {
   }else {
     throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 0, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[@class='d1']/p"), cljs.core.hash_map("\ufdd0'line", 210))), cljs.core.hash_map("\ufdd0'line", 210))), cljs.core.hash_map("\ufdd0'line", 210))), cljs.core.hash_map("\ufdd0'line", 210)))));
   }
-  domina.append_BANG_.call(null, domina.xpath.xpath.call(null, "//div[@class='d1']"), n__4184);
+  domina.append_BANG_.call(null, domina.xpath.xpath.call(null, "//div[@class='d1']"), n__2471);
   if(cljs.core.truth_(cljs.core._EQ_.call(null, 3, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.xpath.call(null, "//div[@class='d1']/p")))))) {
     return null
   }else {
@@ -15971,36 +15971,36 @@ domina.test.add_test.call(null, "can set multiple node's innerHTML", function() 
 });
 domina.test.report = function report(test_results) {
   domina.test.reset.call(null);
-  var G__4185__4186 = cljs.core.seq.call(null, test_results);
-  if(cljs.core.truth_(G__4185__4186)) {
-    var G__4188__4190 = cljs.core.first.call(null, G__4185__4186);
-    var vec__4189__4191 = G__4188__4190;
-    var name__4192 = cljs.core.nth.call(null, vec__4189__4191, 0, null);
-    var result__4193 = cljs.core.nth.call(null, vec__4189__4191, 1, null);
-    var G__4185__4194 = G__4185__4186;
-    var G__4188__4195 = G__4188__4190;
-    var G__4185__4196 = G__4185__4194;
+  var G__2472__2473 = cljs.core.seq.call(null, test_results);
+  if(cljs.core.truth_(G__2472__2473)) {
+    var G__2475__2477 = cljs.core.first.call(null, G__2472__2473);
+    var vec__2476__2478 = G__2475__2477;
+    var name__2479 = cljs.core.nth.call(null, vec__2476__2478, 0, null);
+    var result__2480 = cljs.core.nth.call(null, vec__2476__2478, 1, null);
+    var G__2472__2481 = G__2472__2473;
+    var G__2475__2482 = G__2475__2477;
+    var G__2472__2483 = G__2472__2481;
     while(true) {
-      var vec__4197__4198 = G__4188__4195;
-      var name__4199 = cljs.core.nth.call(null, vec__4197__4198, 0, null);
-      var result__4200 = cljs.core.nth.call(null, vec__4197__4198, 1, null);
-      var G__4185__4201 = G__4185__4196;
-      var result_div__4202 = domina.single_node.call(null, "<div class='test-result'></div>");
-      domina.set_text_BANG_.call(null, result_div__4202, name__4199);
-      if(cljs.core.truth_(cljs.core.not.call(null, cljs.core._EQ_.call(null, result__4200, null)))) {
-        domina.add_class_BANG_.call(null, result_div__4202, "failed");
-        domina.append_BANG_.call(null, result_div__4202, cljs.core.str.call(null, "<div class='message'>", result__4200, "</div>"))
+      var vec__2484__2485 = G__2475__2482;
+      var name__2486 = cljs.core.nth.call(null, vec__2484__2485, 0, null);
+      var result__2487 = cljs.core.nth.call(null, vec__2484__2485, 1, null);
+      var G__2472__2488 = G__2472__2483;
+      var result_div__2489 = domina.single_node.call(null, "<div class='test-result'></div>");
+      domina.set_text_BANG_.call(null, result_div__2489, name__2486);
+      if(cljs.core.truth_(cljs.core.not.call(null, cljs.core._EQ_.call(null, result__2487, null)))) {
+        domina.add_class_BANG_.call(null, result_div__2489, "failed");
+        domina.append_BANG_.call(null, result_div__2489, cljs.core.str.call(null, "<div class='message'>", result__2487, "</div>"))
       }else {
-        domina.add_class_BANG_.call(null, result_div__4202, "passed")
+        domina.add_class_BANG_.call(null, result_div__2489, "passed")
       }
-      domina.append_BANG_.call(null, domina.xpath.xpath.call(null, "//body"), result_div__4202);
-      var temp__3698__auto____4203 = cljs.core.next.call(null, G__4185__4201);
-      if(cljs.core.truth_(temp__3698__auto____4203)) {
-        var G__4185__4204 = temp__3698__auto____4203;
-        var G__4206 = cljs.core.first.call(null, G__4185__4204);
-        var G__4207 = G__4185__4204;
-        G__4188__4195 = G__4206;
-        G__4185__4196 = G__4207;
+      domina.append_BANG_.call(null, domina.xpath.xpath.call(null, "//body"), result_div__2489);
+      var temp__3698__auto____2490 = cljs.core.next.call(null, G__2472__2488);
+      if(cljs.core.truth_(temp__3698__auto____2490)) {
+        var G__2472__2491 = temp__3698__auto____2490;
+        var G__2493 = cljs.core.first.call(null, G__2472__2491);
+        var G__2494 = G__2472__2491;
+        G__2475__2482 = G__2493;
+        G__2472__2483 = G__2494;
         continue
       }else {
       }
@@ -16010,9 +16010,9 @@ domina.test.report = function report(test_results) {
   }
   domina.prepend_BANG_.call(null, domina.xpath.xpath.call(null, "//body"), "<div id='test-summary'>ran <span id='total-tests'></span> tests with <span id='total-failures'></span> failures");
   domina.set_text_BANG_.call(null, domina.by_id.call(null, "total-tests"), cljs.core.count.call(null, test_results));
-  var failure_count__4205 = cljs.core.count.call(null, cljs.core.filter.call(null, cljs.core.complement.call(null, cljs.core.nil_QMARK_), cljs.core.map.call(null, cljs.core.second, test_results)));
-  domina.set_text_BANG_.call(null, domina.by_id.call(null, "total-failures"), failure_count__4205);
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, 0, failure_count__4205))) {
+  var failure_count__2492 = cljs.core.count.call(null, cljs.core.filter.call(null, cljs.core.complement.call(null, cljs.core.nil_QMARK_), cljs.core.map.call(null, cljs.core.second, test_results)));
+  domina.set_text_BANG_.call(null, domina.by_id.call(null, "total-failures"), failure_count__2492);
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, 0, failure_count__2492))) {
     return domina.add_class_BANG_.call(null, domina.by_id.call(null, "test-summary"), "passed")
   }else {
     return domina.add_class_BANG_.call(null, domina.by_id.call(null, "test-summary"), "failed")

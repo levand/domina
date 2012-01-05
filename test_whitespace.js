@@ -14360,23 +14360,23 @@ goog.require("cljs.core");
 domina.DomContent = {};
 domina.nodes = function nodes(content) {
   if(cljs.core.truth_(function() {
-    var and__3546__auto____2668 = content;
-    if(cljs.core.truth_(and__3546__auto____2668)) {
+    var and__3546__auto____4225 = content;
+    if(cljs.core.truth_(and__3546__auto____4225)) {
       return content.domina$DomContent$nodes
     }else {
-      return and__3546__auto____2668
+      return and__3546__auto____4225
     }
   }())) {
     return content.domina$DomContent$nodes(content)
   }else {
     return function() {
-      var or__3548__auto____2669 = domina.nodes[goog.typeOf.call(null, content)];
-      if(cljs.core.truth_(or__3548__auto____2669)) {
-        return or__3548__auto____2669
+      var or__3548__auto____4226 = domina.nodes[goog.typeOf.call(null, content)];
+      if(cljs.core.truth_(or__3548__auto____4226)) {
+        return or__3548__auto____4226
       }else {
-        var or__3548__auto____2670 = domina.nodes["_"];
-        if(cljs.core.truth_(or__3548__auto____2670)) {
-          return or__3548__auto____2670
+        var or__3548__auto____4227 = domina.nodes["_"];
+        if(cljs.core.truth_(or__3548__auto____4227)) {
+          return or__3548__auto____4227
         }else {
           throw cljs.core.missing_protocol.call(null, "DomContent.nodes", content);
         }
@@ -14386,23 +14386,23 @@ domina.nodes = function nodes(content) {
 };
 domina.single_node = function single_node(nodeseq) {
   if(cljs.core.truth_(function() {
-    var and__3546__auto____2671 = nodeseq;
-    if(cljs.core.truth_(and__3546__auto____2671)) {
+    var and__3546__auto____4228 = nodeseq;
+    if(cljs.core.truth_(and__3546__auto____4228)) {
       return nodeseq.domina$DomContent$single_node
     }else {
-      return and__3546__auto____2671
+      return and__3546__auto____4228
     }
   }())) {
     return nodeseq.domina$DomContent$single_node(nodeseq)
   }else {
     return function() {
-      var or__3548__auto____2672 = domina.single_node[goog.typeOf.call(null, nodeseq)];
-      if(cljs.core.truth_(or__3548__auto____2672)) {
-        return or__3548__auto____2672
+      var or__3548__auto____4229 = domina.single_node[goog.typeOf.call(null, nodeseq)];
+      if(cljs.core.truth_(or__3548__auto____4229)) {
+        return or__3548__auto____4229
       }else {
-        var or__3548__auto____2673 = domina.single_node["_"];
-        if(cljs.core.truth_(or__3548__auto____2673)) {
-          return or__3548__auto____2673
+        var or__3548__auto____4230 = domina.single_node["_"];
+        if(cljs.core.truth_(or__3548__auto____4230)) {
+          return or__3548__auto____4230
         }else {
           throw cljs.core.missing_protocol.call(null, "DomContent.single-node", nodeseq);
         }
@@ -14410,74 +14410,34 @@ domina.single_node = function single_node(nodeseq) {
     }().call(null, nodeseq)
   }
 };
-domina.xpath = function() {
-  var xpath = null;
-  var xpath__2677 = function(expr) {
-    return xpath.call(null, document, expr)
-  };
-  var xpath__2678 = function(base, expr) {
-    if(cljs.core.truth_(cljs.core.undefined_QMARK_.call(null, domina.t2674))) {
-      domina.t2674 = function(expr, base, xpath) {
-        this.expr = expr;
-        this.base = base;
-        this.xpath = xpath
-      };
-      domina.t2674.prototype.domina$DomContent$ = true;
-      domina.t2674.prototype.domina$DomContent$nodes = function(_) {
-        var this__2675 = this;
-        return cljs.core.mapcat.call(null, function(p1__2666_SHARP_) {
-          return goog.dom.xml.selectNodes.call(null, p1__2666_SHARP_, this__2675.expr)
-        }, domina.nodes.call(null, this__2675.base))
-      };
-      domina.t2674.prototype.domina$DomContent$single_node = function(_) {
-        var this__2676 = this;
-        return cljs.core.first.call(null, cljs.core.filter.call(null, cljs.core.complement.call(null, cljs.core.nil_QMARK_), cljs.core.map.call(null, function(p1__2667_SHARP_) {
-          return goog.dom.xml.selectSingleNode.call(null, p1__2667_SHARP_, this__2676.expr)
-        }, domina.nodes.call(null, this__2676.base))))
-      }
-    }else {
-    }
-    return new domina.t2674(expr, base, xpath)
-  };
-  xpath = function(base, expr) {
-    switch(arguments.length) {
-      case 1:
-        return xpath__2677.call(this, base);
-      case 2:
-        return xpath__2678.call(this, base, expr)
-    }
-    throw"Invalid arity: " + arguments.length;
-  };
-  return xpath
-}();
 domina.by_id = function by_id(id) {
   return goog.dom.getElement.call(null, cljs.core.name.call(null, id))
 };
 domina.by_class = function by_class(class_name) {
-  if(cljs.core.truth_(cljs.core.undefined_QMARK_.call(null, domina.t2680))) {
-    domina.t2680 = function(class_name, by_class) {
+  if(cljs.core.truth_(cljs.core.undefined_QMARK_.call(null, domina.t4231))) {
+    domina.t4231 = function(class_name, by_class) {
       this.class_name = class_name;
       this.by_class = by_class
     };
-    domina.t2680.prototype.domina$DomContent$ = true;
-    domina.t2680.prototype.domina$DomContent$nodes = function(_) {
-      var this__2681 = this;
-      return goog.dom.getElementsByClass.call(null, cljs.core.name.call(null, this__2681.class_name))
+    domina.t4231.prototype.domina$DomContent$ = true;
+    domina.t4231.prototype.domina$DomContent$nodes = function(_) {
+      var this__4232 = this;
+      return goog.dom.getElementsByClass.call(null, cljs.core.name.call(null, this__4232.class_name))
     };
-    domina.t2680.prototype.domina$DomContent$single_node = function(_) {
-      var this__2682 = this;
-      return goog.dom.getElementByClass.call(null, cljs.core.name.call(null, this__2682.class_name))
+    domina.t4231.prototype.domina$DomContent$single_node = function(_) {
+      var this__4233 = this;
+      return goog.dom.getElementByClass.call(null, cljs.core.name.call(null, this__4233.class_name))
     }
   }else {
   }
-  return new domina.t2680(class_name, by_class)
+  return new domina.t4231(class_name, by_class)
 };
 domina.children = function children(content) {
   return cljs.core.mapcat.call(null, goog.dom.getChildren, domina.nodes.call(null, content))
 };
 domina.clone = function clone(content) {
-  return cljs.core.map.call(null, function(p1__2683_SHARP_) {
-    return p1__2683_SHARP_.cloneNode(true)
+  return cljs.core.map.call(null, function(p1__4234_SHARP_) {
+    return p1__4234_SHARP_.cloneNode(true)
   }, domina.nodes.call(null, content))
 };
 domina.append_BANG_ = function append_BANG_(parent_content, child_content) {
@@ -14485,8 +14445,8 @@ domina.append_BANG_ = function append_BANG_(parent_content, child_content) {
   return parent_content
 };
 domina.insert_BANG_ = function insert_BANG_(parent_content, child_content, idx) {
-  domina.apply_with_cloning.call(null, function(p1__2684_SHARP_, p2__2685_SHARP_) {
-    return goog.dom.insertChildAt.call(null, p1__2684_SHARP_, p2__2685_SHARP_, idx)
+  domina.apply_with_cloning.call(null, function(p1__4235_SHARP_, p2__4236_SHARP_) {
+    return goog.dom.insertChildAt.call(null, p1__4235_SHARP_, p2__4236_SHARP_, idx)
   }, parent_content, child_content);
   return parent_content
 };
@@ -14495,20 +14455,20 @@ domina.prepend_BANG_ = function prepend_BANG_(parent_content, child_content) {
   return parent_content
 };
 domina.insert_before_BANG_ = function insert_before_BANG_(content, new_content) {
-  domina.apply_with_cloning.call(null, function(p1__2687_SHARP_, p2__2686_SHARP_) {
-    return goog.dom.insertSiblingBefore.call(null, p2__2686_SHARP_, p1__2687_SHARP_)
+  domina.apply_with_cloning.call(null, function(p1__4238_SHARP_, p2__4237_SHARP_) {
+    return goog.dom.insertSiblingBefore.call(null, p2__4237_SHARP_, p1__4238_SHARP_)
   }, content, new_content);
   return content
 };
 domina.insert_after_BANG_ = function insert_after_BANG_(content, new_content) {
-  domina.apply_with_cloning.call(null, function(p1__2689_SHARP_, p2__2688_SHARP_) {
-    return goog.dom.insertSiblingAfter.call(null, p2__2688_SHARP_, p1__2689_SHARP_)
+  domina.apply_with_cloning.call(null, function(p1__4240_SHARP_, p2__4239_SHARP_) {
+    return goog.dom.insertSiblingAfter.call(null, p2__4239_SHARP_, p1__4240_SHARP_)
   }, content, new_content);
   return content
 };
 domina.swap_content_BANG_ = function swap_content_BANG_(old_content, new_content) {
-  domina.apply_with_cloning.call(null, function(p1__2691_SHARP_, p2__2690_SHARP_) {
-    return goog.dom.replaceNode.call(null, p2__2690_SHARP_, p1__2691_SHARP_)
+  domina.apply_with_cloning.call(null, function(p1__4242_SHARP_, p2__4241_SHARP_) {
+    return goog.dom.replaceNode.call(null, p2__4241_SHARP_, p1__4242_SHARP_)
   }, old_content, new_content);
   return old_content
 };
@@ -14523,9 +14483,9 @@ domina.destroy_children_BANG_ = function destroy_children_BANG_(content) {
   return content
 };
 domina.style = function style(content, name) {
-  var s__2692 = goog.style.getStyle.call(null, domina.single_node.call(null, content), cljs.core.name.call(null, name));
-  if(cljs.core.truth_(cljs.core.not.call(null, goog.string.isEmptySafe.call(null, s__2692)))) {
-    return s__2692
+  var s__4243 = goog.style.getStyle.call(null, domina.single_node.call(null, content), cljs.core.name.call(null, name));
+  if(cljs.core.truth_(cljs.core.not.call(null, goog.string.isEmptySafe.call(null, s__4243)))) {
+    return s__4243
   }else {
     return null
   }
@@ -14534,19 +14494,19 @@ domina.attr = function attr(content, name) {
   return domina.single_node.call(null, content).getAttribute(cljs.core.name.call(null, name))
 };
 domina.set_style_BANG_ = function set_style_BANG_(content, name, value) {
-  var G__2693__2694 = cljs.core.seq.call(null, domina.nodes.call(null, content));
-  if(cljs.core.truth_(G__2693__2694)) {
-    var n__2695 = cljs.core.first.call(null, G__2693__2694);
-    var G__2693__2696 = G__2693__2694;
+  var G__4244__4245 = cljs.core.seq.call(null, domina.nodes.call(null, content));
+  if(cljs.core.truth_(G__4244__4245)) {
+    var n__4246 = cljs.core.first.call(null, G__4244__4245);
+    var G__4244__4247 = G__4244__4245;
     while(true) {
-      goog.style.setStyle.call(null, n__2695, cljs.core.name.call(null, name), value);
-      var temp__3698__auto____2697 = cljs.core.next.call(null, G__2693__2696);
-      if(cljs.core.truth_(temp__3698__auto____2697)) {
-        var G__2693__2698 = temp__3698__auto____2697;
-        var G__2699 = cljs.core.first.call(null, G__2693__2698);
-        var G__2700 = G__2693__2698;
-        n__2695 = G__2699;
-        G__2693__2696 = G__2700;
+      goog.style.setStyle.call(null, n__4246, cljs.core.name.call(null, name), value);
+      var temp__3698__auto____4248 = cljs.core.next.call(null, G__4244__4247);
+      if(cljs.core.truth_(temp__3698__auto____4248)) {
+        var G__4244__4249 = temp__3698__auto____4248;
+        var G__4250 = cljs.core.first.call(null, G__4244__4249);
+        var G__4251 = G__4244__4249;
+        n__4246 = G__4250;
+        G__4244__4247 = G__4251;
         continue
       }else {
       }
@@ -14557,19 +14517,19 @@ domina.set_style_BANG_ = function set_style_BANG_(content, name, value) {
   return content
 };
 domina.set_attr_BANG_ = function set_attr_BANG_(content, name, value) {
-  var G__2701__2702 = cljs.core.seq.call(null, domina.nodes.call(null, content));
-  if(cljs.core.truth_(G__2701__2702)) {
-    var n__2703 = cljs.core.first.call(null, G__2701__2702);
-    var G__2701__2704 = G__2701__2702;
+  var G__4252__4253 = cljs.core.seq.call(null, domina.nodes.call(null, content));
+  if(cljs.core.truth_(G__4252__4253)) {
+    var n__4254 = cljs.core.first.call(null, G__4252__4253);
+    var G__4252__4255 = G__4252__4253;
     while(true) {
-      n__2703.setAttribute(cljs.core.name.call(null, name), value);
-      var temp__3698__auto____2705 = cljs.core.next.call(null, G__2701__2704);
-      if(cljs.core.truth_(temp__3698__auto____2705)) {
-        var G__2701__2706 = temp__3698__auto____2705;
-        var G__2707 = cljs.core.first.call(null, G__2701__2706);
-        var G__2708 = G__2701__2706;
-        n__2703 = G__2707;
-        G__2701__2704 = G__2708;
+      n__4254.setAttribute(cljs.core.name.call(null, name), value);
+      var temp__3698__auto____4256 = cljs.core.next.call(null, G__4252__4255);
+      if(cljs.core.truth_(temp__3698__auto____4256)) {
+        var G__4252__4257 = temp__3698__auto____4256;
+        var G__4258 = cljs.core.first.call(null, G__4252__4257);
+        var G__4259 = G__4252__4257;
+        n__4254 = G__4258;
+        G__4252__4255 = G__4259;
         continue
       }else {
       }
@@ -14581,18 +14541,18 @@ domina.set_attr_BANG_ = function set_attr_BANG_(content, name, value) {
 };
 domina.parse_style_attributes = function parse_style_attributes(style) {
   return cljs.core.reduce.call(null, function(acc, pair) {
-    var vec__2709__2710 = pair.split(/\s*:\s*/);
-    var k__2711 = cljs.core.nth.call(null, vec__2709__2710, 0, null);
-    var v__2712 = cljs.core.nth.call(null, vec__2709__2710, 1, null);
+    var vec__4260__4261 = pair.split(/\s*:\s*/);
+    var k__4262 = cljs.core.nth.call(null, vec__4260__4261, 0, null);
+    var v__4263 = cljs.core.nth.call(null, vec__4260__4261, 1, null);
     if(cljs.core.truth_(function() {
-      var and__3546__auto____2713 = k__2711;
-      if(cljs.core.truth_(and__3546__auto____2713)) {
-        return v__2712
+      var and__3546__auto____4264 = k__4262;
+      if(cljs.core.truth_(and__3546__auto____4264)) {
+        return v__4263
       }else {
-        return and__3546__auto____2713
+        return and__3546__auto____4264
       }
     }())) {
-      return cljs.core.assoc.call(null, acc, cljs.core.keyword.call(null, k__2711.toLowerCase()), v__2712)
+      return cljs.core.assoc.call(null, acc, cljs.core.keyword.call(null, k__4262.toLowerCase()), v__4263)
     }else {
       return acc
     }
@@ -14602,36 +14562,36 @@ domina.styles = function styles(content) {
   return domina.parse_style_attributes.call(null, domina.attr.call(null, content, "style"))
 };
 domina.attrs = function attrs(content) {
-  var node__2715 = domina.single_node.call(null, content);
-  var attrs__2716 = node__2715.attributes;
-  return cljs.core.reduce.call(null, cljs.core.conj, cljs.core.map.call(null, function(p1__2714_SHARP_) {
-    var attr__2717 = attrs__2716.item(p1__2714_SHARP_);
-    return cljs.core.HashMap.fromArrays([cljs.core.keyword.call(null, attr__2717.nodeName.toLowerCase())], [attr__2717.nodeValue])
-  }, cljs.core.range.call(null, attrs__2716.length)))
+  var node__4266 = domina.single_node.call(null, content);
+  var attrs__4267 = node__4266.attributes;
+  return cljs.core.reduce.call(null, cljs.core.conj, cljs.core.map.call(null, function(p1__4265_SHARP_) {
+    var attr__4268 = attrs__4267.item(p1__4265_SHARP_);
+    return cljs.core.HashMap.fromArrays([cljs.core.keyword.call(null, attr__4268.nodeName.toLowerCase())], [attr__4268.nodeValue])
+  }, cljs.core.range.call(null, attrs__4267.length)))
 };
 domina.set_styles_BANG_ = function set_styles_BANG_(content, styles) {
-  var G__2718__2719 = cljs.core.seq.call(null, styles);
-  if(cljs.core.truth_(G__2718__2719)) {
-    var G__2721__2723 = cljs.core.first.call(null, G__2718__2719);
-    var vec__2722__2724 = G__2721__2723;
-    var name__2725 = cljs.core.nth.call(null, vec__2722__2724, 0, null);
-    var value__2726 = cljs.core.nth.call(null, vec__2722__2724, 1, null);
-    var G__2718__2727 = G__2718__2719;
-    var G__2721__2728 = G__2721__2723;
-    var G__2718__2729 = G__2718__2727;
+  var G__4269__4270 = cljs.core.seq.call(null, styles);
+  if(cljs.core.truth_(G__4269__4270)) {
+    var G__4272__4274 = cljs.core.first.call(null, G__4269__4270);
+    var vec__4273__4275 = G__4272__4274;
+    var name__4276 = cljs.core.nth.call(null, vec__4273__4275, 0, null);
+    var value__4277 = cljs.core.nth.call(null, vec__4273__4275, 1, null);
+    var G__4269__4278 = G__4269__4270;
+    var G__4272__4279 = G__4272__4274;
+    var G__4269__4280 = G__4269__4278;
     while(true) {
-      var vec__2730__2731 = G__2721__2728;
-      var name__2732 = cljs.core.nth.call(null, vec__2730__2731, 0, null);
-      var value__2733 = cljs.core.nth.call(null, vec__2730__2731, 1, null);
-      var G__2718__2734 = G__2718__2729;
-      domina.set_style_BANG_.call(null, content, name__2732, value__2733);
-      var temp__3698__auto____2735 = cljs.core.next.call(null, G__2718__2734);
-      if(cljs.core.truth_(temp__3698__auto____2735)) {
-        var G__2718__2736 = temp__3698__auto____2735;
-        var G__2737 = cljs.core.first.call(null, G__2718__2736);
-        var G__2738 = G__2718__2736;
-        G__2721__2728 = G__2737;
-        G__2718__2729 = G__2738;
+      var vec__4281__4282 = G__4272__4279;
+      var name__4283 = cljs.core.nth.call(null, vec__4281__4282, 0, null);
+      var value__4284 = cljs.core.nth.call(null, vec__4281__4282, 1, null);
+      var G__4269__4285 = G__4269__4280;
+      domina.set_style_BANG_.call(null, content, name__4283, value__4284);
+      var temp__3698__auto____4286 = cljs.core.next.call(null, G__4269__4285);
+      if(cljs.core.truth_(temp__3698__auto____4286)) {
+        var G__4269__4287 = temp__3698__auto____4286;
+        var G__4288 = cljs.core.first.call(null, G__4269__4287);
+        var G__4289 = G__4269__4287;
+        G__4272__4279 = G__4288;
+        G__4269__4280 = G__4289;
         continue
       }else {
       }
@@ -14642,28 +14602,28 @@ domina.set_styles_BANG_ = function set_styles_BANG_(content, styles) {
   return content
 };
 domina.set_attrs_BANG_ = function set_attrs_BANG_(content, attrs) {
-  var G__2739__2740 = cljs.core.seq.call(null, attrs);
-  if(cljs.core.truth_(G__2739__2740)) {
-    var G__2742__2744 = cljs.core.first.call(null, G__2739__2740);
-    var vec__2743__2745 = G__2742__2744;
-    var name__2746 = cljs.core.nth.call(null, vec__2743__2745, 0, null);
-    var value__2747 = cljs.core.nth.call(null, vec__2743__2745, 1, null);
-    var G__2739__2748 = G__2739__2740;
-    var G__2742__2749 = G__2742__2744;
-    var G__2739__2750 = G__2739__2748;
+  var G__4290__4291 = cljs.core.seq.call(null, attrs);
+  if(cljs.core.truth_(G__4290__4291)) {
+    var G__4293__4295 = cljs.core.first.call(null, G__4290__4291);
+    var vec__4294__4296 = G__4293__4295;
+    var name__4297 = cljs.core.nth.call(null, vec__4294__4296, 0, null);
+    var value__4298 = cljs.core.nth.call(null, vec__4294__4296, 1, null);
+    var G__4290__4299 = G__4290__4291;
+    var G__4293__4300 = G__4293__4295;
+    var G__4290__4301 = G__4290__4299;
     while(true) {
-      var vec__2751__2752 = G__2742__2749;
-      var name__2753 = cljs.core.nth.call(null, vec__2751__2752, 0, null);
-      var value__2754 = cljs.core.nth.call(null, vec__2751__2752, 1, null);
-      var G__2739__2755 = G__2739__2750;
-      domina.set_attr_BANG_.call(null, content, name__2753, value__2754);
-      var temp__3698__auto____2756 = cljs.core.next.call(null, G__2739__2755);
-      if(cljs.core.truth_(temp__3698__auto____2756)) {
-        var G__2739__2757 = temp__3698__auto____2756;
-        var G__2758 = cljs.core.first.call(null, G__2739__2757);
-        var G__2759 = G__2739__2757;
-        G__2742__2749 = G__2758;
-        G__2739__2750 = G__2759;
+      var vec__4302__4303 = G__4293__4300;
+      var name__4304 = cljs.core.nth.call(null, vec__4302__4303, 0, null);
+      var value__4305 = cljs.core.nth.call(null, vec__4302__4303, 1, null);
+      var G__4290__4306 = G__4290__4301;
+      domina.set_attr_BANG_.call(null, content, name__4304, value__4305);
+      var temp__3698__auto____4307 = cljs.core.next.call(null, G__4290__4306);
+      if(cljs.core.truth_(temp__3698__auto____4307)) {
+        var G__4290__4308 = temp__3698__auto____4307;
+        var G__4309 = cljs.core.first.call(null, G__4290__4308);
+        var G__4310 = G__4290__4308;
+        G__4293__4300 = G__4309;
+        G__4290__4301 = G__4310;
         continue
       }else {
       }
@@ -14677,19 +14637,19 @@ domina.has_class_QMARK_ = function has_class_QMARK_(content, class$) {
   return goog.dom.classes.has.call(null, domina.single_node.call(null, content), class$)
 };
 domina.add_class_BANG_ = function add_class_BANG_(content, class$) {
-  var G__2760__2761 = cljs.core.seq.call(null, domina.nodes.call(null, content));
-  if(cljs.core.truth_(G__2760__2761)) {
-    var node__2762 = cljs.core.first.call(null, G__2760__2761);
-    var G__2760__2763 = G__2760__2761;
+  var G__4311__4312 = cljs.core.seq.call(null, domina.nodes.call(null, content));
+  if(cljs.core.truth_(G__4311__4312)) {
+    var node__4313 = cljs.core.first.call(null, G__4311__4312);
+    var G__4311__4314 = G__4311__4312;
     while(true) {
-      goog.dom.classes.add.call(null, node__2762, class$);
-      var temp__3698__auto____2764 = cljs.core.next.call(null, G__2760__2763);
-      if(cljs.core.truth_(temp__3698__auto____2764)) {
-        var G__2760__2765 = temp__3698__auto____2764;
-        var G__2766 = cljs.core.first.call(null, G__2760__2765);
-        var G__2767 = G__2760__2765;
-        node__2762 = G__2766;
-        G__2760__2763 = G__2767;
+      goog.dom.classes.add.call(null, node__4313, class$);
+      var temp__3698__auto____4315 = cljs.core.next.call(null, G__4311__4314);
+      if(cljs.core.truth_(temp__3698__auto____4315)) {
+        var G__4311__4316 = temp__3698__auto____4315;
+        var G__4317 = cljs.core.first.call(null, G__4311__4316);
+        var G__4318 = G__4311__4316;
+        node__4313 = G__4317;
+        G__4311__4314 = G__4318;
         continue
       }else {
       }
@@ -14700,19 +14660,19 @@ domina.add_class_BANG_ = function add_class_BANG_(content, class$) {
   return content
 };
 domina.remove_class_BANG_ = function remove_class_BANG_(content, class$) {
-  var G__2768__2769 = cljs.core.seq.call(null, domina.nodes.call(null, content));
-  if(cljs.core.truth_(G__2768__2769)) {
-    var node__2770 = cljs.core.first.call(null, G__2768__2769);
-    var G__2768__2771 = G__2768__2769;
+  var G__4319__4320 = cljs.core.seq.call(null, domina.nodes.call(null, content));
+  if(cljs.core.truth_(G__4319__4320)) {
+    var node__4321 = cljs.core.first.call(null, G__4319__4320);
+    var G__4319__4322 = G__4319__4320;
     while(true) {
-      goog.dom.classes.remove.call(null, node__2770, class$);
-      var temp__3698__auto____2772 = cljs.core.next.call(null, G__2768__2771);
-      if(cljs.core.truth_(temp__3698__auto____2772)) {
-        var G__2768__2773 = temp__3698__auto____2772;
-        var G__2774 = cljs.core.first.call(null, G__2768__2773);
-        var G__2775 = G__2768__2773;
-        node__2770 = G__2774;
-        G__2768__2771 = G__2775;
+      goog.dom.classes.remove.call(null, node__4321, class$);
+      var temp__3698__auto____4323 = cljs.core.next.call(null, G__4319__4322);
+      if(cljs.core.truth_(temp__3698__auto____4323)) {
+        var G__4319__4324 = temp__3698__auto____4323;
+        var G__4325 = cljs.core.first.call(null, G__4319__4324);
+        var G__4326 = G__4319__4324;
+        node__4321 = G__4325;
+        G__4319__4322 = G__4326;
         continue
       }else {
       }
@@ -14727,10 +14687,10 @@ domina.classes = function classes(content) {
 };
 domina.text = function() {
   var text = null;
-  var text__2776 = function(content) {
+  var text__4327 = function(content) {
     return text.call(null, content, true)
   };
-  var text__2777 = function(content, normalize) {
+  var text__4328 = function(content, normalize) {
     if(cljs.core.truth_(normalize)) {
       return goog.dom.getTextContent.call(null, domina.single_node.call(null, content))
     }else {
@@ -14740,28 +14700,28 @@ domina.text = function() {
   text = function(content, normalize) {
     switch(arguments.length) {
       case 1:
-        return text__2776.call(this, content);
+        return text__4327.call(this, content);
       case 2:
-        return text__2777.call(this, content, normalize)
+        return text__4328.call(this, content, normalize)
     }
     throw"Invalid arity: " + arguments.length;
   };
   return text
 }();
 domina.set_text_BANG_ = function set_text_BANG_(content, value) {
-  var G__2779__2780 = cljs.core.seq.call(null, domina.nodes.call(null, content));
-  if(cljs.core.truth_(G__2779__2780)) {
-    var node__2781 = cljs.core.first.call(null, G__2779__2780);
-    var G__2779__2782 = G__2779__2780;
+  var G__4330__4331 = cljs.core.seq.call(null, domina.nodes.call(null, content));
+  if(cljs.core.truth_(G__4330__4331)) {
+    var node__4332 = cljs.core.first.call(null, G__4330__4331);
+    var G__4330__4333 = G__4330__4331;
     while(true) {
-      goog.dom.setTextContent.call(null, node__2781, value);
-      var temp__3698__auto____2783 = cljs.core.next.call(null, G__2779__2782);
-      if(cljs.core.truth_(temp__3698__auto____2783)) {
-        var G__2779__2784 = temp__3698__auto____2783;
-        var G__2785 = cljs.core.first.call(null, G__2779__2784);
-        var G__2786 = G__2779__2784;
-        node__2781 = G__2785;
-        G__2779__2782 = G__2786;
+      goog.dom.setTextContent.call(null, node__4332, value);
+      var temp__3698__auto____4334 = cljs.core.next.call(null, G__4330__4333);
+      if(cljs.core.truth_(temp__3698__auto____4334)) {
+        var G__4330__4335 = temp__3698__auto____4334;
+        var G__4336 = cljs.core.first.call(null, G__4330__4335);
+        var G__4337 = G__4330__4335;
+        node__4332 = G__4336;
+        G__4330__4333 = G__4337;
         continue
       }else {
       }
@@ -14775,19 +14735,19 @@ domina.value = function value(content) {
   return goog.dom.forms.getValue.call(null, domina.single_node.call(null, content))
 };
 domina.set_value_BANG_ = function set_value_BANG_(content, value) {
-  var G__2787__2788 = cljs.core.seq.call(null, domina.nodes.call(null, content));
-  if(cljs.core.truth_(G__2787__2788)) {
-    var node__2789 = cljs.core.first.call(null, G__2787__2788);
-    var G__2787__2790 = G__2787__2788;
+  var G__4338__4339 = cljs.core.seq.call(null, domina.nodes.call(null, content));
+  if(cljs.core.truth_(G__4338__4339)) {
+    var node__4340 = cljs.core.first.call(null, G__4338__4339);
+    var G__4338__4341 = G__4338__4339;
     while(true) {
-      goog.dom.forms.setValue.call(null, node__2789, value);
-      var temp__3698__auto____2791 = cljs.core.next.call(null, G__2787__2790);
-      if(cljs.core.truth_(temp__3698__auto____2791)) {
-        var G__2787__2792 = temp__3698__auto____2791;
-        var G__2793 = cljs.core.first.call(null, G__2787__2792);
-        var G__2794 = G__2787__2792;
-        node__2789 = G__2793;
-        G__2787__2790 = G__2794;
+      goog.dom.forms.setValue.call(null, node__4340, value);
+      var temp__3698__auto____4342 = cljs.core.next.call(null, G__4338__4341);
+      if(cljs.core.truth_(temp__3698__auto____4342)) {
+        var G__4338__4343 = temp__3698__auto____4342;
+        var G__4344 = cljs.core.first.call(null, G__4338__4343);
+        var G__4345 = G__4338__4343;
+        node__4340 = G__4344;
+        G__4338__4341 = G__4345;
         continue
       }else {
       }
@@ -14801,19 +14761,19 @@ domina.html = function html(content) {
   return domina.single_node.call(null, content).innerHTML
 };
 domina.set_html_BANG_ = function set_html_BANG_(content, value) {
-  var G__2795__2796 = cljs.core.seq.call(null, domina.nodes.call(null, content));
-  if(cljs.core.truth_(G__2795__2796)) {
-    var node__2797 = cljs.core.first.call(null, G__2795__2796);
-    var G__2795__2798 = G__2795__2796;
+  var G__4346__4347 = cljs.core.seq.call(null, domina.nodes.call(null, content));
+  if(cljs.core.truth_(G__4346__4347)) {
+    var node__4348 = cljs.core.first.call(null, G__4346__4347);
+    var G__4346__4349 = G__4346__4347;
     while(true) {
-      node__2797.innerHTML = value;
-      var temp__3698__auto____2799 = cljs.core.next.call(null, G__2795__2798);
-      if(cljs.core.truth_(temp__3698__auto____2799)) {
-        var G__2795__2800 = temp__3698__auto____2799;
-        var G__2801 = cljs.core.first.call(null, G__2795__2800);
-        var G__2802 = G__2795__2800;
-        node__2797 = G__2801;
-        G__2795__2798 = G__2802;
+      node__4348.innerHTML = value;
+      var temp__3698__auto____4350 = cljs.core.next.call(null, G__4346__4349);
+      if(cljs.core.truth_(temp__3698__auto____4350)) {
+        var G__4346__4351 = temp__3698__auto____4350;
+        var G__4352 = cljs.core.first.call(null, G__4346__4351);
+        var G__4353 = G__4346__4351;
+        node__4348 = G__4352;
+        G__4346__4349 = G__4353;
         continue
       }else {
       }
@@ -14824,21 +14784,21 @@ domina.set_html_BANG_ = function set_html_BANG_(content, value) {
   return content
 };
 domina.apply_with_cloning = function apply_with_cloning(f, parent_content, child_content) {
-  var parents__2803 = domina.nodes.call(null, parent_content);
-  if(cljs.core.truth_(cljs.core.not.call(null, cljs.core.empty_QMARK_.call(null, parents__2803)))) {
-    var G__2804__2805 = cljs.core.seq.call(null, domina.nodes.call(null, child_content));
-    if(cljs.core.truth_(G__2804__2805)) {
-      var child__2806 = cljs.core.first.call(null, G__2804__2805);
-      var G__2804__2807 = G__2804__2805;
+  var parents__4354 = domina.nodes.call(null, parent_content);
+  if(cljs.core.truth_(cljs.core.not.call(null, cljs.core.empty_QMARK_.call(null, parents__4354)))) {
+    var G__4355__4356 = cljs.core.seq.call(null, domina.nodes.call(null, child_content));
+    if(cljs.core.truth_(G__4355__4356)) {
+      var child__4357 = cljs.core.first.call(null, G__4355__4356);
+      var G__4355__4358 = G__4355__4356;
       while(true) {
-        f.call(null, cljs.core.first.call(null, parents__2803), child__2806);
-        var temp__3698__auto____2808 = cljs.core.next.call(null, G__2804__2807);
-        if(cljs.core.truth_(temp__3698__auto____2808)) {
-          var G__2804__2809 = temp__3698__auto____2808;
-          var G__2822 = cljs.core.first.call(null, G__2804__2809);
-          var G__2823 = G__2804__2809;
-          child__2806 = G__2822;
-          G__2804__2807 = G__2823;
+        f.call(null, cljs.core.first.call(null, parents__4354), child__4357);
+        var temp__3698__auto____4359 = cljs.core.next.call(null, G__4355__4358);
+        if(cljs.core.truth_(temp__3698__auto____4359)) {
+          var G__4355__4360 = temp__3698__auto____4359;
+          var G__4373 = cljs.core.first.call(null, G__4355__4360);
+          var G__4374 = G__4355__4360;
+          child__4357 = G__4373;
+          G__4355__4358 = G__4374;
           continue
         }else {
         }
@@ -14846,24 +14806,24 @@ domina.apply_with_cloning = function apply_with_cloning(f, parent_content, child
       }
     }else {
     }
-    var G__2810__2812 = cljs.core.seq.call(null, cljs.core.rest.call(null, parents__2803));
-    if(cljs.core.truth_(G__2810__2812)) {
-      var parent__2813 = cljs.core.first.call(null, G__2810__2812);
-      var G__2810__2814 = G__2810__2812;
+    var G__4361__4363 = cljs.core.seq.call(null, cljs.core.rest.call(null, parents__4354));
+    if(cljs.core.truth_(G__4361__4363)) {
+      var parent__4364 = cljs.core.first.call(null, G__4361__4363);
+      var G__4361__4365 = G__4361__4363;
       while(true) {
-        var G__2811__2815 = cljs.core.seq.call(null, domina.nodes.call(null, domina.clone.call(null, child_content)));
-        if(cljs.core.truth_(G__2811__2815)) {
-          var child__2816 = cljs.core.first.call(null, G__2811__2815);
-          var G__2811__2817 = G__2811__2815;
+        var G__4362__4366 = cljs.core.seq.call(null, domina.nodes.call(null, domina.clone.call(null, child_content)));
+        if(cljs.core.truth_(G__4362__4366)) {
+          var child__4367 = cljs.core.first.call(null, G__4362__4366);
+          var G__4362__4368 = G__4362__4366;
           while(true) {
-            f.call(null, parent__2813, child__2816);
-            var temp__3698__auto____2818 = cljs.core.next.call(null, G__2811__2817);
-            if(cljs.core.truth_(temp__3698__auto____2818)) {
-              var G__2811__2819 = temp__3698__auto____2818;
-              var G__2824 = cljs.core.first.call(null, G__2811__2819);
-              var G__2825 = G__2811__2819;
-              child__2816 = G__2824;
-              G__2811__2817 = G__2825;
+            f.call(null, parent__4364, child__4367);
+            var temp__3698__auto____4369 = cljs.core.next.call(null, G__4362__4368);
+            if(cljs.core.truth_(temp__3698__auto____4369)) {
+              var G__4362__4370 = temp__3698__auto____4369;
+              var G__4375 = cljs.core.first.call(null, G__4362__4370);
+              var G__4376 = G__4362__4370;
+              child__4367 = G__4375;
+              G__4362__4368 = G__4376;
               continue
             }else {
             }
@@ -14871,13 +14831,13 @@ domina.apply_with_cloning = function apply_with_cloning(f, parent_content, child
           }
         }else {
         }
-        var temp__3698__auto____2820 = cljs.core.next.call(null, G__2810__2814);
-        if(cljs.core.truth_(temp__3698__auto____2820)) {
-          var G__2810__2821 = temp__3698__auto____2820;
-          var G__2826 = cljs.core.first.call(null, G__2810__2821);
-          var G__2827 = G__2810__2821;
-          parent__2813 = G__2826;
-          G__2810__2814 = G__2827;
+        var temp__3698__auto____4371 = cljs.core.next.call(null, G__4361__4365);
+        if(cljs.core.truth_(temp__3698__auto____4371)) {
+          var G__4361__4372 = temp__3698__auto____4371;
+          var G__4377 = cljs.core.first.call(null, G__4361__4372);
+          var G__4378 = G__4361__4372;
+          parent__4364 = G__4377;
+          G__4361__4365 = G__4378;
           continue
         }else {
           return null
@@ -14893,10 +14853,10 @@ domina.apply_with_cloning = function apply_with_cloning(f, parent_content, child
 };
 domina.lazy_nodelist = function() {
   var lazy_nodelist = null;
-  var lazy_nodelist__2828 = function(nl) {
+  var lazy_nodelist__4379 = function(nl) {
     return lazy_nodelist.call(null, nl, 0)
   };
-  var lazy_nodelist__2829 = function(nl, n) {
+  var lazy_nodelist__4380 = function(nl, n) {
     if(cljs.core.truth_(n < nl.length)) {
       return new cljs.core.LazySeq(null, false, function() {
         return cljs.core.cons.call(null, nl.item(n), lazy_nodelist.call(null, nl, n + 1))
@@ -14908,9 +14868,9 @@ domina.lazy_nodelist = function() {
   lazy_nodelist = function(nl, n) {
     switch(arguments.length) {
       case 1:
-        return lazy_nodelist__2828.call(this, nl);
+        return lazy_nodelist__4379.call(this, nl);
       case 2:
-        return lazy_nodelist__2829.call(this, nl, n)
+        return lazy_nodelist__4380.call(this, nl, n)
     }
     throw"Invalid arity: " + arguments.length;
   };
@@ -14943,27 +14903,27 @@ NodeList.prototype.cljs$core$ISeqable$_seq = function(nodelist) {
 };
 NodeList.prototype.cljs$core$IIndexed$ = true;
 NodeList.prototype.cljs$core$IIndexed$_nth = function() {
-  var G__2831 = null;
-  var G__2831__2832 = function(nodelist, n) {
+  var G__4382 = null;
+  var G__4382__4383 = function(nodelist, n) {
     return nodelist.item(n)
   };
-  var G__2831__2833 = function(nodelist, n, not_found) {
+  var G__4382__4384 = function(nodelist, n, not_found) {
     if(cljs.core.truth_(nodelist.length <= n)) {
       return not_found
     }else {
       return cljs.core.nth.call(null, nodelist, n)
     }
   };
-  G__2831 = function(nodelist, n, not_found) {
+  G__4382 = function(nodelist, n, not_found) {
     switch(arguments.length) {
       case 2:
-        return G__2831__2832.call(this, nodelist, n);
+        return G__4382__4383.call(this, nodelist, n);
       case 3:
-        return G__2831__2833.call(this, nodelist, n, not_found)
+        return G__4382__4384.call(this, nodelist, n, not_found)
     }
     throw"Invalid arity: " + arguments.length;
   };
-  return G__2831
+  return G__4382
 }();
 NodeList.prototype.cljs$core$ICounted$ = true;
 NodeList.prototype.cljs$core$ICounted$_count = function(nodelist) {
@@ -14975,36 +14935,138 @@ HTMLCollection.prototype.cljs$core$ISeqable$_seq = function(coll) {
 };
 HTMLCollection.prototype.cljs$core$IIndexed$ = true;
 HTMLCollection.prototype.cljs$core$IIndexed$_nth = function() {
-  var G__2835 = null;
-  var G__2835__2836 = function(coll, n) {
+  var G__4386 = null;
+  var G__4386__4387 = function(coll, n) {
     return coll.item(n)
   };
-  var G__2835__2837 = function(coll, n, not_found) {
+  var G__4386__4388 = function(coll, n, not_found) {
     if(cljs.core.truth_(coll.length <= n)) {
       return not_found
     }else {
       return cljs.core.nth.call(null, coll, n)
     }
   };
-  G__2835 = function(coll, n, not_found) {
+  G__4386 = function(coll, n, not_found) {
     switch(arguments.length) {
       case 2:
-        return G__2835__2836.call(this, coll, n);
+        return G__4386__4387.call(this, coll, n);
       case 3:
-        return G__2835__2837.call(this, coll, n, not_found)
+        return G__4386__4388.call(this, coll, n, not_found)
     }
     throw"Invalid arity: " + arguments.length;
   };
-  return G__2835
+  return G__4386
 }();
 HTMLCollection.prototype.cljs$core$ICounted$ = true;
 HTMLCollection.prototype.cljs$core$ICounted$_count = function(coll) {
   return coll.length
 };
+goog.provide("domina.xpath");
+goog.require("cljs.core");
+goog.require("domina");
+goog.require("goog.dom");
+domina.xpath.select_node_STAR_ = function select_node_STAR_(path, node, technique_1, technique_2) {
+  var doc__2453 = goog.dom.getOwnerDocument.call(null, node);
+  if(cljs.core.truth_(function() {
+    var and__3546__auto____2454 = node.selectSingleNode;
+    if(cljs.core.truth_(and__3546__auto____2454)) {
+      return doc__2453.setProperty
+    }else {
+      return and__3546__auto____2454
+    }
+  }())) {
+    doc__2453.setProperty("SelectionLanguage", "XPath");
+    return technique_1.call(null, node, path)
+  }else {
+    if(cljs.core.truth_(function() {
+      var and__3546__auto____2455 = doc__2453.createNSResolver;
+      if(cljs.core.truth_(and__3546__auto____2455)) {
+        return doc__2453.evaluate
+      }else {
+        return and__3546__auto____2455
+      }
+    }())) {
+      var resolver__2456 = doc__2453.createNSResolver(doc__2453.documentElement);
+      return technique_2.call(null, resolver__2456, doc__2453, node, path)
+    }else {
+      if(cljs.core.truth_("\ufdd0'else")) {
+        throw new domina.xpath.Error("Could not find XPath support in this browser.");
+      }else {
+        return null
+      }
+    }
+  }
+};
+domina.xpath.select_node = function select_node(expr, node) {
+  return domina.xpath.select_node_STAR_.call(null, expr, node, function(node, expr) {
+    return node.selectSingleNode(expr)
+  }, function(resolver, doc, node, expr) {
+    var result__2457 = doc.evaluate(expr, node, resolver, XPathResult.FIRST_ORDERED_NODE_TYPE, null);
+    return result__2457.singleNodeValue
+  })
+};
+domina.xpath.select_nodes = function select_nodes(expr, node) {
+  return domina.xpath.select_node_STAR_.call(null, expr, node, function(node, expr) {
+    return node.selectNodes(expr)
+  }, function(resolver, doc, node, expr) {
+    var result__2458 = doc.evaluate(expr, node, resolver, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
+    var num_results__2459 = result__2458.snapshotLength;
+    var i__2460 = 0;
+    var acc__2461 = null;
+    while(true) {
+      if(cljs.core.truth_(i__2460 < num_results__2459)) {
+        var G__2462 = i__2460 + 1;
+        var G__2463 = cljs.core.cons.call(null, result__2458.snapshotItem(i__2460), acc__2461);
+        i__2460 = G__2462;
+        acc__2461 = G__2463;
+        continue
+      }else {
+        return acc__2461
+      }
+      break
+    }
+  })
+};
+domina.xpath.xpath = function() {
+  var xpath = null;
+  var xpath__2467 = function(expr) {
+    return xpath.call(null, document, expr)
+  };
+  var xpath__2468 = function(base, expr) {
+    if(cljs.core.truth_(cljs.core.undefined_QMARK_.call(null, domina.xpath.t2464))) {
+      domina.xpath.t2464 = function(expr, base, xpath) {
+        this.expr = expr;
+        this.base = base;
+        this.xpath = xpath
+      };
+      domina.xpath.t2464.prototype.domina$DomContent$ = true;
+      domina.xpath.t2464.prototype.domina$DomContent$nodes = function(_) {
+        var this__2465 = this;
+        return cljs.core.mapcat.call(null, cljs.core.partial.call(null, domina.xpath.select_nodes, this__2465.expr), domina.nodes.call(null, this__2465.base))
+      };
+      domina.xpath.t2464.prototype.domina$DomContent$single_node = function(_) {
+        var this__2466 = this;
+        return cljs.core.first.call(null, cljs.core.filter.call(null, cljs.core.complement.call(null, cljs.core.nil_QMARK_), cljs.core.map.call(null, cljs.core.partial.call(null, domina.xpath.select_node, this__2466.expr), domina.nodes.call(null, this__2466.base))))
+      }
+    }else {
+    }
+    return new domina.xpath.t2464(expr, base, xpath)
+  };
+  xpath = function(base, expr) {
+    switch(arguments.length) {
+      case 1:
+        return xpath__2467.call(this, base);
+      case 2:
+        return xpath__2468.call(this, base, expr)
+    }
+    throw"Invalid arity: " + arguments.length;
+  };
+  return xpath
+}();
 goog.provide("domina.test");
 goog.require("cljs.core");
 goog.require("domina");
-goog.require("domina");
+goog.require("domina.xpath");
 goog.require("domina");
 goog.require("domina");
 goog.require("domina");
@@ -15052,73 +15114,73 @@ domina.test.run_test = function run_test(testfn) {
   return tryfn.call(null, testfn)
 };
 domina.test.run_tests = function run_tests() {
-  return cljs.core.map.call(null, function(p__2628) {
-    var vec__2629__2630 = p__2628;
-    var name__2631 = cljs.core.nth.call(null, vec__2629__2630, 0, null);
-    var testfn__2632 = cljs.core.nth.call(null, vec__2629__2630, 1, null);
-    return cljs.core.Vector.fromArray([name__2631, domina.test.run_test.call(null, testfn__2632)])
+  return cljs.core.map.call(null, function(p__4170) {
+    var vec__4171__4172 = p__4170;
+    var name__4173 = cljs.core.nth.call(null, vec__4171__4172, 0, null);
+    var testfn__4174 = cljs.core.nth.call(null, vec__4171__4172, 1, null);
+    return cljs.core.Vector.fromArray([name__4173, domina.test.run_test.call(null, testfn__4174)])
   }, cljs.core.deref.call(null, domina.test.tests))
 };
 domina.test.reset = function reset() {
-  return domina.destroy_BANG_.call(null, domina.xpath.call(null, "//body/*"))
+  return domina.destroy_BANG_.call(null, domina.xpath.xpath.call(null, "//body/*"))
 };
 domina.test.standard_fixture = function standard_fixture() {
-  return domina.append_BANG_.call(null, domina.xpath.call(null, "//body"), "<div class='d1'><p class='p1'>P1</p><p class='p2'>P2</p>\n<p id='id1' class='p3'>P3</p>")
+  return domina.append_BANG_.call(null, domina.xpath.xpath.call(null, "//body"), "<div class='d1'><p class='p1'>P1</p><p class='p2'>P2</p>\n<p id='id1' class='p3'>P3</p>")
 };
 domina.test.add_test.call(null, "basic xpath selection", function() {
   domina.test.reset.call(null);
   domina.test.standard_fixture.call(null);
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, 3, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.call(null, "//p")))))) {
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, 3, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.xpath.call(null, "//p")))))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 3, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p"), cljs.core.hash_map("\ufdd0'line", 51))), cljs.core.hash_map("\ufdd0'line", 51))), cljs.core.hash_map("\ufdd0'line", 51))), cljs.core.hash_map("\ufdd0'line", 51)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 3, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p"), cljs.core.hash_map("\ufdd0'line", 52))), cljs.core.hash_map("\ufdd0'line", 52))), cljs.core.hash_map("\ufdd0'line", 52))), cljs.core.hash_map("\ufdd0'line", 52)))));
   }
 });
 domina.test.add_test.call(null, "basic xpath selection (single node)", function() {
   domina.test.reset.call(null);
   domina.test.standard_fixture.call(null);
-  if(cljs.core.truth_(cljs.core.instance_QMARK_.call(null, Element, domina.single_node.call(null, domina.xpath.call(null, "//p"))))) {
+  if(cljs.core.truth_(cljs.core.instance_QMARK_.call(null, Element, domina.single_node.call(null, domina.xpath.xpath.call(null, "//p"))))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'instance?", "\ufdd1'js/Element", cljs.core.with_meta(cljs.core.list("\ufdd1'single-node", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p"), cljs.core.hash_map("\ufdd0'line", 56))), cljs.core.hash_map("\ufdd0'line", 56))), cljs.core.hash_map("\ufdd0'line", 56)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'instance?", "\ufdd1'js/Element", cljs.core.with_meta(cljs.core.list("\ufdd1'single-node", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p"), cljs.core.hash_map("\ufdd0'line", 57))), cljs.core.hash_map("\ufdd0'line", 57))), cljs.core.hash_map("\ufdd0'line", 57)))));
   }
 });
 domina.test.add_test.call(null, "xpath selection with class specification", function() {
   domina.test.reset.call(null);
   domina.test.standard_fixture.call(null);
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, 1, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.call(null, "//div[@class='d1']")))))) {
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, 1, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.xpath.call(null, "//div[@class='d1']")))))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 1, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[@class='d1']"), cljs.core.hash_map("\ufdd0'line", 61))), cljs.core.hash_map("\ufdd0'line", 61))), cljs.core.hash_map("\ufdd0'line", 61))), cljs.core.hash_map("\ufdd0'line", 61)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 1, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[@class='d1']"), cljs.core.hash_map("\ufdd0'line", 62))), cljs.core.hash_map("\ufdd0'line", 62))), cljs.core.hash_map("\ufdd0'line", 62))), cljs.core.hash_map("\ufdd0'line", 62)))));
   }
 });
 domina.test.add_test.call(null, "a relative xpath expression", function() {
   domina.test.reset.call(null);
   domina.test.standard_fixture.call(null);
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, 3, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.call(null, domina.xpath.call(null, "//body/div[@class='d1']"), "p")))))) {
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, 3, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.xpath.call(null, domina.xpath.xpath.call(null, "//body/div[@class='d1']"), "p")))))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 3, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'->", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//body/div[@class='d1']"), cljs.core.hash_map("\ufdd0'line", 66)), cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "p"), cljs.core.hash_map("\ufdd0'line", 
-    67))), cljs.core.hash_map("\ufdd0'line", 66))), cljs.core.hash_map("\ufdd0'line", 66))), cljs.core.hash_map("\ufdd0'line", 66))), cljs.core.hash_map("\ufdd0'line", 66)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 3, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'->", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//body/div[@class='d1']"), cljs.core.hash_map("\ufdd0'line", 67)), cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "p"), cljs.core.hash_map("\ufdd0'line", 
+    68))), cljs.core.hash_map("\ufdd0'line", 67))), cljs.core.hash_map("\ufdd0'line", 67))), cljs.core.hash_map("\ufdd0'line", 67))), cljs.core.hash_map("\ufdd0'line", 67)))));
   }
 });
 domina.test.add_test.call(null, "extended selection chaining", function() {
   domina.test.reset.call(null);
-  domina.append_BANG_.call(null, domina.xpath.call(null, "//body"), "<div><p><span>some text</span></p><p><span>more text</span></p></div>");
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, 2, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.call(null, domina.xpath.call(null, domina.xpath.call(null, domina.xpath.call(null, "//body"), "div"), "p"), "span")))))) {
+  domina.append_BANG_.call(null, domina.xpath.xpath.call(null, "//body"), "<div><p><span>some text</span></p><p><span>more text</span></p></div>");
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, 2, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.xpath.call(null, domina.xpath.xpath.call(null, domina.xpath.xpath.call(null, domina.xpath.xpath.call(null, "//body"), "div"), "p"), "span")))))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 2, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'->", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//body"), cljs.core.hash_map("\ufdd0'line", 73)), cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "div"), cljs.core.hash_map("\ufdd0'line", 74)), cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", 
-    "p"), cljs.core.hash_map("\ufdd0'line", 75)), cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "span"), cljs.core.hash_map("\ufdd0'line", 76))), cljs.core.hash_map("\ufdd0'line", 73))), cljs.core.hash_map("\ufdd0'line", 73))), cljs.core.hash_map("\ufdd0'line", 73))), cljs.core.hash_map("\ufdd0'line", 73)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 2, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'->", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//body"), cljs.core.hash_map("\ufdd0'line", 74)), cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "div"), cljs.core.hash_map("\ufdd0'line", 75)), cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", 
+    "p"), cljs.core.hash_map("\ufdd0'line", 76)), cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "span"), cljs.core.hash_map("\ufdd0'line", 77))), cljs.core.hash_map("\ufdd0'line", 74))), cljs.core.hash_map("\ufdd0'line", 74))), cljs.core.hash_map("\ufdd0'line", 74))), cljs.core.hash_map("\ufdd0'line", 74)))));
   }
 });
 domina.test.add_test.call(null, "advanced xpath", function() {
   domina.test.reset.call(null);
   domina.test.standard_fixture.call(null);
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, 2, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.call(null, "//p[following-sibling::p[@class='p3']]")))))) {
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, 2, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.xpath.call(null, "//p[following-sibling::p[@class='p3']]")))))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 2, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p[following-sibling::p[@class='p3']]"), cljs.core.hash_map("\ufdd0'line", 80))), cljs.core.hash_map("\ufdd0'line", 80))), cljs.core.hash_map("\ufdd0'line", 80))), cljs.core.hash_map("\ufdd0'line", 80)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 2, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p[following-sibling::p[@class='p3']]"), cljs.core.hash_map("\ufdd0'line", 81))), cljs.core.hash_map("\ufdd0'line", 81))), cljs.core.hash_map("\ufdd0'line", 81))), cljs.core.hash_map("\ufdd0'line", 81)))));
   }
 });
 domina.test.add_test.call(null, "look up node by id", function() {
@@ -15127,7 +15189,7 @@ domina.test.add_test.call(null, "look up node by id", function() {
   if(cljs.core.truth_(cljs.core._EQ_.call(null, 1, cljs.core.count.call(null, domina.nodes.call(null, domina.by_id.call(null, "id1")))))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 1, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'by-id", "id1"), cljs.core.hash_map("\ufdd0'line", 85))), cljs.core.hash_map("\ufdd0'line", 85))), cljs.core.hash_map("\ufdd0'line", 85))), cljs.core.hash_map("\ufdd0'line", 85)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 1, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'by-id", "id1"), cljs.core.hash_map("\ufdd0'line", 86))), cljs.core.hash_map("\ufdd0'line", 86))), cljs.core.hash_map("\ufdd0'line", 86))), cljs.core.hash_map("\ufdd0'line", 86)))));
   }
 });
 domina.test.add_test.call(null, "look up nodes by class", function() {
@@ -15136,161 +15198,161 @@ domina.test.add_test.call(null, "look up nodes by class", function() {
   if(cljs.core.truth_(cljs.core._EQ_.call(null, 1, cljs.core.count.call(null, domina.nodes.call(null, domina.by_class.call(null, "p3")))))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 1, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'by-class", "p3"), cljs.core.hash_map("\ufdd0'line", 90))), cljs.core.hash_map("\ufdd0'line", 90))), cljs.core.hash_map("\ufdd0'line", 90))), cljs.core.hash_map("\ufdd0'line", 90)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 1, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'by-class", "p3"), cljs.core.hash_map("\ufdd0'line", 91))), cljs.core.hash_map("\ufdd0'line", 91))), cljs.core.hash_map("\ufdd0'line", 91))), cljs.core.hash_map("\ufdd0'line", 91)))));
   }
 });
 domina.test.add_test.call(null, "child selection", function() {
   domina.test.reset.call(null);
   domina.test.standard_fixture.call(null);
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, 3, cljs.core.count.call(null, domina.children.call(null, domina.xpath.call(null, "//div[@class='d1']")))))) {
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, 3, cljs.core.count.call(null, domina.children.call(null, domina.xpath.xpath.call(null, "//div[@class='d1']")))))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 3, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'children", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[@class='d1']"), cljs.core.hash_map("\ufdd0'line", 95))), cljs.core.hash_map("\ufdd0'line", 95))), cljs.core.hash_map("\ufdd0'line", 95))), cljs.core.hash_map("\ufdd0'line", 95)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 3, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'children", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[@class='d1']"), cljs.core.hash_map("\ufdd0'line", 96))), cljs.core.hash_map("\ufdd0'line", 96))), cljs.core.hash_map("\ufdd0'line", 96))), cljs.core.hash_map("\ufdd0'line", 96)))));
   }
 });
 domina.test.add_test.call(null, "clone a single node", function() {
   domina.test.reset.call(null);
   domina.test.standard_fixture.call(null);
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, 1, cljs.core.count.call(null, domina.clone.call(null, domina.single_node.call(null, domina.xpath.call(null, "//p"))))))) {
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, 1, cljs.core.count.call(null, domina.clone.call(null, domina.single_node.call(null, domina.xpath.xpath.call(null, "//p"))))))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 1, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'clone", cljs.core.with_meta(cljs.core.list("\ufdd1'single-node", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p"), cljs.core.hash_map("\ufdd0'line", 100))), cljs.core.hash_map("\ufdd0'line", 100))), cljs.core.hash_map("\ufdd0'line", 100))), cljs.core.hash_map("\ufdd0'line", 
-    100))), cljs.core.hash_map("\ufdd0'line", 100)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 1, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'clone", cljs.core.with_meta(cljs.core.list("\ufdd1'single-node", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p"), cljs.core.hash_map("\ufdd0'line", 101))), cljs.core.hash_map("\ufdd0'line", 101))), cljs.core.hash_map("\ufdd0'line", 101))), cljs.core.hash_map("\ufdd0'line", 
+    101))), cljs.core.hash_map("\ufdd0'line", 101)))));
   }
 });
 domina.test.add_test.call(null, "clone multiple nodes", function() {
   domina.test.reset.call(null);
   domina.test.standard_fixture.call(null);
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, 3, cljs.core.count.call(null, domina.clone.call(null, domina.nodes.call(null, domina.xpath.call(null, "//p"))))))) {
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, 3, cljs.core.count.call(null, domina.clone.call(null, domina.nodes.call(null, domina.xpath.xpath.call(null, "//p"))))))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 3, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'clone", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p"), cljs.core.hash_map("\ufdd0'line", 105))), cljs.core.hash_map("\ufdd0'line", 105))), cljs.core.hash_map("\ufdd0'line", 105))), cljs.core.hash_map("\ufdd0'line", 
-    105))), cljs.core.hash_map("\ufdd0'line", 105)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 3, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'clone", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p"), cljs.core.hash_map("\ufdd0'line", 106))), cljs.core.hash_map("\ufdd0'line", 106))), cljs.core.hash_map("\ufdd0'line", 106))), cljs.core.hash_map("\ufdd0'line", 
+    106))), cljs.core.hash_map("\ufdd0'line", 106)))));
   }
 });
 domina.test.add_test.call(null, "append a single child to a single parent", function() {
   domina.test.reset.call(null);
-  domina.append_BANG_.call(null, domina.xpath.call(null, "//body"), "<p class='appended1'>test</p>");
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, 1, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.call(null, "//body/p[@class='appended1']")))))) {
+  domina.append_BANG_.call(null, domina.xpath.xpath.call(null, "//body"), "<p class='appended1'>test</p>");
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, 1, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.xpath.call(null, "//body/p[@class='appended1']")))))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 1, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//body/p[@class='appended1']"), cljs.core.hash_map("\ufdd0'line", 111))), cljs.core.hash_map("\ufdd0'line", 111))), cljs.core.hash_map("\ufdd0'line", 111))), cljs.core.hash_map("\ufdd0'line", 111)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 1, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//body/p[@class='appended1']"), cljs.core.hash_map("\ufdd0'line", 112))), cljs.core.hash_map("\ufdd0'line", 112))), cljs.core.hash_map("\ufdd0'line", 112))), cljs.core.hash_map("\ufdd0'line", 112)))));
   }
 });
 domina.test.add_test.call(null, "append multiple children to a single parent", function() {
   domina.test.reset.call(null);
-  domina.append_BANG_.call(null, domina.xpath.call(null, "//body"), "<p class='appended2'>test2-1</p><p class='appended2'>test2-2</p>");
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, 2, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.call(null, "//body/p[@class='appended2']")))))) {
+  domina.append_BANG_.call(null, domina.xpath.xpath.call(null, "//body"), "<p class='appended2'>test2-1</p><p class='appended2'>test2-2</p>");
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, 2, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.xpath.call(null, "//body/p[@class='appended2']")))))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 2, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//body/p[@class='appended2']"), cljs.core.hash_map("\ufdd0'line", 117))), cljs.core.hash_map("\ufdd0'line", 117))), cljs.core.hash_map("\ufdd0'line", 117))), cljs.core.hash_map("\ufdd0'line", 117)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 2, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//body/p[@class='appended2']"), cljs.core.hash_map("\ufdd0'line", 118))), cljs.core.hash_map("\ufdd0'line", 118))), cljs.core.hash_map("\ufdd0'line", 118))), cljs.core.hash_map("\ufdd0'line", 118)))));
   }
 });
 domina.test.add_test.call(null, "append a single child to multiple parents", function() {
   domina.test.reset.call(null);
   domina.test.standard_fixture.call(null);
-  domina.append_BANG_.call(null, domina.xpath.call(null, "//body/div/p"), "<span>!!</span>");
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, 3, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.call(null, "//div/p/span")))))) {
+  domina.append_BANG_.call(null, domina.xpath.xpath.call(null, "//body/div/p"), "<span>!!</span>");
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, 3, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.xpath.call(null, "//div/p/span")))))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 3, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div/p/span"), cljs.core.hash_map("\ufdd0'line", 124))), cljs.core.hash_map("\ufdd0'line", 124))), cljs.core.hash_map("\ufdd0'line", 124))), cljs.core.hash_map("\ufdd0'line", 124)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 3, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div/p/span"), cljs.core.hash_map("\ufdd0'line", 125))), cljs.core.hash_map("\ufdd0'line", 125))), cljs.core.hash_map("\ufdd0'line", 125))), cljs.core.hash_map("\ufdd0'line", 125)))));
   }
 });
 domina.test.add_test.call(null, "append multiple children to multiple parents", function() {
   domina.test.reset.call(null);
   domina.test.standard_fixture.call(null);
-  domina.append_BANG_.call(null, domina.xpath.call(null, "//body/div/p"), "some <span class='foo'>more</span> text");
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, 3, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.call(null, "//div/p/span[@class='foo']")))))) {
+  domina.append_BANG_.call(null, domina.xpath.xpath.call(null, "//body/div/p"), "some <span class='foo'>more</span> text");
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, 3, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.xpath.call(null, "//div/p/span[@class='foo']")))))) {
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 3, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div/p/span[@class='foo']"), cljs.core.hash_map("\ufdd0'line", 131))), cljs.core.hash_map("\ufdd0'line", 131))), cljs.core.hash_map("\ufdd0'line", 131))), cljs.core.hash_map("\ufdd0'line", 131)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 3, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div/p/span[@class='foo']"), cljs.core.hash_map("\ufdd0'line", 132))), cljs.core.hash_map("\ufdd0'line", 132))), cljs.core.hash_map("\ufdd0'line", 132))), cljs.core.hash_map("\ufdd0'line", 132)))));
   }
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, 9, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.call(null, "//div/p/text()")))))) {
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, 9, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.xpath.call(null, "//div/p/text()")))))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 9, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div/p/text()"), cljs.core.hash_map("\ufdd0'line", 132))), cljs.core.hash_map("\ufdd0'line", 132))), cljs.core.hash_map("\ufdd0'line", 132))), cljs.core.hash_map("\ufdd0'line", 132)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 9, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div/p/text()"), cljs.core.hash_map("\ufdd0'line", 133))), cljs.core.hash_map("\ufdd0'line", 133))), cljs.core.hash_map("\ufdd0'line", 133))), cljs.core.hash_map("\ufdd0'line", 133)))));
   }
 });
 domina.test.add_test.call(null, "prepend a single child to a single parent", function() {
   domina.test.reset.call(null);
-  domina.append_BANG_.call(null, domina.xpath.call(null, "//body"), "<div>2</div><div>3</div>");
-  domina.prepend_BANG_.call(null, domina.xpath.call(null, "//body"), "<div>1</div>");
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, "1", domina.text.call(null, domina.xpath.call(null, "//body/div[1]"))))) {
+  domina.append_BANG_.call(null, domina.xpath.xpath.call(null, "//body"), "<div>2</div><div>3</div>");
+  domina.prepend_BANG_.call(null, domina.xpath.xpath.call(null, "//body"), "<div>1</div>");
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, "1", domina.text.call(null, domina.xpath.xpath.call(null, "//body/div[1]"))))) {
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "1", cljs.core.with_meta(cljs.core.list("\ufdd1'text", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//body/div[1]"), cljs.core.hash_map("\ufdd0'line", 138))), cljs.core.hash_map("\ufdd0'line", 138))), cljs.core.hash_map("\ufdd0'line", 138)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "1", cljs.core.with_meta(cljs.core.list("\ufdd1'text", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//body/div[1]"), cljs.core.hash_map("\ufdd0'line", 139))), cljs.core.hash_map("\ufdd0'line", 139))), cljs.core.hash_map("\ufdd0'line", 139)))));
   }
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, "2", domina.text.call(null, domina.xpath.call(null, "//body/div[2]"))))) {
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, "2", domina.text.call(null, domina.xpath.xpath.call(null, "//body/div[2]"))))) {
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "2", cljs.core.with_meta(cljs.core.list("\ufdd1'text", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//body/div[2]"), cljs.core.hash_map("\ufdd0'line", 139))), cljs.core.hash_map("\ufdd0'line", 139))), cljs.core.hash_map("\ufdd0'line", 139)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "2", cljs.core.with_meta(cljs.core.list("\ufdd1'text", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//body/div[2]"), cljs.core.hash_map("\ufdd0'line", 140))), cljs.core.hash_map("\ufdd0'line", 140))), cljs.core.hash_map("\ufdd0'line", 140)))));
   }
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, "3", domina.text.call(null, domina.xpath.call(null, "//body/div[3]"))))) {
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, "3", domina.text.call(null, domina.xpath.xpath.call(null, "//body/div[3]"))))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "3", cljs.core.with_meta(cljs.core.list("\ufdd1'text", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//body/div[3]"), cljs.core.hash_map("\ufdd0'line", 140))), cljs.core.hash_map("\ufdd0'line", 140))), cljs.core.hash_map("\ufdd0'line", 140)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "3", cljs.core.with_meta(cljs.core.list("\ufdd1'text", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//body/div[3]"), cljs.core.hash_map("\ufdd0'line", 141))), cljs.core.hash_map("\ufdd0'line", 141))), cljs.core.hash_map("\ufdd0'line", 141)))));
   }
 });
 domina.test.add_test.call(null, "prepend a single child to multiple parents", function() {
   domina.test.reset.call(null);
-  domina.append_BANG_.call(null, domina.xpath.call(null, "//body"), "<div><p>2</p></div><div><p>2</p></div>");
-  domina.prepend_BANG_.call(null, domina.xpath.call(null, "//body/div"), "<p>1</p>");
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, 2, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.call(null, "//body/div/p[text()='2']")))))) {
+  domina.append_BANG_.call(null, domina.xpath.xpath.call(null, "//body"), "<div><p>2</p></div><div><p>2</p></div>");
+  domina.prepend_BANG_.call(null, domina.xpath.xpath.call(null, "//body/div"), "<p>1</p>");
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, 2, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.xpath.call(null, "//body/div/p[text()='2']")))))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 2, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//body/div/p[text()='2']"), cljs.core.hash_map("\ufdd0'line", 146))), cljs.core.hash_map("\ufdd0'line", 146))), cljs.core.hash_map("\ufdd0'line", 146))), cljs.core.hash_map("\ufdd0'line", 146)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 2, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//body/div/p[text()='2']"), cljs.core.hash_map("\ufdd0'line", 147))), cljs.core.hash_map("\ufdd0'line", 147))), cljs.core.hash_map("\ufdd0'line", 147))), cljs.core.hash_map("\ufdd0'line", 147)))));
   }
 });
 domina.test.add_test.call(null, "Insert a single child to a single parent", function() {
   domina.test.reset.call(null);
-  domina.append_BANG_.call(null, domina.xpath.call(null, "//body"), "<div class='testInserts'></div>");
-  domina.append_BANG_.call(null, domina.xpath.call(null, "//div[@class='testInserts']"), "<p class='i1'></p>");
-  domina.append_BANG_.call(null, domina.xpath.call(null, "//div[@class='testInserts']"), "<p class='i3'></p>");
-  domina.insert_BANG_.call(null, domina.xpath.call(null, "//div[@class='testInserts']"), "<p class='i2'></p>", 1);
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, 3, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.call(null, "//div[@class='testInserts']/p")))))) {
+  domina.append_BANG_.call(null, domina.xpath.xpath.call(null, "//body"), "<div class='testInserts'></div>");
+  domina.append_BANG_.call(null, domina.xpath.xpath.call(null, "//div[@class='testInserts']"), "<p class='i1'></p>");
+  domina.append_BANG_.call(null, domina.xpath.xpath.call(null, "//div[@class='testInserts']"), "<p class='i3'></p>");
+  domina.insert_BANG_.call(null, domina.xpath.xpath.call(null, "//div[@class='testInserts']"), "<p class='i2'></p>", 1);
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, 3, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.xpath.call(null, "//div[@class='testInserts']/p")))))) {
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 3, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[@class='testInserts']/p"), cljs.core.hash_map("\ufdd0'line", 158))), cljs.core.hash_map("\ufdd0'line", 158))), cljs.core.hash_map("\ufdd0'line", 158))), cljs.core.hash_map("\ufdd0'line", 158)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 3, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[@class='testInserts']/p"), cljs.core.hash_map("\ufdd0'line", 159))), cljs.core.hash_map("\ufdd0'line", 159))), cljs.core.hash_map("\ufdd0'line", 159))), cljs.core.hash_map("\ufdd0'line", 159)))));
   }
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, 1, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.call(null, "//p[@class='i2']/preceding-sibling::*")))))) {
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, 1, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.xpath.call(null, "//p[@class='i2']/preceding-sibling::*")))))) {
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 1, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p[@class='i2']/preceding-sibling::*"), cljs.core.hash_map("\ufdd0'line", 159))), cljs.core.hash_map("\ufdd0'line", 159))), cljs.core.hash_map("\ufdd0'line", 159))), cljs.core.hash_map("\ufdd0'line", 159)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 1, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p[@class='i2']/preceding-sibling::*"), cljs.core.hash_map("\ufdd0'line", 160))), cljs.core.hash_map("\ufdd0'line", 160))), cljs.core.hash_map("\ufdd0'line", 160))), cljs.core.hash_map("\ufdd0'line", 160)))));
   }
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, 1, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.call(null, "//p[@class='i2']/following-sibling::*")))))) {
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, 1, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.xpath.call(null, "//p[@class='i2']/following-sibling::*")))))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 1, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p[@class='i2']/following-sibling::*"), cljs.core.hash_map("\ufdd0'line", 160))), cljs.core.hash_map("\ufdd0'line", 160))), cljs.core.hash_map("\ufdd0'line", 160))), cljs.core.hash_map("\ufdd0'line", 160)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 1, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p[@class='i2']/following-sibling::*"), cljs.core.hash_map("\ufdd0'line", 161))), cljs.core.hash_map("\ufdd0'line", 161))), cljs.core.hash_map("\ufdd0'line", 161))), cljs.core.hash_map("\ufdd0'line", 161)))));
   }
 });
 domina.test.add_test.call(null, "Insert a single child to multiple parents", function() {
   domina.test.reset.call(null);
-  domina.append_BANG_.call(null, domina.xpath.call(null, "//body"), "<div class='testInserts' id='testInsert1'></div>");
-  domina.append_BANG_.call(null, domina.xpath.call(null, "//body"), "<div class='testInserts' id='testInsert2'></div>");
-  domina.append_BANG_.call(null, domina.xpath.call(null, "//div[@class='testInserts']"), "<p class='i1'></p>");
-  domina.append_BANG_.call(null, domina.xpath.call(null, "//div[@class='testInserts']"), "<p class='i3'></p>");
-  domina.insert_BANG_.call(null, domina.xpath.call(null, "//div[@class='testInserts']"), "<p class='i2'></p>", 1);
-  var G__2633__2634 = cljs.core.seq.call(null, cljs.core.Vector.fromArray([domina.xpath.call(null, "//div[@id='testInsert1']"), domina.xpath.call(null, "//div[@id='testInsert2']")]));
-  if(cljs.core.truth_(G__2633__2634)) {
-    var children__2635 = cljs.core.first.call(null, G__2633__2634);
-    var G__2633__2636 = G__2633__2634;
+  domina.append_BANG_.call(null, domina.xpath.xpath.call(null, "//body"), "<div class='testInserts' id='testInsert1'></div>");
+  domina.append_BANG_.call(null, domina.xpath.xpath.call(null, "//body"), "<div class='testInserts' id='testInsert2'></div>");
+  domina.append_BANG_.call(null, domina.xpath.xpath.call(null, "//div[@class='testInserts']"), "<p class='i1'></p>");
+  domina.append_BANG_.call(null, domina.xpath.xpath.call(null, "//div[@class='testInserts']"), "<p class='i3'></p>");
+  domina.insert_BANG_.call(null, domina.xpath.xpath.call(null, "//div[@class='testInserts']"), "<p class='i2'></p>", 1);
+  var G__4175__4176 = cljs.core.seq.call(null, cljs.core.Vector.fromArray([domina.xpath.xpath.call(null, "//div[@id='testInsert1']"), domina.xpath.xpath.call(null, "//div[@id='testInsert2']")]));
+  if(cljs.core.truth_(G__4175__4176)) {
+    var children__4177 = cljs.core.first.call(null, G__4175__4176);
+    var G__4175__4178 = G__4175__4176;
     while(true) {
-      if(cljs.core.truth_(cljs.core._EQ_.call(null, 3, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.call(null, children__2635, "p")))))) {
+      if(cljs.core.truth_(cljs.core._EQ_.call(null, 3, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.xpath.call(null, children__4177, "p")))))) {
       }else {
-        throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 3, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "\ufdd1'children", "p"), cljs.core.hash_map("\ufdd0'line", 176))), cljs.core.hash_map("\ufdd0'line", 176))), cljs.core.hash_map("\ufdd0'line", 176))), cljs.core.hash_map("\ufdd0'line", 176)))));
+        throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 3, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "\ufdd1'children", "p"), cljs.core.hash_map("\ufdd0'line", 177))), cljs.core.hash_map("\ufdd0'line", 177))), cljs.core.hash_map("\ufdd0'line", 177))), cljs.core.hash_map("\ufdd0'line", 177)))));
       }
-      if(cljs.core.truth_(cljs.core._EQ_.call(null, 1, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.call(null, children__2635, "p[@class='i2']/preceding-sibling::*")))))) {
+      if(cljs.core.truth_(cljs.core._EQ_.call(null, 1, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.xpath.call(null, children__4177, "p[@class='i2']/preceding-sibling::*")))))) {
       }else {
-        throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 1, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "\ufdd1'children", "p[@class='i2']/preceding-sibling::*"), cljs.core.hash_map("\ufdd0'line", 177))), cljs.core.hash_map("\ufdd0'line", 177))), cljs.core.hash_map("\ufdd0'line", 177))), cljs.core.hash_map("\ufdd0'line", 
-        177)))));
+        throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 1, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "\ufdd1'children", "p[@class='i2']/preceding-sibling::*"), cljs.core.hash_map("\ufdd0'line", 178))), cljs.core.hash_map("\ufdd0'line", 178))), cljs.core.hash_map("\ufdd0'line", 178))), cljs.core.hash_map("\ufdd0'line", 
+        178)))));
       }
-      if(cljs.core.truth_(cljs.core._EQ_.call(null, 1, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.call(null, children__2635, "p[@class='i2']/following-sibling::*")))))) {
+      if(cljs.core.truth_(cljs.core._EQ_.call(null, 1, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.xpath.call(null, children__4177, "p[@class='i2']/following-sibling::*")))))) {
       }else {
-        throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 1, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "\ufdd1'children", "p[@class='i2']/following-sibling::*"), cljs.core.hash_map("\ufdd0'line", 179))), cljs.core.hash_map("\ufdd0'line", 179))), cljs.core.hash_map("\ufdd0'line", 179))), cljs.core.hash_map("\ufdd0'line", 
-        179)))));
+        throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 1, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "\ufdd1'children", "p[@class='i2']/following-sibling::*"), cljs.core.hash_map("\ufdd0'line", 180))), cljs.core.hash_map("\ufdd0'line", 180))), cljs.core.hash_map("\ufdd0'line", 180))), cljs.core.hash_map("\ufdd0'line", 
+        180)))));
       }
-      var temp__3698__auto____2637 = cljs.core.next.call(null, G__2633__2636);
-      if(cljs.core.truth_(temp__3698__auto____2637)) {
-        var G__2633__2638 = temp__3698__auto____2637;
-        var G__2639 = cljs.core.first.call(null, G__2633__2638);
-        var G__2640 = G__2633__2638;
-        children__2635 = G__2639;
-        G__2633__2636 = G__2640;
+      var temp__3698__auto____4179 = cljs.core.next.call(null, G__4175__4178);
+      if(cljs.core.truth_(temp__3698__auto____4179)) {
+        var G__4175__4180 = temp__3698__auto____4179;
+        var G__4181 = cljs.core.first.call(null, G__4175__4180);
+        var G__4182 = G__4175__4180;
+        children__4177 = G__4181;
+        G__4175__4178 = G__4182;
         continue
       }else {
         return null
@@ -15303,642 +15365,642 @@ domina.test.add_test.call(null, "Insert a single child to multiple parents", fun
 });
 domina.test.add_test.call(null, "destroy a single node", function() {
   domina.test.reset.call(null);
-  domina.append_BANG_.call(null, domina.xpath.call(null, "//body"), "<p class='appended1'>app1</p>");
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, 1, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.call(null, "//body/p[@class='appended1']")))))) {
+  domina.append_BANG_.call(null, domina.xpath.xpath.call(null, "//body"), "<p class='appended1'>app1</p>");
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, 1, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.xpath.call(null, "//body/p[@class='appended1']")))))) {
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 1, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//body/p[@class='appended1']"), cljs.core.hash_map("\ufdd0'line", 185))), cljs.core.hash_map("\ufdd0'line", 185))), cljs.core.hash_map("\ufdd0'line", 185))), cljs.core.hash_map("\ufdd0'line", 185)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 1, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//body/p[@class='appended1']"), cljs.core.hash_map("\ufdd0'line", 186))), cljs.core.hash_map("\ufdd0'line", 186))), cljs.core.hash_map("\ufdd0'line", 186))), cljs.core.hash_map("\ufdd0'line", 186)))));
   }
-  domina.destroy_BANG_.call(null, domina.xpath.call(null, "//body/p[@class='appended1']"));
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, 0, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.call(null, "//body/p[@class='appended1']")))))) {
+  domina.destroy_BANG_.call(null, domina.xpath.xpath.call(null, "//body/p[@class='appended1']"));
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, 0, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.xpath.call(null, "//body/p[@class='appended1']")))))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 0, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//body/p[@class='appended1']"), cljs.core.hash_map("\ufdd0'line", 187))), cljs.core.hash_map("\ufdd0'line", 187))), cljs.core.hash_map("\ufdd0'line", 187))), cljs.core.hash_map("\ufdd0'line", 187)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 0, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//body/p[@class='appended1']"), cljs.core.hash_map("\ufdd0'line", 188))), cljs.core.hash_map("\ufdd0'line", 188))), cljs.core.hash_map("\ufdd0'line", 188))), cljs.core.hash_map("\ufdd0'line", 188)))));
   }
 });
 domina.test.add_test.call(null, "destroy multiple nodes", function() {
   domina.test.reset.call(null);
-  domina.append_BANG_.call(null, domina.xpath.call(null, "//body"), "<p class='appended2'>app1</p><p class='appended2'>app2</p>");
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, 2, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.call(null, "//body/p[@class='appended2']")))))) {
+  domina.append_BANG_.call(null, domina.xpath.xpath.call(null, "//body"), "<p class='appended2'>app1</p><p class='appended2'>app2</p>");
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, 2, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.xpath.call(null, "//body/p[@class='appended2']")))))) {
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 2, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//body/p[@class='appended2']"), cljs.core.hash_map("\ufdd0'line", 193))), cljs.core.hash_map("\ufdd0'line", 193))), cljs.core.hash_map("\ufdd0'line", 193))), cljs.core.hash_map("\ufdd0'line", 193)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 2, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//body/p[@class='appended2']"), cljs.core.hash_map("\ufdd0'line", 194))), cljs.core.hash_map("\ufdd0'line", 194))), cljs.core.hash_map("\ufdd0'line", 194))), cljs.core.hash_map("\ufdd0'line", 194)))));
   }
-  domina.destroy_BANG_.call(null, domina.xpath.call(null, "//body/p[@class='appended2']"));
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, 0, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.call(null, "//body/p[@class='appended2']")))))) {
+  domina.destroy_BANG_.call(null, domina.xpath.xpath.call(null, "//body/p[@class='appended2']"));
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, 0, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.xpath.call(null, "//body/p[@class='appended2']")))))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 0, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//body/p[@class='appended2']"), cljs.core.hash_map("\ufdd0'line", 195))), cljs.core.hash_map("\ufdd0'line", 195))), cljs.core.hash_map("\ufdd0'line", 195))), cljs.core.hash_map("\ufdd0'line", 195)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 0, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//body/p[@class='appended2']"), cljs.core.hash_map("\ufdd0'line", 196))), cljs.core.hash_map("\ufdd0'line", 196))), cljs.core.hash_map("\ufdd0'line", 196))), cljs.core.hash_map("\ufdd0'line", 196)))));
   }
 });
 domina.test.add_test.call(null, "detach and reattach a single node", function() {
   domina.test.reset.call(null);
   domina.test.standard_fixture.call(null);
-  var n__2641 = domina.detach_BANG_.call(null, domina.xpath.call(null, "//p[@class='p3']"));
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, 0, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.call(null, "//p[@class='p3']")))))) {
+  var n__4183 = domina.detach_BANG_.call(null, domina.xpath.xpath.call(null, "//p[@class='p3']"));
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, 0, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.xpath.call(null, "//p[@class='p3']")))))) {
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 0, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p[@class='p3']"), cljs.core.hash_map("\ufdd0'line", 201))), cljs.core.hash_map("\ufdd0'line", 201))), cljs.core.hash_map("\ufdd0'line", 201))), cljs.core.hash_map("\ufdd0'line", 201)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 0, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p[@class='p3']"), cljs.core.hash_map("\ufdd0'line", 202))), cljs.core.hash_map("\ufdd0'line", 202))), cljs.core.hash_map("\ufdd0'line", 202))), cljs.core.hash_map("\ufdd0'line", 202)))));
   }
-  domina.append_BANG_.call(null, domina.xpath.call(null, "//div[@class='d1']"), n__2641);
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, 1, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.call(null, "//p[@class='p3']")))))) {
+  domina.append_BANG_.call(null, domina.xpath.xpath.call(null, "//div[@class='d1']"), n__4183);
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, 1, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.xpath.call(null, "//p[@class='p3']")))))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 1, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p[@class='p3']"), cljs.core.hash_map("\ufdd0'line", 203))), cljs.core.hash_map("\ufdd0'line", 203))), cljs.core.hash_map("\ufdd0'line", 203))), cljs.core.hash_map("\ufdd0'line", 203)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 1, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p[@class='p3']"), cljs.core.hash_map("\ufdd0'line", 204))), cljs.core.hash_map("\ufdd0'line", 204))), cljs.core.hash_map("\ufdd0'line", 204))), cljs.core.hash_map("\ufdd0'line", 204)))));
   }
 });
 domina.test.add_test.call(null, "detach and reattach multiple nodes", function() {
   domina.test.reset.call(null);
   domina.test.standard_fixture.call(null);
-  var n__2642 = domina.detach_BANG_.call(null, domina.xpath.call(null, "//div[@class='d1']/p"));
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, 0, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.call(null, "//div[@class='d1']/p")))))) {
+  var n__4184 = domina.detach_BANG_.call(null, domina.xpath.xpath.call(null, "//div[@class='d1']/p"));
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, 0, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.xpath.call(null, "//div[@class='d1']/p")))))) {
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 0, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[@class='d1']/p"), cljs.core.hash_map("\ufdd0'line", 209))), cljs.core.hash_map("\ufdd0'line", 209))), cljs.core.hash_map("\ufdd0'line", 209))), cljs.core.hash_map("\ufdd0'line", 209)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 0, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[@class='d1']/p"), cljs.core.hash_map("\ufdd0'line", 210))), cljs.core.hash_map("\ufdd0'line", 210))), cljs.core.hash_map("\ufdd0'line", 210))), cljs.core.hash_map("\ufdd0'line", 210)))));
   }
-  domina.append_BANG_.call(null, domina.xpath.call(null, "//div[@class='d1']"), n__2642);
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, 3, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.call(null, "//div[@class='d1']/p")))))) {
+  domina.append_BANG_.call(null, domina.xpath.xpath.call(null, "//div[@class='d1']"), n__4184);
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, 3, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.xpath.call(null, "//div[@class='d1']/p")))))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 3, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[@class='d1']/p"), cljs.core.hash_map("\ufdd0'line", 211))), cljs.core.hash_map("\ufdd0'line", 211))), cljs.core.hash_map("\ufdd0'line", 211))), cljs.core.hash_map("\ufdd0'line", 211)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 3, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[@class='d1']/p"), cljs.core.hash_map("\ufdd0'line", 212))), cljs.core.hash_map("\ufdd0'line", 212))), cljs.core.hash_map("\ufdd0'line", 212))), cljs.core.hash_map("\ufdd0'line", 212)))));
   }
 });
 domina.test.add_test.call(null, "clear a node's contents", function() {
   domina.test.reset.call(null);
   domina.test.standard_fixture.call(null);
-  domina.destroy_children_BANG_.call(null, domina.xpath.call(null, "//div[@class='d1']"));
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, 1, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.call(null, "//div[@class='d1']")))))) {
+  domina.destroy_children_BANG_.call(null, domina.xpath.xpath.call(null, "//div[@class='d1']"));
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, 1, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.xpath.call(null, "//div[@class='d1']")))))) {
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 1, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[@class='d1']"), cljs.core.hash_map("\ufdd0'line", 217))), cljs.core.hash_map("\ufdd0'line", 217))), cljs.core.hash_map("\ufdd0'line", 217))), cljs.core.hash_map("\ufdd0'line", 217)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 1, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[@class='d1']"), cljs.core.hash_map("\ufdd0'line", 218))), cljs.core.hash_map("\ufdd0'line", 218))), cljs.core.hash_map("\ufdd0'line", 218))), cljs.core.hash_map("\ufdd0'line", 218)))));
   }
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, 0, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.call(null, "//div[@class='d1']/*")))))) {
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, 0, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.xpath.call(null, "//div[@class='d1']/*")))))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 0, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[@class='d1']/*"), cljs.core.hash_map("\ufdd0'line", 218))), cljs.core.hash_map("\ufdd0'line", 218))), cljs.core.hash_map("\ufdd0'line", 218))), cljs.core.hash_map("\ufdd0'line", 218)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 0, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[@class='d1']/*"), cljs.core.hash_map("\ufdd0'line", 219))), cljs.core.hash_map("\ufdd0'line", 219))), cljs.core.hash_map("\ufdd0'line", 219))), cljs.core.hash_map("\ufdd0'line", 219)))));
   }
 });
 domina.test.add_test.call(null, "insert-before! with a single reference and single new node", function() {
   domina.test.reset.call(null);
-  domina.append_BANG_.call(null, domina.xpath.call(null, "//body"), "<div id='ref'>Some content</div>");
+  domina.append_BANG_.call(null, domina.xpath.xpath.call(null, "//body"), "<div id='ref'>Some content</div>");
   domina.insert_before_BANG_.call(null, domina.nodes.call(null, domina.by_id.call(null, "ref")), "<p>before</p>");
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, 1, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.call(null, "//div[@id='ref']/preceding-sibling::*[text()='before']")))))) {
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, 1, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.xpath.call(null, "//div[@id='ref']/preceding-sibling::*[text()='before']")))))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 1, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[@id='ref']/preceding-sibling::*[text()='before']"), cljs.core.hash_map("\ufdd0'line", 224))), cljs.core.hash_map("\ufdd0'line", 224))), cljs.core.hash_map("\ufdd0'line", 224))), cljs.core.hash_map("\ufdd0'line", 
-    224)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 1, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[@id='ref']/preceding-sibling::*[text()='before']"), cljs.core.hash_map("\ufdd0'line", 225))), cljs.core.hash_map("\ufdd0'line", 225))), cljs.core.hash_map("\ufdd0'line", 225))), cljs.core.hash_map("\ufdd0'line", 
+    225)))));
   }
 });
 domina.test.add_test.call(null, "insert-before! with a single reference and multiple new nodes", function() {
   domina.test.reset.call(null);
-  domina.append_BANG_.call(null, domina.xpath.call(null, "//body"), "<div id='ref'>Some content</div>");
+  domina.append_BANG_.call(null, domina.xpath.xpath.call(null, "//body"), "<div id='ref'>Some content</div>");
   domina.insert_before_BANG_.call(null, domina.nodes.call(null, domina.by_id.call(null, "ref")), "<p>before1</p><p>before2</p>");
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, 1, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.call(null, "//div[@id='ref']/preceding-sibling::*[text()='before2' and position()=1]")))))) {
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, 1, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.xpath.call(null, "//div[@id='ref']/preceding-sibling::*[text()='before2' and position()=1]")))))) {
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 1, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[@id='ref']/preceding-sibling::*[text()='before2' and position()=1]"), cljs.core.hash_map("\ufdd0'line", 230))), cljs.core.hash_map("\ufdd0'line", 230))), cljs.core.hash_map("\ufdd0'line", 230))), cljs.core.hash_map("\ufdd0'line", 
-    230)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 1, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[@id='ref']/preceding-sibling::*[text()='before2' and position()=1]"), cljs.core.hash_map("\ufdd0'line", 231))), cljs.core.hash_map("\ufdd0'line", 231))), cljs.core.hash_map("\ufdd0'line", 231))), cljs.core.hash_map("\ufdd0'line", 
+    231)))));
   }
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, 1, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.call(null, "//div[@id='ref']/preceding-sibling::*[text()='before1' and position()=2]")))))) {
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, 1, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.xpath.call(null, "//div[@id='ref']/preceding-sibling::*[text()='before1' and position()=2]")))))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 1, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[@id='ref']/preceding-sibling::*[text()='before1' and position()=2]"), cljs.core.hash_map("\ufdd0'line", 231))), cljs.core.hash_map("\ufdd0'line", 231))), cljs.core.hash_map("\ufdd0'line", 231))), cljs.core.hash_map("\ufdd0'line", 
-    231)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 1, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[@id='ref']/preceding-sibling::*[text()='before1' and position()=2]"), cljs.core.hash_map("\ufdd0'line", 232))), cljs.core.hash_map("\ufdd0'line", 232))), cljs.core.hash_map("\ufdd0'line", 232))), cljs.core.hash_map("\ufdd0'line", 
+    232)))));
   }
 });
 domina.test.add_test.call(null, "insert-before! with multiple reference nodes and a single new node", function() {
   domina.test.reset.call(null);
-  domina.append_BANG_.call(null, domina.xpath.call(null, "//body"), "<div class='ref' id='ref1'>content1</div>");
-  domina.append_BANG_.call(null, domina.xpath.call(null, "//body"), "<div class='ref' id='ref2'>content2</div>");
+  domina.append_BANG_.call(null, domina.xpath.xpath.call(null, "//body"), "<div class='ref' id='ref1'>content1</div>");
+  domina.append_BANG_.call(null, domina.xpath.xpath.call(null, "//body"), "<div class='ref' id='ref2'>content2</div>");
   domina.insert_before_BANG_.call(null, domina.nodes.call(null, domina.by_class.call(null, "ref")), "<p>before</p>");
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, 2, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.call(null, "//p")))))) {
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, 2, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.xpath.call(null, "//p")))))) {
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 2, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p"), cljs.core.hash_map("\ufdd0'line", 238))), cljs.core.hash_map("\ufdd0'line", 238))), cljs.core.hash_map("\ufdd0'line", 238))), cljs.core.hash_map("\ufdd0'line", 238)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 2, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p"), cljs.core.hash_map("\ufdd0'line", 239))), cljs.core.hash_map("\ufdd0'line", 239))), cljs.core.hash_map("\ufdd0'line", 239))), cljs.core.hash_map("\ufdd0'line", 239)))));
   }
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, 1, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.call(null, "//div[@id='ref1']/preceding-sibling::p")))))) {
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, 1, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.xpath.call(null, "//div[@id='ref1']/preceding-sibling::p")))))) {
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 1, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[@id='ref1']/preceding-sibling::p"), cljs.core.hash_map("\ufdd0'line", 239))), cljs.core.hash_map("\ufdd0'line", 239))), cljs.core.hash_map("\ufdd0'line", 239))), cljs.core.hash_map("\ufdd0'line", 239)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 1, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[@id='ref1']/preceding-sibling::p"), cljs.core.hash_map("\ufdd0'line", 240))), cljs.core.hash_map("\ufdd0'line", 240))), cljs.core.hash_map("\ufdd0'line", 240))), cljs.core.hash_map("\ufdd0'line", 240)))));
   }
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, 2, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.call(null, "//div[@id='ref2']/preceding-sibling::p")))))) {
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, 2, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.xpath.call(null, "//div[@id='ref2']/preceding-sibling::p")))))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 2, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[@id='ref2']/preceding-sibling::p"), cljs.core.hash_map("\ufdd0'line", 240))), cljs.core.hash_map("\ufdd0'line", 240))), cljs.core.hash_map("\ufdd0'line", 240))), cljs.core.hash_map("\ufdd0'line", 240)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 2, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[@id='ref2']/preceding-sibling::p"), cljs.core.hash_map("\ufdd0'line", 241))), cljs.core.hash_map("\ufdd0'line", 241))), cljs.core.hash_map("\ufdd0'line", 241))), cljs.core.hash_map("\ufdd0'line", 241)))));
   }
 });
 domina.test.add_test.call(null, "insert-after! with a single reference and single new node", function() {
   domina.test.reset.call(null);
-  domina.append_BANG_.call(null, domina.xpath.call(null, "//body"), "<div id='ref'>Some content</div>");
+  domina.append_BANG_.call(null, domina.xpath.xpath.call(null, "//body"), "<div id='ref'>Some content</div>");
   domina.insert_after_BANG_.call(null, domina.nodes.call(null, domina.by_id.call(null, "ref")), "<p>after</p>");
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, 1, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.call(null, "//div[@id='ref']/following-sibling::*[text()='after']")))))) {
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, 1, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.xpath.call(null, "//div[@id='ref']/following-sibling::*[text()='after']")))))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 1, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[@id='ref']/following-sibling::*[text()='after']"), cljs.core.hash_map("\ufdd0'line", 247))), cljs.core.hash_map("\ufdd0'line", 247))), cljs.core.hash_map("\ufdd0'line", 247))), cljs.core.hash_map("\ufdd0'line", 
-    247)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 1, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[@id='ref']/following-sibling::*[text()='after']"), cljs.core.hash_map("\ufdd0'line", 248))), cljs.core.hash_map("\ufdd0'line", 248))), cljs.core.hash_map("\ufdd0'line", 248))), cljs.core.hash_map("\ufdd0'line", 
+    248)))));
   }
 });
 domina.test.add_test.call(null, "insert-after! with a single reference and multiple new nodes", function() {
   domina.test.reset.call(null);
-  domina.append_BANG_.call(null, domina.xpath.call(null, "//body"), "<div id='ref'>Some content</div>");
+  domina.append_BANG_.call(null, domina.xpath.xpath.call(null, "//body"), "<div id='ref'>Some content</div>");
   domina.insert_after_BANG_.call(null, domina.nodes.call(null, domina.by_id.call(null, "ref")), "<p>after1</p><p>after2</p>");
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, 1, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.call(null, "//div[@id='ref']/following-sibling::*[text()='after1' and position()=1]")))))) {
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, 1, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.xpath.call(null, "//div[@id='ref']/following-sibling::*[text()='after1' and position()=1]")))))) {
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 1, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[@id='ref']/following-sibling::*[text()='after1' and position()=1]"), cljs.core.hash_map("\ufdd0'line", 253))), cljs.core.hash_map("\ufdd0'line", 253))), cljs.core.hash_map("\ufdd0'line", 253))), cljs.core.hash_map("\ufdd0'line", 
-    253)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 1, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[@id='ref']/following-sibling::*[text()='after1' and position()=1]"), cljs.core.hash_map("\ufdd0'line", 254))), cljs.core.hash_map("\ufdd0'line", 254))), cljs.core.hash_map("\ufdd0'line", 254))), cljs.core.hash_map("\ufdd0'line", 
+    254)))));
   }
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, 1, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.call(null, "//div[@id='ref']/following-sibling::*[text()='after2' and position()=2]")))))) {
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, 1, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.xpath.call(null, "//div[@id='ref']/following-sibling::*[text()='after2' and position()=2]")))))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 1, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[@id='ref']/following-sibling::*[text()='after2' and position()=2]"), cljs.core.hash_map("\ufdd0'line", 254))), cljs.core.hash_map("\ufdd0'line", 254))), cljs.core.hash_map("\ufdd0'line", 254))), cljs.core.hash_map("\ufdd0'line", 
-    254)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 1, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[@id='ref']/following-sibling::*[text()='after2' and position()=2]"), cljs.core.hash_map("\ufdd0'line", 255))), cljs.core.hash_map("\ufdd0'line", 255))), cljs.core.hash_map("\ufdd0'line", 255))), cljs.core.hash_map("\ufdd0'line", 
+    255)))));
   }
 });
 domina.test.add_test.call(null, "insert-after! with multiple reference nodes and a single new node", function() {
   domina.test.reset.call(null);
-  domina.append_BANG_.call(null, domina.xpath.call(null, "//body"), "<div class='ref' id='ref1'>content1</div>");
-  domina.append_BANG_.call(null, domina.xpath.call(null, "//body"), "<div class='ref' id='ref2'>content2</div>");
+  domina.append_BANG_.call(null, domina.xpath.xpath.call(null, "//body"), "<div class='ref' id='ref1'>content1</div>");
+  domina.append_BANG_.call(null, domina.xpath.xpath.call(null, "//body"), "<div class='ref' id='ref2'>content2</div>");
   domina.insert_after_BANG_.call(null, domina.nodes.call(null, domina.by_class.call(null, "ref")), "<p>after</p>");
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, 2, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.call(null, "//p")))))) {
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, 2, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.xpath.call(null, "//p")))))) {
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 2, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p"), cljs.core.hash_map("\ufdd0'line", 261))), cljs.core.hash_map("\ufdd0'line", 261))), cljs.core.hash_map("\ufdd0'line", 261))), cljs.core.hash_map("\ufdd0'line", 261)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 2, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p"), cljs.core.hash_map("\ufdd0'line", 262))), cljs.core.hash_map("\ufdd0'line", 262))), cljs.core.hash_map("\ufdd0'line", 262))), cljs.core.hash_map("\ufdd0'line", 262)))));
   }
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, 2, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.call(null, "//div[@id='ref1']/following-sibling::p")))))) {
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, 2, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.xpath.call(null, "//div[@id='ref1']/following-sibling::p")))))) {
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 2, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[@id='ref1']/following-sibling::p"), cljs.core.hash_map("\ufdd0'line", 262))), cljs.core.hash_map("\ufdd0'line", 262))), cljs.core.hash_map("\ufdd0'line", 262))), cljs.core.hash_map("\ufdd0'line", 262)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 2, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[@id='ref1']/following-sibling::p"), cljs.core.hash_map("\ufdd0'line", 263))), cljs.core.hash_map("\ufdd0'line", 263))), cljs.core.hash_map("\ufdd0'line", 263))), cljs.core.hash_map("\ufdd0'line", 263)))));
   }
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, 1, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.call(null, "//div[@id='ref2']/following-sibling::p")))))) {
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, 1, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.xpath.call(null, "//div[@id='ref2']/following-sibling::p")))))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 1, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[@id='ref2']/following-sibling::p"), cljs.core.hash_map("\ufdd0'line", 263))), cljs.core.hash_map("\ufdd0'line", 263))), cljs.core.hash_map("\ufdd0'line", 263))), cljs.core.hash_map("\ufdd0'line", 263)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 1, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[@id='ref2']/following-sibling::p"), cljs.core.hash_map("\ufdd0'line", 264))), cljs.core.hash_map("\ufdd0'line", 264))), cljs.core.hash_map("\ufdd0'line", 264))), cljs.core.hash_map("\ufdd0'line", 264)))));
   }
 });
 domina.test.add_test.call(null, "swap-content! with a single reference node and a single new node", function() {
   domina.test.reset.call(null);
-  domina.append_BANG_.call(null, domina.xpath.call(null, "//body"), "<div><p id='before'>TYPO</p></div>");
-  domina.swap_content_BANG_.call(null, domina.xpath.call(null, "//p[@id='before']"), "<p id='after'>fixed</p>");
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, 0, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.call(null, "//p[@id='before']")))))) {
+  domina.append_BANG_.call(null, domina.xpath.xpath.call(null, "//body"), "<div><p id='before'>TYPO</p></div>");
+  domina.swap_content_BANG_.call(null, domina.xpath.xpath.call(null, "//p[@id='before']"), "<p id='after'>fixed</p>");
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, 0, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.xpath.call(null, "//p[@id='before']")))))) {
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 0, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p[@id='before']"), cljs.core.hash_map("\ufdd0'line", 269))), cljs.core.hash_map("\ufdd0'line", 269))), cljs.core.hash_map("\ufdd0'line", 269))), cljs.core.hash_map("\ufdd0'line", 269)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 0, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p[@id='before']"), cljs.core.hash_map("\ufdd0'line", 270))), cljs.core.hash_map("\ufdd0'line", 270))), cljs.core.hash_map("\ufdd0'line", 270))), cljs.core.hash_map("\ufdd0'line", 270)))));
   }
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, 1, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.call(null, "//p[@id='after']")))))) {
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, 1, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.xpath.call(null, "//p[@id='after']")))))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 1, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p[@id='after']"), cljs.core.hash_map("\ufdd0'line", 270))), cljs.core.hash_map("\ufdd0'line", 270))), cljs.core.hash_map("\ufdd0'line", 270))), cljs.core.hash_map("\ufdd0'line", 270)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 1, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p[@id='after']"), cljs.core.hash_map("\ufdd0'line", 271))), cljs.core.hash_map("\ufdd0'line", 271))), cljs.core.hash_map("\ufdd0'line", 271))), cljs.core.hash_map("\ufdd0'line", 271)))));
   }
 });
 domina.test.add_test.call(null, "swap-content! with a single reference node and multiple new nodes", function() {
   domina.test.reset.call(null);
-  domina.append_BANG_.call(null, domina.xpath.call(null, "//body"), "<div><p id='before'>TYPO</p></div>");
-  domina.swap_content_BANG_.call(null, domina.xpath.call(null, "//p[@id='before']"), "<p class='after'>fixed1</p><p class='after'>fixed2</p>");
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, 0, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.call(null, "//p[@id='before']")))))) {
+  domina.append_BANG_.call(null, domina.xpath.xpath.call(null, "//body"), "<div><p id='before'>TYPO</p></div>");
+  domina.swap_content_BANG_.call(null, domina.xpath.xpath.call(null, "//p[@id='before']"), "<p class='after'>fixed1</p><p class='after'>fixed2</p>");
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, 0, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.xpath.call(null, "//p[@id='before']")))))) {
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 0, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p[@id='before']"), cljs.core.hash_map("\ufdd0'line", 276))), cljs.core.hash_map("\ufdd0'line", 276))), cljs.core.hash_map("\ufdd0'line", 276))), cljs.core.hash_map("\ufdd0'line", 276)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 0, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p[@id='before']"), cljs.core.hash_map("\ufdd0'line", 277))), cljs.core.hash_map("\ufdd0'line", 277))), cljs.core.hash_map("\ufdd0'line", 277))), cljs.core.hash_map("\ufdd0'line", 277)))));
   }
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, 2, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.call(null, "//p[@class='after']")))))) {
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, 2, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.xpath.call(null, "//p[@class='after']")))))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 2, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p[@class='after']"), cljs.core.hash_map("\ufdd0'line", 277))), cljs.core.hash_map("\ufdd0'line", 277))), cljs.core.hash_map("\ufdd0'line", 277))), cljs.core.hash_map("\ufdd0'line", 277)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 2, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p[@class='after']"), cljs.core.hash_map("\ufdd0'line", 278))), cljs.core.hash_map("\ufdd0'line", 278))), cljs.core.hash_map("\ufdd0'line", 278))), cljs.core.hash_map("\ufdd0'line", 278)))));
   }
 });
 domina.test.add_test.call(null, "swap-content! with multiple reference nodes and multiple new nodes", function() {
   domina.test.reset.call(null);
-  domina.append_BANG_.call(null, domina.xpath.call(null, "//body"), "<div><p class='before'>TYPO-1</p></div>");
-  domina.append_BANG_.call(null, domina.xpath.call(null, "//body"), "<div><p class='before'>TYPO-2</p></div>");
-  domina.swap_content_BANG_.call(null, domina.xpath.call(null, "//p[@class='before']"), "<p class='after'>fixed1</p><p class='after'>fixed2</p>");
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, 0, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.call(null, "//p[@class='before']")))))) {
+  domina.append_BANG_.call(null, domina.xpath.xpath.call(null, "//body"), "<div><p class='before'>TYPO-1</p></div>");
+  domina.append_BANG_.call(null, domina.xpath.xpath.call(null, "//body"), "<div><p class='before'>TYPO-2</p></div>");
+  domina.swap_content_BANG_.call(null, domina.xpath.xpath.call(null, "//p[@class='before']"), "<p class='after'>fixed1</p><p class='after'>fixed2</p>");
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, 0, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.xpath.call(null, "//p[@class='before']")))))) {
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 0, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p[@class='before']"), cljs.core.hash_map("\ufdd0'line", 284))), cljs.core.hash_map("\ufdd0'line", 284))), cljs.core.hash_map("\ufdd0'line", 284))), cljs.core.hash_map("\ufdd0'line", 284)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 0, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p[@class='before']"), cljs.core.hash_map("\ufdd0'line", 285))), cljs.core.hash_map("\ufdd0'line", 285))), cljs.core.hash_map("\ufdd0'line", 285))), cljs.core.hash_map("\ufdd0'line", 285)))));
   }
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, 4, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.call(null, "//p[@class='after']")))))) {
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, 4, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.xpath.call(null, "//p[@class='after']")))))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 4, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p[@class='after']"), cljs.core.hash_map("\ufdd0'line", 285))), cljs.core.hash_map("\ufdd0'line", 285))), cljs.core.hash_map("\ufdd0'line", 285))), cljs.core.hash_map("\ufdd0'line", 285)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 4, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p[@class='after']"), cljs.core.hash_map("\ufdd0'line", 286))), cljs.core.hash_map("\ufdd0'line", 286))), cljs.core.hash_map("\ufdd0'line", 286))), cljs.core.hash_map("\ufdd0'line", 286)))));
   }
 });
 domina.test.add_test.call(null, "can retrieve a css property value", function() {
   domina.test.reset.call(null);
-  domina.append_BANG_.call(null, domina.xpath.call(null, "//body"), '<div style="background-color: maroon;">Test</div>');
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, "maroon", domina.style.call(null, domina.xpath.call(null, "//div"), "background-color")))) {
+  domina.append_BANG_.call(null, domina.xpath.xpath.call(null, "//body"), '<div style="background-color: maroon;">Test</div>');
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, "maroon", domina.style.call(null, domina.xpath.xpath.call(null, "//div"), "background-color")))) {
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "maroon", cljs.core.with_meta(cljs.core.list("\ufdd1'style", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div"), cljs.core.hash_map("\ufdd0'line", 292)), "background-color"), cljs.core.hash_map("\ufdd0'line", 292))), cljs.core.hash_map("\ufdd0'line", 292)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "maroon", cljs.core.with_meta(cljs.core.list("\ufdd1'style", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div"), cljs.core.hash_map("\ufdd0'line", 293)), "background-color"), cljs.core.hash_map("\ufdd0'line", 293))), cljs.core.hash_map("\ufdd0'line", 293)))));
   }
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, "maroon", domina.style.call(null, domina.xpath.call(null, "//div"), "\ufdd0'background-color")))) {
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, "maroon", domina.style.call(null, domina.xpath.xpath.call(null, "//div"), "\ufdd0'background-color")))) {
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "maroon", cljs.core.with_meta(cljs.core.list("\ufdd1'style", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div"), cljs.core.hash_map("\ufdd0'line", 293)), "\ufdd0'background-color"), cljs.core.hash_map("\ufdd0'line", 293))), cljs.core.hash_map("\ufdd0'line", 293)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "maroon", cljs.core.with_meta(cljs.core.list("\ufdd1'style", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div"), cljs.core.hash_map("\ufdd0'line", 294)), "\ufdd0'background-color"), cljs.core.hash_map("\ufdd0'line", 294))), cljs.core.hash_map("\ufdd0'line", 294)))));
   }
-  if(cljs.core.truth_(cljs.core.nil_QMARK_.call(null, domina.style.call(null, domina.xpath.call(null, "//div"), "\ufdd0'no-such-style")))) {
+  if(cljs.core.truth_(cljs.core.nil_QMARK_.call(null, domina.style.call(null, domina.xpath.xpath.call(null, "//div"), "\ufdd0'no-such-style")))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'nil?", cljs.core.with_meta(cljs.core.list("\ufdd1'style", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div"), cljs.core.hash_map("\ufdd0'line", 294)), "\ufdd0'no-such-style"), cljs.core.hash_map("\ufdd0'line", 294))), cljs.core.hash_map("\ufdd0'line", 294)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'nil?", cljs.core.with_meta(cljs.core.list("\ufdd1'style", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div"), cljs.core.hash_map("\ufdd0'line", 295)), "\ufdd0'no-such-style"), cljs.core.hash_map("\ufdd0'line", 295))), cljs.core.hash_map("\ufdd0'line", 295)))));
   }
 });
 domina.test.add_test.call(null, "can retrieve an HTML attribute value", function() {
   domina.test.reset.call(null);
-  domina.append_BANG_.call(null, domina.xpath.call(null, "//body"), '<div height="42">Content!</div>');
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, "42", domina.attr.call(null, domina.xpath.call(null, "//div"), "height")))) {
+  domina.append_BANG_.call(null, domina.xpath.xpath.call(null, "//body"), '<div height="42">Content!</div>');
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, "42", domina.attr.call(null, domina.xpath.xpath.call(null, "//div"), "height")))) {
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "42", cljs.core.with_meta(cljs.core.list("\ufdd1'attr", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div"), cljs.core.hash_map("\ufdd0'line", 299)), "height"), cljs.core.hash_map("\ufdd0'line", 299))), cljs.core.hash_map("\ufdd0'line", 299)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "42", cljs.core.with_meta(cljs.core.list("\ufdd1'attr", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div"), cljs.core.hash_map("\ufdd0'line", 300)), "height"), cljs.core.hash_map("\ufdd0'line", 300))), cljs.core.hash_map("\ufdd0'line", 300)))));
   }
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, "42", domina.attr.call(null, domina.xpath.call(null, "//div"), "\ufdd0'height")))) {
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, "42", domina.attr.call(null, domina.xpath.xpath.call(null, "//div"), "\ufdd0'height")))) {
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "42", cljs.core.with_meta(cljs.core.list("\ufdd1'attr", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div"), cljs.core.hash_map("\ufdd0'line", 300)), "\ufdd0'height"), cljs.core.hash_map("\ufdd0'line", 300))), cljs.core.hash_map("\ufdd0'line", 300)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "42", cljs.core.with_meta(cljs.core.list("\ufdd1'attr", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div"), cljs.core.hash_map("\ufdd0'line", 301)), "\ufdd0'height"), cljs.core.hash_map("\ufdd0'line", 301))), cljs.core.hash_map("\ufdd0'line", 301)))));
   }
-  if(cljs.core.truth_(cljs.core.nil_QMARK_.call(null, domina.attr.call(null, domina.xpath.call(null, "//div"), "\ufdd0'no-such-attr:c")))) {
+  if(cljs.core.truth_(cljs.core.nil_QMARK_.call(null, domina.attr.call(null, domina.xpath.xpath.call(null, "//div"), "\ufdd0'no-such-attr:c")))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'nil?", cljs.core.with_meta(cljs.core.list("\ufdd1'attr", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div"), cljs.core.hash_map("\ufdd0'line", 301)), "\ufdd0'no-such-attr:c"), cljs.core.hash_map("\ufdd0'line", 301))), cljs.core.hash_map("\ufdd0'line", 301)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'nil?", cljs.core.with_meta(cljs.core.list("\ufdd1'attr", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div"), cljs.core.hash_map("\ufdd0'line", 302)), "\ufdd0'no-such-attr:c"), cljs.core.hash_map("\ufdd0'line", 302))), cljs.core.hash_map("\ufdd0'line", 302)))));
   }
 });
 domina.test.add_test.call(null, "can set a css property on a single node", function() {
   domina.test.reset.call(null);
-  domina.append_BANG_.call(null, domina.xpath.call(null, "//body"), "<div>1</div><div>2</div>");
-  domina.set_style_BANG_.call(null, domina.xpath.call(null, "//div[1]"), "background-color", "red");
-  domina.set_style_BANG_.call(null, domina.xpath.call(null, "//div[2]"), "\ufdd0'background-color", "green");
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, "red", domina.style.call(null, domina.xpath.call(null, "//div[1]"), "background-color")))) {
+  domina.append_BANG_.call(null, domina.xpath.xpath.call(null, "//body"), "<div>1</div><div>2</div>");
+  domina.set_style_BANG_.call(null, domina.xpath.xpath.call(null, "//div[1]"), "background-color", "red");
+  domina.set_style_BANG_.call(null, domina.xpath.xpath.call(null, "//div[2]"), "\ufdd0'background-color", "green");
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, "red", domina.style.call(null, domina.xpath.xpath.call(null, "//div[1]"), "background-color")))) {
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "red", cljs.core.with_meta(cljs.core.list("\ufdd1'style", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[1]"), cljs.core.hash_map("\ufdd0'line", 308)), "background-color"), cljs.core.hash_map("\ufdd0'line", 308))), cljs.core.hash_map("\ufdd0'line", 308)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "red", cljs.core.with_meta(cljs.core.list("\ufdd1'style", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[1]"), cljs.core.hash_map("\ufdd0'line", 309)), "background-color"), cljs.core.hash_map("\ufdd0'line", 309))), cljs.core.hash_map("\ufdd0'line", 309)))));
   }
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, "green", domina.style.call(null, domina.xpath.call(null, "//div[2]"), "background-color")))) {
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, "green", domina.style.call(null, domina.xpath.xpath.call(null, "//div[2]"), "background-color")))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "green", cljs.core.with_meta(cljs.core.list("\ufdd1'style", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[2]"), cljs.core.hash_map("\ufdd0'line", 309)), "background-color"), cljs.core.hash_map("\ufdd0'line", 309))), cljs.core.hash_map("\ufdd0'line", 309)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "green", cljs.core.with_meta(cljs.core.list("\ufdd1'style", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[2]"), cljs.core.hash_map("\ufdd0'line", 310)), "background-color"), cljs.core.hash_map("\ufdd0'line", 310))), cljs.core.hash_map("\ufdd0'line", 310)))));
   }
 });
 domina.test.add_test.call(null, "can set a css property on multiple nodes", function() {
   domina.test.reset.call(null);
-  domina.append_BANG_.call(null, domina.xpath.call(null, "//body"), "<div>1</div><div>2</div>");
-  domina.set_style_BANG_.call(null, domina.xpath.call(null, "//div"), "color", "red");
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, "red", domina.style.call(null, domina.xpath.call(null, "//div[1]"), "color")))) {
+  domina.append_BANG_.call(null, domina.xpath.xpath.call(null, "//body"), "<div>1</div><div>2</div>");
+  domina.set_style_BANG_.call(null, domina.xpath.xpath.call(null, "//div"), "color", "red");
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, "red", domina.style.call(null, domina.xpath.xpath.call(null, "//div[1]"), "color")))) {
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "red", cljs.core.with_meta(cljs.core.list("\ufdd1'style", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[1]"), cljs.core.hash_map("\ufdd0'line", 315)), "color"), cljs.core.hash_map("\ufdd0'line", 315))), cljs.core.hash_map("\ufdd0'line", 315)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "red", cljs.core.with_meta(cljs.core.list("\ufdd1'style", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[1]"), cljs.core.hash_map("\ufdd0'line", 316)), "color"), cljs.core.hash_map("\ufdd0'line", 316))), cljs.core.hash_map("\ufdd0'line", 316)))));
   }
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, "red", domina.style.call(null, domina.xpath.call(null, "//div[2]"), "color")))) {
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, "red", domina.style.call(null, domina.xpath.xpath.call(null, "//div[2]"), "color")))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "red", cljs.core.with_meta(cljs.core.list("\ufdd1'style", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[2]"), cljs.core.hash_map("\ufdd0'line", 316)), "color"), cljs.core.hash_map("\ufdd0'line", 316))), cljs.core.hash_map("\ufdd0'line", 316)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "red", cljs.core.with_meta(cljs.core.list("\ufdd1'style", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[2]"), cljs.core.hash_map("\ufdd0'line", 317)), "color"), cljs.core.hash_map("\ufdd0'line", 317))), cljs.core.hash_map("\ufdd0'line", 317)))));
   }
 });
 domina.test.add_test.call(null, "can set a html attribute on a single node", function() {
   domina.test.reset.call(null);
-  domina.append_BANG_.call(null, domina.xpath.call(null, "//body"), "<div>1</div><div>2</div>");
-  domina.set_attr_BANG_.call(null, domina.xpath.call(null, "//div[1]"), "width", 42);
-  domina.set_attr_BANG_.call(null, domina.xpath.call(null, "//div[2]"), "\ufdd0'width", 42);
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, "42", domina.attr.call(null, domina.xpath.call(null, "//div[1]"), "width")))) {
+  domina.append_BANG_.call(null, domina.xpath.xpath.call(null, "//body"), "<div>1</div><div>2</div>");
+  domina.set_attr_BANG_.call(null, domina.xpath.xpath.call(null, "//div[1]"), "width", 42);
+  domina.set_attr_BANG_.call(null, domina.xpath.xpath.call(null, "//div[2]"), "\ufdd0'width", 42);
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, "42", domina.attr.call(null, domina.xpath.xpath.call(null, "//div[1]"), "width")))) {
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "42", cljs.core.with_meta(cljs.core.list("\ufdd1'attr", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[1]"), cljs.core.hash_map("\ufdd0'line", 323)), "width"), cljs.core.hash_map("\ufdd0'line", 323))), cljs.core.hash_map("\ufdd0'line", 323)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "42", cljs.core.with_meta(cljs.core.list("\ufdd1'attr", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[1]"), cljs.core.hash_map("\ufdd0'line", 324)), "width"), cljs.core.hash_map("\ufdd0'line", 324))), cljs.core.hash_map("\ufdd0'line", 324)))));
   }
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, "42", domina.attr.call(null, domina.xpath.call(null, "//div[2]"), "width")))) {
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, "42", domina.attr.call(null, domina.xpath.xpath.call(null, "//div[2]"), "width")))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "42", cljs.core.with_meta(cljs.core.list("\ufdd1'attr", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[2]"), cljs.core.hash_map("\ufdd0'line", 324)), "width"), cljs.core.hash_map("\ufdd0'line", 324))), cljs.core.hash_map("\ufdd0'line", 324)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "42", cljs.core.with_meta(cljs.core.list("\ufdd1'attr", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[2]"), cljs.core.hash_map("\ufdd0'line", 325)), "width"), cljs.core.hash_map("\ufdd0'line", 325))), cljs.core.hash_map("\ufdd0'line", 325)))));
   }
 });
 domina.test.add_test.call(null, "can set a html attribute on a single node", function() {
   domina.test.reset.call(null);
-  domina.append_BANG_.call(null, domina.xpath.call(null, "//body"), "<div>1</div><div>2</div>");
-  domina.set_attr_BANG_.call(null, domina.xpath.call(null, "//div"), "width", 42);
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, "42", domina.attr.call(null, domina.xpath.call(null, "//div[1]"), "width")))) {
+  domina.append_BANG_.call(null, domina.xpath.xpath.call(null, "//body"), "<div>1</div><div>2</div>");
+  domina.set_attr_BANG_.call(null, domina.xpath.xpath.call(null, "//div"), "width", 42);
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, "42", domina.attr.call(null, domina.xpath.xpath.call(null, "//div[1]"), "width")))) {
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "42", cljs.core.with_meta(cljs.core.list("\ufdd1'attr", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[1]"), cljs.core.hash_map("\ufdd0'line", 330)), "width"), cljs.core.hash_map("\ufdd0'line", 330))), cljs.core.hash_map("\ufdd0'line", 330)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "42", cljs.core.with_meta(cljs.core.list("\ufdd1'attr", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[1]"), cljs.core.hash_map("\ufdd0'line", 331)), "width"), cljs.core.hash_map("\ufdd0'line", 331))), cljs.core.hash_map("\ufdd0'line", 331)))));
   }
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, "42", domina.attr.call(null, domina.xpath.call(null, "//div[2]"), "width")))) {
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, "42", domina.attr.call(null, domina.xpath.xpath.call(null, "//div[2]"), "width")))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "42", cljs.core.with_meta(cljs.core.list("\ufdd1'attr", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[2]"), cljs.core.hash_map("\ufdd0'line", 331)), "width"), cljs.core.hash_map("\ufdd0'line", 331))), cljs.core.hash_map("\ufdd0'line", 331)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "42", cljs.core.with_meta(cljs.core.list("\ufdd1'attr", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[2]"), cljs.core.hash_map("\ufdd0'line", 332)), "width"), cljs.core.hash_map("\ufdd0'line", 332))), cljs.core.hash_map("\ufdd0'line", 332)))));
   }
 });
 domina.test.add_test.call(null, "can get multiple CSS styles from a single node.", function() {
   domina.test.reset.call(null);
-  domina.append_BANG_.call(null, domina.xpath.call(null, "//body"), "<div>1</div>");
-  domina.set_style_BANG_.call(null, domina.xpath.call(null, "//div"), "color", "red");
-  domina.set_style_BANG_.call(null, domina.xpath.call(null, "//div"), "background-color", "black");
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, cljs.core.ObjMap.fromObject(["\ufdd0'color", "\ufdd0'background-color"], {"\ufdd0'color":"red", "\ufdd0'background-color":"black"}), domina.styles.call(null, domina.xpath.call(null, "//div"))))) {
+  domina.append_BANG_.call(null, domina.xpath.xpath.call(null, "//body"), "<div>1</div>");
+  domina.set_style_BANG_.call(null, domina.xpath.xpath.call(null, "//div"), "color", "red");
+  domina.set_style_BANG_.call(null, domina.xpath.xpath.call(null, "//div"), "background-color", "black");
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, cljs.core.ObjMap.fromObject(["\ufdd0'color", "\ufdd0'background-color"], {"\ufdd0'color":"red", "\ufdd0'background-color":"black"}), domina.styles.call(null, domina.xpath.xpath.call(null, "//div"))))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", cljs.core.hash_map("\ufdd0'color", "red", "\ufdd0'background-color", "black"), cljs.core.with_meta(cljs.core.list("\ufdd1'styles", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div"), cljs.core.hash_map("\ufdd0'line", 339))), cljs.core.hash_map("\ufdd0'line", 339))), cljs.core.hash_map("\ufdd0'line", 338)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", cljs.core.hash_map("\ufdd0'color", "red", "\ufdd0'background-color", "black"), cljs.core.with_meta(cljs.core.list("\ufdd1'styles", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div"), cljs.core.hash_map("\ufdd0'line", 340))), cljs.core.hash_map("\ufdd0'line", 340))), cljs.core.hash_map("\ufdd0'line", 339)))));
   }
 });
 domina.test.add_test.call(null, "can get multiple HTML attributes from a single node.", function() {
   domina.test.reset.call(null);
-  domina.append_BANG_.call(null, domina.xpath.call(null, "//body"), "<div>1</div>");
-  domina.set_attr_BANG_.call(null, domina.xpath.call(null, "//div"), "width", 42);
-  domina.set_attr_BANG_.call(null, domina.xpath.call(null, "//div"), "height", 24);
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, cljs.core.ObjMap.fromObject(["\ufdd0'width", "\ufdd0'height"], {"\ufdd0'width":"42", "\ufdd0'height":"24"}), domina.attrs.call(null, domina.xpath.call(null, "//div"))))) {
+  domina.append_BANG_.call(null, domina.xpath.xpath.call(null, "//body"), "<div>1</div>");
+  domina.set_attr_BANG_.call(null, domina.xpath.xpath.call(null, "//div"), "width", 42);
+  domina.set_attr_BANG_.call(null, domina.xpath.xpath.call(null, "//div"), "height", 24);
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, cljs.core.ObjMap.fromObject(["\ufdd0'width", "\ufdd0'height"], {"\ufdd0'width":"42", "\ufdd0'height":"24"}), domina.attrs.call(null, domina.xpath.xpath.call(null, "//div"))))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", cljs.core.hash_map("\ufdd0'width", "42", "\ufdd0'height", "24"), cljs.core.with_meta(cljs.core.list("\ufdd1'attrs", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div"), cljs.core.hash_map("\ufdd0'line", 347))), cljs.core.hash_map("\ufdd0'line", 347))), cljs.core.hash_map("\ufdd0'line", 346)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", cljs.core.hash_map("\ufdd0'width", "42", "\ufdd0'height", "24"), cljs.core.with_meta(cljs.core.list("\ufdd1'attrs", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div"), cljs.core.hash_map("\ufdd0'line", 348))), cljs.core.hash_map("\ufdd0'line", 348))), cljs.core.hash_map("\ufdd0'line", 347)))));
   }
 });
 domina.test.add_test.call(null, "can set multiple CSS styles on a single node", function() {
   domina.test.reset.call(null);
-  domina.append_BANG_.call(null, domina.xpath.call(null, "//body"), "<div>1</div>");
-  domina.set_styles_BANG_.call(null, domina.xpath.call(null, "//div"), cljs.core.ObjMap.fromObject(["\ufdd0'color", "\ufdd0'background-color"], {"\ufdd0'color":"red", "\ufdd0'background-color":"black"}));
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, "black", domina.style.call(null, domina.xpath.call(null, "//div"), "background-color")))) {
+  domina.append_BANG_.call(null, domina.xpath.xpath.call(null, "//body"), "<div>1</div>");
+  domina.set_styles_BANG_.call(null, domina.xpath.xpath.call(null, "//div"), cljs.core.ObjMap.fromObject(["\ufdd0'color", "\ufdd0'background-color"], {"\ufdd0'color":"red", "\ufdd0'background-color":"black"}));
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, "black", domina.style.call(null, domina.xpath.xpath.call(null, "//div"), "background-color")))) {
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "black", cljs.core.with_meta(cljs.core.list("\ufdd1'style", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div"), cljs.core.hash_map("\ufdd0'line", 354)), "background-color"), cljs.core.hash_map("\ufdd0'line", 354))), cljs.core.hash_map("\ufdd0'line", 354)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "black", cljs.core.with_meta(cljs.core.list("\ufdd1'style", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div"), cljs.core.hash_map("\ufdd0'line", 355)), "background-color"), cljs.core.hash_map("\ufdd0'line", 355))), cljs.core.hash_map("\ufdd0'line", 355)))));
   }
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, "red", domina.style.call(null, domina.xpath.call(null, "//div"), "color")))) {
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, "red", domina.style.call(null, domina.xpath.xpath.call(null, "//div"), "color")))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "red", cljs.core.with_meta(cljs.core.list("\ufdd1'style", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div"), cljs.core.hash_map("\ufdd0'line", 355)), "color"), cljs.core.hash_map("\ufdd0'line", 355))), cljs.core.hash_map("\ufdd0'line", 355)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "red", cljs.core.with_meta(cljs.core.list("\ufdd1'style", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div"), cljs.core.hash_map("\ufdd0'line", 356)), "color"), cljs.core.hash_map("\ufdd0'line", 356))), cljs.core.hash_map("\ufdd0'line", 356)))));
   }
 });
 domina.test.add_test.call(null, "can set multiple CSS styles on multiple nodes", function() {
   domina.test.reset.call(null);
-  domina.append_BANG_.call(null, domina.xpath.call(null, "//body"), "<div>1</div><div>2</div>");
-  domina.set_styles_BANG_.call(null, domina.xpath.call(null, "//div"), cljs.core.ObjMap.fromObject(["\ufdd0'color", "\ufdd0'background-color"], {"\ufdd0'color":"red", "\ufdd0'background-color":"black"}));
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, "black", domina.style.call(null, domina.xpath.call(null, "//div[1]"), "background-color")))) {
+  domina.append_BANG_.call(null, domina.xpath.xpath.call(null, "//body"), "<div>1</div><div>2</div>");
+  domina.set_styles_BANG_.call(null, domina.xpath.xpath.call(null, "//div"), cljs.core.ObjMap.fromObject(["\ufdd0'color", "\ufdd0'background-color"], {"\ufdd0'color":"red", "\ufdd0'background-color":"black"}));
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, "black", domina.style.call(null, domina.xpath.xpath.call(null, "//div[1]"), "background-color")))) {
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "black", cljs.core.with_meta(cljs.core.list("\ufdd1'style", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[1]"), cljs.core.hash_map("\ufdd0'line", 362)), "background-color"), cljs.core.hash_map("\ufdd0'line", 362))), cljs.core.hash_map("\ufdd0'line", 362)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "black", cljs.core.with_meta(cljs.core.list("\ufdd1'style", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[1]"), cljs.core.hash_map("\ufdd0'line", 363)), "background-color"), cljs.core.hash_map("\ufdd0'line", 363))), cljs.core.hash_map("\ufdd0'line", 363)))));
   }
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, "red", domina.style.call(null, domina.xpath.call(null, "//div[1]"), "color")))) {
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, "red", domina.style.call(null, domina.xpath.xpath.call(null, "//div[1]"), "color")))) {
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "red", cljs.core.with_meta(cljs.core.list("\ufdd1'style", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[1]"), cljs.core.hash_map("\ufdd0'line", 363)), "color"), cljs.core.hash_map("\ufdd0'line", 363))), cljs.core.hash_map("\ufdd0'line", 363)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "red", cljs.core.with_meta(cljs.core.list("\ufdd1'style", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[1]"), cljs.core.hash_map("\ufdd0'line", 364)), "color"), cljs.core.hash_map("\ufdd0'line", 364))), cljs.core.hash_map("\ufdd0'line", 364)))));
   }
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, "black", domina.style.call(null, domina.xpath.call(null, "//div[2]"), "background-color")))) {
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, "black", domina.style.call(null, domina.xpath.xpath.call(null, "//div[2]"), "background-color")))) {
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "black", cljs.core.with_meta(cljs.core.list("\ufdd1'style", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[2]"), cljs.core.hash_map("\ufdd0'line", 364)), "background-color"), cljs.core.hash_map("\ufdd0'line", 364))), cljs.core.hash_map("\ufdd0'line", 364)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "black", cljs.core.with_meta(cljs.core.list("\ufdd1'style", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[2]"), cljs.core.hash_map("\ufdd0'line", 365)), "background-color"), cljs.core.hash_map("\ufdd0'line", 365))), cljs.core.hash_map("\ufdd0'line", 365)))));
   }
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, "red", domina.style.call(null, domina.xpath.call(null, "//div[2]"), "color")))) {
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, "red", domina.style.call(null, domina.xpath.xpath.call(null, "//div[2]"), "color")))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "red", cljs.core.with_meta(cljs.core.list("\ufdd1'style", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[2]"), cljs.core.hash_map("\ufdd0'line", 365)), "color"), cljs.core.hash_map("\ufdd0'line", 365))), cljs.core.hash_map("\ufdd0'line", 365)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "red", cljs.core.with_meta(cljs.core.list("\ufdd1'style", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[2]"), cljs.core.hash_map("\ufdd0'line", 366)), "color"), cljs.core.hash_map("\ufdd0'line", 366))), cljs.core.hash_map("\ufdd0'line", 366)))));
   }
 });
 domina.test.add_test.call(null, "can set multiple HTML attributes on a single node", function() {
   domina.test.reset.call(null);
-  domina.append_BANG_.call(null, domina.xpath.call(null, "//body"), "<div>1</div>");
-  domina.set_attrs_BANG_.call(null, domina.xpath.call(null, "//div"), cljs.core.ObjMap.fromObject(["\ufdd0'width", "\ufdd0'height"], {"\ufdd0'width":42, "\ufdd0'height":24}));
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, "42", domina.attr.call(null, domina.xpath.call(null, "//div"), "width")))) {
+  domina.append_BANG_.call(null, domina.xpath.xpath.call(null, "//body"), "<div>1</div>");
+  domina.set_attrs_BANG_.call(null, domina.xpath.xpath.call(null, "//div"), cljs.core.ObjMap.fromObject(["\ufdd0'width", "\ufdd0'height"], {"\ufdd0'width":42, "\ufdd0'height":24}));
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, "42", domina.attr.call(null, domina.xpath.xpath.call(null, "//div"), "width")))) {
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "42", cljs.core.with_meta(cljs.core.list("\ufdd1'attr", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div"), cljs.core.hash_map("\ufdd0'line", 372)), "width"), cljs.core.hash_map("\ufdd0'line", 372))), cljs.core.hash_map("\ufdd0'line", 372)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "42", cljs.core.with_meta(cljs.core.list("\ufdd1'attr", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div"), cljs.core.hash_map("\ufdd0'line", 373)), "width"), cljs.core.hash_map("\ufdd0'line", 373))), cljs.core.hash_map("\ufdd0'line", 373)))));
   }
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, "24", domina.attr.call(null, domina.xpath.call(null, "//div"), "height")))) {
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, "24", domina.attr.call(null, domina.xpath.xpath.call(null, "//div"), "height")))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "24", cljs.core.with_meta(cljs.core.list("\ufdd1'attr", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div"), cljs.core.hash_map("\ufdd0'line", 373)), "height"), cljs.core.hash_map("\ufdd0'line", 373))), cljs.core.hash_map("\ufdd0'line", 373)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "24", cljs.core.with_meta(cljs.core.list("\ufdd1'attr", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div"), cljs.core.hash_map("\ufdd0'line", 374)), "height"), cljs.core.hash_map("\ufdd0'line", 374))), cljs.core.hash_map("\ufdd0'line", 374)))));
   }
 });
 domina.test.add_test.call(null, "can set multiple CSS styles on multiple nodes", function() {
   domina.test.reset.call(null);
-  domina.append_BANG_.call(null, domina.xpath.call(null, "//body"), "<div>1</div><div>2</div>");
-  domina.set_attrs_BANG_.call(null, domina.xpath.call(null, "//div"), cljs.core.ObjMap.fromObject(["\ufdd0'width", "\ufdd0'height"], {"\ufdd0'width":42, "\ufdd0'height":24}));
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, "42", domina.attr.call(null, domina.xpath.call(null, "//div[1]"), "width")))) {
+  domina.append_BANG_.call(null, domina.xpath.xpath.call(null, "//body"), "<div>1</div><div>2</div>");
+  domina.set_attrs_BANG_.call(null, domina.xpath.xpath.call(null, "//div"), cljs.core.ObjMap.fromObject(["\ufdd0'width", "\ufdd0'height"], {"\ufdd0'width":42, "\ufdd0'height":24}));
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, "42", domina.attr.call(null, domina.xpath.xpath.call(null, "//div[1]"), "width")))) {
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "42", cljs.core.with_meta(cljs.core.list("\ufdd1'attr", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[1]"), cljs.core.hash_map("\ufdd0'line", 380)), "width"), cljs.core.hash_map("\ufdd0'line", 380))), cljs.core.hash_map("\ufdd0'line", 380)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "42", cljs.core.with_meta(cljs.core.list("\ufdd1'attr", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[1]"), cljs.core.hash_map("\ufdd0'line", 381)), "width"), cljs.core.hash_map("\ufdd0'line", 381))), cljs.core.hash_map("\ufdd0'line", 381)))));
   }
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, "24", domina.attr.call(null, domina.xpath.call(null, "//div[1]"), "height")))) {
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, "24", domina.attr.call(null, domina.xpath.xpath.call(null, "//div[1]"), "height")))) {
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "24", cljs.core.with_meta(cljs.core.list("\ufdd1'attr", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[1]"), cljs.core.hash_map("\ufdd0'line", 381)), "height"), cljs.core.hash_map("\ufdd0'line", 381))), cljs.core.hash_map("\ufdd0'line", 381)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "24", cljs.core.with_meta(cljs.core.list("\ufdd1'attr", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[1]"), cljs.core.hash_map("\ufdd0'line", 382)), "height"), cljs.core.hash_map("\ufdd0'line", 382))), cljs.core.hash_map("\ufdd0'line", 382)))));
   }
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, "42", domina.attr.call(null, domina.xpath.call(null, "//div[2]"), "width")))) {
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, "42", domina.attr.call(null, domina.xpath.xpath.call(null, "//div[2]"), "width")))) {
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "42", cljs.core.with_meta(cljs.core.list("\ufdd1'attr", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[2]"), cljs.core.hash_map("\ufdd0'line", 382)), "width"), cljs.core.hash_map("\ufdd0'line", 382))), cljs.core.hash_map("\ufdd0'line", 382)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "42", cljs.core.with_meta(cljs.core.list("\ufdd1'attr", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[2]"), cljs.core.hash_map("\ufdd0'line", 383)), "width"), cljs.core.hash_map("\ufdd0'line", 383))), cljs.core.hash_map("\ufdd0'line", 383)))));
   }
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, "24", domina.attr.call(null, domina.xpath.call(null, "//div[2]"), "height")))) {
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, "24", domina.attr.call(null, domina.xpath.xpath.call(null, "//div[2]"), "height")))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "24", cljs.core.with_meta(cljs.core.list("\ufdd1'attr", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[2]"), cljs.core.hash_map("\ufdd0'line", 383)), "height"), cljs.core.hash_map("\ufdd0'line", 383))), cljs.core.hash_map("\ufdd0'line", 383)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "24", cljs.core.with_meta(cljs.core.list("\ufdd1'attr", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[2]"), cljs.core.hash_map("\ufdd0'line", 384)), "height"), cljs.core.hash_map("\ufdd0'line", 384))), cljs.core.hash_map("\ufdd0'line", 384)))));
   }
 });
 domina.test.add_test.call(null, "test the has-class? function", function() {
   domina.test.reset.call(null);
-  domina.append_BANG_.call(null, domina.xpath.call(null, "//body"), "<div class='class1'>1</div>");
-  domina.append_BANG_.call(null, domina.xpath.call(null, "//body"), "<div class='class2'>2</div>");
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, true, domina.has_class_QMARK_.call(null, domina.xpath.call(null, "//div[1]"), "class1")))) {
+  domina.append_BANG_.call(null, domina.xpath.xpath.call(null, "//body"), "<div class='class1'>1</div>");
+  domina.append_BANG_.call(null, domina.xpath.xpath.call(null, "//body"), "<div class='class2'>2</div>");
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, true, domina.has_class_QMARK_.call(null, domina.xpath.xpath.call(null, "//div[1]"), "class1")))) {
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", true, cljs.core.with_meta(cljs.core.list("\ufdd1'has-class?", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[1]"), cljs.core.hash_map("\ufdd0'line", 389)), "class1"), cljs.core.hash_map("\ufdd0'line", 389))), cljs.core.hash_map("\ufdd0'line", 389)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", true, cljs.core.with_meta(cljs.core.list("\ufdd1'has-class?", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[1]"), cljs.core.hash_map("\ufdd0'line", 390)), "class1"), cljs.core.hash_map("\ufdd0'line", 390))), cljs.core.hash_map("\ufdd0'line", 390)))));
   }
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, true, domina.has_class_QMARK_.call(null, domina.xpath.call(null, "//div[2]"), "class2")))) {
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, true, domina.has_class_QMARK_.call(null, domina.xpath.xpath.call(null, "//div[2]"), "class2")))) {
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", true, cljs.core.with_meta(cljs.core.list("\ufdd1'has-class?", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[2]"), cljs.core.hash_map("\ufdd0'line", 390)), "class2"), cljs.core.hash_map("\ufdd0'line", 390))), cljs.core.hash_map("\ufdd0'line", 390)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", true, cljs.core.with_meta(cljs.core.list("\ufdd1'has-class?", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[2]"), cljs.core.hash_map("\ufdd0'line", 391)), "class2"), cljs.core.hash_map("\ufdd0'line", 391))), cljs.core.hash_map("\ufdd0'line", 391)))));
   }
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, false, domina.has_class_QMARK_.call(null, domina.xpath.call(null, "//div[1]"), "class2")))) {
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, false, domina.has_class_QMARK_.call(null, domina.xpath.xpath.call(null, "//div[1]"), "class2")))) {
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", false, cljs.core.with_meta(cljs.core.list("\ufdd1'has-class?", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[1]"), cljs.core.hash_map("\ufdd0'line", 391)), "class2"), cljs.core.hash_map("\ufdd0'line", 391))), cljs.core.hash_map("\ufdd0'line", 391)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", false, cljs.core.with_meta(cljs.core.list("\ufdd1'has-class?", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[1]"), cljs.core.hash_map("\ufdd0'line", 392)), "class2"), cljs.core.hash_map("\ufdd0'line", 392))), cljs.core.hash_map("\ufdd0'line", 392)))));
   }
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, false, domina.has_class_QMARK_.call(null, domina.xpath.call(null, "//div[2]"), "class1")))) {
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, false, domina.has_class_QMARK_.call(null, domina.xpath.xpath.call(null, "//div[2]"), "class1")))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", false, cljs.core.with_meta(cljs.core.list("\ufdd1'has-class?", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[2]"), cljs.core.hash_map("\ufdd0'line", 392)), "class1"), cljs.core.hash_map("\ufdd0'line", 392))), cljs.core.hash_map("\ufdd0'line", 392)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", false, cljs.core.with_meta(cljs.core.list("\ufdd1'has-class?", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[2]"), cljs.core.hash_map("\ufdd0'line", 393)), "class1"), cljs.core.hash_map("\ufdd0'line", 393))), cljs.core.hash_map("\ufdd0'line", 393)))));
   }
 });
 domina.test.add_test.call(null, "can add a CSS class to a single node", function() {
   domina.test.reset.call(null);
-  domina.append_BANG_.call(null, domina.xpath.call(null, "//body"), "<div>1</div>");
-  domina.add_class_BANG_.call(null, domina.xpath.call(null, "//div"), "class1");
-  domina.add_class_BANG_.call(null, domina.xpath.call(null, "//div"), "class2");
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, true, domina.has_class_QMARK_.call(null, domina.xpath.call(null, "//div"), "class1")))) {
+  domina.append_BANG_.call(null, domina.xpath.xpath.call(null, "//body"), "<div>1</div>");
+  domina.add_class_BANG_.call(null, domina.xpath.xpath.call(null, "//div"), "class1");
+  domina.add_class_BANG_.call(null, domina.xpath.xpath.call(null, "//div"), "class2");
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, true, domina.has_class_QMARK_.call(null, domina.xpath.xpath.call(null, "//div"), "class1")))) {
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", true, cljs.core.with_meta(cljs.core.list("\ufdd1'has-class?", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div"), cljs.core.hash_map("\ufdd0'line", 399)), "class1"), cljs.core.hash_map("\ufdd0'line", 399))), cljs.core.hash_map("\ufdd0'line", 399)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", true, cljs.core.with_meta(cljs.core.list("\ufdd1'has-class?", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div"), cljs.core.hash_map("\ufdd0'line", 400)), "class1"), cljs.core.hash_map("\ufdd0'line", 400))), cljs.core.hash_map("\ufdd0'line", 400)))));
   }
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, true, domina.has_class_QMARK_.call(null, domina.xpath.call(null, "//div"), "class2")))) {
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, true, domina.has_class_QMARK_.call(null, domina.xpath.xpath.call(null, "//div"), "class2")))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", true, cljs.core.with_meta(cljs.core.list("\ufdd1'has-class?", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div"), cljs.core.hash_map("\ufdd0'line", 400)), "class2"), cljs.core.hash_map("\ufdd0'line", 400))), cljs.core.hash_map("\ufdd0'line", 400)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", true, cljs.core.with_meta(cljs.core.list("\ufdd1'has-class?", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div"), cljs.core.hash_map("\ufdd0'line", 401)), "class2"), cljs.core.hash_map("\ufdd0'line", 401))), cljs.core.hash_map("\ufdd0'line", 401)))));
   }
 });
 domina.test.add_test.call(null, "can add a CSS class to multiple nodes", function() {
   domina.test.reset.call(null);
-  domina.append_BANG_.call(null, domina.xpath.call(null, "//body"), "<div>1</div><div>2</div>");
-  domina.add_class_BANG_.call(null, domina.xpath.call(null, "//div"), "class1");
-  domina.add_class_BANG_.call(null, domina.xpath.call(null, "//div"), "class2");
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, true, domina.has_class_QMARK_.call(null, domina.xpath.call(null, "//div[1]"), "class1")))) {
+  domina.append_BANG_.call(null, domina.xpath.xpath.call(null, "//body"), "<div>1</div><div>2</div>");
+  domina.add_class_BANG_.call(null, domina.xpath.xpath.call(null, "//div"), "class1");
+  domina.add_class_BANG_.call(null, domina.xpath.xpath.call(null, "//div"), "class2");
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, true, domina.has_class_QMARK_.call(null, domina.xpath.xpath.call(null, "//div[1]"), "class1")))) {
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", true, cljs.core.with_meta(cljs.core.list("\ufdd1'has-class?", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[1]"), cljs.core.hash_map("\ufdd0'line", 407)), "class1"), cljs.core.hash_map("\ufdd0'line", 407))), cljs.core.hash_map("\ufdd0'line", 407)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", true, cljs.core.with_meta(cljs.core.list("\ufdd1'has-class?", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[1]"), cljs.core.hash_map("\ufdd0'line", 408)), "class1"), cljs.core.hash_map("\ufdd0'line", 408))), cljs.core.hash_map("\ufdd0'line", 408)))));
   }
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, true, domina.has_class_QMARK_.call(null, domina.xpath.call(null, "//div[2]"), "class1")))) {
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, true, domina.has_class_QMARK_.call(null, domina.xpath.xpath.call(null, "//div[2]"), "class1")))) {
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", true, cljs.core.with_meta(cljs.core.list("\ufdd1'has-class?", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[2]"), cljs.core.hash_map("\ufdd0'line", 408)), "class1"), cljs.core.hash_map("\ufdd0'line", 408))), cljs.core.hash_map("\ufdd0'line", 408)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", true, cljs.core.with_meta(cljs.core.list("\ufdd1'has-class?", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[2]"), cljs.core.hash_map("\ufdd0'line", 409)), "class1"), cljs.core.hash_map("\ufdd0'line", 409))), cljs.core.hash_map("\ufdd0'line", 409)))));
   }
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, true, domina.has_class_QMARK_.call(null, domina.xpath.call(null, "//div[1]"), "class2")))) {
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, true, domina.has_class_QMARK_.call(null, domina.xpath.xpath.call(null, "//div[1]"), "class2")))) {
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", true, cljs.core.with_meta(cljs.core.list("\ufdd1'has-class?", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[1]"), cljs.core.hash_map("\ufdd0'line", 409)), "class2"), cljs.core.hash_map("\ufdd0'line", 409))), cljs.core.hash_map("\ufdd0'line", 409)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", true, cljs.core.with_meta(cljs.core.list("\ufdd1'has-class?", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[1]"), cljs.core.hash_map("\ufdd0'line", 410)), "class2"), cljs.core.hash_map("\ufdd0'line", 410))), cljs.core.hash_map("\ufdd0'line", 410)))));
   }
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, true, domina.has_class_QMARK_.call(null, domina.xpath.call(null, "//div[2]"), "class2")))) {
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, true, domina.has_class_QMARK_.call(null, domina.xpath.xpath.call(null, "//div[2]"), "class2")))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", true, cljs.core.with_meta(cljs.core.list("\ufdd1'has-class?", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[2]"), cljs.core.hash_map("\ufdd0'line", 410)), "class2"), cljs.core.hash_map("\ufdd0'line", 410))), cljs.core.hash_map("\ufdd0'line", 410)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", true, cljs.core.with_meta(cljs.core.list("\ufdd1'has-class?", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[2]"), cljs.core.hash_map("\ufdd0'line", 411)), "class2"), cljs.core.hash_map("\ufdd0'line", 411))), cljs.core.hash_map("\ufdd0'line", 411)))));
   }
 });
 domina.test.add_test.call(null, "can remove a CSS class from a single node", function() {
   domina.test.reset.call(null);
-  domina.append_BANG_.call(null, domina.xpath.call(null, "//body"), "<div class='class1 class2'>1</div>");
-  domina.remove_class_BANG_.call(null, domina.xpath.call(null, "//div"), "class1");
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, false, domina.has_class_QMARK_.call(null, domina.xpath.call(null, "//div"), "class1")))) {
+  domina.append_BANG_.call(null, domina.xpath.xpath.call(null, "//body"), "<div class='class1 class2'>1</div>");
+  domina.remove_class_BANG_.call(null, domina.xpath.xpath.call(null, "//div"), "class1");
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, false, domina.has_class_QMARK_.call(null, domina.xpath.xpath.call(null, "//div"), "class1")))) {
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", false, cljs.core.with_meta(cljs.core.list("\ufdd1'has-class?", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div"), cljs.core.hash_map("\ufdd0'line", 416)), "class1"), cljs.core.hash_map("\ufdd0'line", 416))), cljs.core.hash_map("\ufdd0'line", 416)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", false, cljs.core.with_meta(cljs.core.list("\ufdd1'has-class?", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div"), cljs.core.hash_map("\ufdd0'line", 417)), "class1"), cljs.core.hash_map("\ufdd0'line", 417))), cljs.core.hash_map("\ufdd0'line", 417)))));
   }
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, true, domina.has_class_QMARK_.call(null, domina.xpath.call(null, "//div"), "class2")))) {
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, true, domina.has_class_QMARK_.call(null, domina.xpath.xpath.call(null, "//div"), "class2")))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", true, cljs.core.with_meta(cljs.core.list("\ufdd1'has-class?", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div"), cljs.core.hash_map("\ufdd0'line", 417)), "class2"), cljs.core.hash_map("\ufdd0'line", 417))), cljs.core.hash_map("\ufdd0'line", 417)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", true, cljs.core.with_meta(cljs.core.list("\ufdd1'has-class?", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div"), cljs.core.hash_map("\ufdd0'line", 418)), "class2"), cljs.core.hash_map("\ufdd0'line", 418))), cljs.core.hash_map("\ufdd0'line", 418)))));
   }
 });
 domina.test.add_test.call(null, "can remove a CSS class from a multiple nodes", function() {
   domina.test.reset.call(null);
-  domina.append_BANG_.call(null, domina.xpath.call(null, "//body"), "<div class='class1 class2'>1</div><div class='class1 class2'>2</div>");
-  domina.remove_class_BANG_.call(null, domina.xpath.call(null, "//div"), "class1");
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, false, domina.has_class_QMARK_.call(null, domina.xpath.call(null, "//div[1]"), "class1")))) {
+  domina.append_BANG_.call(null, domina.xpath.xpath.call(null, "//body"), "<div class='class1 class2'>1</div><div class='class1 class2'>2</div>");
+  domina.remove_class_BANG_.call(null, domina.xpath.xpath.call(null, "//div"), "class1");
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, false, domina.has_class_QMARK_.call(null, domina.xpath.xpath.call(null, "//div[1]"), "class1")))) {
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", false, cljs.core.with_meta(cljs.core.list("\ufdd1'has-class?", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[1]"), cljs.core.hash_map("\ufdd0'line", 423)), "class1"), cljs.core.hash_map("\ufdd0'line", 423))), cljs.core.hash_map("\ufdd0'line", 423)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", false, cljs.core.with_meta(cljs.core.list("\ufdd1'has-class?", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[1]"), cljs.core.hash_map("\ufdd0'line", 424)), "class1"), cljs.core.hash_map("\ufdd0'line", 424))), cljs.core.hash_map("\ufdd0'line", 424)))));
   }
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, true, domina.has_class_QMARK_.call(null, domina.xpath.call(null, "//div[1]"), "class2")))) {
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, true, domina.has_class_QMARK_.call(null, domina.xpath.xpath.call(null, "//div[1]"), "class2")))) {
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", true, cljs.core.with_meta(cljs.core.list("\ufdd1'has-class?", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[1]"), cljs.core.hash_map("\ufdd0'line", 424)), "class2"), cljs.core.hash_map("\ufdd0'line", 424))), cljs.core.hash_map("\ufdd0'line", 424)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", true, cljs.core.with_meta(cljs.core.list("\ufdd1'has-class?", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[1]"), cljs.core.hash_map("\ufdd0'line", 425)), "class2"), cljs.core.hash_map("\ufdd0'line", 425))), cljs.core.hash_map("\ufdd0'line", 425)))));
   }
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, false, domina.has_class_QMARK_.call(null, domina.xpath.call(null, "//div[2]"), "class1")))) {
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, false, domina.has_class_QMARK_.call(null, domina.xpath.xpath.call(null, "//div[2]"), "class1")))) {
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", false, cljs.core.with_meta(cljs.core.list("\ufdd1'has-class?", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[2]"), cljs.core.hash_map("\ufdd0'line", 425)), "class1"), cljs.core.hash_map("\ufdd0'line", 425))), cljs.core.hash_map("\ufdd0'line", 425)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", false, cljs.core.with_meta(cljs.core.list("\ufdd1'has-class?", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[2]"), cljs.core.hash_map("\ufdd0'line", 426)), "class1"), cljs.core.hash_map("\ufdd0'line", 426))), cljs.core.hash_map("\ufdd0'line", 426)))));
   }
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, true, domina.has_class_QMARK_.call(null, domina.xpath.call(null, "//div[2]"), "class2")))) {
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, true, domina.has_class_QMARK_.call(null, domina.xpath.xpath.call(null, "//div[2]"), "class2")))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", true, cljs.core.with_meta(cljs.core.list("\ufdd1'has-class?", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[2]"), cljs.core.hash_map("\ufdd0'line", 426)), "class2"), cljs.core.hash_map("\ufdd0'line", 426))), cljs.core.hash_map("\ufdd0'line", 426)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", true, cljs.core.with_meta(cljs.core.list("\ufdd1'has-class?", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div[2]"), cljs.core.hash_map("\ufdd0'line", 427)), "class2"), cljs.core.hash_map("\ufdd0'line", 427))), cljs.core.hash_map("\ufdd0'line", 427)))));
   }
 });
 domina.test.add_test.call(null, "can get a list of all css classes for a node", function() {
   domina.test.reset.call(null);
-  domina.append_BANG_.call(null, domina.xpath.call(null, "//body"), "<div class='class1 class2 class3'>1</div>");
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, cljs.core.Vector.fromArray(["class1", "class2", "class3"]), domina.classes.call(null, domina.xpath.call(null, "//div"))))) {
+  domina.append_BANG_.call(null, domina.xpath.xpath.call(null, "//body"), "<div class='class1 class2 class3'>1</div>");
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, cljs.core.Vector.fromArray(["class1", "class2", "class3"]), domina.classes.call(null, domina.xpath.xpath.call(null, "//div"))))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", new cljs.core.Vector(null, ["class1", "class2", "class3"]), cljs.core.with_meta(cljs.core.list("\ufdd1'classes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div"), cljs.core.hash_map("\ufdd0'line", 431))), cljs.core.hash_map("\ufdd0'line", 431))), cljs.core.hash_map("\ufdd0'line", 431)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", new cljs.core.Vector(null, ["class1", "class2", "class3"]), cljs.core.with_meta(cljs.core.list("\ufdd1'classes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div"), cljs.core.hash_map("\ufdd0'line", 432))), cljs.core.hash_map("\ufdd0'line", 432))), cljs.core.hash_map("\ufdd0'line", 432)))));
   }
 });
 domina.test.add_test.call(null, "can retrieve the text value of a node with normalization.", function() {
   domina.test.reset.call(null);
-  domina.append_BANG_.call(null, domina.xpath.call(null, "//body"), "<p>\n\n   Some text.  \n  </p>");
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, "Some text. ", domina.text.call(null, domina.xpath.call(null, "//p"))))) {
+  domina.append_BANG_.call(null, domina.xpath.xpath.call(null, "//body"), "<p>\n\n   Some text.  \n  </p>");
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, "Some text. ", domina.text.call(null, domina.xpath.xpath.call(null, "//p"))))) {
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "Some text. ", cljs.core.with_meta(cljs.core.list("\ufdd1'text", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p"), cljs.core.hash_map("\ufdd0'line", 436))), cljs.core.hash_map("\ufdd0'line", 436))), cljs.core.hash_map("\ufdd0'line", 436)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "Some text. ", cljs.core.with_meta(cljs.core.list("\ufdd1'text", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p"), cljs.core.hash_map("\ufdd0'line", 437))), cljs.core.hash_map("\ufdd0'line", 437))), cljs.core.hash_map("\ufdd0'line", 437)))));
   }
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, "Some text. ", domina.text.call(null, domina.xpath.call(null, "//p"), true)))) {
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, "Some text. ", domina.text.call(null, domina.xpath.xpath.call(null, "//p"), true)))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "Some text. ", cljs.core.with_meta(cljs.core.list("\ufdd1'text", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p"), cljs.core.hash_map("\ufdd0'line", 437)), true), cljs.core.hash_map("\ufdd0'line", 437))), cljs.core.hash_map("\ufdd0'line", 437)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "Some text. ", cljs.core.with_meta(cljs.core.list("\ufdd1'text", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p"), cljs.core.hash_map("\ufdd0'line", 438)), true), cljs.core.hash_map("\ufdd0'line", 438))), cljs.core.hash_map("\ufdd0'line", 438)))));
   }
 });
 domina.test.add_test.call(null, "can retrieve the text value of a node without normalization.", function() {
   domina.test.reset.call(null);
-  domina.append_BANG_.call(null, domina.xpath.call(null, "//body"), "<p>\n\n   Some text.  \n  </p>");
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, "\n\n   Some text.  \n  ", domina.text.call(null, domina.xpath.call(null, "//p"), false)))) {
+  domina.append_BANG_.call(null, domina.xpath.xpath.call(null, "//body"), "<p>\n\n   Some text.  \n  </p>");
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, "\n\n   Some text.  \n  ", domina.text.call(null, domina.xpath.xpath.call(null, "//p"), false)))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "\n\n   Some text.  \n  ", cljs.core.with_meta(cljs.core.list("\ufdd1'text", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p"), cljs.core.hash_map("\ufdd0'line", 442)), false), cljs.core.hash_map("\ufdd0'line", 442))), cljs.core.hash_map("\ufdd0'line", 442)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "\n\n   Some text.  \n  ", cljs.core.with_meta(cljs.core.list("\ufdd1'text", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p"), cljs.core.hash_map("\ufdd0'line", 443)), false), cljs.core.hash_map("\ufdd0'line", 443))), cljs.core.hash_map("\ufdd0'line", 443)))));
   }
 });
 domina.test.add_test.call(null, "can set text on a single node", function() {
   domina.test.reset.call(null);
-  domina.append_BANG_.call(null, domina.xpath.call(null, "//body"), "<p></p>");
-  domina.set_text_BANG_.call(null, domina.xpath.call(null, "//p"), "Hello world!");
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, "Hello world!", domina.text.call(null, domina.xpath.call(null, "//p"))))) {
+  domina.append_BANG_.call(null, domina.xpath.xpath.call(null, "//body"), "<p></p>");
+  domina.set_text_BANG_.call(null, domina.xpath.xpath.call(null, "//p"), "Hello world!");
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, "Hello world!", domina.text.call(null, domina.xpath.xpath.call(null, "//p"))))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "Hello world!", cljs.core.with_meta(cljs.core.list("\ufdd1'text", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p"), cljs.core.hash_map("\ufdd0'line", 448))), cljs.core.hash_map("\ufdd0'line", 448))), cljs.core.hash_map("\ufdd0'line", 448)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "Hello world!", cljs.core.with_meta(cljs.core.list("\ufdd1'text", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p"), cljs.core.hash_map("\ufdd0'line", 449))), cljs.core.hash_map("\ufdd0'line", 449))), cljs.core.hash_map("\ufdd0'line", 449)))));
   }
 });
 domina.test.add_test.call(null, "can set text on a multiple nodes", function() {
   domina.test.reset.call(null);
-  domina.append_BANG_.call(null, domina.xpath.call(null, "//body"), "<p></p><p></p>");
-  domina.set_text_BANG_.call(null, domina.xpath.call(null, "//p"), "Hello world!");
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, "Hello world!", domina.text.call(null, domina.xpath.call(null, "//p[1]"))))) {
+  domina.append_BANG_.call(null, domina.xpath.xpath.call(null, "//body"), "<p></p><p></p>");
+  domina.set_text_BANG_.call(null, domina.xpath.xpath.call(null, "//p"), "Hello world!");
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, "Hello world!", domina.text.call(null, domina.xpath.xpath.call(null, "//p[1]"))))) {
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "Hello world!", cljs.core.with_meta(cljs.core.list("\ufdd1'text", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p[1]"), cljs.core.hash_map("\ufdd0'line", 454))), cljs.core.hash_map("\ufdd0'line", 454))), cljs.core.hash_map("\ufdd0'line", 454)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "Hello world!", cljs.core.with_meta(cljs.core.list("\ufdd1'text", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p[1]"), cljs.core.hash_map("\ufdd0'line", 455))), cljs.core.hash_map("\ufdd0'line", 455))), cljs.core.hash_map("\ufdd0'line", 455)))));
   }
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, "Hello world!", domina.text.call(null, domina.xpath.call(null, "//p[2]"))))) {
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, "Hello world!", domina.text.call(null, domina.xpath.xpath.call(null, "//p[2]"))))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "Hello world!", cljs.core.with_meta(cljs.core.list("\ufdd1'text", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p[2]"), cljs.core.hash_map("\ufdd0'line", 455))), cljs.core.hash_map("\ufdd0'line", 455))), cljs.core.hash_map("\ufdd0'line", 455)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "Hello world!", cljs.core.with_meta(cljs.core.list("\ufdd1'text", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p[2]"), cljs.core.hash_map("\ufdd0'line", 456))), cljs.core.hash_map("\ufdd0'line", 456))), cljs.core.hash_map("\ufdd0'line", 456)))));
   }
 });
 domina.test.add_test.call(null, "can get a form field value", function() {
   domina.test.reset.call(null);
-  domina.append_BANG_.call(null, domina.xpath.call(null, "//body"), "<form><input type='text' name='test' value='Test Value'></input></form>");
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, "Test Value", domina.value.call(null, domina.xpath.call(null, "//input"))))) {
+  domina.append_BANG_.call(null, domina.xpath.xpath.call(null, "//body"), "<form><input type='text' name='test' value='Test Value'></input></form>");
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, "Test Value", domina.value.call(null, domina.xpath.xpath.call(null, "//input"))))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "Test Value", cljs.core.with_meta(cljs.core.list("\ufdd1'value", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//input"), cljs.core.hash_map("\ufdd0'line", 460))), cljs.core.hash_map("\ufdd0'line", 460))), cljs.core.hash_map("\ufdd0'line", 460)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "Test Value", cljs.core.with_meta(cljs.core.list("\ufdd1'value", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//input"), cljs.core.hash_map("\ufdd0'line", 461))), cljs.core.hash_map("\ufdd0'line", 461))), cljs.core.hash_map("\ufdd0'line", 461)))));
   }
 });
 domina.test.add_test.call(null, "can set a form field value", function() {
   domina.test.reset.call(null);
-  domina.append_BANG_.call(null, domina.xpath.call(null, "//body"), "<form><input type='text' name='test'></input></form>");
-  domina.set_value_BANG_.call(null, domina.xpath.call(null, "//input"), "Test Value");
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, "Test Value", domina.value.call(null, domina.xpath.call(null, "//input"))))) {
+  domina.append_BANG_.call(null, domina.xpath.xpath.call(null, "//body"), "<form><input type='text' name='test'></input></form>");
+  domina.set_value_BANG_.call(null, domina.xpath.xpath.call(null, "//input"), "Test Value");
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, "Test Value", domina.value.call(null, domina.xpath.xpath.call(null, "//input"))))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "Test Value", cljs.core.with_meta(cljs.core.list("\ufdd1'value", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//input"), cljs.core.hash_map("\ufdd0'line", 466))), cljs.core.hash_map("\ufdd0'line", 466))), cljs.core.hash_map("\ufdd0'line", 466)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "Test Value", cljs.core.with_meta(cljs.core.list("\ufdd1'value", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//input"), cljs.core.hash_map("\ufdd0'line", 467))), cljs.core.hash_map("\ufdd0'line", 467))), cljs.core.hash_map("\ufdd0'line", 467)))));
   }
 });
 domina.test.add_test.call(null, "can set multiple form field values", function() {
   domina.test.reset.call(null);
-  domina.append_BANG_.call(null, domina.xpath.call(null, "//body"), "<form><input type='text' name='test'></input><input type='text' name='test'></input></form>");
-  domina.set_value_BANG_.call(null, domina.xpath.call(null, "//input"), "Test Value");
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, "Test Value", domina.value.call(null, domina.xpath.call(null, "//input[1]"))))) {
+  domina.append_BANG_.call(null, domina.xpath.xpath.call(null, "//body"), "<form><input type='text' name='test'></input><input type='text' name='test'></input></form>");
+  domina.set_value_BANG_.call(null, domina.xpath.xpath.call(null, "//input"), "Test Value");
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, "Test Value", domina.value.call(null, domina.xpath.xpath.call(null, "//input[1]"))))) {
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "Test Value", cljs.core.with_meta(cljs.core.list("\ufdd1'value", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//input[1]"), cljs.core.hash_map("\ufdd0'line", 472))), cljs.core.hash_map("\ufdd0'line", 472))), cljs.core.hash_map("\ufdd0'line", 472)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "Test Value", cljs.core.with_meta(cljs.core.list("\ufdd1'value", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//input[1]"), cljs.core.hash_map("\ufdd0'line", 473))), cljs.core.hash_map("\ufdd0'line", 473))), cljs.core.hash_map("\ufdd0'line", 473)))));
   }
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, "Test Value", domina.value.call(null, domina.xpath.call(null, "//input[2]"))))) {
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, "Test Value", domina.value.call(null, domina.xpath.xpath.call(null, "//input[2]"))))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "Test Value", cljs.core.with_meta(cljs.core.list("\ufdd1'value", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//input[2]"), cljs.core.hash_map("\ufdd0'line", 473))), cljs.core.hash_map("\ufdd0'line", 473))), cljs.core.hash_map("\ufdd0'line", 473)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "Test Value", cljs.core.with_meta(cljs.core.list("\ufdd1'value", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//input[2]"), cljs.core.hash_map("\ufdd0'line", 474))), cljs.core.hash_map("\ufdd0'line", 474))), cljs.core.hash_map("\ufdd0'line", 474)))));
   }
 });
 domina.test.add_test.call(null, "can get a node's innerHTML", function() {
   domina.test.reset.call(null);
-  domina.append_BANG_.call(null, domina.xpath.call(null, "//body"), "<div><p class='foobar'>some text</p></div>");
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, '<p class="foobar">some text</p>', domina.html.call(null, domina.xpath.call(null, "//div"))))) {
+  domina.append_BANG_.call(null, domina.xpath.xpath.call(null, "//body"), "<div><p class='foobar'>some text</p></div>");
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, '<p class="foobar">some text</p>', domina.html.call(null, domina.xpath.xpath.call(null, "//div"))))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", '<p class="foobar">some text</p>', cljs.core.with_meta(cljs.core.list("\ufdd1'html", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div"), cljs.core.hash_map("\ufdd0'line", 478))), cljs.core.hash_map("\ufdd0'line", 478))), cljs.core.hash_map("\ufdd0'line", 478)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", '<p class="foobar">some text</p>', cljs.core.with_meta(cljs.core.list("\ufdd1'html", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div"), cljs.core.hash_map("\ufdd0'line", 479))), cljs.core.hash_map("\ufdd0'line", 479))), cljs.core.hash_map("\ufdd0'line", 479)))));
   }
 });
 domina.test.add_test.call(null, "can set a node's innerHTML", function() {
   domina.test.reset.call(null);
-  domina.append_BANG_.call(null, domina.xpath.call(null, "//body"), "<div></div>");
-  domina.set_html_BANG_.call(null, domina.xpath.call(null, "//div"), "<p class='foobar'>some text</p>");
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, 1, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.call(null, "//body/div/p[@class='foobar']")))))) {
+  domina.append_BANG_.call(null, domina.xpath.xpath.call(null, "//body"), "<div></div>");
+  domina.set_html_BANG_.call(null, domina.xpath.xpath.call(null, "//div"), "<p class='foobar'>some text</p>");
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, 1, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.xpath.call(null, "//body/div/p[@class='foobar']")))))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 1, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//body/div/p[@class='foobar']"), cljs.core.hash_map("\ufdd0'line", 484))), cljs.core.hash_map("\ufdd0'line", 484))), cljs.core.hash_map("\ufdd0'line", 484))), cljs.core.hash_map("\ufdd0'line", 484)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 1, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//body/div/p[@class='foobar']"), cljs.core.hash_map("\ufdd0'line", 485))), cljs.core.hash_map("\ufdd0'line", 485))), cljs.core.hash_map("\ufdd0'line", 485))), cljs.core.hash_map("\ufdd0'line", 485)))));
   }
 });
 domina.test.add_test.call(null, "can set multiple node's innerHTML", function() {
   domina.test.reset.call(null);
-  domina.append_BANG_.call(null, domina.xpath.call(null, "//body"), "<div></div><div></div>");
-  domina.set_html_BANG_.call(null, domina.xpath.call(null, "//div"), "<p class='foobar'>some text</p>");
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, 2, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.call(null, "//body/div/p[@class='foobar']")))))) {
+  domina.append_BANG_.call(null, domina.xpath.xpath.call(null, "//body"), "<div></div><div></div>");
+  domina.set_html_BANG_.call(null, domina.xpath.xpath.call(null, "//div"), "<p class='foobar'>some text</p>");
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, 2, cljs.core.count.call(null, domina.nodes.call(null, domina.xpath.xpath.call(null, "//body/div/p[@class='foobar']")))))) {
     return null
   }else {
-    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 2, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//body/div/p[@class='foobar']"), cljs.core.hash_map("\ufdd0'line", 490))), cljs.core.hash_map("\ufdd0'line", 490))), cljs.core.hash_map("\ufdd0'line", 490))), cljs.core.hash_map("\ufdd0'line", 490)))));
+    throw new Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", 2, cljs.core.with_meta(cljs.core.list("\ufdd1'count", cljs.core.with_meta(cljs.core.list("\ufdd1'nodes", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//body/div/p[@class='foobar']"), cljs.core.hash_map("\ufdd0'line", 491))), cljs.core.hash_map("\ufdd0'line", 491))), cljs.core.hash_map("\ufdd0'line", 491))), cljs.core.hash_map("\ufdd0'line", 491)))));
   }
 });
 domina.test.report = function report(test_results) {
   domina.test.reset.call(null);
-  var G__2643__2644 = cljs.core.seq.call(null, test_results);
-  if(cljs.core.truth_(G__2643__2644)) {
-    var G__2646__2648 = cljs.core.first.call(null, G__2643__2644);
-    var vec__2647__2649 = G__2646__2648;
-    var name__2650 = cljs.core.nth.call(null, vec__2647__2649, 0, null);
-    var result__2651 = cljs.core.nth.call(null, vec__2647__2649, 1, null);
-    var G__2643__2652 = G__2643__2644;
-    var G__2646__2653 = G__2646__2648;
-    var G__2643__2654 = G__2643__2652;
+  var G__4185__4186 = cljs.core.seq.call(null, test_results);
+  if(cljs.core.truth_(G__4185__4186)) {
+    var G__4188__4190 = cljs.core.first.call(null, G__4185__4186);
+    var vec__4189__4191 = G__4188__4190;
+    var name__4192 = cljs.core.nth.call(null, vec__4189__4191, 0, null);
+    var result__4193 = cljs.core.nth.call(null, vec__4189__4191, 1, null);
+    var G__4185__4194 = G__4185__4186;
+    var G__4188__4195 = G__4188__4190;
+    var G__4185__4196 = G__4185__4194;
     while(true) {
-      var vec__2655__2656 = G__2646__2653;
-      var name__2657 = cljs.core.nth.call(null, vec__2655__2656, 0, null);
-      var result__2658 = cljs.core.nth.call(null, vec__2655__2656, 1, null);
-      var G__2643__2659 = G__2643__2654;
-      var result_div__2660 = domina.single_node.call(null, "<div class='test-result'></div>");
-      domina.set_text_BANG_.call(null, result_div__2660, name__2657);
-      if(cljs.core.truth_(cljs.core.not.call(null, cljs.core._EQ_.call(null, result__2658, null)))) {
-        domina.add_class_BANG_.call(null, result_div__2660, "failed");
-        domina.append_BANG_.call(null, result_div__2660, cljs.core.str.call(null, "<div class='message'>", result__2658, "</div>"))
+      var vec__4197__4198 = G__4188__4195;
+      var name__4199 = cljs.core.nth.call(null, vec__4197__4198, 0, null);
+      var result__4200 = cljs.core.nth.call(null, vec__4197__4198, 1, null);
+      var G__4185__4201 = G__4185__4196;
+      var result_div__4202 = domina.single_node.call(null, "<div class='test-result'></div>");
+      domina.set_text_BANG_.call(null, result_div__4202, name__4199);
+      if(cljs.core.truth_(cljs.core.not.call(null, cljs.core._EQ_.call(null, result__4200, null)))) {
+        domina.add_class_BANG_.call(null, result_div__4202, "failed");
+        domina.append_BANG_.call(null, result_div__4202, cljs.core.str.call(null, "<div class='message'>", result__4200, "</div>"))
       }else {
-        domina.add_class_BANG_.call(null, result_div__2660, "passed")
+        domina.add_class_BANG_.call(null, result_div__4202, "passed")
       }
-      domina.append_BANG_.call(null, domina.xpath.call(null, "//body"), result_div__2660);
-      var temp__3698__auto____2661 = cljs.core.next.call(null, G__2643__2659);
-      if(cljs.core.truth_(temp__3698__auto____2661)) {
-        var G__2643__2662 = temp__3698__auto____2661;
-        var G__2664 = cljs.core.first.call(null, G__2643__2662);
-        var G__2665 = G__2643__2662;
-        G__2646__2653 = G__2664;
-        G__2643__2654 = G__2665;
+      domina.append_BANG_.call(null, domina.xpath.xpath.call(null, "//body"), result_div__4202);
+      var temp__3698__auto____4203 = cljs.core.next.call(null, G__4185__4201);
+      if(cljs.core.truth_(temp__3698__auto____4203)) {
+        var G__4185__4204 = temp__3698__auto____4203;
+        var G__4206 = cljs.core.first.call(null, G__4185__4204);
+        var G__4207 = G__4185__4204;
+        G__4188__4195 = G__4206;
+        G__4185__4196 = G__4207;
         continue
       }else {
       }
@@ -15946,11 +16008,11 @@ domina.test.report = function report(test_results) {
     }
   }else {
   }
-  domina.prepend_BANG_.call(null, domina.xpath.call(null, "//body"), "<div id='test-summary'>ran <span id='total-tests'></span> tests with <span id='total-failures'></span> failures");
+  domina.prepend_BANG_.call(null, domina.xpath.xpath.call(null, "//body"), "<div id='test-summary'>ran <span id='total-tests'></span> tests with <span id='total-failures'></span> failures");
   domina.set_text_BANG_.call(null, domina.by_id.call(null, "total-tests"), cljs.core.count.call(null, test_results));
-  var failure_count__2663 = cljs.core.count.call(null, cljs.core.filter.call(null, cljs.core.complement.call(null, cljs.core.nil_QMARK_), cljs.core.map.call(null, cljs.core.second, test_results)));
-  domina.set_text_BANG_.call(null, domina.by_id.call(null, "total-failures"), failure_count__2663);
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, 0, failure_count__2663))) {
+  var failure_count__4205 = cljs.core.count.call(null, cljs.core.filter.call(null, cljs.core.complement.call(null, cljs.core.nil_QMARK_), cljs.core.map.call(null, cljs.core.second, test_results)));
+  domina.set_text_BANG_.call(null, domina.by_id.call(null, "total-failures"), failure_count__4205);
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, 0, failure_count__4205))) {
     return domina.add_class_BANG_.call(null, domina.by_id.call(null, "test-summary"), "passed")
   }else {
     return domina.add_class_BANG_.call(null, domina.by_id.call(null, "test-summary"), "failed")

@@ -1,9 +1,10 @@
 (ns domina.test
-  (:use [domina :only [nodes single-node xpath by-id by-class children clone append!
+  (:use [domina :only [nodes single-node by-id by-class children clone append!
                        prepend! detach! destroy! destroy-children! insert! insert-before!
                        insert-after! swap-content! style attr set-style! set-attr! styles attrs
                        set-styles! set-attrs! has-class? add-class! remove-class! classes
-                       text set-text! value set-value! html set-html!]]))
+                       text set-text! value set-value! html set-html!]]
+        [domina.xpath :only [xpath]]))
 
 (comment
   (repl/connect "http://localhost:9000/repl")

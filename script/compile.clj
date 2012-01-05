@@ -4,7 +4,14 @@
 
 (time
  (do
-   (println "Compiling without any optimiizations...")
+   (println "Compiling IE test")
+   (time
+    (build "src/cljs"
+           {:optimizations :whitespace
+            :pretty-print *pretty-print*
+            :output-dir "build/ie_test"
+            :output-to "public/ie_test.js"}))
+   (println "Compiling without any optimizations...")
    (time
     (build "test/cljs"
            {:pretty-print *pretty-print*

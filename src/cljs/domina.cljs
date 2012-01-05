@@ -15,15 +15,6 @@
 
 ;;;;;;;;;;;;;;;;;;; Public API ;;;;;;;;;;;;;;;;;
 
-(defn xpath
-  "Returns content based on an xpath expression. Takes an optional content as a base; if none is given, uses js/document as a base."
-  ([expr] (xpath js/document expr))
-  ([base expr] (reify DomContent
-                 (nodes [_] (mapcat #(xml/selectNodes % expr) (nodes base)))
-                 (single-node [_] (first (filter (complement nil?)
-                                                 (map #(xml/selectSingleNode % expr)
-                                                      (nodes base))))))))
-
 (defn by-id
   "Returns content containing a single node by looking up the given ID"
   [id]

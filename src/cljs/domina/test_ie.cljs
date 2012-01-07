@@ -6,4 +6,14 @@
                        text set-text! value set-value! html set-html!]]
         [domina.xpath :only [xpath]]))
 
-(append! (xpath "//body") "<h1>Hello</h1><p>1</p><p>2</p>")
+(append! (xpath "//body") "<p>\n\n   Some text.  \n  </p>")
+
+(def x (xpath "//p"))
+(def n (single-node x))
+(def t (text x))
+(def t2 (text n))
+
+(js/alert t)
+(js/alert t2)
+
+

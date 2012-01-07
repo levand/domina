@@ -9,8 +9,8 @@
     (build "src/cljs"
            {:optimizations :whitespace
             :pretty-print *pretty-print*
-            :output-dir "build/ie_test"
-            :output-to "public/ie_test.js"}))
+            :output-dir "build/test_ie"
+            :output-to "public/test_ie.js"}))
    (println "Compiling without any optimizations...")
    (time
     (build "test/cljs"

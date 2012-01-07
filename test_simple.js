@@ -9625,17 +9625,17 @@ var domina = {DomContent:{}, nodes:function(a) {
   return goog.dom.getElement.call(null, cljs.core.name.call(null, a))
 }};
 domina.by_class = function by_class(b) {
-  if(cljs.core.truth_(cljs.core.undefined_QMARK_.call(null, domina.t4451))) {
-    domina.t4451 = function(b, d) {
+  if(cljs.core.truth_(cljs.core.undefined_QMARK_.call(null, domina.t3034))) {
+    domina.t3034 = function(b, d) {
       this.class_name = b;
       this.by_class = d
-    }, domina.t4451.prototype.domina$DomContent$ = !0, domina.t4451.prototype.domina$DomContent$nodes = function() {
+    }, domina.t3034.prototype.domina$DomContent$ = !0, domina.t3034.prototype.domina$DomContent$nodes = function() {
       return goog.dom.getElementsByClass.call(null, cljs.core.name.call(null, this.class_name))
-    }, domina.t4451.prototype.domina$DomContent$single_node = function() {
+    }, domina.t3034.prototype.domina$DomContent$single_node = function() {
       return goog.dom.getElementByClass.call(null, cljs.core.name.call(null, this.class_name))
     }
   }
-  return new domina.t4451(b, by_class)
+  return new domina.t3034(b, by_class)
 };
 domina.children = function(a) {
   return cljs.core.mapcat.call(null, goog.dom.getChildren, domina.nodes.call(null, a))
@@ -9811,7 +9811,7 @@ domina.text = function() {
       case 1:
         return a.call(null, b, !0);
       case 2:
-        return cljs.core.truth_(c) ? goog.dom.getTextContent.call(null, domina.single_node.call(null, b)) : goog.dom.getRawTextContent.call(null, domina.single_node.call(null, b))
+        return cljs.core.truth_(c) ? goog.string.trim.call(null, goog.dom.getTextContent.call(null, domina.single_node.call(null, b))) : goog.dom.getRawTextContent.call(null, domina.single_node.call(null, b))
     }
     throw"Invalid arity: " + arguments.length;
   }
@@ -10755,13 +10755,13 @@ domina.test.add_test.call(null, "can get a list of all css classes for a node", 
 domina.test.add_test.call(null, "can retrieve the text value of a node with normalization.", function() {
   domina.test.reset.call(null);
   domina.append_BANG_.call(null, domina.xpath.xpath.call(null, "//body"), "<p>\n\n   Some text.  \n  </p>");
-  if(!cljs.core.truth_(cljs.core._EQ_.call(null, "Some text. ", domina.text.call(null, domina.xpath.xpath.call(null, "//p"))))) {
-    throw Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "Some text. ", cljs.core.with_meta(cljs.core.list("\ufdd1'text", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p"), cljs.core.hash_map("\ufdd0'line", 437))), cljs.core.hash_map("\ufdd0'line", 437))), cljs.core.hash_map("\ufdd0'line", 437)))));
+  if(!cljs.core.truth_(cljs.core._EQ_.call(null, "Some text.", domina.text.call(null, domina.xpath.xpath.call(null, "//p"))))) {
+    throw Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "Some text.", cljs.core.with_meta(cljs.core.list("\ufdd1'text", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p"), cljs.core.hash_map("\ufdd0'line", 437))), cljs.core.hash_map("\ufdd0'line", 437))), cljs.core.hash_map("\ufdd0'line", 437)))));
   }
-  if(cljs.core.truth_(cljs.core._EQ_.call(null, "Some text. ", domina.text.call(null, domina.xpath.xpath.call(null, "//p"), !0)))) {
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, "Some text.", domina.text.call(null, domina.xpath.xpath.call(null, "//p"), !0)))) {
     return null
   }else {
-    throw Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "Some text. ", cljs.core.with_meta(cljs.core.list("\ufdd1'text", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p"), cljs.core.hash_map("\ufdd0'line", 438)), !0), cljs.core.hash_map("\ufdd0'line", 438))), cljs.core.hash_map("\ufdd0'line", 438)))));
+    throw Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "Some text.", cljs.core.with_meta(cljs.core.list("\ufdd1'text", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p"), cljs.core.hash_map("\ufdd0'line", 438)), !0), cljs.core.hash_map("\ufdd0'line", 438))), cljs.core.hash_map("\ufdd0'line", 438)))));
   }
 });
 domina.test.add_test.call(null, "can retrieve the text value of a node without normalization.", function() {

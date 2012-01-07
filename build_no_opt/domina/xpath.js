@@ -78,12 +78,18 @@ break;
 }));
 });
 /**
-* Returns content based on an xpath expression. Takes an optional content as a base; if none is given, uses js/document as a base.
+* Returns the root HTML Element
+*/
+domina.xpath.root_element = (function root_element(){
+return (goog.dom.getElementsByTagNameAndClass.call(null,"html")[0]);
+});
+/**
+* Returns content based on an xpath expression. Takes an optional content as a base; if none is given, uses the <html> element as a base.
 */
 domina.xpath.xpath = (function() {
 var xpath = null;
 var xpath__2450 = (function (expr){
-return xpath.call(null,document,expr);
+return xpath.call(null,domina.xpath.root_element.call(null),expr);
 });
 var xpath__2451 = (function (base,expr){
 if(cljs.core.truth_(cljs.core.undefined_QMARK_.call(null,domina.xpath.t2447)))

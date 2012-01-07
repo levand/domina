@@ -10,7 +10,7 @@ Pull requests are extremely welcome!
 
 Previously, there was no straightforward way to do DOM manipulation in ClojureScript. The Google Closure library is available, but it does not represent a fluid, functional approach to DOM manipulation that users of libraries such as jQuery are accustomed to. jQuery itself, as well as other DOM manipulation libraries, are not easy to use with ClojureScript due to incompatibilities with the advanced mode compiler.
 
-However, a jQuery-esqe, functional approach to DOM manipulation is extremely well suited to ClojureScript. Domina, while it does not provide any innovations, attempts to provide a basic functional interface to DOM manipulation that feels natural in ClojureScript.
+However, a jQuery-esqe, functional approach to DOM manipulation is extremely well suited to ClojureScript. Domina, while it does not provide any innovations, attempts to provide a basic functional interface to DOM manipulation that feels natural in ClojureScript. For a good library that takes a novel, alternative approach to DOM manipulation inspired by Clojure's Enlive, consider [Enfocus](https://github.com/ckirkendall/enfocus).
 
 ## Key Concepts
 
@@ -28,7 +28,7 @@ Entities which implement `DomContent` include:
 
 ### Selectors
 
-Selector functions take a string and return a `DomContent` representing matching nodes. For example:
+Selector functions take a string and return a `DomContent` representing matching nodes. For example, the `xpath` function in the `domina.xpath` namespace:
 
 ```clojure
 (xpath "//div[@class='foo']/p[2]")
@@ -45,39 +45,39 @@ The `xpath` function also takes an optional first argument (which can be any `Do
     (xpath "span"))
 ```
 
-Other selector functions include `by-id` and `by-class` which return a `DomContent` based on node id and node class, respectively.
+Other selector functions include the core functions `by-id` and `by-class` which return a `DomContent` based on node id and node class, respectively.
 
 ## Examples
 
 Append a `<div>` to the body element:
 
 ```clojure
-(append (xpath "//body") "<div>Hello world!</div>")
+(append! (xpath "//body") "<div>Hello world!</div>")
 ```
 
 Move a `<div>` from the end of the document to the beginning:
 
 ```clojure
-(prepend (xpath "//body") 
-         (detach (xpath "//body/div[last()]")))
+(prepend! (xpath "//body") 
+         (detach! (xpath "//body/div[last()]")))
 ```
 
 Add a CSS class on a node with a particular id:
 
 ```clojure
-(add-class (by-id "foobar")
+(add-class! (by-id "foobar")
 ```
 
 Delete all nodes of a given class:
 
 ```clojure
-(delete (by-class "foo"))
+(delete! (by-class "foo"))
 ```
 
 Set some colors on all child nodes of `<div>` elements with a class of 'foo':
 
 ```clojure
-(set-styles (xpath "//div[@class='foo']/*")
+(set-styles! (xpath "//div[@class='foo']/*")
             {:background-color "black"
              :color "white"})
 ```
@@ -85,7 +85,7 @@ Set some colors on all child nodes of `<div>` elements with a class of 'foo':
 Set the text content of a node:
 
 ```clojure
-(set-text (by-id "foobar") "Lorem ipsum...")
+(set-text! (by-id "foobar") "Lorem ipsum...")
 ```
 
 Get the values of all `<input>` elements on the page:

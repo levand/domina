@@ -434,8 +434,8 @@
 (add-test "can retrieve the text value of a node with normalization."
           #(do (reset)
                (append! (xpath "//body") "<p>\n\n   Some text.  \n  </p>")
-               (assert (= "Some text. " (text (xpath "//p"))))
-               (assert (= "Some text. " (text (xpath "//p") true)))))
+               (assert (= "Some text." (text (xpath "//p"))))
+               (assert (= "Some text." (text (xpath "//p") true)))))
 
 (add-test "can retrieve the text value of a node without normalization."
           #(do (reset)

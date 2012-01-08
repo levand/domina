@@ -277,6 +277,20 @@
   ISeqable
   (-seq [nodelist] (lazy-nodelist nodelist)))
 
+;; StaticNodeList basically the same as NodeList, only present in IE8.
+(if (. js/window StaticNodeList)
+  (extend-type js/StaticNodeList
+    ICounted
+    (-count [nodelist] (. nodelist length))
+
+    IIndexed
+    (-nth ([nodelist n] (. nodelist (item n)))
+          ([nodelist n not-found] (if (<= (. nodelist length) n)
+                              not-found
+                              (nth nodelist n))))
+    ISeqable
+    (-seq [nodelist] (lazy-nodelist nodelist))))
+
 (extend-type js/HTMLCollection
   ICounted
   (-count [coll] (. coll length))

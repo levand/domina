@@ -10020,8 +10020,8 @@ domina.xpath.select_nodes = function(a, b) {
     }
   })
 };
-domina.xpath.html_root = function() {
-  return goog.dom.getElementsByTagNameAndClass.call(null, "html")
+domina.xpath.root_element = function() {
+  return goog.dom.getElementsByTagNameAndClass.call(null, "html")[0]
 };
 domina.xpath.xpath = function() {
   var a = null, b = function(b, d) {
@@ -10041,7 +10041,7 @@ domina.xpath.xpath = function() {
   return a = function(c, d) {
     switch(arguments.length) {
       case 1:
-        return a.call(null, domina.xpath.html_root.call(null), c);
+        return a.call(null, domina.xpath.root_element.call(null), domina.xpath.t, c);
       case 2:
         return b.call(this, c, d)
     }

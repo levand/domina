@@ -68,8 +68,8 @@ break;
 }
 }));
 });
-domina.xpath.html_root = (function html_root(){
-return goog.dom.getElementsByTagNameAndClass.call(null,"html");
+domina.xpath.root_element = (function root_element(){
+return (goog.dom.getElementsByTagNameAndClass.call(null,"html")[0]);
 });
 /**
 * Returns content based on an xpath expression. Takes an optional content as a base; if none is given, uses js/document as a base.
@@ -77,7 +77,7 @@ return goog.dom.getElementsByTagNameAndClass.call(null,"html");
 domina.xpath.xpath = (function() {
 var xpath = null;
 var xpath__2446 = (function (expr){
-return xpath.call(null,domina.xpath.html_root.call(null),expr);
+return xpath.call(null,domina.xpath.root_element.call(null),domina.xpath.t,expr);
 });
 var xpath__2447 = (function (base,expr){
 if(cljs.core.truth_(cljs.core.undefined_QMARK_.call(null,domina.xpath.t2443)))

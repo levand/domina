@@ -15019,13 +15019,13 @@ domina.xpath.select_nodes = function select_nodes(expr, node) {
     }
   })
 };
-domina.xpath.html_root = function html_root() {
-  return goog.dom.getElementsByTagNameAndClass.call(null, "html")
+domina.xpath.root_element = function root_element() {
+  return goog.dom.getElementsByTagNameAndClass.call(null, "html")[0]
 };
 domina.xpath.xpath = function() {
   var xpath = null;
   var xpath__2461 = function(expr) {
-    return xpath.call(null, domina.xpath.html_root.call(null), expr)
+    return xpath.call(null, domina.xpath.root_element.call(null), domina.xpath.t, expr)
   };
   var xpath__2462 = function(base, expr) {
     if(cljs.core.truth_(cljs.core.undefined_QMARK_.call(null, domina.xpath.t2458))) {

@@ -3345,8 +3345,8 @@ HTMLCollection.prototype.r = function() {
 HTMLCollection.prototype.j = function(b) {
   return b.length
 };
-var ne;
-function oe(b, c, d, e) {
+var ne = {}, oe;
+function pe(b, c, d, e) {
   var j = nb.call(f, c);
   if(n(function() {
     var b = c.selectSingleNode;
@@ -3365,15 +3365,15 @@ function oe(b, c, d, e) {
     }
   }
 }
-function pe(b, c) {
-  return oe.call(f, b, c, function(b, c) {
+function qe(b, c) {
+  return pe.call(f, b, c, function(b, c) {
     return b.selectSingleNode(c)
   }, function(b, c, j, m) {
     return c.evaluate(m, j, f, XPathResult.FIRST_ORDERED_NODE_TYPE, f).singleNodeValue
   })
 }
-function qe(b, c) {
-  return oe.call(f, b, c, function(b, c) {
+function re(b, c) {
+  return pe.call(f, b, c, function(b, c) {
     return b.selectNodes(c)
   }, function(b, c, j, m) {
     for(var b = c.evaluate(m, j, f, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, f), c = b.snapshotLength, j = 0, q = f;;) {
@@ -3385,29 +3385,29 @@ function qe(b, c) {
     }
   })
 }
-function re() {
-  return Za.call(f, "html")
+function se() {
+  return Za.call(f, "html")[0]
 }
 var X = function() {
   function b(b, e) {
-    if(n(mc.call(f, ne))) {
-      ne = function(b, c, d) {
+    if(n(mc.call(f, oe))) {
+      oe = function(b, c, d) {
         this.O = b;
         this.K = c;
-        this.U = d
-      }, ne.prototype.G = function() {
-        return Zc.call(f, Rc.call(f, qe, this.O), R.call(f, this.K))
-      }, ne.prototype.H = function() {
-        return D.call(f, ad.call(f, Qc.call(f, v), P.call(f, Rc.call(f, pe, this.O), R.call(f, this.K))))
+        this.V = d
+      }, oe.prototype.G = function() {
+        return Zc.call(f, Rc.call(f, re, this.O), R.call(f, this.K))
+      }, oe.prototype.H = function() {
+        return D.call(f, ad.call(f, Qc.call(f, v), P.call(f, Rc.call(f, qe, this.O), R.call(f, this.K))))
       }
     }
-    return new ne(e, b, c)
+    return new oe(e, b, c)
   }
   var c = f;
   return c = function(d, e) {
     switch(arguments.length) {
       case 1:
-        return c.call(f, re.call(f), d);
+        return c.call(f, se.call(f), ne.U, d);
       case 2:
         return b.call(this, d, e)
     }
@@ -3421,11 +3421,11 @@ window.tryfn = function(b) {
     return c
   }
 };
-var se = Dd.call(f, fd([]));
+var te = Dd.call(f, fd([]));
 function Y(b, c) {
-  return Fd.call(f, se, cc, fd([b, c]))
+  return Fd.call(f, te, cc, fd([b, c]))
 }
-function te(b) {
+function ue(b) {
   return tryfn.call(f, b)
 }
 function Z() {
@@ -4125,6 +4125,6 @@ Y.call(f, "can set multiple node's innerHTML", function() {
 }).call(f, wd.call(f, function() {
   return P.call(f, function(b) {
     var c = J.call(f, b, 0, f), b = J.call(f, b, 1, f);
-    return fd([c, te.call(f, b)])
-  }, Gd.call(f, se))
+    return fd([c, ue.call(f, b)])
+  }, Gd.call(f, te))
 }.call(f)));

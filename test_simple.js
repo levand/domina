@@ -9959,8 +9959,8 @@ NodeList.prototype.cljs$core$ICounted$ = !0;
 NodeList.prototype.cljs$core$ICounted$_count = function(a) {
   return a.length
 };
-if(cljs.core.truth_(StaticNodeList)) {
-  StaticNodeList.prototype = NodeList
+if(cljs.core.truth_(window.StaticNodeList)) {
+  window.StaticNodeList.prototype = NodeList
 }
 HTMLCollection.prototype.cljs$core$ISeqable$ = !0;
 HTMLCollection.prototype.cljs$core$ISeqable$_seq = function(a) {

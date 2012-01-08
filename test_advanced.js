@@ -4081,11 +4081,11 @@ Y.call(f, "can get a node's innerHTML", function() {
   S.call(f, X.call(f, "//body"), "<div><p class='foobar'>some text</p></div>");
   if(l(function() {
     var b = s.call(f, '<p class="foobar">some text</p>', le.call(f, X.call(f, "//div")));
-    return l(b) ? b : s.call(f, '<P class="foobar">some text</P>', le.call(f, X.call(f, "//div")))
+    return l(b) ? b : s.call(f, "<P class=foobar>some text</P>", le.call(f, X.call(f, "//div")))
   }())) {
     return f
   }else {
-    a(Error(L.call(f, "Assert failed: ", P.call(f, J(x("\ufdd1'or", J(x("\ufdd1'=", '<p class="foobar">some text</p>', J(x("\ufdd1'html", J(x("\ufdd1'xpath", "//div"), v("\ufdd0'line", 481))), v("\ufdd0'line", 481))), v("\ufdd0'line", 481)), J(x("\ufdd1'=", '<P class="foobar">some text</P>', J(x("\ufdd1'html", J(x("\ufdd1'xpath", "//div"), v("\ufdd0'line", 482))), v("\ufdd0'line", 482))), v("\ufdd0'line", 482))), v("\ufdd0'line", 481))))))
+    a(Error(L.call(f, "Assert failed: ", P.call(f, J(x("\ufdd1'or", J(x("\ufdd1'=", '<p class="foobar">some text</p>', J(x("\ufdd1'html", J(x("\ufdd1'xpath", "//div"), v("\ufdd0'line", 481))), v("\ufdd0'line", 481))), v("\ufdd0'line", 481)), J(x("\ufdd1'=", "<P class=foobar>some text</P>", J(x("\ufdd1'html", J(x("\ufdd1'xpath", "//div"), v("\ufdd0'line", 482))), v("\ufdd0'line", 482))), v("\ufdd0'line", 482))), v("\ufdd0'line", 481))))))
   }
 });
 Y.call(f, "can set a node's innerHTML", function() {

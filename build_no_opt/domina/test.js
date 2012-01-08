@@ -874,12 +874,12 @@ if(cljs.core.truth_((function (){var or__3548__auto____2434 = cljs.core._EQ_.cal
 if(cljs.core.truth_(or__3548__auto____2434))
 {return or__3548__auto____2434;
 } else
-{return cljs.core._EQ_.call(null,"<P class=\"foobar\">some text</P>",domina.html.call(null,domina.xpath.xpath.call(null,"//div")));
+{return cljs.core._EQ_.call(null,"<P class=foobar>some text</P>",domina.html.call(null,domina.xpath.xpath.call(null,"//div")));
 }
 })()))
 {return null;
 } else
-{throw (new Error(cljs.core.str.call(null,"Assert failed: ",cljs.core.pr_str.call(null,cljs.core.with_meta(cljs.core.list("﷑'or",cljs.core.with_meta(cljs.core.list("﷑'=","<p class=\"foobar\">some text</p>",cljs.core.with_meta(cljs.core.list("﷑'html",cljs.core.with_meta(cljs.core.list("﷑'xpath","//div"),cljs.core.hash_map("﷐'line",481))),cljs.core.hash_map("﷐'line",481))),cljs.core.hash_map("﷐'line",481)),cljs.core.with_meta(cljs.core.list("﷑'=","<P class=\"foobar\">some text</P>",cljs.core.with_meta(cljs.core.list("﷑'html",cljs.core.with_meta(cljs.core.list("﷑'xpath","//div"),cljs.core.hash_map("﷐'line",482))),cljs.core.hash_map("﷐'line",482))),cljs.core.hash_map("﷐'line",482))),cljs.core.hash_map("﷐'line",481))))));
+{throw (new Error(cljs.core.str.call(null,"Assert failed: ",cljs.core.pr_str.call(null,cljs.core.with_meta(cljs.core.list("﷑'or",cljs.core.with_meta(cljs.core.list("﷑'=","<p class=\"foobar\">some text</p>",cljs.core.with_meta(cljs.core.list("﷑'html",cljs.core.with_meta(cljs.core.list("﷑'xpath","//div"),cljs.core.hash_map("﷐'line",481))),cljs.core.hash_map("﷐'line",481))),cljs.core.hash_map("﷐'line",481)),cljs.core.with_meta(cljs.core.list("﷑'=","<P class=foobar>some text</P>",cljs.core.with_meta(cljs.core.list("﷑'html",cljs.core.with_meta(cljs.core.list("﷑'xpath","//div"),cljs.core.hash_map("﷐'line",482))),cljs.core.hash_map("﷐'line",482))),cljs.core.hash_map("﷐'line",482))),cljs.core.hash_map("﷐'line",481))))));
 }
 }));
 domina.test.add_test.call(null,"can set a node's innerHTML",(function (){

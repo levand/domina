@@ -3298,10 +3298,10 @@ R._ = function(b) {
 S._ = function(b) {
   return D.call(f, b)
 };
-Node.prototype.G = function(b) {
+Element.prototype.G = function(b) {
   return z.call(f, b)
 };
-Node.prototype.H = ba();
+Element.prototype.H = ba();
 R.string = function(b) {
   return z.call(f, eb.call(f, b))
 };

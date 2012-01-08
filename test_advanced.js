@@ -2995,7 +2995,7 @@ var Kd = function Jd(c) {
   if(n(mc.call(f, Hd))) {
     Hd = function(c, e) {
       this.L = c;
-      this.U = e
+      this.T = e
     }, Hd.prototype.G = function() {
       return bb.call(f, rd.call(f, this.L))
     }, Hd.prototype.H = function() {
@@ -3345,8 +3345,8 @@ HTMLCollection.prototype.r = function() {
 HTMLCollection.prototype.j = function(b) {
   return b.length
 };
-var ne = {}, oe;
-function pe(b, c, d, e) {
+var ne;
+function oe(b, c, d, e) {
   var j = nb.call(f, c);
   if(n(function() {
     var b = c.selectSingleNode;
@@ -3354,29 +3354,26 @@ function pe(b, c, d, e) {
   }())) {
     return j.setProperty("SelectionLanguage", "XPath"), d.call(f, c, b)
   }else {
-    if(n(function() {
-      var b = j.createNSResolver;
-      return n(b) ? j.evaluate : b
-    }())) {
+    if(n(j.evaluate)) {
       return d = j.createNSResolver(j.documentElement), e.call(f, d, j, c, b)
     }else {
       if(n("\ufdd0'else")) {
-        a(new ne.T("Could not find XPath support in this browser."))
+        a(Error("Could not find XPath support in this browser."))
       }else {
         return f
       }
     }
   }
 }
-function qe(b, c) {
-  return pe.call(f, b, c, function(b, c) {
+function pe(b, c) {
+  return oe.call(f, b, c, function(b, c) {
     return b.selectSingleNode(c)
   }, function(b, c, j, m) {
     return c.evaluate(m, j, f, XPathResult.FIRST_ORDERED_NODE_TYPE, f).singleNodeValue
   })
 }
-function re(b, c) {
-  return pe.call(f, b, c, function(b, c) {
+function qe(b, c) {
+  return oe.call(f, b, c, function(b, c) {
     return b.selectNodes(c)
   }, function(b, c, j, m) {
     for(var b = c.evaluate(m, j, f, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, f), c = b.snapshotLength, j = 0, q = f;;) {
@@ -3388,29 +3385,29 @@ function re(b, c) {
     }
   })
 }
-function se() {
+function re() {
   return Za.call(f, "html")
 }
 var X = function() {
   function b(b, e) {
-    if(n(mc.call(f, oe))) {
-      oe = function(b, c, d) {
+    if(n(mc.call(f, ne))) {
+      ne = function(b, c, d) {
         this.O = b;
         this.K = c;
-        this.V = d
-      }, oe.prototype.G = function() {
-        return Zc.call(f, Rc.call(f, re, this.O), R.call(f, this.K))
-      }, oe.prototype.H = function() {
-        return D.call(f, ad.call(f, Qc.call(f, v), P.call(f, Rc.call(f, qe, this.O), R.call(f, this.K))))
+        this.U = d
+      }, ne.prototype.G = function() {
+        return Zc.call(f, Rc.call(f, qe, this.O), R.call(f, this.K))
+      }, ne.prototype.H = function() {
+        return D.call(f, ad.call(f, Qc.call(f, v), P.call(f, Rc.call(f, pe, this.O), R.call(f, this.K))))
       }
     }
-    return new oe(e, b, c)
+    return new ne(e, b, c)
   }
   var c = f;
   return c = function(d, e) {
     switch(arguments.length) {
       case 1:
-        return c.call(f, se.call(f), d);
+        return c.call(f, re.call(f), d);
       case 2:
         return b.call(this, d, e)
     }
@@ -3424,11 +3421,11 @@ window.tryfn = function(b) {
     return c
   }
 };
-var te = Dd.call(f, fd([]));
+var se = Dd.call(f, fd([]));
 function Y(b, c) {
-  return Fd.call(f, te, cc, fd([b, c]))
+  return Fd.call(f, se, cc, fd([b, c]))
 }
-function ue(b) {
+function te(b) {
   return tryfn.call(f, b)
 }
 function Z() {
@@ -4128,6 +4125,6 @@ Y.call(f, "can set multiple node's innerHTML", function() {
 }).call(f, wd.call(f, function() {
   return P.call(f, function(b) {
     var c = J.call(f, b, 0, f), b = J.call(f, b, 1, f);
-    return fd([c, ue.call(f, b)])
-  }, Gd.call(f, te))
+    return fd([c, te.call(f, b)])
+  }, Gd.call(f, se))
 }.call(f)));

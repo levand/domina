@@ -14966,28 +14966,21 @@ goog.require("cljs.core");
 goog.require("domina");
 goog.require("goog.dom");
 domina.xpath.select_node_STAR_ = function select_node_STAR_(path, node, technique_1, technique_2) {
-  var doc__2453 = goog.dom.getOwnerDocument.call(null, node);
+  var doc__2451 = goog.dom.getOwnerDocument.call(null, node);
   if(cljs.core.truth_(function() {
-    var and__3546__auto____2454 = node.selectSingleNode;
-    if(cljs.core.truth_(and__3546__auto____2454)) {
-      return doc__2453.setProperty
+    var and__3546__auto____2452 = node.selectSingleNode;
+    if(cljs.core.truth_(and__3546__auto____2452)) {
+      return doc__2451.setProperty
     }else {
-      return and__3546__auto____2454
+      return and__3546__auto____2452
     }
   }())) {
-    doc__2453.setProperty("SelectionLanguage", "XPath");
+    doc__2451.setProperty("SelectionLanguage", "XPath");
     return technique_1.call(null, node, path)
   }else {
-    if(cljs.core.truth_(function() {
-      var and__3546__auto____2455 = doc__2453.createNSResolver;
-      if(cljs.core.truth_(and__3546__auto____2455)) {
-        return doc__2453.evaluate
-      }else {
-        return and__3546__auto____2455
-      }
-    }())) {
-      var resolver__2456 = doc__2453.createNSResolver(doc__2453.documentElement);
-      return technique_2.call(null, resolver__2456, doc__2453, node, path)
+    if(cljs.core.truth_(doc__2451.evaluate)) {
+      var resolver__2453 = doc__2451.createNSResolver(doc__2451.documentElement);
+      return technique_2.call(null, resolver__2453, doc__2451, node, path)
     }else {
       if(cljs.core.truth_("\ufdd0'else")) {
         throw new domina.xpath.Error("Could not find XPath support in this browser.");
@@ -15001,27 +14994,27 @@ domina.xpath.select_node = function select_node(expr, node) {
   return domina.xpath.select_node_STAR_.call(null, expr, node, function(node, expr) {
     return node.selectSingleNode(expr)
   }, function(resolver, doc, node, expr) {
-    var result__2457 = doc.evaluate(expr, node, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null);
-    return result__2457.singleNodeValue
+    var result__2454 = doc.evaluate(expr, node, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null);
+    return result__2454.singleNodeValue
   })
 };
 domina.xpath.select_nodes = function select_nodes(expr, node) {
   return domina.xpath.select_node_STAR_.call(null, expr, node, function(node, expr) {
     return node.selectNodes(expr)
   }, function(resolver, doc, node, expr) {
-    var result__2458 = doc.evaluate(expr, node, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
-    var num_results__2459 = result__2458.snapshotLength;
-    var i__2460 = 0;
-    var acc__2461 = null;
+    var result__2455 = doc.evaluate(expr, node, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
+    var num_results__2456 = result__2455.snapshotLength;
+    var i__2457 = 0;
+    var acc__2458 = null;
     while(true) {
-      if(cljs.core.truth_(i__2460 < num_results__2459)) {
-        var G__2462 = i__2460 + 1;
-        var G__2463 = cljs.core.cons.call(null, result__2458.snapshotItem(i__2460), acc__2461);
-        i__2460 = G__2462;
-        acc__2461 = G__2463;
+      if(cljs.core.truth_(i__2457 < num_results__2456)) {
+        var G__2459 = i__2457 + 1;
+        var G__2460 = cljs.core.cons.call(null, result__2455.snapshotItem(i__2457), acc__2458);
+        i__2457 = G__2459;
+        acc__2458 = G__2460;
         continue
       }else {
-        return acc__2461
+        return acc__2458
       }
       break
     }
@@ -15032,35 +15025,35 @@ domina.xpath.html_root = function html_root() {
 };
 domina.xpath.xpath = function() {
   var xpath = null;
-  var xpath__2467 = function(expr) {
+  var xpath__2464 = function(expr) {
     return xpath.call(null, domina.xpath.html_root.call(null), expr)
   };
-  var xpath__2468 = function(base, expr) {
-    if(cljs.core.truth_(cljs.core.undefined_QMARK_.call(null, domina.xpath.t2464))) {
-      domina.xpath.t2464 = function(expr, base, xpath) {
+  var xpath__2465 = function(base, expr) {
+    if(cljs.core.truth_(cljs.core.undefined_QMARK_.call(null, domina.xpath.t2461))) {
+      domina.xpath.t2461 = function(expr, base, xpath) {
         this.expr = expr;
         this.base = base;
         this.xpath = xpath
       };
-      domina.xpath.t2464.prototype.domina$DomContent$ = true;
-      domina.xpath.t2464.prototype.domina$DomContent$nodes = function(_) {
-        var this__2465 = this;
-        return cljs.core.mapcat.call(null, cljs.core.partial.call(null, domina.xpath.select_nodes, this__2465.expr), domina.nodes.call(null, this__2465.base))
+      domina.xpath.t2461.prototype.domina$DomContent$ = true;
+      domina.xpath.t2461.prototype.domina$DomContent$nodes = function(_) {
+        var this__2462 = this;
+        return cljs.core.mapcat.call(null, cljs.core.partial.call(null, domina.xpath.select_nodes, this__2462.expr), domina.nodes.call(null, this__2462.base))
       };
-      domina.xpath.t2464.prototype.domina$DomContent$single_node = function(_) {
-        var this__2466 = this;
-        return cljs.core.first.call(null, cljs.core.filter.call(null, cljs.core.complement.call(null, cljs.core.nil_QMARK_), cljs.core.map.call(null, cljs.core.partial.call(null, domina.xpath.select_node, this__2466.expr), domina.nodes.call(null, this__2466.base))))
+      domina.xpath.t2461.prototype.domina$DomContent$single_node = function(_) {
+        var this__2463 = this;
+        return cljs.core.first.call(null, cljs.core.filter.call(null, cljs.core.complement.call(null, cljs.core.nil_QMARK_), cljs.core.map.call(null, cljs.core.partial.call(null, domina.xpath.select_node, this__2463.expr), domina.nodes.call(null, this__2463.base))))
       }
     }else {
     }
-    return new domina.xpath.t2464(expr, base, xpath)
+    return new domina.xpath.t2461(expr, base, xpath)
   };
   xpath = function(base, expr) {
     switch(arguments.length) {
       case 1:
-        return xpath__2467.call(this, base);
+        return xpath__2464.call(this, base);
       case 2:
-        return xpath__2468.call(this, base, expr)
+        return xpath__2465.call(this, base, expr)
     }
     throw"Invalid arity: " + arguments.length;
   };

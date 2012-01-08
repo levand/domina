@@ -9989,10 +9989,7 @@ domina.xpath.select_node_STAR_ = function(a, b, c, d) {
   }())) {
     return e.setProperty("SelectionLanguage", "XPath"), c.call(null, b, a)
   }else {
-    if(cljs.core.truth_(function() {
-      var a = e.createNSResolver;
-      return cljs.core.truth_(a) ? e.evaluate : a
-    }())) {
+    if(cljs.core.truth_(e.evaluate)) {
       return c = e.createNSResolver(e.documentElement), d.call(null, c, e, b, a)
     }else {
       if(cljs.core.truth_("\ufdd0'else")) {
@@ -10028,18 +10025,18 @@ domina.xpath.html_root = function() {
 };
 domina.xpath.xpath = function() {
   var a = null, b = function(b, d) {
-    if(cljs.core.truth_(cljs.core.undefined_QMARK_.call(null, domina.xpath.t2481))) {
-      domina.xpath.t2481 = function(a, b, c) {
+    if(cljs.core.truth_(cljs.core.undefined_QMARK_.call(null, domina.xpath.t2477))) {
+      domina.xpath.t2477 = function(a, b, c) {
         this.expr = a;
         this.base = b;
         this.xpath = c
-      }, domina.xpath.t2481.prototype.domina$DomContent$ = !0, domina.xpath.t2481.prototype.domina$DomContent$nodes = function() {
+      }, domina.xpath.t2477.prototype.domina$DomContent$ = !0, domina.xpath.t2477.prototype.domina$DomContent$nodes = function() {
         return cljs.core.mapcat.call(null, cljs.core.partial.call(null, domina.xpath.select_nodes, this.expr), domina.nodes.call(null, this.base))
-      }, domina.xpath.t2481.prototype.domina$DomContent$single_node = function() {
+      }, domina.xpath.t2477.prototype.domina$DomContent$single_node = function() {
         return cljs.core.first.call(null, cljs.core.filter.call(null, cljs.core.complement.call(null, cljs.core.nil_QMARK_), cljs.core.map.call(null, cljs.core.partial.call(null, domina.xpath.select_node, this.expr), domina.nodes.call(null, this.base))))
       }
     }
-    return new domina.xpath.t2481(d, b, a)
+    return new domina.xpath.t2477(d, b, a)
   };
   return a = function(c, d) {
     switch(arguments.length) {

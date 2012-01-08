@@ -10023,6 +10023,9 @@ domina.xpath.select_nodes = function(a, b) {
     }
   })
 };
+domina.xpath.html_root = function() {
+  return document.getElementsByTagNameAndClass("html")
+};
 domina.xpath.xpath = function() {
   var a = null, b = function(b, d) {
     if(cljs.core.truth_(cljs.core.undefined_QMARK_.call(null, domina.xpath.t2481))) {
@@ -10041,7 +10044,7 @@ domina.xpath.xpath = function() {
   return a = function(c, d) {
     switch(arguments.length) {
       case 1:
-        return a.call(null, document, c);
+        return a.call(null, domina.xpath.html_root.call(null), c);
       case 2:
         return b.call(this, c, d)
     }

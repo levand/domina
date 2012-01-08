@@ -77,13 +77,16 @@ break;
 }
 }));
 });
+domina.xpath.html_root = (function html_root(){
+return document.getElementsByTagNameAndClass("html");
+});
 /**
 * Returns content based on an xpath expression. Takes an optional content as a base; if none is given, uses js/document as a base.
 */
 domina.xpath.xpath = (function() {
 var xpath = null;
 var xpath__2450 = (function (expr){
-return xpath.call(null,document,expr);
+return xpath.call(null,domina.xpath.html_root.call(null),expr);
 });
 var xpath__2451 = (function (base,expr){
 if(cljs.core.truth_(cljs.core.undefined_QMARK_.call(null,domina.xpath.t2447)))

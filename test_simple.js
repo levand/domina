@@ -10041,7 +10041,7 @@ domina.xpath.xpath = function() {
   return a = function(c, d) {
     switch(arguments.length) {
       case 1:
-        return a.call(null, domina.xpath.root_element.call(null), domina.xpath.t, c);
+        return a.call(null, domina.xpath.root_element.call(null), c);
       case 2:
         return b.call(this, c, d)
     }

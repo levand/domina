@@ -15025,7 +15025,7 @@ domina.xpath.root_element = function root_element() {
 domina.xpath.xpath = function() {
   var xpath = null;
   var xpath__2461 = function(expr) {
-    return xpath.call(null, domina.xpath.root_element.call(null), domina.xpath.t, expr)
+    return xpath.call(null, domina.xpath.root_element.call(null), expr)
   };
   var xpath__2462 = function(base, expr) {
     if(cljs.core.truth_(cljs.core.undefined_QMARK_.call(null, domina.xpath.t2458))) {

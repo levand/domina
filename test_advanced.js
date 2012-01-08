@@ -3355,7 +3355,7 @@ function oe(b, c, d, e) {
     return j.setProperty("SelectionLanguage", "XPath"), d.call(f, c, b)
   }else {
     if(n(j.evaluate)) {
-      return d = j.createNSResolver(j.documentElement), e.call(f, d, j, c, b)
+      return e.call(f, f, j, c, b)
     }else {
       if(n("\ufdd0'else")) {
         a(Error("Could not find XPath support in this browser."))

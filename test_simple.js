@@ -9625,17 +9625,17 @@ var domina = {DomContent:{}, nodes:function(a) {
   return goog.dom.getElement.call(null, cljs.core.name.call(null, a))
 }};
 domina.by_class = function by_class(b) {
-  if(cljs.core.truth_(cljs.core.undefined_QMARK_.call(null, domina.t2920))) {
-    domina.t2920 = function(b, d) {
+  if(cljs.core.truth_(cljs.core.undefined_QMARK_.call(null, domina.t2971))) {
+    domina.t2971 = function(b, d) {
       this.class_name = b;
       this.by_class = d
-    }, domina.t2920.prototype.domina$DomContent$ = !0, domina.t2920.prototype.domina$DomContent$nodes = function() {
+    }, domina.t2971.prototype.domina$DomContent$ = !0, domina.t2971.prototype.domina$DomContent$nodes = function() {
       return goog.dom.getElementsByClass.call(null, cljs.core.name.call(null, this.class_name))
-    }, domina.t2920.prototype.domina$DomContent$single_node = function() {
+    }, domina.t2971.prototype.domina$DomContent$single_node = function() {
       return goog.dom.getElementByClass.call(null, cljs.core.name.call(null, this.class_name))
     }
   }
-  return new domina.t2920(b, by_class)
+  return new domina.t2971(b, by_class)
 };
 domina.children = function(a) {
   return cljs.core.mapcat.call(null, goog.dom.getChildren, domina.nodes.call(null, a))
@@ -9924,11 +9924,11 @@ domina.nodes._ = function(a) {
 domina.single_node._ = function(a) {
   return cljs.core.first.call(null, a)
 };
-Element.prototype.domina$DomContent$ = !0;
-Element.prototype.domina$DomContent$nodes = function(a) {
+Node.prototype.domina$DomContent$ = !0;
+Node.prototype.domina$DomContent$nodes = function(a) {
   return cljs.core.cons.call(null, a)
 };
-Element.prototype.domina$DomContent$single_node = function(a) {
+Node.prototype.domina$DomContent$single_node = function(a) {
   return a
 };
 domina.DomContent.string = !0;
@@ -10023,9 +10023,6 @@ domina.xpath.select_nodes = function(a, b) {
     }
   })
 };
-domina.xpath.root_element = function() {
-  return goog.dom.getElementsByTagNameAndClass.call(null, "html")[0]
-};
 domina.xpath.xpath = function() {
   var a = null, b = function(b, d) {
     if(cljs.core.truth_(cljs.core.undefined_QMARK_.call(null, domina.xpath.t2481))) {
@@ -10044,7 +10041,7 @@ domina.xpath.xpath = function() {
   return a = function(c, d) {
     switch(arguments.length) {
       case 1:
-        return a.call(null, domina.xpath.root_element.call(null), c);
+        return a.call(null, document, c);
       case 2:
         return b.call(this, c, d)
     }

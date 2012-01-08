@@ -14897,36 +14897,71 @@ domina.nodes["string"] = function(s) {
 domina.single_node["string"] = function(s) {
   return goog.dom.htmlToDocumentFragment.call(null, s)
 };
-domina.nodelist_icounted_impl = cljs.core.ObjMap.fromObject(["\ufdd0'-count"], {"\ufdd0'-count":function nodelist_icounted_impl(nodelist) {
-  return nodelist.length
-}});
-domina.nodelist_iindexed_impl = cljs.core.ObjMap.fromObject(["\ufdd0'-nth"], {"\ufdd0'-nth":function() {
-  var nodelist_iindexed_impl = null;
-  var nodelist_iindexed_impl__2576 = function(nodelist, n) {
+NodeList.prototype.cljs$core$ISeqable$ = true;
+NodeList.prototype.cljs$core$ISeqable$_seq = function(nodelist) {
+  return null
+};
+NodeList.prototype.cljs$core$IIndexed$ = true;
+NodeList.prototype.cljs$core$IIndexed$_nth = function() {
+  var G__2576 = null;
+  var G__2576__2577 = function(nodelist, n) {
     return nodelist.item(n)
   };
-  var nodelist_iindexed_impl__2577 = function(nodelist, n, not_found) {
+  var G__2576__2578 = function(nodelist, n, not_found) {
     if(cljs.core.truth_(nodelist.length <= n)) {
       return not_found
     }else {
       return cljs.core.nth.call(null, nodelist, n)
     }
   };
-  nodelist_iindexed_impl = function(nodelist, n, not_found) {
+  G__2576 = function(nodelist, n, not_found) {
     switch(arguments.length) {
       case 2:
-        return nodelist_iindexed_impl__2576.call(this, nodelist, n);
+        return G__2576__2577.call(this, nodelist, n);
       case 3:
-        return nodelist_iindexed_impl__2577.call(this, nodelist, n, not_found)
+        return G__2576__2578.call(this, nodelist, n, not_found)
     }
     throw"Invalid arity: " + arguments.length;
   };
-  return nodelist_iindexed_impl
-}()});
-domina.nodelist_iseqable_impl = cljs.core.ObjMap.fromObject(["\ufdd0'-seq"], {"\ufdd0'-seq":domina.lazy_nodelis});
-domina.extend.call(null, NodeList, cljs.core.ICounted, domina.nodelist_icounted_impl, cljs.core.IIndexed, domina.nodelist_iindexed_impl, cljs.core.ISeqable, domina.nodelist_isequable_impl);
+  return G__2576
+}();
+NodeList.prototype.cljs$core$ICounted$ = true;
+NodeList.prototype.cljs$core$ICounted$_count = function(nodelist) {
+  return null
+};
 if(cljs.core.truth_(window.StaticNodeList)) {
-  domina.extend.call(null, StaticNodeList, cljs.core.ICounted, domina.nodelist_icounted_impl, cljs.core.IIndexed, domina.nodelist_iindexed_impl, cljs.core.ISeqable, domina.nodelist_isequable_impl)
+  StaticNodeList.prototype.cljs$core$ISeqable$ = true;
+  StaticNodeList.prototype.cljs$core$ISeqable$_seq = function(nodelist) {
+    return domina.lazy_nodelist.call(null, nodelist)
+  };
+  StaticNodeList.prototype.cljs$core$IIndexed$ = true;
+  StaticNodeList.prototype.cljs$core$IIndexed$_nth = function() {
+    var G__2580 = null;
+    var G__2580__2581 = function(nodelist, n) {
+      return nodelist.item(n)
+    };
+    var G__2580__2582 = function(nodelist, n, not_found) {
+      if(cljs.core.truth_(nodelist.length <= n)) {
+        return not_found
+      }else {
+        return cljs.core.nth.call(null, nodelist, n)
+      }
+    };
+    G__2580 = function(nodelist, n, not_found) {
+      switch(arguments.length) {
+        case 2:
+          return G__2580__2581.call(this, nodelist, n);
+        case 3:
+          return G__2580__2582.call(this, nodelist, n, not_found)
+      }
+      throw"Invalid arity: " + arguments.length;
+    };
+    return G__2580
+  }();
+  StaticNodeList.prototype.cljs$core$ICounted$ = true;
+  StaticNodeList.prototype.cljs$core$ICounted$_count = function(nodelist) {
+    return nodelist.length
+  }
 }else {
 }
 HTMLCollection.prototype.cljs$core$ISeqable$ = true;
@@ -14935,27 +14970,27 @@ HTMLCollection.prototype.cljs$core$ISeqable$_seq = function(coll) {
 };
 HTMLCollection.prototype.cljs$core$IIndexed$ = true;
 HTMLCollection.prototype.cljs$core$IIndexed$_nth = function() {
-  var G__2579 = null;
-  var G__2579__2580 = function(coll, n) {
+  var G__2584 = null;
+  var G__2584__2585 = function(coll, n) {
     return coll.item(n)
   };
-  var G__2579__2581 = function(coll, n, not_found) {
+  var G__2584__2586 = function(coll, n, not_found) {
     if(cljs.core.truth_(coll.length <= n)) {
       return not_found
     }else {
       return cljs.core.nth.call(null, coll, n)
     }
   };
-  G__2579 = function(coll, n, not_found) {
+  G__2584 = function(coll, n, not_found) {
     switch(arguments.length) {
       case 2:
-        return G__2579__2580.call(this, coll, n);
+        return G__2584__2585.call(this, coll, n);
       case 3:
-        return G__2579__2581.call(this, coll, n, not_found)
+        return G__2584__2586.call(this, coll, n, not_found)
     }
     throw"Invalid arity: " + arguments.length;
   };
-  return G__2579
+  return G__2584
 }();
 HTMLCollection.prototype.cljs$core$ICounted$ = true;
 HTMLCollection.prototype.cljs$core$ICounted$_count = function(coll) {

@@ -9953,18 +9953,9 @@ domina.nodelist_iindexed_impl = cljs.core.ObjMap.fromObject(["\ufdd0'-nth"], {"\
     throw"Invalid arity: " + arguments.length;
   }
 }()});
-domina.nodelist_iseqable_impl = cljs.core.ObjMap.fromObject(["\ufdd0'-seq"], {"\ufdd0'-seq":function(a) {
-  return domina.lazy_nodelist.call(null, a)
-}});
-NodeList.prototype.domina$nodelist_isequable_impl$ = !0;
-NodeList.prototype.cljs$core$ISeqable$ = !0;
-NodeList.prototype.domina$nodelist_iindexed_impl$ = !0;
-NodeList.prototype.cljs$core$IIndexed$ = !0;
-NodeList.prototype.domina$nodelist_icounted_impl$ = !0;
-NodeList.prototype.cljs$core$ICounted$ = !0;
-if(cljs.core.truth_(window.StaticNodeList)) {
-  StaticNodeList.prototype.domina$nodelist_isequable_impl$ = !0, StaticNodeList.prototype.cljs$core$ISeqable$ = !0, StaticNodeList.prototype.domina$nodelist_iindexed_impl$ = !0, StaticNodeList.prototype.cljs$core$IIndexed$ = !0, StaticNodeList.prototype.domina$nodelist_icounted_impl$ = !0, StaticNodeList.prototype.cljs$core$ICounted$ = !0
-}
+domina.nodelist_iseqable_impl = cljs.core.ObjMap.fromObject(["\ufdd0'-seq"], {"\ufdd0'-seq":domina.lazy_nodelis});
+domina.extend.call(null, NodeList, cljs.core.ICounted, domina.nodelist_icounted_impl, cljs.core.IIndexed, domina.nodelist_iindexed_impl, cljs.core.ISeqable, domina.nodelist_isequable_impl);
+cljs.core.truth_(window.StaticNodeList) && domina.extend.call(null, StaticNodeList, cljs.core.ICounted, domina.nodelist_icounted_impl, cljs.core.IIndexed, domina.nodelist_iindexed_impl, cljs.core.ISeqable, domina.nodelist_isequable_impl);
 HTMLCollection.prototype.cljs$core$ISeqable$ = !0;
 HTMLCollection.prototype.cljs$core$ISeqable$_seq = function(a) {
   return domina.lazy_nodelist.call(null, a)

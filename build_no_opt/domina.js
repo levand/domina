@@ -765,22 +765,10 @@ throw('Invalid arity: ' + arguments.length);
 return nodelist_iindexed_impl;
 })()
 });
-domina.nodelist_iseqable_impl = cljs.core.ObjMap.fromObject(["﷐'-seq"],{"﷐'-seq":(function nodelist_iseqable_impl(nodelist){
-return domina.lazy_nodelist.call(null,nodelist);
-})});
-NodeList.prototype.domina$nodelist_isequable_impl$ = true;
-NodeList.prototype.cljs$core$ISeqable$ = true;
-NodeList.prototype.domina$nodelist_iindexed_impl$ = true;
-NodeList.prototype.cljs$core$IIndexed$ = true;
-NodeList.prototype.domina$nodelist_icounted_impl$ = true;
-NodeList.prototype.cljs$core$ICounted$ = true;
+domina.nodelist_iseqable_impl = cljs.core.ObjMap.fromObject(["﷐'-seq"],{"﷐'-seq":domina.lazy_nodelis});
+domina.extend.call(null,NodeList,cljs.core.ICounted,domina.nodelist_icounted_impl,cljs.core.IIndexed,domina.nodelist_iindexed_impl,cljs.core.ISeqable,domina.nodelist_isequable_impl);
 if(cljs.core.truth_(window.StaticNodeList))
-{StaticNodeList.prototype.domina$nodelist_isequable_impl$ = true;
-StaticNodeList.prototype.cljs$core$ISeqable$ = true;
-StaticNodeList.prototype.domina$nodelist_iindexed_impl$ = true;
-StaticNodeList.prototype.cljs$core$IIndexed$ = true;
-StaticNodeList.prototype.domina$nodelist_icounted_impl$ = true;
-StaticNodeList.prototype.cljs$core$ICounted$ = true;
+{domina.extend.call(null,StaticNodeList,cljs.core.ICounted,domina.nodelist_icounted_impl,cljs.core.IIndexed,domina.nodelist_iindexed_impl,cljs.core.ISeqable,domina.nodelist_isequable_impl);
 } else
 {}
 HTMLCollection.prototype.cljs$core$ISeqable$ = true;

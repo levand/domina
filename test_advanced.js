@@ -141,32 +141,32 @@ function pa(b) {
 ;var qa, ra, sa, ta, ua;
 (ua = "ScriptEngine" in ca && ca.ScriptEngine() == "JScript") && (ca.ScriptEngineMajorVersion(), ca.ScriptEngineMinorVersion(), ca.ScriptEngineBuildVersion());
 function va(b, c) {
-  this.h = ua ? [] : "";
+  this.i = ua ? [] : "";
   b != f && this.append.apply(this, arguments)
 }
 ua ? (va.prototype.I = 0, va.prototype.append = function(b, c, d) {
-  c == f ? this.h[this.I++] = b : (this.h.push.apply(this.h, arguments), this.I = this.h.length);
+  c == f ? this.i[this.I++] = b : (this.i.push.apply(this.i, arguments), this.I = this.i.length);
   return this
 }) : va.prototype.append = function(b, c, d) {
-  this.h += b;
+  this.i += b;
   if(c != f) {
     for(var e = 1;e < arguments.length;e++) {
-      this.h += arguments[e]
+      this.i += arguments[e]
     }
   }
   return this
 };
 va.prototype.clear = function() {
-  ua ? this.I = this.h.length = 0 : this.h = ""
+  ua ? this.I = this.i.length = 0 : this.i = ""
 };
 va.prototype.toString = function() {
   if(ua) {
-    var b = this.h.join("");
+    var b = this.i.join("");
     this.clear();
     b && this.append(b);
     return b
   }else {
-    return this.h
+    return this.i
   }
 };
 function wa() {
@@ -527,7 +527,7 @@ function Cb(b) {
   return Array.prototype.slice.call(arguments)
 }
 function p(b) {
-  return n(n(b) ? b.j : b) ? b.j(b) : function() {
+  return n(n(b) ? b.g : b) ? b.g(b) : function() {
     var c = p[i.call(f, b)];
     if(n(c)) {
       return c
@@ -541,7 +541,7 @@ function p(b) {
   }().call(f, b)
 }
 function Db(b, c) {
-  return n(n(b) ? b.i : b) ? b.i(b, c) : function() {
+  return n(n(b) ? b.j : b) ? b.j(b, c) : function() {
     var c = Db[i.call(f, b)];
     if(n(c)) {
       return c
@@ -556,7 +556,7 @@ function Db(b, c) {
 }
 var r = function() {
   function b(b, c, j) {
-    return n(n(b) ? b.r : b) ? b.r(b, c, j) : function() {
+    return n(n(b) ? b.o : b) ? b.o(b, c, j) : function() {
       var c = r[i.call(f, b)];
       if(n(c)) {
         return c
@@ -570,7 +570,7 @@ var r = function() {
     }().call(f, b, c, j)
   }
   function c(b, c) {
-    return n(n(b) ? b.r : b) ? b.r(b, c) : function() {
+    return n(n(b) ? b.o : b) ? b.o(b, c) : function() {
       var c = r[i.call(f, b)];
       if(n(c)) {
         return c
@@ -691,7 +691,7 @@ function Kb(b) {
 }
 var Lb = {};
 function Mb(b) {
-  return n(n(b) ? b.o : b) ? b.c : function() {
+  return n(n(b) ? b.p : b) ? b.c : function() {
     var c = Mb[i.call(f, b)];
     if(n(c)) {
       return c
@@ -705,7 +705,7 @@ function Mb(b) {
   }().call(f, b)
 }
 function Nb(b, c) {
-  return n(n(b) ? b.p : b) ? b.p(b, c) : function() {
+  return n(n(b) ? b.q : b) ? b.q(b, c) : function() {
     var c = Nb[i.call(f, b)];
     if(n(c)) {
       return c
@@ -801,7 +801,7 @@ function Rb(b) {
 }
 var Sb = {}, Tb = {};
 function Ub(b, c) {
-  return n(n(b) ? b.g : b) ? b.g(b, c) : function() {
+  return n(n(b) ? b.h : b) ? b.h(b, c) : function() {
     var c = Ub[i.call(f, b)];
     if(n(c)) {
       return c
@@ -956,7 +956,7 @@ var Wb = function() {
 }();
 function Xb(b, c) {
   this.n = b;
-  this.q = c
+  this.r = c
 }
 h = Xb.prototype;
 h.k = function(b) {
@@ -966,41 +966,41 @@ h.z = function() {
   return function(b, c, d) {
     switch(arguments.length) {
       case 2:
-        return Wb.call(f, b, c, this.n[this.q], this.q + 1);
+        return Wb.call(f, b, c, this.n[this.r], this.r + 1);
       case 3:
-        return Wb.call(f, b, c, d, this.q)
+        return Wb.call(f, b, c, d, this.r)
     }
     a("Invalid arity: " + arguments.length)
   }
 }();
-h.i = function(b, c) {
+h.j = function(b, c) {
   return z.call(f, c, b)
 };
 h.e = function(b, c) {
   return Zb.call(f, b, c)
 };
 h.u = !0;
-h.r = function() {
+h.o = function() {
   return function(b, c, d) {
     switch(arguments.length) {
       case 2:
-        var e = c + this.q;
+        var e = c + this.r;
         return n(e < this.n.length) ? this.n[e] : f;
       case 3:
-        return e = c + this.q, n(e < this.n.length) ? this.n[e] : d
+        return e = c + this.r, n(e < this.n.length) ? this.n[e] : d
     }
     a("Invalid arity: " + arguments.length)
   }
 }();
-h.j = function() {
-  return this.n.length - this.q
+h.g = function() {
+  return this.n.length - this.r
 };
 h.A = !0;
 h.s = function() {
-  return this.n[this.q]
+  return this.n[this.r]
 };
 h.t = function() {
-  return n(this.q + 1 < this.n.length) ? new Xb(this.n, this.q + 1) : y.call(f)
+  return n(this.r + 1 < this.n.length) ? new Xb(this.n, this.r + 1) : y.call(f)
 };
 h.f = aa();
 function $b(b, c) {
@@ -1542,22 +1542,22 @@ h.k = function(b) {
   return Yb.call(f, b)
 };
 h.u = !0;
-h.i = function(b, c) {
+h.j = function(b, c) {
   return new Cc(this.c, c, b, this.count + 1)
 };
 h.f = aa();
-h.j = g("count");
+h.g = g("count");
 h.A = !0;
 h.s = g("C");
 h.t = g("B");
 h.e = function(b, c) {
   return Zb.call(f, b, c)
 };
-h.p = function(b, c) {
+h.q = function(b, c) {
   return new Cc(c, this.C, this.B, this.count)
 };
 h.l = !0;
-h.o = g("c");
+h.p = g("c");
 function Dc(b) {
   this.c = b
 }
@@ -1566,22 +1566,22 @@ h.k = function(b) {
   return Yb.call(f, b)
 };
 h.u = !0;
-h.i = function(b, c) {
+h.j = function(b, c) {
   return new Cc(this.c, c, f, 1)
 };
 h.f = ba(f);
-h.j = ba(0);
+h.g = ba(0);
 h.A = !0;
 h.s = ba(f);
 h.t = ba(f);
 h.e = function(b, c) {
   return Zb.call(f, b, c)
 };
-h.p = function(b, c) {
+h.q = function(b, c) {
   return new Dc(c)
 };
 h.l = !0;
-h.o = g("c");
+h.p = g("c");
 var Ec = new Dc(f);
 function Fc(b) {
   return tc.call(f, cc, Ec, b)
@@ -1613,7 +1613,7 @@ h.e = function(b, c) {
   return Zb.call(f, b, c)
 };
 h.u = !0;
-h.i = function(b, c) {
+h.j = function(b, c) {
   return new Gc(f, c, b)
 };
 h.A = !0;
@@ -1622,8 +1622,8 @@ h.t = function() {
   return n(v.call(f, this.B)) ? Ec : this.B
 };
 h.l = !0;
-h.o = g("c");
-h.p = function(b, c) {
+h.p = g("c");
+h.q = function(b, c) {
   return new Gc(c, this.C, this.B)
 };
 function z(b, c) {
@@ -1705,7 +1705,7 @@ h.e = function(b, c) {
   return Zb.call(f, b, c)
 };
 h.u = !0;
-h.i = function(b, c) {
+h.j = function(b, c) {
   return z.call(f, c, b)
 };
 h.A = !0;
@@ -1716,8 +1716,8 @@ h.t = function(b) {
   return E.call(f, Hc.call(f, b))
 };
 h.l = !0;
-h.o = g("c");
-h.p = function(b, c) {
+h.p = g("c");
+h.q = function(b, c) {
   return new O(c, this.J, this.x)
 };
 function Ic(b) {
@@ -2259,7 +2259,7 @@ h.F = function(b, c, d) {
   return new dd(this.c, b)
 };
 h.u = !0;
-h.i = function(b, c) {
+h.j = function(b, c) {
   var d = Bb.call(f, this.d);
   d.push(c);
   return new dd(this.c, d)
@@ -2283,19 +2283,19 @@ h.f = function() {
     })
   }.call(f, 0) : f
 };
-h.j = function() {
+h.g = function() {
   return this.d.length
 };
 h.Q = !0;
 h.e = function(b, c) {
   return Zb.call(f, b, c)
 };
-h.p = function(b, c) {
+h.q = function(b, c) {
   return new dd(c, this.d)
 };
 h.l = !0;
-h.o = g("c");
-h.r = function() {
+h.p = g("c");
+h.o = function() {
   function b(b, c, j) {
     var m = this;
     return n(function() {
@@ -2420,7 +2420,7 @@ h.F = function(b, c, d) {
     return K.call(f, bd.call(f, x.call(f, c, d), B.call(f, b)), this.c)
   }
 };
-h.i = function(b, c) {
+h.j = function(b, c) {
   return n(kc.call(f, c)) ? Hb.call(f, b, r.call(f, c, 0), r.call(f, c, 1)) : tc.call(f, Db, b, c)
 };
 h.f = function() {
@@ -2429,17 +2429,17 @@ h.f = function() {
     return hd.call(f, c, b.D[c])
   }, b.keys) : f
 };
-h.j = function() {
+h.g = function() {
   return this.keys.length
 };
 h.e = function(b, c) {
   return kd.call(f, b, c)
 };
-h.p = function(b, c) {
+h.q = function(b, c) {
   return new nd(c, this.keys, this.D)
 };
 h.l = !0;
-h.o = g("c");
+h.p = g("c");
 h.M = !0;
 Cb.call(f);
 function od(b, c) {
@@ -2488,7 +2488,7 @@ h.F = function(b, c, d) {
     return e = Xa.call(f, this.v), e[b] = Cb.call(f, c, d), new pd(this.c, this.count + 1, e)
   }
 };
-h.i = function(b, c) {
+h.j = function(b, c) {
   return n(kc.call(f, c)) ? Hb.call(f, b, r.call(f, c, 0), r.call(f, c, 1)) : tc.call(f, Db, b, c)
 };
 h.f = function() {
@@ -2502,15 +2502,15 @@ h.f = function() {
     return f
   }
 };
-h.j = g("count");
+h.g = g("count");
 h.e = function(b, c) {
   return kd.call(f, b, c)
 };
-h.p = function(b, c) {
+h.q = function(b, c) {
   return new pd(c, this.count, this.v)
 };
 h.l = !0;
-h.o = g("c");
+h.p = g("c");
 h.M = !0;
 var qd = new pd(f, 0, function() {
   return{}
@@ -2590,7 +2590,7 @@ h.k = function(b) {
   return Yb.call(f, b)
 };
 h.u = !0;
-h.i = function(b, c) {
+h.j = function(b, c) {
   return z.call(f, c, b)
 };
 h.z = function() {
@@ -2607,7 +2607,7 @@ h.z = function() {
 h.f = function(b) {
   return n((n(this.step > 0) ? vc : wc).call(f, this.start, this.end)) ? b : f
 };
-h.j = function(b) {
+h.g = function(b) {
   return n(H.call(f, Rb.call(f, b))) ? 0 : Math.ceil.call(f, (this.end - this.start) / this.step)
 };
 h.A = !0;
@@ -2618,12 +2618,12 @@ h.t = function(b) {
 h.e = function(b, c) {
   return Zb.call(f, b, c)
 };
-h.p = function(b, c) {
+h.q = function(b, c) {
   return new td(c, this.start, this.end, this.step)
 };
 h.l = !0;
-h.o = g("c");
-h.r = function() {
+h.p = g("c");
+h.o = function() {
   function b(b, c, j) {
     var m = this;
     return n(c < p.call(f, b)) ? m.start + c * m.step : n(function() {
@@ -2786,7 +2786,7 @@ var Q = function() {
   return b
 }();
 pd.prototype.m = !0;
-pd.prototype.g = function(b, c) {
+pd.prototype.h = function(b, c) {
   return xd.call(f, function(b) {
     return xd.call(f, zd, "", " ", "", c, b)
   }, "{", ", ", "}", c, b)
@@ -2796,11 +2796,11 @@ Ub.number = function(b) {
   return y.call(f, M.call(f, b))
 };
 Xb.prototype.m = !0;
-Xb.prototype.g = function(b, c) {
+Xb.prototype.h = function(b, c) {
   return xd.call(f, zd, "(", " ", ")", c, b)
 };
 O.prototype.m = !0;
-O.prototype.g = function(b, c) {
+O.prototype.h = function(b, c) {
   return xd.call(f, zd, "(", " ", ")", c, b)
 };
 Tb["boolean"] = !0;
@@ -2818,11 +2818,11 @@ Ub.string = function(b, c) {
   }(), rd.call(f, b))) : n("\ufdd0'else") ? y.call(f, n("\ufdd0'readably".call(f, c)) ? la.call(f, b) : b) : f
 };
 dd.prototype.m = !0;
-dd.prototype.g = function(b, c) {
+dd.prototype.h = function(b, c) {
   return xd.call(f, zd, "[", " ", "]", c, b)
 };
 Cc.prototype.m = !0;
-Cc.prototype.g = function(b, c) {
+Cc.prototype.h = function(b, c) {
   return xd.call(f, zd, "(", " ", ")", c, b)
 };
 Tb.array = !0;
@@ -2830,19 +2830,19 @@ Ub.array = function(b, c) {
   return xd.call(f, zd, "#<Array [", ", ", "]>", c, b)
 };
 Dc.prototype.m = !0;
-Dc.prototype.g = function() {
+Dc.prototype.h = function() {
   return y.call(f, "()")
 };
 Gc.prototype.m = !0;
-Gc.prototype.g = function(b, c) {
+Gc.prototype.h = function(b, c) {
   return xd.call(f, zd, "(", " ", ")", c, b)
 };
 td.prototype.m = !0;
-td.prototype.g = function(b, c) {
+td.prototype.h = function(b, c) {
   return xd.call(f, zd, "(", " ", ")", c, b)
 };
 nd.prototype.m = !0;
-nd.prototype.g = function(b, c) {
+nd.prototype.h = function(b, c) {
   return xd.call(f, function(b) {
     return xd.call(f, zd, "", " ", "", c, b)
   }, "{", ", ", "}", c, b)
@@ -2874,11 +2874,11 @@ h.N = function(b, c, d) {
   }
 };
 h.m = !0;
-h.g = function(b, c) {
+h.h = function(b, c) {
   return Mc.call(f, fd(["#<Atom: "]), Ub.call(f, this.state, c), ">")
 };
 h.l = !0;
-h.o = g("c");
+h.p = g("c");
 h.P = g("state");
 h.e = function(b, c) {
   return b === c
@@ -3314,7 +3314,7 @@ S.string = function(b) {
 NodeList.prototype.f = function(b) {
   return me.call(f, b)
 };
-NodeList.prototype.r = function() {
+NodeList.prototype.o = function() {
   return function(b, c, d) {
     switch(arguments.length) {
       case 2:
@@ -3325,13 +3325,30 @@ NodeList.prototype.r = function() {
     a("Invalid arity: " + arguments.length)
   }
 }();
-NodeList.prototype.j = function(b) {
+NodeList.prototype.g = function(b) {
+  return b.length
+};
+StaticNodeList.prototype.f = function(b) {
+  return me.call(f, b)
+};
+StaticNodeList.prototype.o = function() {
+  return function(b, c, d) {
+    switch(arguments.length) {
+      case 2:
+        return b.item(c);
+      case 3:
+        return n(b.length <= c) ? d : J.call(f, b, c)
+    }
+    a("Invalid arity: " + arguments.length)
+  }
+}();
+StaticNodeList.prototype.g = function(b) {
   return b.length
 };
 HTMLCollection.prototype.f = function(b) {
   return me.call(f, b)
 };
-HTMLCollection.prototype.r = function() {
+HTMLCollection.prototype.o = function() {
   return function(b, c, d) {
     switch(arguments.length) {
       case 2:
@@ -3342,7 +3359,7 @@ HTMLCollection.prototype.r = function() {
     a("Invalid arity: " + arguments.length)
   }
 }();
-HTMLCollection.prototype.j = function(b) {
+HTMLCollection.prototype.g = function(b) {
   return b.length
 };
 var ne;

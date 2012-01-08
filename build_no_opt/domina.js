@@ -740,7 +740,7 @@ return goog.dom.htmlToDocumentFragment.call(null,s);
 }));
 NodeList.prototype.cljs$core$ISeqable$ = true;
 NodeList.prototype.cljs$core$ISeqable$_seq = (function (nodelist){
-return domina.lasy_nodelist.call(null,nodelist);
+return domina.lazy_nodelist.call(null,nodelist);
 });
 NodeList.prototype.cljs$core$IIndexed$ = true;
 NodeList.prototype.cljs$core$IIndexed$_nth = (function() {

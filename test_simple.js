@@ -9940,7 +9940,7 @@ domina.single_node.string = function(a) {
 };
 NodeList.prototype.cljs$core$ISeqable$ = !0;
 NodeList.prototype.cljs$core$ISeqable$_seq = function(a) {
-  return domina.lasy_nodelist.call(null, a)
+  return domina.lazy_nodelist.call(null, a)
 };
 NodeList.prototype.cljs$core$IIndexed$ = !0;
 NodeList.prototype.cljs$core$IIndexed$_nth = function() {

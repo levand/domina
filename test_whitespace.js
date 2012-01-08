@@ -15028,7 +15028,7 @@ domina.xpath.select_nodes = function select_nodes(expr, node) {
   })
 };
 domina.xpath.html_root = function html_root() {
-  return document.getElementsByTagNameAndClass("html")
+  return goog.dom.getElementsByTagNameAndClass.call(null, "html")
 };
 domina.xpath.xpath = function() {
   var xpath = null;

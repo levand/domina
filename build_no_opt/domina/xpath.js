@@ -78,7 +78,7 @@ break;
 }));
 });
 domina.xpath.html_root = (function html_root(){
-return document.getElementsByTagNameAndClass("html");
+return goog.dom.getElementsByTagNameAndClass.call(null,"html");
 });
 /**
 * Returns content based on an xpath expression. Takes an optional content as a base; if none is given, uses js/document as a base.

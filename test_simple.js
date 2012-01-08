@@ -10024,7 +10024,7 @@ domina.xpath.select_nodes = function(a, b) {
   })
 };
 domina.xpath.html_root = function() {
-  return document.getElementsByTagNameAndClass("html")
+  return goog.dom.getElementsByTagNameAndClass.call(null, "html")
 };
 domina.xpath.xpath = function() {
   var a = null, b = function(b, d) {

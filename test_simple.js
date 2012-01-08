@@ -9625,17 +9625,17 @@ var domina = {DomContent:{}, nodes:function(a) {
   return goog.dom.getElement.call(null, cljs.core.name.call(null, a))
 }};
 domina.by_class = function by_class(b) {
-  if(cljs.core.truth_(cljs.core.undefined_QMARK_.call(null, domina.t2932))) {
-    domina.t2932 = function(b, d) {
+  if(cljs.core.truth_(cljs.core.undefined_QMARK_.call(null, domina.t2920))) {
+    domina.t2920 = function(b, d) {
       this.class_name = b;
       this.by_class = d
-    }, domina.t2932.prototype.domina$DomContent$ = !0, domina.t2932.prototype.domina$DomContent$nodes = function() {
+    }, domina.t2920.prototype.domina$DomContent$ = !0, domina.t2920.prototype.domina$DomContent$nodes = function() {
       return goog.dom.getElementsByClass.call(null, cljs.core.name.call(null, this.class_name))
-    }, domina.t2932.prototype.domina$DomContent$single_node = function() {
+    }, domina.t2920.prototype.domina$DomContent$single_node = function() {
       return goog.dom.getElementByClass.call(null, cljs.core.name.call(null, this.class_name))
     }
   }
-  return new domina.t2932(b, by_class)
+  return new domina.t2920(b, by_class)
 };
 domina.children = function(a) {
   return cljs.core.mapcat.call(null, goog.dom.getChildren, domina.nodes.call(null, a))
@@ -9957,27 +9957,6 @@ NodeList.prototype.cljs$core$IIndexed$_nth = function() {
 }();
 NodeList.prototype.cljs$core$ICounted$ = !0;
 NodeList.prototype.cljs$core$ICounted$_count = function(a) {
-  return a.length
-};
-StaticNodeList.prototype.cljs$core$ISeqable$ = !0;
-StaticNodeList.prototype.cljs$core$ISeqable$_seq = function(a) {
-  return domina.lazy_nodelist.call(null, a)
-};
-StaticNodeList.prototype.cljs$core$IIndexed$ = !0;
-StaticNodeList.prototype.cljs$core$IIndexed$_nth = function() {
-  var a = null;
-  return function(a, c, d) {
-    switch(arguments.length) {
-      case 2:
-        return a.item(c);
-      case 3:
-        return cljs.core.truth_(a.length <= c) ? d : cljs.core.nth.call(null, a, c)
-    }
-    throw"Invalid arity: " + arguments.length;
-  }
-}();
-StaticNodeList.prototype.cljs$core$ICounted$ = !0;
-StaticNodeList.prototype.cljs$core$ICounted$_count = function(a) {
   return a.length
 };
 HTMLCollection.prototype.cljs$core$ISeqable$ = !0;

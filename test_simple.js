@@ -9939,8 +9939,8 @@ domina.single_node.string = function(a) {
   return goog.dom.htmlToDocumentFragment.call(null, a)
 };
 NodeList.prototype.cljs$core$ISeqable$ = !0;
-NodeList.prototype.cljs$core$ISeqable$_seq = function() {
-  return null
+NodeList.prototype.cljs$core$ISeqable$_seq = function(a) {
+  return domina.lasy_nodelist.call(null, a)
 };
 NodeList.prototype.cljs$core$IIndexed$ = !0;
 NodeList.prototype.cljs$core$IIndexed$_nth = function() {
@@ -9956,8 +9956,8 @@ NodeList.prototype.cljs$core$IIndexed$_nth = function() {
   }
 }();
 NodeList.prototype.cljs$core$ICounted$ = !0;
-NodeList.prototype.cljs$core$ICounted$_count = function() {
-  return null
+NodeList.prototype.cljs$core$ICounted$_count = function(a) {
+  return a.length
 };
 if(cljs.core.truth_(window.StaticNodeList)) {
   StaticNodeList.prototype.cljs$core$ISeqable$ = !0, StaticNodeList.prototype.cljs$core$ISeqable$_seq = function(a) {

@@ -740,7 +740,7 @@ return goog.dom.htmlToDocumentFragment.call(null,s);
 }));
 NodeList.prototype.cljs$core$ISeqable$ = true;
 NodeList.prototype.cljs$core$ISeqable$_seq = (function (nodelist){
-return null;
+return domina.lasy_nodelist.call(null,nodelist);
 });
 NodeList.prototype.cljs$core$IIndexed$ = true;
 NodeList.prototype.cljs$core$IIndexed$_nth = (function() {
@@ -769,7 +769,7 @@ return G__2745;
 ;
 NodeList.prototype.cljs$core$ICounted$ = true;
 NodeList.prototype.cljs$core$ICounted$_count = (function (nodelist){
-return null;
+return nodelist.length;
 });
 if(cljs.core.truth_(window.StaticNodeList))
 {StaticNodeList.prototype.cljs$core$ISeqable$ = true;

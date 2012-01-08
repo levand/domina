@@ -43,7 +43,7 @@ domina.xpath.select_node = (function select_node(expr,node){
 return domina.xpath.select_node_STAR_.call(null,expr,node,(function (node,expr){
 return node.selectSingleNode(expr);
 }),(function (resolver,doc,node,expr){
-var result__2440 = doc.evaluate(expr,node,resolver,XPathResult.FIRST_ORDERED_NODE_TYPE,null);
+var result__2440 = doc.evaluate(expr,node,null,XPathResult.FIRST_ORDERED_NODE_TYPE,null);
 
 return result__2440.singleNodeValue;
 }));
@@ -55,7 +55,7 @@ domina.xpath.select_nodes = (function select_nodes(expr,node){
 return domina.xpath.select_node_STAR_.call(null,expr,node,(function (node,expr){
 return node.selectNodes(expr);
 }),(function (resolver,doc,node,expr){
-var result__2441 = doc.evaluate(expr,node,resolver,XPathResult.ORDERED_NODE_SNAPSHOT_TYPE,null);
+var result__2441 = doc.evaluate(expr,node,null,XPathResult.ORDERED_NODE_SNAPSHOT_TYPE,null);
 var num_results__2442 = result__2441.snapshotLength;
 
 var i__2443 = 0;

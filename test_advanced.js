@@ -3372,14 +3372,14 @@ function qe(b, c) {
   return pe.call(f, b, c, function(b, c) {
     return b.selectSingleNode(c)
   }, function(b, c, j, m) {
-    return c.evaluate(m, j, b, XPathResult.FIRST_ORDERED_NODE_TYPE, f).singleNodeValue
+    return c.evaluate(m, j, f, XPathResult.FIRST_ORDERED_NODE_TYPE, f).singleNodeValue
   })
 }
 function re(b, c) {
   return pe.call(f, b, c, function(b, c) {
     return b.selectNodes(c)
   }, function(b, c, j, m) {
-    for(var b = c.evaluate(m, j, b, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, f), c = b.snapshotLength, j = 0, q = f;;) {
+    for(var b = c.evaluate(m, j, f, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, f), c = b.snapshotLength, j = 0, q = f;;) {
       if(n(j < c)) {
         m = j + 1, q = z.call(f, b.snapshotItem(j), q), j = m
       }else {

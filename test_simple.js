@@ -10007,14 +10007,14 @@ domina.xpath.select_node = function(a, b) {
   return domina.xpath.select_node_STAR_.call(null, a, b, function(a, b) {
     return a.selectSingleNode(b)
   }, function(a, b, e, f) {
-    return b.evaluate(f, e, a, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue
+    return b.evaluate(f, e, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue
   })
 };
 domina.xpath.select_nodes = function(a, b) {
   return domina.xpath.select_node_STAR_.call(null, a, b, function(a, b) {
     return a.selectNodes(b)
   }, function(a, b, e, f) {
-    for(var a = b.evaluate(f, e, a, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null), b = a.snapshotLength, e = 0, g = null;;) {
+    for(var a = b.evaluate(f, e, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null), b = a.snapshotLength, e = 0, g = null;;) {
       if(cljs.core.truth_(e < b)) {
         f = e + 1, g = cljs.core.cons.call(null, a.snapshotItem(e), g), e = f
       }else {

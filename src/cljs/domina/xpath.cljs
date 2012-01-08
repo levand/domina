@@ -15,11 +15,9 @@
           (do
             (.setProperty doc "SelectionLanguage" "XPath")
             (technique-1 node path))
-          (and (. doc createNSResolver)
-               (. doc evaluate))
-          (let [resolver (.createNSResolver doc (. doc documentElement))]
-            (technique-2 resolver doc node path))
-          :else (throw (Error. "Could not find XPath support in this browser.")))))
+          (. doc evaluate)
+          (technique-2 nil doc node path)
+          :else (throw (js/Error. "Could not find XPath support in this browser.")))))
 
 (defn- select-node
   "Selects a single node using an XPath expression and a root node"
@@ -28,7 +26,7 @@
                 (fn [node expr]
                   (.selectSingleNode node expr))
                 (fn [resolver doc node expr]
-                  (let [result (.evaluate doc expr node resolver
+                  (let [result (.evaluate doc expr node nil
                                           XPathResult/FIRST_ORDERED_NODE_TYPE nil)]
                     (. result singleNodeValue)))))
 
@@ -39,7 +37,7 @@
                 (fn [node expr]
                   (.selectNodes node expr))
                 (fn [resolver doc node expr]
-                  (let [result (.evaluate doc expr node resolver
+                  (let [result (.evaluate doc expr node nil
                                           XPathResult/ORDERED_NODE_SNAPSHOT_TYPE nil)
                         num-results (.snapshotLength result)]
                     (loop [i 0 acc nil]
@@ -47,9 +45,13 @@
                         (recur (inc i) (cons (.snapshotItem result i) acc))
                         acc))))))
 
+(defn- root-element
+  []
+  (aget (dom/getElementsByTagNameAndClass "html") 0))
+
 (defn xpath
   "Returns content based on an xpath expression. Takes an optional content as a base; if none is given, uses js/document as a base."
-  ([expr] (xpath js/document expr))
+  ([expr] (xpath (root-element) expr))
   ([base expr] (reify domina/DomContent
                  (nodes [_] (mapcat (partial select-nodes expr) (domina/nodes base)))
                  (single-node [_] (first (filter (complement nil?)

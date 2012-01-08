@@ -257,7 +257,7 @@
   (nodes [s] (cons (dom/htmlToDocumentFragment s)))
   (single-node [s] (dom/htmlToDocumentFragment s))
 
-  js/Node
+  js/Element
   (nodes [content] (cons content))
   (single-node [content] content)
 

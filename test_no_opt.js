@@ -1,4 +1,4 @@
-goog.addDependency("../../../lib/cybozu-xpath.js", ['cybozu.xpath'], []);
+goog.addDependency("../../js-lib/cybozu-xpath.js", ['cybozu.xpath'], []);
 goog.addDependency("../cljs/core.js", ['cljs.core'], ['goog.string', 'goog.string.StringBuffer', 'goog.object', 'goog.array']);
 goog.addDependency("../domina.js", ['domina'], ['cljs.core', 'goog.dom', 'goog.dom.xml', 'goog.dom.classes', 'goog.dom.forms', 'goog.style', 'goog.string', 'cljs.core']);
 goog.addDependency("../domina/xpath.js", ['domina.xpath'], ['cljs.core', 'domina', 'goog.dom', 'cybozu.xpath']);

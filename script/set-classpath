@@ -8,6 +8,7 @@ CP=$CP:$CLOJURESCRIPT_HOME/src/cljs
 PROJECT_DIR=`dirname $0`/..
 
 CP=$CP:$PROJECT_DIR/lib/*
+CP=$CP:$PROJECT_DIR/lib
 
 CP=$CP:$PROJECT_DIR/src/cljs
 CP=$CP:$PROJECT_DIR/src/clj

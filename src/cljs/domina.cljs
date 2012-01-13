@@ -142,12 +142,12 @@
   "Returns a map of the HTML attributes/values. Assumes content will be a single node. Attribute names are returned as keywords."
   [content]
   (let [node (single-node content)
-        attrs (. node -attributes)]
+        attrs (. node attributes)]
     (reduce conj (map
                   #(let [attr (. attrs item %)]
-                     {(keyword (.. attr -nodeName (toLowerCase)))
-                      (. attr -nodeValue)})
-                  (range (. attrs -length))))))
+                     {(keyword (.. attr nodeName (toLowerCase)))
+                      (. attr nodeValue)})
+                  (range (. attrs length))))))
 
 (defn set-styles!
   "Sets the specified CSS styles for each node in the content, given a map of names and values. Style names may be keywords or strings."
@@ -219,13 +219,13 @@
 (defn html
   "Returns the innerHTML of a node. Assumes content is a single node."
   [content]
-  (. (single-node content) -innerHTML))
+  (. (single-node content) innerHTML))
 
 (defn set-html!
   "Sets the innerHTML value for all the nodes in the given content."
   [content value]
   (doseq [node (nodes content)]
-    (set! (. node -innerHTML) value))
+    (set! (. node innerHTML) value))
   content)
 
 ;;;;;;;;;;;;;;;;;;; private helper functions ;;;;;;;;;;;;;;;;;
@@ -244,7 +244,7 @@
 (defn- lazy-nodelist
   "A lazy seq view of a js/NodeList"
   ([nl] (lazy-nodelist nl 0))
-  ([nl n] (when (< n (. nl -length))
+  ([nl n] (when (< n (. nl length))
             (lazy-seq
              (cons (. nl (item n))
                    (lazy-nodelist nl (inc n)))))))
@@ -267,25 +267,25 @@
 
 (extend-type js/NodeList
   ICounted
-  (-count [nodelist] (. nodelist -length))
+  (-count [nodelist] (. nodelist length))
 
   IIndexed
   (-nth ([nodelist n] (. nodelist (item n)))
-    ([nodelist n not-found] (if (<= (. nodelist -length) n)
+    ([nodelist n not-found] (if (<= (. nodelist length) n)
                               not-found
                               (nth nodelist n))))
   ISeqable
   (-seq [nodelist] (lazy-nodelist nodelist)))
 
 ;; StaticNodeList basically the same as NodeList, only present in IE8.
-(if (. js/window -StaticNodeList)
+(if (. js/window StaticNodeList)
   (extend-type js/StaticNodeList
     ICounted
-    (-count [nodelist] (. nodelist -length))
+    (-count [nodelist] (. nodelist length))
 
     IIndexed
     (-nth ([nodelist n] (. nodelist (item n)))
-          ([nodelist n not-found] (if (<= (. nodelist -length) n)
+          ([nodelist n not-found] (if (<= (. nodelist length) n)
                               not-found
                               (nth nodelist n))))
     ISeqable
@@ -293,11 +293,11 @@
 
 (extend-type js/HTMLCollection
   ICounted
-  (-count [coll] (. coll -length))
+  (-count [coll] (. coll length))
 
   IIndexed
   (-nth ([coll n] (. coll (item n)))
-    ([coll n not-found] (if (<= (. coll -length) n)
+    ([coll n not-found] (if (<= (. coll length) n)
                           not-found
                           (nth coll n))))
   ISeqable

@@ -96,6 +96,23 @@ Get the values of all `<input>` elements on the page:
 
 For examples of every currently implemented function, see the `test.cljs` file in the code repository, which exercises each function in unit tests against a DOM page. The `test.html` file loads and runs `test.cljs` in the context of the DOM.
 
+## Important note on IE compatibility
+
+Internet Explorer does not support DOM Level 3 XPath selectors. In order to utilize the `domina.xpath` namespace, you will need to conditionally include a pure-javascript XPath DOM Level 3 implementation.
+
+A fast implementation known to work is provided by Cybozu Labs at http://coderepos.org/share/wiki/JavaScript-XPath
+
+Including it looks like this:
+
+```html
+    <!--[if IE]><script type="text/javascript" src="cybozu-xpath.js"></script><![endif]-->
+```
+
+It was decided *not* to compile this functionality directly into Domina for two reasons:
+
+- Potential licensing issues
+- Reduced code size. With a conditional comment, the script isn't even downloaded for browsers which support XPath natively, which is obviously not possible to determine at compile-time.
+
 ## Todo
 
 There's still a lot of work to be done:

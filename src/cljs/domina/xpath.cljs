@@ -10,12 +10,12 @@
 (defn- select-node*
   [path node technique-1 technique-2]
   (let [doc (dom/getOwnerDocument node)]
-    (cond (and (. node selectSingleNode)
-               (. doc setProperty))
+    (cond (and (. node -selectSingleNode)
+               (. doc -setProperty))
           (do
             (.setProperty doc "SelectionLanguage" "XPath")
             (technique-1 node path))
-          (. doc evaluate)
+          (. doc -evaluate)
           (technique-2 nil doc node path)
           :else (throw (js/Error. "Could not find XPath support in this browser.")))))
 
@@ -28,7 +28,7 @@
                 (fn [resolver doc node expr]
                   (let [result (.evaluate doc expr node nil
                                           XPathResult/FIRST_ORDERED_NODE_TYPE nil)]
-                    (. result singleNodeValue)))))
+                    (. result -singleNodeValue)))))
 
 (defn- select-nodes
   "Selects multiple nodes using an XPath expression and a root node"
@@ -39,7 +39,7 @@
                 (fn [resolver doc node expr]
                   (let [result (.evaluate doc expr node nil
                                           XPathResult/ORDERED_NODE_SNAPSHOT_TYPE nil)
-                        num-results (.snapshotLength result)]
+                        num-results (.-snapshotLength result)]
                     (loop [i 0 acc nil]
                       (if (< i num-results)
                         (recur (inc i) (cons (.snapshotItem result i) acc))

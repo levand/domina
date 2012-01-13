@@ -1,11 +1,14 @@
 (ns domina.xpath
   (:require [domina :as domina]
-            [goog.dom :as dom]))
+            [goog.dom :as dom]
+            [cybozu.xpath :as xpath-impl]))
 
 ;; This file covers the same basic functionality as goog.dom.xml.
 ;; However, it does so in such a way that it can fall back to xpath support
-;; provided by non-native XPath implementations (e.g, http://llamalab.com/js/xpath/
-;; or http://mcc.id.au/xpathjs)
+;; provided by non-native XPath implementations. Examples include
+;; http://llamalab.com/js/xpath/ or http://mcc.id.au/xpathjs. The repository
+;; includes the implementation from Cybozu Labs
+;; http://coderepos.org/share/wiki/JavaScript-XPath
 
 (defn- select-node*
   [path node technique-1 technique-2]

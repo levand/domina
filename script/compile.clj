@@ -2,6 +2,9 @@
 
 (def ^:dynamic *pretty-print* true)
 
+(def foreign-libs [{:file "js-lib/
+                    :provides ["cybozu.xpath"]}])
+
 (time
  (do
    (println "Compiling IE test")
@@ -9,12 +12,14 @@
     (build "src/cljs"
            {:optimizations :whitespace
             :pretty-print *pretty-print*
+            :foreign-libs foreign-libs
             :output-dir "build/test_ie"
             :output-to "public/test_ie.js"}))
    (println "Compiling without any optimizations...")
    (time
     (build "test/cljs"
            {:pretty-print *pretty-print*
+            :foreign-libs foreign-libs
             :output-dir "public/build_no_opt"
             :output-to "public/test_no_opt.js"}))
    (println "Compiling with whitespace optimizations...")
@@ -22,6 +27,7 @@
     (build "test/cljs"
            {:optimizations :whitespace
             :pretty-print *pretty-print*
+            :foreign-libs foreign-libs
             :output-dir "build/whitespace"
             :output-to "public/test_whitespace.js"}))
    (println "Compiling with simple optimizations...")
@@ -29,6 +35,7 @@
     (build "test/cljs"
            {:optimizations :simple
             :pretty-print *pretty-print*
+            :foreign-libs foreign-libs
             :output-dir "build/simple"
             :output-to "public/test_simple.js"}))
    (println "Compiling with advanced optimizations...")
@@ -36,6 +43,7 @@
     (build "test/cljs"
            {:optimizations :advanced
             :pretty-print *pretty-print*
+            :foreign-libs foreign-libs
             :output-dir "build/advanced"
             :output-to "public/test_advanced.js"}))
    (println "Compilation complete.")))

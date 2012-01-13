@@ -145,7 +145,7 @@
         attrs (. node -attributes)]
     (reduce conj (map
                   #(let [attr (. attrs item %)]
-                     {(keyword (.. attr nodeName (toLowerCase)))
+                     {(keyword (.. attr -nodeName (toLowerCase)))
                       (. attr -nodeValue)})
                   (range (. attrs -length))))))
 

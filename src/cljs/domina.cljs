@@ -244,7 +244,7 @@
 (defn- lazy-nodelist
   "A lazy seq view of a js/NodeList"
   ([nl] (lazy-nodelist nl 0))
-  ([nl n] (when (< n (. nl length))
+  ([nl n] (when (< n (. nl -length))
             (lazy-seq
              (cons (. nl (item n))
                    (lazy-nodelist nl (inc n)))))))
@@ -267,11 +267,11 @@
 
 (extend-type js/NodeList
   ICounted
-  (-count [nodelist] (. nodelist length))
+  (-count [nodelist] (. nodelist -length))
 
   IIndexed
   (-nth ([nodelist n] (. nodelist (item n)))
-    ([nodelist n not-found] (if (<= (. nodelist length) n)
+    ([nodelist n not-found] (if (<= (. nodelist -length) n)
                               not-found
                               (nth nodelist n))))
   ISeqable
@@ -281,11 +281,11 @@
 (if (. js/window -StaticNodeList)
   (extend-type js/StaticNodeList
     ICounted
-    (-count [nodelist] (. nodelist length))
+    (-count [nodelist] (. nodelist -length))
 
     IIndexed
     (-nth ([nodelist n] (. nodelist (item n)))
-          ([nodelist n not-found] (if (<= (. nodelist length) n)
+          ([nodelist n not-found] (if (<= (. nodelist -length) n)
                               not-found
                               (nth nodelist n))))
     ISeqable
@@ -293,11 +293,11 @@
 
 (extend-type js/HTMLCollection
   ICounted
-  (-count [coll] (. coll length))
+  (-count [coll] (. coll -length))
 
   IIndexed
   (-nth ([coll n] (. coll (item n)))
-    ([coll n not-found] (if (<= (. coll length) n)
+    ([coll n not-found] (if (<= (. coll -length) n)
                           not-found
                           (nth coll n))))
   ISeqable

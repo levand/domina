@@ -2,6 +2,7 @@ goog.provide('domina.xpath');
 goog.require('cljs.core');
 goog.require('domina');
 goog.require('goog.dom');
+goog.require('cybozu.xpath');
 domina.xpath.select_node_STAR_ = (function select_node_STAR_(path,node,technique_1,technique_2){
 var doc__2434 = goog.dom.getOwnerDocument.call(null,node);
 

@@ -142,12 +142,12 @@
   "Returns a map of the HTML attributes/values. Assumes content will be a single node. Attribute names are returned as keywords."
   [content]
   (let [node (single-node content)
-        attrs (. node attributes)]
+        attrs (. node -attributes)]
     (reduce conj (map
                   #(let [attr (. attrs item %)]
                      {(keyword (.. attr nodeName (toLowerCase)))
-                      (. attr nodeValue)})
-                  (range (. attrs length))))))
+                      (. attr -nodeValue)})
+                  (range (. attrs -length))))))
 
 (defn set-styles!
   "Sets the specified CSS styles for each node in the content, given a map of names and values. Style names may be keywords or strings."
@@ -219,13 +219,13 @@
 (defn html
   "Returns the innerHTML of a node. Assumes content is a single node."
   [content]
-  (. (single-node content) innerHTML))
+  (. (single-node content) -innerHTML))
 
 (defn set-html!
   "Sets the innerHTML value for all the nodes in the given content."
   [content value]
   (doseq [node (nodes content)]
-    (set! (. node innerHTML) value))
+    (set! (. node -innerHTML) value))
   content)
 
 ;;;;;;;;;;;;;;;;;;; private helper functions ;;;;;;;;;;;;;;;;;
@@ -278,7 +278,7 @@
   (-seq [nodelist] (lazy-nodelist nodelist)))
 
 ;; StaticNodeList basically the same as NodeList, only present in IE8.
-(if (. js/window StaticNodeList)
+(if (. js/window -StaticNodeList)
   (extend-type js/StaticNodeList
     ICounted
     (-count [nodelist] (. nodelist length))

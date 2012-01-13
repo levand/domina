@@ -5166,6 +5166,7 @@ var cybozu = {xpath:{}};
       a.XPathExpression.prototype.evaluate = function(b, c) {
         return new a.XPathResult(this.expr.evaluate(new v(b)), c)
       };
+      window.XPathExpression = a.XPathExpression;
       a.XPathResult = function(a, b) {
         if(b == 0) {
           switch(typeof a) {
@@ -5208,6 +5209,7 @@ var cybozu = {xpath:{}};
             this.singleNodeValue = a.first()
         }
       };
+      window.XPathResult = a.XPathResult;
       a.XPathResult.prototype.iterateNext = function() {
         return this.nodes[this.index++]
       };

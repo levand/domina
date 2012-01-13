@@ -2735,6 +2735,7 @@ var install = function(win) {
     win.XPathExpression.prototype.evaluate = function(node, type) {
         return new win.XPathResult(this.expr.evaluate(new Ctx(node)), type);
     };
+    window['XPathExpression'] = win.XPathExpression
     
     win.XPathResult = function (value, type) {
         if (type == 0) {
@@ -2769,6 +2770,7 @@ var install = function(win) {
                 return;
         }
     };
+    window['XPathResult'] = win.XPathResult
     
     win.XPathResult.prototype.iterateNext = function() { return this.nodes[this.index++] };
     win.XPathResult.prototype.snapshotItem = function(i) { return this.nodes[i] };

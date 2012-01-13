@@ -6665,6 +6665,7 @@ goog.provide("cybozu.xpath");
     win.XPathExpression.prototype.evaluate = function(node, type) {
       return new win.XPathResult(this.expr.evaluate(new Ctx(node)), type)
     };
+    window["XPathExpression"] = win.XPathExpression;
     win.XPathResult = function(value, type) {
       if(type == 0) {
         switch(typeof value) {
@@ -6708,6 +6709,7 @@ goog.provide("cybozu.xpath");
           return
       }
     };
+    window["XPathResult"] = win.XPathResult;
     win.XPathResult.prototype.iterateNext = function() {
       return this.nodes[this.index++]
     };

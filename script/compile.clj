@@ -2,7 +2,7 @@
 
 (def ^:dynamic *pretty-print* true)
 
-(def foreign-libs [{:file "cybozu-xpath.js"
+(def foreign-libs [{:file "js-lib/
                     :provides ["cybozu.xpath"]}])
 
 (time

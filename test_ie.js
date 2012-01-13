@@ -4727,6 +4727,2024 @@ goog.dom.forms.setSelectMultiple_ = function(el, opt_value) {
     }
   }
 };
+goog.provide("cybozu.xpath");
+(function() {
+  var undefined = void 0;
+  var defaultConfig = {targetFrame:undefined, exportInstaller:false, useNative:true, useInnerText:true};
+  var config;
+  if(window.jsxpath) {
+    config = window.jsxpath
+  }else {
+    var scriptElms = document.getElementsByTagName("script");
+    var scriptElm = scriptElms[scriptElms.length - 1];
+    var scriptSrc = scriptElm.src;
+    config = {};
+    var scriptSrcMatchResult = scriptSrc.match(/\?(.*)$/);
+    if(scriptSrcMatchResult) {
+      var configStrings = scriptSrcMatchResult[1].split("&");
+      for(var i = 0, l = configStrings.length;i < l;i++) {
+        var configString = configStrings[i];
+        var configStringSplited = configString.split("=");
+        var configName = configStringSplited[0];
+        var configValue = configStringSplited[1];
+        if(configValue == undefined) {
+          configValue == true
+        }else {
+          if(configValue == "false" || /^-?\d+$/.test(configValue)) {
+            configValue = eval(configValue)
+          }
+        }
+        config[configName] = configValue
+      }
+    }
+  }
+  for(var n in defaultConfig) {
+    if(!(n in config)) {
+      config[n] = defaultConfig[n]
+    }
+  }
+  config.hasNative = !!(document.implementation && document.implementation.hasFeature && document.implementation.hasFeature("XPath", null));
+  if(config.hasNative && config.useNative && !config.exportInstaller) {
+    return
+  }
+  var BinaryExpr;
+  var FilterExpr;
+  var FunctionCall;
+  var Literal;
+  var NameTest;
+  var NodeSet;
+  var NodeType;
+  var NodeUtil;
+  var Number;
+  var PathExpr;
+  var Step;
+  var UnaryExpr;
+  var UnionExpr;
+  var VariableReference;
+  var uai = new function() {
+    var ua = navigator.userAgent;
+    if(RegExp == undefined) {
+      if(ua.indexOf("Opera") >= 0) {
+        this.opera = true
+      }else {
+        if(ua.indexOf("Netscape") >= 0) {
+          this.netscape = true
+        }else {
+          if(ua.indexOf("Mozilla/") == 0) {
+            this.mozilla = true
+          }else {
+            this.unknown = true
+          }
+        }
+      }
+      if(ua.indexOf("Gecko/") >= 0) {
+        this.gecko = true
+      }
+      if(ua.indexOf("Win") >= 0) {
+        this.windows = true
+      }else {
+        if(ua.indexOf("Mac") >= 0) {
+          this.mac = true
+        }else {
+          if(ua.indexOf("Linux") >= 0) {
+            this.linux = true
+          }else {
+            if(ua.indexOf("BSD") >= 0) {
+              this.bsd = true
+            }else {
+              if(ua.indexOf("SunOS") >= 0) {
+                this.sunos = true
+              }
+            }
+          }
+        }
+      }
+    }else {
+      if(/AppleWebKit\/(\d+(?:\.\d+)*)/.test(ua)) {
+        this.applewebkit = RegExp.$1;
+        if(RegExp.$1.charAt(0) == 4) {
+          this.applewebkit2 = true
+        }else {
+          this.applewebkit3 = true
+        }
+      }else {
+        if(typeof Components == "object" && (/Gecko\/(\d{8})/.test(ua) || navigator.product == "Gecko" && /^(\d{8})$/.test(navigator.productSub))) {
+          this.gecko = RegExp.$1
+        }
+      }
+      if(typeof opera == "object" && typeof opera.version == "function") {
+        this.opera = opera.version();
+        this["opera" + this.opera[0] + this.opera[2]] = true
+      }else {
+        if(typeof opera == "object" && /Opera[\/ ](\d+\.\d+)/.test(ua)) {
+          this.opera = RegExp.$1
+        }else {
+          if(this.ie) {
+          }else {
+            if(/Safari\/(\d+(?:\.\d+)*)/.test(ua)) {
+              this.safari = RegExp.$1
+            }else {
+              if(/NetFront\/(\d+(?:\.\d+)*)/.test(ua)) {
+                this.netfront = RegExp.$1
+              }else {
+                if(/Konqueror\/(\d+(?:\.\d+)*)/.test(ua)) {
+                  this.konqueror = RegExp.$1
+                }else {
+                  if(ua.indexOf("(compatible;") < 0 && /^Mozilla\/(\d+\.\d+)/.test(ua)) {
+                    this.mozilla = RegExp.$1;
+                    if(/\([^(]*rv:(\d+(?:\.\d+)*).*?\)/.test(ua)) {
+                      this.mozillarv = RegExp.$1
+                    }
+                    if(/Firefox\/(\d+(?:\.\d+)*)/.test(ua)) {
+                      this.firefox = RegExp.$1
+                    }else {
+                      if(/Netscape\d?\/(\d+(?:\.\d+)*)/.test(ua)) {
+                        this.netscape = RegExp.$1
+                      }
+                    }
+                  }else {
+                    this.unknown = true
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      if(ua.indexOf("Win 9x 4.90") >= 0) {
+        this.windows = "ME"
+      }else {
+        if(/Win(?:dows)? ?(NT ?(\d+\.\d+)?|\d+|ME|Vista|XP)/.test(ua)) {
+          this.windows = RegExp.$1;
+          if(RegExp.$2) {
+            this.winnt = RegExp.$2
+          }else {
+            switch(RegExp.$1) {
+              case "2000":
+                this.winnt = "5.0";
+                break;
+              case "XP":
+                this.winnt = "5.1";
+                break;
+              case "Vista":
+                this.winnt = "6.0";
+                break
+            }
+          }
+        }else {
+          if(ua.indexOf("Mac") >= 0) {
+            this.mac = true
+          }else {
+            if(ua.indexOf("Linux") >= 0) {
+              this.linux = true
+            }else {
+              if(/(\w*BSD)/.test(ua)) {
+                this.bsd = RegExp.$1
+              }else {
+                if(ua.indexOf("SunOS") >= 0) {
+                  this.sunos = true
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  };
+  var Lexer = function(source) {
+    var proto = Lexer.prototype;
+    var tokens = source.match(proto.regs.token);
+    for(var i = 0, l = tokens.length;i < l;i++) {
+      if(proto.regs.strip.test(tokens[i])) {
+        tokens.splice(i, 1)
+      }
+    }
+    for(var n in proto) {
+      tokens[n] = proto[n]
+    }
+    tokens.index = 0;
+    return tokens
+  };
+  Lexer.prototype.regs = {token:/\$?(?:(?![0-9-])[\w-]+:)?(?![0-9-])[\w-]+|\/\/|\.\.|::|\d+(?:\.\d*)?|\.\d+|"[^"]*"|'[^']*'|[!<>]=|(?![0-9-])[\w-]+:\*|\s+|./g, strip:/^\s/};
+  Lexer.prototype.peek = function(i) {
+    return this[this.index + (i || 0)]
+  };
+  Lexer.prototype.next = function() {
+    return this[this.index++]
+  };
+  Lexer.prototype.back = function() {
+    this.index--
+  };
+  Lexer.prototype.empty = function() {
+    return this.length <= this.index
+  };
+  var Ctx = function(node, position, last) {
+    this.node = node;
+    this.position = position || 1;
+    this.last = last || 1
+  };
+  var BaseExpr = function() {
+  };
+  BaseExpr.prototype.number = function(ctx) {
+    var exrs = this.evaluate(ctx);
+    if(exrs.isNodeSet) {
+      return exrs.number()
+    }
+    return+exrs
+  };
+  BaseExpr.prototype.string = function(ctx) {
+    var exrs = this.evaluate(ctx);
+    if(exrs.isNodeSet) {
+      return exrs.string()
+    }
+    return"" + exrs
+  };
+  BaseExpr.prototype.bool = function(ctx) {
+    var exrs = this.evaluate(ctx);
+    if(exrs.isNodeSet) {
+      return exrs.bool()
+    }
+    return!!exrs
+  };
+  var BaseExprHasPredicates = function() {
+  };
+  BaseExprHasPredicates.parsePredicates = function(lexer, expr) {
+    while(lexer.peek() == "[") {
+      lexer.next();
+      if(lexer.empty()) {
+        throw Error("missing predicate expr");
+      }
+      var predicate = BinaryExpr.parse(lexer);
+      expr.predicate(predicate);
+      if(lexer.empty()) {
+        throw Error("unclosed predicate expr");
+      }
+      if(lexer.next() != "]") {
+        lexer.back();
+        throw Error("bad token: " + lexer.next());
+      }
+    }
+  };
+  BaseExprHasPredicates.prototype = new BaseExpr;
+  BaseExprHasPredicates.prototype.evaluatePredicates = function(nodeset, start) {
+    var predicates, predicate, nodes, node, nodeset, position, reverse;
+    reverse = this.reverse;
+    predicates = this.predicates;
+    nodeset.sort();
+    for(var i = start || 0, l0 = predicates.length;i < l0;i++) {
+      predicate = predicates[i];
+      var deleteIndexes = [];
+      var nodes = nodeset.list();
+      for(var j = 0, l1 = nodes.length;j < l1;j++) {
+        position = reverse ? l1 - j : j + 1;
+        exrs = predicate.evaluate(new Ctx(nodes[j], position, l1));
+        switch(typeof exrs) {
+          case "number":
+            exrs = position == exrs;
+            break;
+          case "string":
+            exrs = !!exrs;
+            break;
+          case "object":
+            exrs = exrs.bool();
+            break
+        }
+        if(!exrs) {
+          deleteIndexes.push(j)
+        }
+      }
+      for(var j = deleteIndexes.length - 1, l1 = 0;j >= l1;j--) {
+        nodeset.del(deleteIndexes[j])
+      }
+    }
+    return nodeset
+  };
+  if(!window.BinaryExpr && window.defaultConfig) {
+    window.BinaryExpr = null
+  }
+  BinaryExpr = function(op, left, right, datatype) {
+    this.op = op;
+    this.left = left;
+    this.right = right;
+    this.datatype = BinaryExpr.ops[op][2];
+    this.needContextPosition = left.needContextPosition || right.needContextPosition;
+    this.needContextNode = left.needContextNode || right.needContextNode;
+    if(this.op == "=") {
+      if(!right.needContextNode && !right.needContextPosition && right.datatype != "nodeset" && right.datatype != "void" && left.quickAttr) {
+        this.quickAttr = true;
+        this.attrName = left.attrName;
+        this.attrValueExpr = right
+      }else {
+        if(!left.needContextNode && !left.needContextPosition && left.datatype != "nodeset" && left.datatype != "void" && right.quickAttr) {
+          this.quickAttr = true;
+          this.attrName = right.attrName;
+          this.attrValueExpr = left
+        }
+      }
+    }
+  };
+  BinaryExpr.compare = function(op, comp, left, right, ctx) {
+    var type, lnodes, rnodes, nodes, nodeset, primitive;
+    left = left.evaluate(ctx);
+    right = right.evaluate(ctx);
+    if(left.isNodeSet && right.isNodeSet) {
+      lnodes = left.list();
+      rnodes = right.list();
+      for(var i = 0, l0 = lnodes.length;i < l0;i++) {
+        for(var j = 0, l1 = rnodes.length;j < l1;j++) {
+          if(comp(NodeUtil.to("string", lnodes[i]), NodeUtil.to("string", rnodes[j]))) {
+            return true
+          }
+        }
+      }
+      return false
+    }
+    if(left.isNodeSet || right.isNodeSet) {
+      if(left.isNodeSet) {
+        nodeset = left, primitive = right
+      }else {
+        nodeset = right, primitive = left
+      }
+      nodes = nodeset.list();
+      type = typeof primitive;
+      for(var i = 0, l = nodes.length;i < l;i++) {
+        if(comp(NodeUtil.to(type, nodes[i]), primitive)) {
+          return true
+        }
+      }
+      return false
+    }
+    if(op == "=" || op == "!=") {
+      if(typeof left == "boolean" || typeof right == "boolean") {
+        return comp(!!left, !!right)
+      }
+      if(typeof left == "number" || typeof right == "number") {
+        return comp(+left, +right)
+      }
+      return comp(left, right)
+    }
+    return comp(+left, +right)
+  };
+  BinaryExpr.ops = {"div":[6, function(left, right, ctx) {
+    return left.number(ctx) / right.number(ctx)
+  }, "number"], "mod":[6, function(left, right, ctx) {
+    return left.number(ctx) % right.number(ctx)
+  }, "number"], "*":[6, function(left, right, ctx) {
+    return left.number(ctx) * right.number(ctx)
+  }, "number"], "+":[5, function(left, right, ctx) {
+    return left.number(ctx) + right.number(ctx)
+  }, "number"], "-":[5, function(left, right, ctx) {
+    return left.number(ctx) - right.number(ctx)
+  }, "number"], "<":[4, function(left, right, ctx) {
+    return BinaryExpr.compare("<", function(a, b) {
+      return a < b
+    }, left, right, ctx)
+  }, "boolean"], ">":[4, function(left, right, ctx) {
+    return BinaryExpr.compare(">", function(a, b) {
+      return a > b
+    }, left, right, ctx)
+  }, "boolean"], "<=":[4, function(left, right, ctx) {
+    return BinaryExpr.compare("<=", function(a, b) {
+      return a <= b
+    }, left, right, ctx)
+  }, "boolean"], ">=":[4, function(left, right, ctx) {
+    return BinaryExpr.compare(">=", function(a, b) {
+      return a >= b
+    }, left, right, ctx)
+  }, "boolean"], "=":[3, function(left, right, ctx) {
+    return BinaryExpr.compare("=", function(a, b) {
+      return a == b
+    }, left, right, ctx)
+  }, "boolean"], "!=":[3, function(left, right, ctx) {
+    return BinaryExpr.compare("!=", function(a, b) {
+      return a != b
+    }, left, right, ctx)
+  }, "boolean"], "and":[2, function(left, right, ctx) {
+    return left.bool(ctx) && right.bool(ctx)
+  }, "boolean"], "or":[1, function(left, right, ctx) {
+    return left.bool(ctx) || right.bool(ctx)
+  }, "boolean"]};
+  BinaryExpr.parse = function(lexer) {
+    var op, precedence, info, expr, stack = [], index = lexer.index;
+    while(true) {
+      if(lexer.empty()) {
+        throw Error("missing right expression");
+      }
+      expr = UnaryExpr.parse(lexer);
+      op = lexer.next();
+      if(!op) {
+        break
+      }
+      info = this.ops[op];
+      precedence = info && info[0];
+      if(!precedence) {
+        lexer.back();
+        break
+      }
+      while(stack.length && precedence <= this.ops[stack[stack.length - 1]][0]) {
+        expr = new BinaryExpr(stack.pop(), stack.pop(), expr)
+      }
+      stack.push(expr, op)
+    }
+    while(stack.length) {
+      expr = new BinaryExpr(stack.pop(), stack.pop(), expr)
+    }
+    return expr
+  };
+  BinaryExpr.prototype = new BaseExpr;
+  BinaryExpr.prototype.evaluate = function(ctx) {
+    return BinaryExpr.ops[this.op][1](this.left, this.right, ctx)
+  };
+  BinaryExpr.prototype.show = function(indent) {
+    indent = indent || "";
+    var t = "";
+    t += indent + "binary: " + this.op + "\n";
+    indent += "    ";
+    t += this.left.show(indent);
+    t += this.right.show(indent);
+    return t
+  };
+  if(!window.UnaryExpr && window.defaultConfig) {
+    window.UnaryExpr = null
+  }
+  UnaryExpr = function(op, expr) {
+    this.op = op;
+    this.expr = expr;
+    this.needContextPosition = expr.needContextPosition;
+    this.needContextNode = expr.needContextNode
+  };
+  UnaryExpr.ops = {"-":1};
+  UnaryExpr.parse = function(lexer) {
+    var token;
+    if(this.ops[lexer.peek()]) {
+      return new UnaryExpr(lexer.next(), UnaryExpr.parse(lexer))
+    }else {
+      return UnionExpr.parse(lexer)
+    }
+  };
+  UnaryExpr.prototype = new BaseExpr;
+  UnaryExpr.prototype.datatype = "number";
+  UnaryExpr.prototype.evaluate = function(ctx) {
+    return-this.expr.number(ctx)
+  };
+  UnaryExpr.prototype.show = function(indent) {
+    indent = indent || "";
+    var t = "";
+    t += indent + "unary: " + this.op + "\n";
+    indent += "    ";
+    t += this.expr.show(indent);
+    return t
+  };
+  if(!window.UnionExpr && window.defaultConfig) {
+    window.UnionExpr = null
+  }
+  UnionExpr = function() {
+    this.paths = []
+  };
+  UnionExpr.ops = {"|":1};
+  UnionExpr.parse = function(lexer) {
+    var union, expr;
+    expr = PathExpr.parse(lexer);
+    if(!this.ops[lexer.peek()]) {
+      return expr
+    }
+    union = new UnionExpr;
+    union.path(expr);
+    while(true) {
+      if(!this.ops[lexer.next()]) {
+        break
+      }
+      if(lexer.empty()) {
+        throw Error("missing next union location path");
+      }
+      union.path(PathExpr.parse(lexer))
+    }
+    lexer.back();
+    return union
+  };
+  UnionExpr.prototype = new BaseExpr;
+  UnionExpr.prototype.datatype = "nodeset";
+  UnionExpr.prototype.evaluate = function(ctx) {
+    var paths = this.paths;
+    var nodeset = new NodeSet;
+    for(var i = 0, l = paths.length;i < l;i++) {
+      var exrs = paths[i].evaluate(ctx);
+      if(!exrs.isNodeSet) {
+        throw Error("PathExpr must be nodeset");
+      }
+      nodeset.merge(exrs)
+    }
+    return nodeset
+  };
+  UnionExpr.prototype.path = function(path) {
+    this.paths.push(path);
+    if(path.needContextPosition) {
+      this.needContextPosition = true
+    }
+    if(path.needContextNode) {
+      this.needContextNode = true
+    }
+  };
+  UnionExpr.prototype.show = function(indent) {
+    indent = indent || "";
+    var t = "";
+    t += indent + "union:" + "\n";
+    indent += "    ";
+    for(var i = 0;i < this.paths.length;i++) {
+      t += this.paths[i].show(indent)
+    }
+    return t
+  };
+  if(!window.PathExpr && window.defaultConfig) {
+    window.PathExpr = null
+  }
+  PathExpr = function(filter) {
+    this.filter = filter;
+    this.steps = [];
+    this.datatype = filter.datatype;
+    this.needContextPosition = filter.needContextPosition;
+    this.needContextNode = filter.needContextNode
+  };
+  PathExpr.ops = {"//":1, "/":1};
+  PathExpr.parse = function(lexer) {
+    var op, expr, path, token;
+    if(this.ops[lexer.peek()]) {
+      op = lexer.next();
+      token = lexer.peek();
+      if(op == "/" && (lexer.empty() || token != "." && token != ".." && token != "@" && token != "*" && !/(?![0-9])[\w]/.test(token))) {
+        return FilterExpr.root()
+      }
+      path = new PathExpr(FilterExpr.root());
+      if(lexer.empty()) {
+        throw Error("missing next location step");
+      }
+      expr = Step.parse(lexer);
+      path.step(op, expr)
+    }else {
+      expr = FilterExpr.parse(lexer);
+      if(!expr) {
+        expr = Step.parse(lexer);
+        path = new PathExpr(FilterExpr.context());
+        path.step("/", expr)
+      }else {
+        if(!this.ops[lexer.peek()]) {
+          return expr
+        }else {
+          path = new PathExpr(expr)
+        }
+      }
+    }
+    while(true) {
+      if(!this.ops[lexer.peek()]) {
+        break
+      }
+      op = lexer.next();
+      if(lexer.empty()) {
+        throw Error("missing next location step");
+      }
+      path.step(op, Step.parse(lexer))
+    }
+    return path
+  };
+  PathExpr.prototype = new BaseExpr;
+  PathExpr.prototype.evaluate = function(ctx) {
+    var nodeset = this.filter.evaluate(ctx);
+    if(!nodeset.isNodeSet) {
+      throw Exception("Filter nodeset must be nodeset type");
+    }
+    var steps = this.steps;
+    for(var i = 0, l0 = steps.length;i < l0 && nodeset.length;i++) {
+      var step = steps[i][1];
+      var reverse = step.reverse;
+      var iter = nodeset.iterator(reverse);
+      var prevNodeset = nodeset;
+      nodeset = null;
+      var node, next;
+      if(!step.needContextPosition && step.axis == "following") {
+        for(node = iter();next = iter();node = next) {
+          if(uai.applewebkit2) {
+            var contains = false;
+            var ancestor = next;
+            do {
+              if(ancestor == node) {
+                contains = true;
+                break
+              }
+            }while(ancestor = ancestor.parentNode);
+            if(!contains) {
+              break
+            }
+          }else {
+            try {
+              if(!node.contains(next)) {
+                break
+              }
+            }catch(e) {
+              if(!(next.compareDocumentPosition(node) & 8)) {
+                break
+              }
+            }
+          }
+        }
+        nodeset = step.evaluate(new Ctx(node))
+      }else {
+        if(!step.needContextPosition && step.axis == "preceding") {
+          node = iter();
+          nodeset = step.evaluate(new Ctx(node))
+        }else {
+          node = iter();
+          var j = 0;
+          nodeset = step.evaluate(new Ctx(node), false, prevNodeset, j);
+          while(node = iter()) {
+            j++;
+            nodeset.merge(step.evaluate(new Ctx(node), false, prevNodeset, j))
+          }
+        }
+      }
+    }
+    return nodeset
+  };
+  PathExpr.prototype.step = function(op, step) {
+    step.op = op;
+    this.steps.push([op, step]);
+    this.quickAttr = false;
+    if(this.steps.length == 1) {
+      if(op == "/" && step.axis == "attribute") {
+        var test = step.test;
+        if(!test.notOnlyElement && test.name != "*") {
+          this.quickAttr = true;
+          this.attrName = test.name
+        }
+      }
+    }
+  };
+  PathExpr.prototype.show = function(indent) {
+    indent = indent || "";
+    var t = "";
+    t += indent + "path:" + "\n";
+    indent += "    ";
+    t += indent + "filter:" + "\n";
+    t += this.filter.show(indent + "    ");
+    if(this.steps.length) {
+      t += indent + "steps:" + "\n";
+      indent += "    ";
+      for(var i = 0;i < this.steps.length;i++) {
+        var step = this.steps[i];
+        t += indent + "operator: " + step[0] + "\n";
+        t += step[1].show(indent)
+      }
+    }
+    return t
+  };
+  if(!window.FilterExpr && window.defaultConfig) {
+    window.FilterExpr = null
+  }
+  FilterExpr = function(primary) {
+    this.primary = primary;
+    this.predicates = [];
+    this.datatype = primary.datatype;
+    this.needContextPosition = primary.needContextPosition;
+    this.needContextNode = primary.needContextNode
+  };
+  FilterExpr.parse = function(lexer) {
+    var expr, filter, token, ch;
+    token = lexer.peek();
+    ch = token.charAt(0);
+    switch(ch) {
+      case "$":
+        expr = VariableReference.parse(lexer);
+        break;
+      case "(":
+        lexer.next();
+        expr = BinaryExpr.parse(lexer);
+        if(lexer.empty()) {
+          throw Error('unclosed "("');
+        }
+        if(lexer.next() != ")") {
+          lexer.back();
+          throw Error("bad token: " + lexer.next());
+        }
+        break;
+      case '"':
+      ;
+      case "'":
+        expr = Literal.parse(lexer);
+        break;
+      default:
+        if(!isNaN(+token)) {
+          expr = Number.parse(lexer)
+        }else {
+          if(NodeType.types[token]) {
+            return null
+          }else {
+            if(/(?![0-9])[\w]/.test(ch) && lexer.peek(1) == "(") {
+              expr = FunctionCall.parse(lexer)
+            }else {
+              return null
+            }
+          }
+        }
+        break
+    }
+    if(lexer.peek() != "[") {
+      return expr
+    }
+    filter = new FilterExpr(expr);
+    BaseExprHasPredicates.parsePredicates(lexer, filter);
+    return filter
+  };
+  FilterExpr.root = function() {
+    return new FunctionCall("root-node")
+  };
+  FilterExpr.context = function() {
+    return new FunctionCall("context-node")
+  };
+  FilterExpr.prototype = new BaseExprHasPredicates;
+  FilterExpr.prototype.evaluate = function(ctx) {
+    var nodeset = this.primary.evaluate(ctx);
+    if(!nodeset.isNodeSet) {
+      if(this.predicates.length) {
+        throw Error("Primary result must be nodeset type " + "if filter have predicate expression");
+      }
+      return nodeset
+    }
+    return this.evaluatePredicates(nodeset)
+  };
+  FilterExpr.prototype.predicate = function(predicate) {
+    this.predicates.push(predicate)
+  };
+  FilterExpr.prototype.show = function(indent) {
+    indent = indent || "";
+    var t = "";
+    t += indent + "filter: " + "\n";
+    indent += "    ";
+    t += this.primary.show(indent);
+    if(this.predicates.length) {
+      t += indent + "predicates: " + "\n";
+      indent += "    ";
+      for(var i = 0;i < this.predicates.length;i++) {
+        t += this.predicates[i].show(indent)
+      }
+    }
+    return t
+  };
+  if(!window.NodeUtil && window.defaultConfig) {
+    window.NodeUtil = null
+  }
+  NodeUtil = {to:function(valueType, node) {
+    var t, type = node.nodeType;
+    if(type == 1 && config.useInnerText && !uai.applewebkit2) {
+      t = node.textContent;
+      t = t == undefined || t == null ? node.innerText : t;
+      t = t == undefined || t == null ? "" : t
+    }
+    if(typeof t != "string") {
+      if(type == 9 || type == 1) {
+        if(type == 9) {
+          node = node.documentElement
+        }else {
+          node = node.firstChild
+        }
+        for(t = "", stack = [], i = 0;node;) {
+          do {
+            if(node.nodeType != 1) {
+              t += node.nodeValue
+            }
+            stack[i++] = node
+          }while(node = node.firstChild);
+          while(i && !(node = stack[--i].nextSibling)) {
+          }
+        }
+      }else {
+        t = node.nodeValue
+      }
+    }
+    switch(valueType) {
+      case "number":
+        return+t;
+      case "boolean":
+        return!!t;
+      default:
+        return t
+    }
+  }, attrPropMap:{name:"name", "class":"className", dir:"dir", id:"id", name:"name", title:"title"}, attrMatch:function(node, attrName, attrValue) {
+    if(!attrName || attrValue == null && node.hasAttribute && node.hasAttribute(attrName) || attrValue != null && node.getAttribute && node.getAttribute(attrName) == attrValue) {
+      return true
+    }else {
+      return false
+    }
+  }, getDescendantNodes:function(test, node, nodeset, attrName, attrValue, prevNodeset, prevIndex) {
+    if(prevNodeset) {
+      prevNodeset.delDescendant(node, prevIndex)
+    }
+    if(attrValue && attrName == "id" && node.getElementById) {
+      node = node.getElementById(attrValue);
+      if(node && test.match(node)) {
+        nodeset.push(node)
+      }
+    }else {
+      if(attrValue && attrName == "name" && node.getElementsByName) {
+        var nodes = node.getElementsByName(attrValue);
+        for(var i = 0, l = nodes.length;i < l;i++) {
+          node = nodes[i];
+          if(uai.opera ? node.name == attrValue && test.match(node) : test.match(node)) {
+            nodeset.push(node)
+          }
+        }
+      }else {
+        if(attrValue && attrName == "class" && node.getElementsByClassName) {
+          var nodes = node.getElementsByClassName(attrValue);
+          for(var i = 0, l = nodes.length;i < l;i++) {
+            node = nodes[i];
+            if(node.className == attrValue && test.match(node)) {
+              nodeset.push(node)
+            }
+          }
+        }else {
+          if(test.notOnlyElement) {
+            (function(parent) {
+              var f = arguments.callee;
+              for(var node = parent.firstChild;node;node = node.nextSibling) {
+                if(NodeUtil.attrMatch(node, attrName, attrValue)) {
+                  if(test.match(node.nodeType)) {
+                    nodeset.push(node)
+                  }
+                }
+                f(node)
+              }
+            })(node)
+          }else {
+            var name = test.name;
+            if(node.getElementsByTagName) {
+              var nodes = node.getElementsByTagName(name);
+              if(nodes) {
+                var i = 0;
+                while(node = nodes[i++]) {
+                  if(NodeUtil.attrMatch(node, attrName, attrValue)) {
+                    nodeset.push(node)
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    return nodeset
+  }, getChildNodes:function(test, node, nodeset, attrName, attrValue) {
+    for(var node = node.firstChild;node;node = node.nextSibling) {
+      if(NodeUtil.attrMatch(node, attrName, attrValue)) {
+        if(test.match(node)) {
+          nodeset.push(node)
+        }
+      }
+    }
+    return nodeset
+  }};
+  if(!window.Step && window.defaultConfig) {
+    window.Step = null
+  }
+  Step = function(axis, test) {
+    this.axis = axis;
+    this.reverse = Step.axises[axis][0];
+    this.func = Step.axises[axis][1];
+    this.test = test;
+    this.predicates = [];
+    this._quickAttr = Step.axises[axis][2]
+  };
+  Step.axises = {ancestor:[true, function(test, node, nodeset, _, __, prevNodeset, prevIndex) {
+    while(node = node.parentNode) {
+      if(prevNodeset && node.nodeType == 1) {
+        prevNodeset.reserveDelByNode(node, prevIndex, true)
+      }
+      if(test.match(node)) {
+        nodeset.unshift(node)
+      }
+    }
+    return nodeset
+  }], "ancestor-or-self":[true, function(test, node, nodeset, _, __, prevNodeset, prevIndex) {
+    do {
+      if(prevNodeset && node.nodeType == 1) {
+        prevNodeset.reserveDelByNode(node, prevIndex, true)
+      }
+      if(test.match(node)) {
+        nodeset.unshift(node)
+      }
+    }while(node = node.parentNode);
+    return nodeset
+  }], attribute:[false, function(test, node, nodeset) {
+    var attrs = node.attributes;
+    if(attrs) {
+      if(test.notOnlyElement && test.type == 0 || test.name == "*") {
+        for(var i = 0, attr;attr = attrs[i];i++) {
+          nodeset.push(attr)
+        }
+      }else {
+        var attr = attrs.getNamedItem(test.name);
+        if(attr) {
+          nodeset.push(attr)
+        }
+      }
+    }
+    return nodeset
+  }], child:[false, NodeUtil.getChildNodes, true], descendant:[false, NodeUtil.getDescendantNodes, true], "descendant-or-self":[false, function(test, node, nodeset, attrName, attrValue, prevNodeset, prevIndex) {
+    if(NodeUtil.attrMatch(node, attrName, attrValue)) {
+      if(test.match(node)) {
+        nodeset.push(node)
+      }
+    }
+    return NodeUtil.getDescendantNodes(test, node, nodeset, attrName, attrValue, prevNodeset, prevIndex)
+  }, true], following:[false, function(test, node, nodeset, attrName, attrValue) {
+    do {
+      var child = node;
+      while(child = child.nextSibling) {
+        if(NodeUtil.attrMatch(child, attrName, attrValue)) {
+          if(test.match(child)) {
+            nodeset.push(child)
+          }
+        }
+        nodeset = NodeUtil.getDescendantNodes(test, child, nodeset, attrName, attrValue)
+      }
+    }while(node = node.parentNode);
+    return nodeset
+  }, true], "following-sibling":[false, function(test, node, nodeset, _, __, prevNodeset, prevIndex) {
+    while(node = node.nextSibling) {
+      if(prevNodeset && node.nodeType == 1) {
+        prevNodeset.reserveDelByNode(node, prevIndex)
+      }
+      if(test.match(node)) {
+        nodeset.push(node)
+      }
+    }
+    return nodeset
+  }], namespace:[false, function(test, node, nodeset) {
+    return nodeset
+  }], parent:[false, function(test, node, nodeset) {
+    if(node.nodeType == 9) {
+      return nodeset
+    }
+    if(node.nodeType == 2) {
+      nodeset.push(node.ownerElement);
+      return nodeset
+    }
+    var node = node.parentNode;
+    if(test.match(node)) {
+      nodeset.push(node)
+    }
+    return nodeset
+  }], preceding:[true, function(test, node, nodeset, attrName, attrValue) {
+    var parents = [];
+    do {
+      parents.unshift(node)
+    }while(node = node.parentNode);
+    for(var i = 1, l0 = parents.length;i < l0;i++) {
+      var siblings = [];
+      node = parents[i];
+      while(node = node.previousSibling) {
+        siblings.unshift(node)
+      }
+      for(var j = 0, l1 = siblings.length;j < l1;j++) {
+        node = siblings[j];
+        if(NodeUtil.attrMatch(node, attrName, attrValue)) {
+          if(test.match(node)) {
+            nodeset.push(node)
+          }
+        }
+        nodeset = NodeUtil.getDescendantNodes(test, node, nodeset, attrName, attrValue)
+      }
+    }
+    return nodeset
+  }, true], "preceding-sibling":[true, function(test, node, nodeset, _, __, prevNodeset, prevIndex) {
+    while(node = node.previousSibling) {
+      if(prevNodeset && node.nodeType == 1) {
+        prevNodeset.reserveDelByNode(node, prevIndex, true)
+      }
+      if(test.match(node)) {
+        nodeset.unshift(node)
+      }
+    }
+    return nodeset
+  }], self:[false, function(test, node, nodeset) {
+    if(test.match(node)) {
+      nodeset.push(node)
+    }
+    return nodeset
+  }]};
+  Step.parse = function(lexer) {
+    var axis, test, step, token;
+    if(lexer.peek() == ".") {
+      step = this.self();
+      lexer.next()
+    }else {
+      if(lexer.peek() == "..") {
+        step = this.parent();
+        lexer.next()
+      }else {
+        if(lexer.peek() == "@") {
+          axis = "attribute";
+          lexer.next();
+          if(lexer.empty()) {
+            throw Error("missing attribute name");
+          }
+        }else {
+          if(lexer.peek(1) == "::") {
+            if(!/(?![0-9])[\w]/.test(lexer.peek().charAt(0))) {
+              throw Error("bad token: " + lexer.next());
+            }
+            axis = lexer.next();
+            lexer.next();
+            if(!this.axises[axis]) {
+              throw Error("invalid axis: " + axis);
+            }
+            if(lexer.empty()) {
+              throw Error("missing node name");
+            }
+          }else {
+            axis = "child"
+          }
+        }
+        token = lexer.peek();
+        if(!/(?![0-9])[\w]/.test(token.charAt(0))) {
+          if(token == "*") {
+            test = NameTest.parse(lexer)
+          }else {
+            throw Error("bad token: " + lexer.next());
+          }
+        }else {
+          if(lexer.peek(1) == "(") {
+            if(!NodeType.types[token]) {
+              throw Error("invalid node type: " + token);
+            }
+            test = NodeType.parse(lexer)
+          }else {
+            test = NameTest.parse(lexer)
+          }
+        }
+        step = new Step(axis, test)
+      }
+    }
+    BaseExprHasPredicates.parsePredicates(lexer, step);
+    return step
+  };
+  Step.self = function() {
+    return new Step("self", new NodeType("node"))
+  };
+  Step.parent = function() {
+    return new Step("parent", new NodeType("node"))
+  };
+  Step.prototype = new BaseExprHasPredicates;
+  Step.prototype.evaluate = function(ctx, special, prevNodeset, prevIndex) {
+    var node = ctx.node;
+    var reverse = false;
+    if(!special && this.op == "//") {
+      if(!this.needContextPosition && this.axis == "child") {
+        if(this.quickAttr) {
+          var attrValue = this.attrValueExpr ? this.attrValueExpr.string(ctx) : null;
+          var nodeset = NodeUtil.getDescendantNodes(this.test, node, new NodeSet, this.attrName, attrValue, prevNodeset, prevIndex);
+          nodeset = this.evaluatePredicates(nodeset, 1)
+        }else {
+          var nodeset = NodeUtil.getDescendantNodes(this.test, node, new NodeSet, null, null, prevNodeset, prevIndex);
+          nodeset = this.evaluatePredicates(nodeset)
+        }
+      }else {
+        var step = new Step("descendant-or-self", new NodeType("node"));
+        var nodes = step.evaluate(ctx, false, prevNodeset, prevIndex).list();
+        var nodeset = null;
+        step.op = "/";
+        for(var i = 0, l = nodes.length;i < l;i++) {
+          if(!nodeset) {
+            nodeset = this.evaluate(new Ctx(nodes[i]), true)
+          }else {
+            nodeset.merge(this.evaluate(new Ctx(nodes[i]), true))
+          }
+        }
+        nodeset = nodeset || new NodeSet
+      }
+    }else {
+      if(this.needContextPosition) {
+        prevNodeset = null;
+        prevIndex = null
+      }
+      if(this.quickAttr) {
+        var attrValue = this.attrValueExpr ? this.attrValueExpr.string(ctx) : null;
+        var nodeset = this.func(this.test, node, new NodeSet, this.attrName, attrValue, prevNodeset, prevIndex);
+        nodeset = this.evaluatePredicates(nodeset, 1)
+      }else {
+        var nodeset = this.func(this.test, node, new NodeSet, null, null, prevNodeset, prevIndex);
+        nodeset = this.evaluatePredicates(nodeset)
+      }
+      if(prevNodeset) {
+        prevNodeset.doDel()
+      }
+    }
+    return nodeset
+  };
+  Step.prototype.predicate = function(predicate) {
+    this.predicates.push(predicate);
+    if(predicate.needContextPosition || predicate.datatype == "number" || predicate.datatype == "void") {
+      this.needContextPosition = true
+    }
+    if(this._quickAttr && this.predicates.length == 1 && predicate.quickAttr) {
+      var attrName = predicate.attrName;
+      this.attrName = attrName;
+      this.attrValueExpr = predicate.attrValueExpr;
+      this.quickAttr = true
+    }
+  };
+  Step.prototype.show = function(indent) {
+    indent = indent || "";
+    var t = "";
+    t += indent + "step: " + "\n";
+    indent += "    ";
+    if(this.axis) {
+      t += indent + "axis: " + this.axis + "\n"
+    }
+    t += this.test.show(indent);
+    if(this.predicates.length) {
+      t += indent + "predicates: " + "\n";
+      indent += "    ";
+      for(var i = 0;i < this.predicates.length;i++) {
+        t += this.predicates[i].show(indent)
+      }
+    }
+    return t
+  };
+  if(!window.NodeType && window.defaultConfig) {
+    window.NodeType = null
+  }
+  NodeType = function(name, literal) {
+    this.name = name;
+    this.literal = literal;
+    switch(name) {
+      case "comment":
+        this.type = 8;
+        break;
+      case "text":
+        this.type = 3;
+        break;
+      case "processing-instruction":
+        this.type = 7;
+        break;
+      case "node":
+        this.type = 0;
+        break
+    }
+  };
+  NodeType.types = {"comment":1, "text":1, "processing-instruction":1, "node":1};
+  NodeType.parse = function(lexer) {
+    var type, literal, ch;
+    type = lexer.next();
+    lexer.next();
+    if(lexer.empty()) {
+      throw Error("bad nodetype");
+    }
+    ch = lexer.peek().charAt(0);
+    if(ch == '"' || ch == "'") {
+      literal = Literal.parse(lexer)
+    }
+    if(lexer.empty()) {
+      throw Error("bad nodetype");
+    }
+    if(lexer.next() != ")") {
+      lexer.back();
+      throw Error("bad token " + lexer.next());
+    }
+    return new NodeType(type, literal)
+  };
+  NodeType.prototype = new BaseExpr;
+  NodeType.prototype.notOnlyElement = true;
+  NodeType.prototype.match = function(node) {
+    return!this.type || this.type == node.nodeType
+  };
+  NodeType.prototype.show = function(indent) {
+    indent = indent || "";
+    var t = "";
+    t += indent + "nodetype: " + this.type + "\n";
+    if(this.literal) {
+      indent += "    ";
+      t += this.literal.show(indent)
+    }
+    return t
+  };
+  if(!window.NameTest && window.defaultConfig) {
+    window.NameTest = null
+  }
+  NameTest = function(name) {
+    this.name = name.toLowerCase()
+  };
+  NameTest.parse = function(lexer) {
+    if(lexer.peek() != "*" && lexer.peek(1) == ":" && lexer.peek(2) == "*") {
+      return new NameTest(lexer.next() + lexer.next() + lexer.next())
+    }
+    return new NameTest(lexer.next())
+  };
+  NameTest.prototype = new BaseExpr;
+  NameTest.prototype.match = function(node) {
+    var type = node.nodeType;
+    if(type == 1 || type == 2) {
+      if(this.name == "*" || this.name == node.nodeName.toLowerCase()) {
+        return true
+      }
+    }
+    return false
+  };
+  NameTest.prototype.show = function(indent) {
+    indent = indent || "";
+    var t = "";
+    t += indent + "nametest: " + this.name + "\n";
+    return t
+  };
+  if(!window.VariableReference && window.defaultConfig) {
+    window.VariableReference = null
+  }
+  VariableReference = function(name) {
+    this.name = name.substring(1)
+  };
+  VariableReference.parse = function(lexer) {
+    var token = lexer.next();
+    if(token.length < 2) {
+      throw Error("unnamed variable reference");
+    }
+    return new VariableReference(token)
+  };
+  VariableReference.prototype = new BaseExpr;
+  VariableReference.prototype.datatype = "void";
+  VariableReference.prototype.show = function(indent) {
+    indent = indent || "";
+    var t = "";
+    t += indent + "variable: " + this.name + "\n";
+    return t
+  };
+  if(!window.Literal && window.defaultConfig) {
+    window.Literal = null
+  }
+  Literal = function(text) {
+    this.text = text.substring(1, text.length - 1)
+  };
+  Literal.parse = function(lexer) {
+    var token = lexer.next();
+    if(token.length < 2) {
+      throw Error("unclosed literal string");
+    }
+    return new Literal(token)
+  };
+  Literal.prototype = new BaseExpr;
+  Literal.prototype.datatype = "string";
+  Literal.prototype.evaluate = function(ctx) {
+    return this.text
+  };
+  Literal.prototype.show = function(indent) {
+    indent = indent || "";
+    var t = "";
+    t += indent + "literal: " + this.text + "\n";
+    return t
+  };
+  if(!window.Number && window.defaultConfig) {
+    window.Number = null
+  }
+  Number = function(digit) {
+    this.digit = +digit
+  };
+  Number.parse = function(lexer) {
+    return new Number(lexer.next())
+  };
+  Number.prototype = new BaseExpr;
+  Number.prototype.datatype = "number";
+  Number.prototype.evaluate = function(ctx) {
+    return this.digit
+  };
+  Number.prototype.show = function(indent) {
+    indent = indent || "";
+    var t = "";
+    t += indent + "number: " + this.digit + "\n";
+    return t
+  };
+  if(!window.FunctionCall && window.defaultConfig) {
+    window.FunctionCall = null
+  }
+  FunctionCall = function(name) {
+    var info = FunctionCall.funcs[name];
+    if(!info) {
+      throw Error(name + " is not a function");
+    }
+    this.name = name;
+    this.func = info[0];
+    this.args = [];
+    this.datatype = info[1];
+    if(info[2]) {
+      this.needContextPosition = true
+    }
+    this.needContextNodeInfo = info[3];
+    this.needContextNode = this.needContextNodeInfo[0]
+  };
+  FunctionCall.funcs = {"context-node":[function() {
+    if(arguments.length != 0) {
+      throw Error("Function context-node expects ()");
+    }
+    var ns;
+    ns = new NodeSet;
+    ns.push(this.node);
+    return ns
+  }, "nodeset", false, [true]], "root-node":[function() {
+    if(arguments.length != 0) {
+      throw Error("Function root-node expects ()");
+    }
+    var ns, ctxn;
+    ns = new NodeSet;
+    ctxn = this.node;
+    if(ctxn.nodeType == 9) {
+      ns.push(ctxn)
+    }else {
+      ns.push(ctxn.ownerDocument)
+    }
+    return ns
+  }, "nodeset", false, []], last:[function() {
+    if(arguments.length != 0) {
+      throw Error("Function last expects ()");
+    }
+    return this.last
+  }, "number", true, []], position:[function() {
+    if(arguments.length != 0) {
+      throw Error("Function position expects ()");
+    }
+    return this.position
+  }, "number", true, []], count:[function(ns) {
+    if(arguments.length != 1 || !(ns = ns.evaluate(this)).isNodeSet) {
+      throw Error("Function count expects (nodeset)");
+    }
+    return ns.length
+  }, "number", false, []], id:[function(s) {
+    var ids, ns, i, id, elm, ctxn, doc;
+    if(arguments.length != 1) {
+      throw Error("Function id expects (object)");
+    }
+    ctxn = this.node;
+    if(ctxn.nodeType == 9) {
+      doc = ctxn
+    }else {
+      doc = ctxn.ownerDocument
+    }
+    s = s.string(this);
+    ids = s.split(/\s+/);
+    ns = new NodeSet;
+    for(i = 0, l = ids.length;i < l;i++) {
+      id = ids[i];
+      elm = doc.getElementById(id);
+      if(uai.opera && elm && elm.id != id) {
+        var elms = doc.getElementsByName(id);
+        for(var j = 0, l0 = elms.length;j < l0;j++) {
+          elm = elms[j];
+          if(elm.id == id) {
+            ns.push(elm)
+          }
+        }
+      }else {
+        if(elm) {
+          ns.push(elm)
+        }
+      }
+    }
+    ns.isSorted = false;
+    return ns
+  }, "nodeset", false, []], "local-name":[function(ns) {
+    var nd;
+    switch(arguments.length) {
+      case 0:
+        nd = this.node;
+        break;
+      case 1:
+        if((ns = ns.evaluate(this)).isNodeSet) {
+          nd = ns.first();
+          break
+        }
+      ;
+      default:
+        throw Error("Function local-name expects (nodeset?)");break
+    }
+    return"" + nd.nodeName.toLowerCase()
+  }, "string", false, [true, false]], name:[function(ns) {
+    return FunctionCall.funcs["local-name"][0].apply(this, arguments)
+  }, "string", false, [true, false]], "namespace-uri":[function(ns) {
+    return""
+  }, "string", false, [true, false]], string:[function(s) {
+    switch(arguments.length) {
+      case 0:
+        s = NodeUtil.to("string", this.node);
+        break;
+      case 1:
+        s = s.string(this);
+        break;
+      default:
+        throw Error("Function string expects (object?)");break
+    }
+    return s
+  }, "string", false, [true, false]], concat:[function(s1, s2) {
+    if(arguments.length < 2) {
+      throw Error("Function concat expects (string, string[, ...])");
+    }
+    for(var t = "", i = 0, l = arguments.length;i < l;i++) {
+      t += arguments[i].string(this)
+    }
+    return t
+  }, "string", false, []], "starts-with":[function(s1, s2) {
+    if(arguments.length != 2) {
+      throw Error("Function starts-with expects (string, string)");
+    }
+    s1 = s1.string(this);
+    s2 = s2.string(this);
+    return s1.indexOf(s2) == 0
+  }, "boolean", false, []], contains:[function(s1, s2) {
+    if(arguments.length != 2) {
+      throw Error("Function contains expects (string, string)");
+    }
+    s1 = s1.string(this);
+    s2 = s2.string(this);
+    return s1.indexOf(s2) != -1
+  }, "boolean", false, []], substring:[function(s, n1, n2) {
+    var a1, a2;
+    s = s.string(this);
+    n1 = n1.number(this);
+    switch(arguments.length) {
+      case 2:
+        n2 = s.length - n1 + 1;
+        break;
+      case 3:
+        n2 = n2.number(this);
+        break;
+      default:
+        throw Error("Function substring expects (string, string)");break
+    }
+    n1 = Math.round(n1);
+    n2 = Math.round(n2);
+    a1 = n1 - 1;
+    a2 = n1 + n2 - 1;
+    if(a2 == Infinity) {
+      return s.substring(a1 < 0 ? 0 : a1)
+    }else {
+      return s.substring(a1 < 0 ? 0 : a1, a2)
+    }
+  }, "string", false, []], "substring-before":[function(s1, s2) {
+    var n;
+    if(arguments.length != 2) {
+      throw Error("Function substring-before expects (string, string)");
+    }
+    s1 = s1.string(this);
+    s2 = s2.string(this);
+    n = s1.indexOf(s2);
+    if(n == -1) {
+      return""
+    }
+    return s1.substring(0, n)
+  }, "string", false, []], "substring-after":[function(s1, s2) {
+    if(arguments.length != 2) {
+      throw Error("Function substring-after expects (string, string)");
+    }
+    s1 = s1.string(this);
+    s2 = s2.string(this);
+    var n = s1.indexOf(s2);
+    if(n == -1) {
+      return""
+    }
+    return s1.substring(n + s2.length)
+  }, "string", false, []], "string-length":[function(s) {
+    switch(arguments.length) {
+      case 0:
+        s = NodeUtil.to("string", this.node);
+        break;
+      case 1:
+        s = s.string(this);
+        break;
+      default:
+        throw Error("Function string-length expects (string?)");break
+    }
+    return s.length
+  }, "number", false, [true, false]], "normalize-space":[function(s) {
+    switch(arguments.length) {
+      case 0:
+        s = NodeUtil.to("string", this.node);
+        break;
+      case 1:
+        s = s.string(this);
+        break;
+      default:
+        throw Error("Function normalize-space expects (string?)");break
+    }
+    return s.replace(/\s+/g, " ").replace(/^ /, "").replace(/ $/, "")
+  }, "string", false, [true, false]], translate:[function(s1, s2, s3) {
+    if(arguments.length != 3) {
+      throw Error("Function translate expects (string, string, string)");
+    }
+    s1 = s1.string(this);
+    s2 = s2.string(this);
+    s3 = s3.string(this);
+    var map = [];
+    for(var i = 0, l = s2.length;i < l;i++) {
+      var ch = s2.charAt(i);
+      if(!map[ch]) {
+        map[ch] = s3.charAt(i) || ""
+      }
+    }
+    for(var t = "", i = 0, l = s1.length;i < l;i++) {
+      var ch = s1.charAt(i);
+      var replace = map[ch];
+      t += replace != undefined ? replace : ch
+    }
+    return t
+  }, "string", false, []], "boolean":[function(b) {
+    if(arguments.length != 1) {
+      throw Error("Function boolean expects (object)");
+    }
+    return b.bool(this)
+  }, "boolean", false, []], not:[function(b) {
+    if(arguments.length != 1) {
+      throw Error("Function not expects (object)");
+    }
+    return!b.bool(this)
+  }, "boolean", false, []], "true":[function() {
+    if(arguments.length != 0) {
+      throw Error("Function true expects ()");
+    }
+    return true
+  }, "boolean", false, []], "false":[function() {
+    if(arguments.length != 0) {
+      throw Error("Function false expects ()");
+    }
+    return false
+  }, "boolean", false, []], lang:[function(s) {
+    return false
+  }, "boolean", false, []], number:[function(n) {
+    switch(arguments.length) {
+      case 0:
+        n = NodeUtil.to("number", this.node);
+        break;
+      case 1:
+        n = n.number(this);
+        break;
+      default:
+        throw Error("Function number expects (object?)");break
+    }
+    return n
+  }, "number", false, [true, false]], sum:[function(ns) {
+    var nodes, n, i, l;
+    if(arguments.length != 1 || !(ns = ns.evaluate(this)).isNodeSet) {
+      throw Error("Function sum expects (nodeset)");
+    }
+    nodes = ns.list();
+    n = 0;
+    for(i = 0, l = nodes.length;i < l;i++) {
+      n += NodeUtil.to("number", nodes[i])
+    }
+    return n
+  }, "number", false, []], floor:[function(n) {
+    if(arguments.length != 1) {
+      throw Error("Function floor expects (number)");
+    }
+    n = n.number(this);
+    return Math.floor(n)
+  }, "number", false, []], ceiling:[function(n) {
+    if(arguments.length != 1) {
+      throw Error("Function ceiling expects (number)");
+    }
+    n = n.number(this);
+    return Math.ceil(n)
+  }, "number", false, []], round:[function(n) {
+    if(arguments.length != 1) {
+      throw Error("Function round expects (number)");
+    }
+    n = n.number(this);
+    return Math.round(n)
+  }, "number", false, []]};
+  FunctionCall.parse = function(lexer) {
+    var expr, func = new FunctionCall(lexer.next());
+    lexer.next();
+    while(lexer.peek() != ")") {
+      if(lexer.empty()) {
+        throw Error("missing function argument list");
+      }
+      expr = BinaryExpr.parse(lexer);
+      func.arg(expr);
+      if(lexer.peek() != ",") {
+        break
+      }
+      lexer.next()
+    }
+    if(lexer.empty()) {
+      throw Error("unclosed function argument list");
+    }
+    if(lexer.next() != ")") {
+      lexer.back();
+      throw Error("bad token: " + lexer.next());
+    }
+    return func
+  };
+  FunctionCall.prototype = new BaseExpr;
+  FunctionCall.prototype.evaluate = function(ctx) {
+    return this.func.apply(ctx, this.args)
+  };
+  FunctionCall.prototype.arg = function(arg) {
+    this.args.push(arg);
+    if(arg.needContextPosition) {
+      this.needContextPosition = true
+    }
+    var args = this.args;
+    if(arg.needContextNode) {
+      args.needContexNode = true
+    }
+    this.needContextNode = args.needContextNode || this.needContextNodeInfo[args.length]
+  };
+  FunctionCall.prototype.show = function(indent) {
+    indent = indent || "";
+    var t = "";
+    t += indent + "function: " + this.name + "\n";
+    indent += "    ";
+    if(this.args.length) {
+      t += indent + "arguments: " + "\n";
+      indent += "    ";
+      for(var i = 0;i < this.args.length;i++) {
+        t += this.args[i].show(indent)
+      }
+    }
+    return t
+  };
+  var NodeID = {uuid:1, get:function(node) {
+    return node.__jsxpath_id__ || (node.__jsxpath_id__ = this.uuid++)
+  }};
+  if(!window.NodeSet && window.defaultConfig) {
+    window.NodeSet = null
+  }
+  NodeSet = function() {
+    this.length = 0;
+    this.nodes = [];
+    this.seen = {};
+    this.idIndexMap = null;
+    this.reserveDels = []
+  };
+  NodeSet.prototype.isNodeSet = true;
+  NodeSet.prototype.isSorted = true;
+  NodeSet.prototype.merge = function(nodeset) {
+    this.isSorted = false;
+    if(nodeset.only) {
+      return this.push(nodeset.only)
+    }
+    if(this.only) {
+      var only = this.only;
+      delete this.only;
+      this.push(only);
+      this.length--
+    }
+    var nodes = nodeset.nodes;
+    for(var i = 0, l = nodes.length;i < l;i++) {
+      this._add(nodes[i])
+    }
+  };
+  NodeSet.prototype.sort = function() {
+    if(this.only) {
+      return
+    }
+    if(this.sortOff) {
+      return
+    }
+    if(!this.isSorted) {
+      this.isSorted = true;
+      this.idIndexMap = null;
+      var nodes = this.nodes;
+      nodes.sort(function(a, b) {
+        if(a == b) {
+          return 0
+        }
+        if(a.compareDocumentPosition) {
+          var result = a.compareDocumentPosition(b);
+          if(result & 2) {
+            return 1
+          }
+          if(result & 4) {
+            return-1
+          }
+          return 0
+        }else {
+          var node1 = a, node2 = b, ancestor1 = a, ancestor2 = b, deep1 = 0, deep2 = 0;
+          while(ancestor1 = ancestor1.parentNode) {
+            deep1++
+          }
+          while(ancestor2 = ancestor2.parentNode) {
+            deep2++
+          }
+          if(deep1 > deep2) {
+            while(deep1-- != deep2) {
+              node1 = node1.parentNode
+            }
+            if(node1 == node2) {
+              return 1
+            }
+          }else {
+            if(deep2 > deep1) {
+              while(deep2-- != deep1) {
+                node2 = node2.parentNode
+              }
+              if(node1 == node2) {
+                return-1
+              }
+            }
+          }
+          while((ancestor1 = node1.parentNode) != (ancestor2 = node2.parentNode)) {
+            node1 = ancestor1;
+            node2 = ancestor2
+          }
+          while(node1 = node1.nextSibling) {
+            if(node1 == node2) {
+              return-1
+            }
+          }
+          return 1
+        }
+      })
+    }
+  };
+  NodeSet.prototype.reserveDelByNodeID = function(id, offset, reverse) {
+    var map = this.createIdIndexMap();
+    var index;
+    if(index = map[id]) {
+      if(reverse && this.length - offset - 1 > index || !reverse && offset < index) {
+        var obj = {value:index, order:String.fromCharCode(index), toString:function() {
+          return this.order
+        }, valueOf:function() {
+          return this.value
+        }};
+        this.reserveDels.push(obj)
+      }
+    }
+  };
+  NodeSet.prototype.reserveDelByNode = function(node, offset, reverse) {
+    this.reserveDelByNodeID(NodeID.get(node), offset, reverse)
+  };
+  NodeSet.prototype.doDel = function() {
+    if(!this.reserveDels.length) {
+      return
+    }
+    if(this.length < 65536) {
+      var dels = this.reserveDels.sort(function(a, b) {
+        return b - a
+      })
+    }else {
+      var dels = this.reserveDels.sort(function(a, b) {
+        return b - a
+      })
+    }
+    for(var i = 0, l = dels.length;i < l;i++) {
+      this.del(dels[i])
+    }
+    this.reserveDels = [];
+    this.idIndexMap = null
+  };
+  NodeSet.prototype.createIdIndexMap = function() {
+    if(this.idIndexMap) {
+      return this.idIndexMap
+    }else {
+      var map = this.idIndexMap = {};
+      var nodes = this.nodes;
+      for(var i = 0, l = nodes.length;i < l;i++) {
+        var node = nodes[i];
+        var id = NodeID.get(node);
+        map[id] = i
+      }
+      return map
+    }
+  };
+  NodeSet.prototype.del = function(index) {
+    this.length--;
+    if(this.only) {
+      delete this.only
+    }else {
+      var node = this.nodes.splice(index, 1)[0];
+      if(this._first == node) {
+        delete this._first;
+        delete this._firstSourceIndex;
+        delete this._firstSubIndex
+      }
+      delete this.seen[NodeID.get(node)]
+    }
+  };
+  NodeSet.prototype.delDescendant = function(elm, offset) {
+    if(this.only) {
+      return
+    }
+    var nodeType = elm.nodeType;
+    if(nodeType != 1 && nodeType != 9) {
+      return
+    }
+    if(uai.applewebkit2) {
+      return
+    }
+    if(!elm.contains) {
+      if(nodeType == 1) {
+        var _elm = elm;
+        elm = {contains:function(node) {
+          return node.compareDocumentPosition(_elm) & 8
+        }}
+      }else {
+        elm = {contains:function() {
+          return true
+        }}
+      }
+    }
+    var nodes = this.nodes;
+    for(var i = offset + 1;i < nodes.length;i++) {
+      if(elm.contains(nodes[i])) {
+        this.del(i);
+        i--
+      }
+    }
+  };
+  NodeSet.prototype._add = function(node, reverse) {
+    var seen = this.seen;
+    var id = NodeID.get(node);
+    if(seen[id]) {
+      return true
+    }
+    seen[id] = true;
+    this.length++;
+    if(reverse) {
+      this.nodes.unshift(node)
+    }else {
+      this.nodes.push(node)
+    }
+  };
+  NodeSet.prototype.unshift = function(node) {
+    if(!this.length) {
+      this.length++;
+      this.only = node;
+      return
+    }
+    if(this.only) {
+      var only = this.only;
+      delete this.only;
+      this.unshift(only);
+      this.length--
+    }
+    return this._add(node, true)
+  };
+  NodeSet.prototype.push = function(node) {
+    if(!this.length) {
+      this.length++;
+      this.only = node;
+      return
+    }
+    if(this.only) {
+      var only = this.only;
+      delete this.only;
+      this.push(only);
+      this.length--
+    }
+    return this._add(node)
+  };
+  NodeSet.prototype.first = function() {
+    if(this.only) {
+      return this.only
+    }
+    if(this.nodes.length > 1) {
+      this.sort()
+    }
+    return this.nodes[0]
+  };
+  NodeSet.prototype.list = function() {
+    if(this.only) {
+      return[this.only]
+    }
+    this.sort();
+    return this.nodes
+  };
+  NodeSet.prototype.string = function() {
+    var node = this.only || this.first();
+    return node ? NodeUtil.to("string", node) : ""
+  };
+  NodeSet.prototype.bool = function() {
+    return!!(this.length || this.only)
+  };
+  NodeSet.prototype.number = function() {
+    return+this.string()
+  };
+  NodeSet.prototype.iterator = function(reverse) {
+    this.sort();
+    var nodeset = this;
+    if(!reverse) {
+      var count = 0;
+      return function() {
+        if(nodeset.only && count++ == 0) {
+          return nodeset.only
+        }
+        return nodeset.nodes[count++]
+      }
+    }else {
+      var count = 0;
+      return function() {
+        var index = nodeset.length - count++ - 1;
+        if(nodeset.only && index == 0) {
+          return nodeset.only
+        }
+        return nodeset.nodes[index]
+      }
+    }
+  };
+  var install = function(win) {
+    win = win || this;
+    var doc = win.document;
+    var undefined = win.undefined;
+    win.XPathExpression = function(expr) {
+      if(!expr.length) {
+        throw win.Error("no expression");
+      }
+      var lexer = this.lexer = Lexer(expr);
+      if(lexer.empty()) {
+        throw win.Error("no expression");
+      }
+      this.expr = BinaryExpr.parse(lexer);
+      if(!lexer.empty()) {
+        throw win.Error("bad token: " + lexer.next());
+      }
+    };
+    win.XPathExpression.prototype.evaluate = function(node, type) {
+      return new win.XPathResult(this.expr.evaluate(new Ctx(node)), type)
+    };
+    win.XPathResult = function(value, type) {
+      if(type == 0) {
+        switch(typeof value) {
+          case "object":
+            type++;
+          case "boolean":
+            type++;
+          case "string":
+            type++;
+          case "number":
+            type++
+        }
+      }
+      this.resultType = type;
+      switch(type) {
+        case 1:
+          this.numberValue = value.isNodeSet ? value.number() : +value;
+          return;
+        case 2:
+          this.stringValue = value.isNodeSet ? value.string() : "" + value;
+          return;
+        case 3:
+          this.booleanValue = value.isNodeSet ? value.bool() : !!value;
+          return;
+        case 4:
+        ;
+        case 5:
+        ;
+        case 6:
+        ;
+        case 7:
+          this.nodes = value.list();
+          this.snapshotLength = value.length;
+          this.index = 0;
+          this.invalidIteratorState = false;
+          break;
+        case 8:
+        ;
+        case 9:
+          this.singleNodeValue = value.first();
+          return
+      }
+    };
+    win.XPathResult.prototype.iterateNext = function() {
+      return this.nodes[this.index++]
+    };
+    win.XPathResult.prototype.snapshotItem = function(i) {
+      return this.nodes[i]
+    };
+    win.XPathResult.ANY_TYPE = 0;
+    win.XPathResult.NUMBER_TYPE = 1;
+    win.XPathResult.STRING_TYPE = 2;
+    win.XPathResult.BOOLEAN_TYPE = 3;
+    win.XPathResult.UNORDERED_NODE_ITERATOR_TYPE = 4;
+    win.XPathResult.ORDERED_NODE_ITERATOR_TYPE = 5;
+    win.XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE = 6;
+    win.XPathResult.ORDERED_NODE_SNAPSHOT_TYPE = 7;
+    win.XPathResult.ANY_UNORDERED_NODE_TYPE = 8;
+    win.XPathResult.FIRST_ORDERED_NODE_TYPE = 9;
+    doc.createExpression = function(expr) {
+      return new win.XPathExpression(expr, null)
+    };
+    doc.evaluate = function(expr, context, _, type) {
+      return doc.createExpression(expr, null).evaluate(context, type)
+    }
+  };
+  var win;
+  if(config.targetFrame) {
+    var frame = document.getElementById(config.targetFrame);
+    if(frame) {
+      win = frame.contentWindow
+    }
+  }
+  if(config.exportInstaller) {
+    window.install = install
+  }
+  if(!config.hasNative || !config.useNative) {
+    install(win || window)
+  }
+})();
 goog.provide("goog.dom.xml");
 goog.require("goog.dom");
 goog.require("goog.dom.NodeType");
@@ -14360,23 +16378,23 @@ goog.require("cljs.core");
 domina.DomContent = {};
 domina.nodes = function nodes(content) {
   if(cljs.core.truth_(function() {
-    var and__3546__auto____2419 = content;
-    if(cljs.core.truth_(and__3546__auto____2419)) {
+    var and__3546__auto____2434 = content;
+    if(cljs.core.truth_(and__3546__auto____2434)) {
       return content.domina$DomContent$nodes
     }else {
-      return and__3546__auto____2419
+      return and__3546__auto____2434
     }
   }())) {
     return content.domina$DomContent$nodes(content)
   }else {
     return function() {
-      var or__3548__auto____2420 = domina.nodes[goog.typeOf.call(null, content)];
-      if(cljs.core.truth_(or__3548__auto____2420)) {
-        return or__3548__auto____2420
+      var or__3548__auto____2435 = domina.nodes[goog.typeOf.call(null, content)];
+      if(cljs.core.truth_(or__3548__auto____2435)) {
+        return or__3548__auto____2435
       }else {
-        var or__3548__auto____2421 = domina.nodes["_"];
-        if(cljs.core.truth_(or__3548__auto____2421)) {
-          return or__3548__auto____2421
+        var or__3548__auto____2436 = domina.nodes["_"];
+        if(cljs.core.truth_(or__3548__auto____2436)) {
+          return or__3548__auto____2436
         }else {
           throw cljs.core.missing_protocol.call(null, "DomContent.nodes", content);
         }
@@ -14386,23 +16404,23 @@ domina.nodes = function nodes(content) {
 };
 domina.single_node = function single_node(nodeseq) {
   if(cljs.core.truth_(function() {
-    var and__3546__auto____2422 = nodeseq;
-    if(cljs.core.truth_(and__3546__auto____2422)) {
+    var and__3546__auto____2437 = nodeseq;
+    if(cljs.core.truth_(and__3546__auto____2437)) {
       return nodeseq.domina$DomContent$single_node
     }else {
-      return and__3546__auto____2422
+      return and__3546__auto____2437
     }
   }())) {
     return nodeseq.domina$DomContent$single_node(nodeseq)
   }else {
     return function() {
-      var or__3548__auto____2423 = domina.single_node[goog.typeOf.call(null, nodeseq)];
-      if(cljs.core.truth_(or__3548__auto____2423)) {
-        return or__3548__auto____2423
+      var or__3548__auto____2438 = domina.single_node[goog.typeOf.call(null, nodeseq)];
+      if(cljs.core.truth_(or__3548__auto____2438)) {
+        return or__3548__auto____2438
       }else {
-        var or__3548__auto____2424 = domina.single_node["_"];
-        if(cljs.core.truth_(or__3548__auto____2424)) {
-          return or__3548__auto____2424
+        var or__3548__auto____2439 = domina.single_node["_"];
+        if(cljs.core.truth_(or__3548__auto____2439)) {
+          return or__3548__auto____2439
         }else {
           throw cljs.core.missing_protocol.call(null, "DomContent.single-node", nodeseq);
         }
@@ -14414,30 +16432,30 @@ domina.by_id = function by_id(id) {
   return goog.dom.getElement.call(null, cljs.core.name.call(null, id))
 };
 domina.by_class = function by_class(class_name) {
-  if(cljs.core.truth_(cljs.core.undefined_QMARK_.call(null, domina.t2425))) {
-    domina.t2425 = function(class_name, by_class) {
+  if(cljs.core.truth_(cljs.core.undefined_QMARK_.call(null, domina.t2440))) {
+    domina.t2440 = function(class_name, by_class) {
       this.class_name = class_name;
       this.by_class = by_class
     };
-    domina.t2425.prototype.domina$DomContent$ = true;
-    domina.t2425.prototype.domina$DomContent$nodes = function(_) {
-      var this__2426 = this;
-      return goog.dom.getElementsByClass.call(null, cljs.core.name.call(null, this__2426.class_name))
+    domina.t2440.prototype.domina$DomContent$ = true;
+    domina.t2440.prototype.domina$DomContent$nodes = function(_) {
+      var this__2441 = this;
+      return goog.dom.getElementsByClass.call(null, cljs.core.name.call(null, this__2441.class_name))
     };
-    domina.t2425.prototype.domina$DomContent$single_node = function(_) {
-      var this__2427 = this;
-      return goog.dom.getElementByClass.call(null, cljs.core.name.call(null, this__2427.class_name))
+    domina.t2440.prototype.domina$DomContent$single_node = function(_) {
+      var this__2442 = this;
+      return goog.dom.getElementByClass.call(null, cljs.core.name.call(null, this__2442.class_name))
     }
   }else {
   }
-  return new domina.t2425(class_name, by_class)
+  return new domina.t2440(class_name, by_class)
 };
 domina.children = function children(content) {
   return cljs.core.mapcat.call(null, goog.dom.getChildren, domina.nodes.call(null, content))
 };
 domina.clone = function clone(content) {
-  return cljs.core.map.call(null, function(p1__2428_SHARP_) {
-    return p1__2428_SHARP_.cloneNode(true)
+  return cljs.core.map.call(null, function(p1__2443_SHARP_) {
+    return p1__2443_SHARP_.cloneNode(true)
   }, domina.nodes.call(null, content))
 };
 domina.append_BANG_ = function append_BANG_(parent_content, child_content) {
@@ -14445,8 +16463,8 @@ domina.append_BANG_ = function append_BANG_(parent_content, child_content) {
   return parent_content
 };
 domina.insert_BANG_ = function insert_BANG_(parent_content, child_content, idx) {
-  domina.apply_with_cloning.call(null, function(p1__2429_SHARP_, p2__2430_SHARP_) {
-    return goog.dom.insertChildAt.call(null, p1__2429_SHARP_, p2__2430_SHARP_, idx)
+  domina.apply_with_cloning.call(null, function(p1__2444_SHARP_, p2__2445_SHARP_) {
+    return goog.dom.insertChildAt.call(null, p1__2444_SHARP_, p2__2445_SHARP_, idx)
   }, parent_content, child_content);
   return parent_content
 };
@@ -14455,20 +16473,20 @@ domina.prepend_BANG_ = function prepend_BANG_(parent_content, child_content) {
   return parent_content
 };
 domina.insert_before_BANG_ = function insert_before_BANG_(content, new_content) {
-  domina.apply_with_cloning.call(null, function(p1__2432_SHARP_, p2__2431_SHARP_) {
-    return goog.dom.insertSiblingBefore.call(null, p2__2431_SHARP_, p1__2432_SHARP_)
+  domina.apply_with_cloning.call(null, function(p1__2447_SHARP_, p2__2446_SHARP_) {
+    return goog.dom.insertSiblingBefore.call(null, p2__2446_SHARP_, p1__2447_SHARP_)
   }, content, new_content);
   return content
 };
 domina.insert_after_BANG_ = function insert_after_BANG_(content, new_content) {
-  domina.apply_with_cloning.call(null, function(p1__2434_SHARP_, p2__2433_SHARP_) {
-    return goog.dom.insertSiblingAfter.call(null, p2__2433_SHARP_, p1__2434_SHARP_)
+  domina.apply_with_cloning.call(null, function(p1__2449_SHARP_, p2__2448_SHARP_) {
+    return goog.dom.insertSiblingAfter.call(null, p2__2448_SHARP_, p1__2449_SHARP_)
   }, content, new_content);
   return content
 };
 domina.swap_content_BANG_ = function swap_content_BANG_(old_content, new_content) {
-  domina.apply_with_cloning.call(null, function(p1__2436_SHARP_, p2__2435_SHARP_) {
-    return goog.dom.replaceNode.call(null, p2__2435_SHARP_, p1__2436_SHARP_)
+  domina.apply_with_cloning.call(null, function(p1__2451_SHARP_, p2__2450_SHARP_) {
+    return goog.dom.replaceNode.call(null, p2__2450_SHARP_, p1__2451_SHARP_)
   }, old_content, new_content);
   return old_content
 };
@@ -14483,9 +16501,9 @@ domina.destroy_children_BANG_ = function destroy_children_BANG_(content) {
   return content
 };
 domina.style = function style(content, name) {
-  var s__2437 = goog.style.getStyle.call(null, domina.single_node.call(null, content), cljs.core.name.call(null, name));
-  if(cljs.core.truth_(cljs.core.not.call(null, goog.string.isEmptySafe.call(null, s__2437)))) {
-    return s__2437
+  var s__2452 = goog.style.getStyle.call(null, domina.single_node.call(null, content), cljs.core.name.call(null, name));
+  if(cljs.core.truth_(cljs.core.not.call(null, goog.string.isEmptySafe.call(null, s__2452)))) {
+    return s__2452
   }else {
     return null
   }
@@ -14494,19 +16512,19 @@ domina.attr = function attr(content, name) {
   return domina.single_node.call(null, content).getAttribute(cljs.core.name.call(null, name))
 };
 domina.set_style_BANG_ = function set_style_BANG_(content, name, value) {
-  var G__2438__2439 = cljs.core.seq.call(null, domina.nodes.call(null, content));
-  if(cljs.core.truth_(G__2438__2439)) {
-    var n__2440 = cljs.core.first.call(null, G__2438__2439);
-    var G__2438__2441 = G__2438__2439;
+  var G__2453__2454 = cljs.core.seq.call(null, domina.nodes.call(null, content));
+  if(cljs.core.truth_(G__2453__2454)) {
+    var n__2455 = cljs.core.first.call(null, G__2453__2454);
+    var G__2453__2456 = G__2453__2454;
     while(true) {
-      goog.style.setStyle.call(null, n__2440, cljs.core.name.call(null, name), value);
-      var temp__3698__auto____2442 = cljs.core.next.call(null, G__2438__2441);
-      if(cljs.core.truth_(temp__3698__auto____2442)) {
-        var G__2438__2443 = temp__3698__auto____2442;
-        var G__2444 = cljs.core.first.call(null, G__2438__2443);
-        var G__2445 = G__2438__2443;
-        n__2440 = G__2444;
-        G__2438__2441 = G__2445;
+      goog.style.setStyle.call(null, n__2455, cljs.core.name.call(null, name), value);
+      var temp__3698__auto____2457 = cljs.core.next.call(null, G__2453__2456);
+      if(cljs.core.truth_(temp__3698__auto____2457)) {
+        var G__2453__2458 = temp__3698__auto____2457;
+        var G__2459 = cljs.core.first.call(null, G__2453__2458);
+        var G__2460 = G__2453__2458;
+        n__2455 = G__2459;
+        G__2453__2456 = G__2460;
         continue
       }else {
       }
@@ -14517,19 +16535,19 @@ domina.set_style_BANG_ = function set_style_BANG_(content, name, value) {
   return content
 };
 domina.set_attr_BANG_ = function set_attr_BANG_(content, name, value) {
-  var G__2446__2447 = cljs.core.seq.call(null, domina.nodes.call(null, content));
-  if(cljs.core.truth_(G__2446__2447)) {
-    var n__2448 = cljs.core.first.call(null, G__2446__2447);
-    var G__2446__2449 = G__2446__2447;
+  var G__2461__2462 = cljs.core.seq.call(null, domina.nodes.call(null, content));
+  if(cljs.core.truth_(G__2461__2462)) {
+    var n__2463 = cljs.core.first.call(null, G__2461__2462);
+    var G__2461__2464 = G__2461__2462;
     while(true) {
-      n__2448.setAttribute(cljs.core.name.call(null, name), value);
-      var temp__3698__auto____2450 = cljs.core.next.call(null, G__2446__2449);
-      if(cljs.core.truth_(temp__3698__auto____2450)) {
-        var G__2446__2451 = temp__3698__auto____2450;
-        var G__2452 = cljs.core.first.call(null, G__2446__2451);
-        var G__2453 = G__2446__2451;
-        n__2448 = G__2452;
-        G__2446__2449 = G__2453;
+      n__2463.setAttribute(cljs.core.name.call(null, name), value);
+      var temp__3698__auto____2465 = cljs.core.next.call(null, G__2461__2464);
+      if(cljs.core.truth_(temp__3698__auto____2465)) {
+        var G__2461__2466 = temp__3698__auto____2465;
+        var G__2467 = cljs.core.first.call(null, G__2461__2466);
+        var G__2468 = G__2461__2466;
+        n__2463 = G__2467;
+        G__2461__2464 = G__2468;
         continue
       }else {
       }
@@ -14541,18 +16559,18 @@ domina.set_attr_BANG_ = function set_attr_BANG_(content, name, value) {
 };
 domina.parse_style_attributes = function parse_style_attributes(style) {
   return cljs.core.reduce.call(null, function(acc, pair) {
-    var vec__2454__2455 = pair.split(/\s*:\s*/);
-    var k__2456 = cljs.core.nth.call(null, vec__2454__2455, 0, null);
-    var v__2457 = cljs.core.nth.call(null, vec__2454__2455, 1, null);
+    var vec__2469__2470 = pair.split(/\s*:\s*/);
+    var k__2471 = cljs.core.nth.call(null, vec__2469__2470, 0, null);
+    var v__2472 = cljs.core.nth.call(null, vec__2469__2470, 1, null);
     if(cljs.core.truth_(function() {
-      var and__3546__auto____2458 = k__2456;
-      if(cljs.core.truth_(and__3546__auto____2458)) {
-        return v__2457
+      var and__3546__auto____2473 = k__2471;
+      if(cljs.core.truth_(and__3546__auto____2473)) {
+        return v__2472
       }else {
-        return and__3546__auto____2458
+        return and__3546__auto____2473
       }
     }())) {
-      return cljs.core.assoc.call(null, acc, cljs.core.keyword.call(null, k__2456.toLowerCase()), v__2457)
+      return cljs.core.assoc.call(null, acc, cljs.core.keyword.call(null, k__2471.toLowerCase()), v__2472)
     }else {
       return acc
     }
@@ -14562,36 +16580,36 @@ domina.styles = function styles(content) {
   return domina.parse_style_attributes.call(null, domina.attr.call(null, content, "style"))
 };
 domina.attrs = function attrs(content) {
-  var node__2460 = domina.single_node.call(null, content);
-  var attrs__2461 = node__2460.attributes;
-  return cljs.core.reduce.call(null, cljs.core.conj, cljs.core.map.call(null, function(p1__2459_SHARP_) {
-    var attr__2462 = attrs__2461.item(p1__2459_SHARP_);
-    return cljs.core.HashMap.fromArrays([cljs.core.keyword.call(null, attr__2462.nodeName.toLowerCase())], [attr__2462.nodeValue])
-  }, cljs.core.range.call(null, attrs__2461.length)))
+  var node__2475 = domina.single_node.call(null, content);
+  var attrs__2476 = node__2475.attributes;
+  return cljs.core.reduce.call(null, cljs.core.conj, cljs.core.map.call(null, function(p1__2474_SHARP_) {
+    var attr__2477 = attrs__2476.item(p1__2474_SHARP_);
+    return cljs.core.HashMap.fromArrays([cljs.core.keyword.call(null, attr__2477.nodeName.toLowerCase())], [attr__2477.nodeValue])
+  }, cljs.core.range.call(null, attrs__2476.length)))
 };
 domina.set_styles_BANG_ = function set_styles_BANG_(content, styles) {
-  var G__2463__2464 = cljs.core.seq.call(null, styles);
-  if(cljs.core.truth_(G__2463__2464)) {
-    var G__2466__2468 = cljs.core.first.call(null, G__2463__2464);
-    var vec__2467__2469 = G__2466__2468;
-    var name__2470 = cljs.core.nth.call(null, vec__2467__2469, 0, null);
-    var value__2471 = cljs.core.nth.call(null, vec__2467__2469, 1, null);
-    var G__2463__2472 = G__2463__2464;
-    var G__2466__2473 = G__2466__2468;
-    var G__2463__2474 = G__2463__2472;
+  var G__2478__2479 = cljs.core.seq.call(null, styles);
+  if(cljs.core.truth_(G__2478__2479)) {
+    var G__2481__2483 = cljs.core.first.call(null, G__2478__2479);
+    var vec__2482__2484 = G__2481__2483;
+    var name__2485 = cljs.core.nth.call(null, vec__2482__2484, 0, null);
+    var value__2486 = cljs.core.nth.call(null, vec__2482__2484, 1, null);
+    var G__2478__2487 = G__2478__2479;
+    var G__2481__2488 = G__2481__2483;
+    var G__2478__2489 = G__2478__2487;
     while(true) {
-      var vec__2475__2476 = G__2466__2473;
-      var name__2477 = cljs.core.nth.call(null, vec__2475__2476, 0, null);
-      var value__2478 = cljs.core.nth.call(null, vec__2475__2476, 1, null);
-      var G__2463__2479 = G__2463__2474;
-      domina.set_style_BANG_.call(null, content, name__2477, value__2478);
-      var temp__3698__auto____2480 = cljs.core.next.call(null, G__2463__2479);
-      if(cljs.core.truth_(temp__3698__auto____2480)) {
-        var G__2463__2481 = temp__3698__auto____2480;
-        var G__2482 = cljs.core.first.call(null, G__2463__2481);
-        var G__2483 = G__2463__2481;
-        G__2466__2473 = G__2482;
-        G__2463__2474 = G__2483;
+      var vec__2490__2491 = G__2481__2488;
+      var name__2492 = cljs.core.nth.call(null, vec__2490__2491, 0, null);
+      var value__2493 = cljs.core.nth.call(null, vec__2490__2491, 1, null);
+      var G__2478__2494 = G__2478__2489;
+      domina.set_style_BANG_.call(null, content, name__2492, value__2493);
+      var temp__3698__auto____2495 = cljs.core.next.call(null, G__2478__2494);
+      if(cljs.core.truth_(temp__3698__auto____2495)) {
+        var G__2478__2496 = temp__3698__auto____2495;
+        var G__2497 = cljs.core.first.call(null, G__2478__2496);
+        var G__2498 = G__2478__2496;
+        G__2481__2488 = G__2497;
+        G__2478__2489 = G__2498;
         continue
       }else {
       }
@@ -14602,28 +16620,28 @@ domina.set_styles_BANG_ = function set_styles_BANG_(content, styles) {
   return content
 };
 domina.set_attrs_BANG_ = function set_attrs_BANG_(content, attrs) {
-  var G__2484__2485 = cljs.core.seq.call(null, attrs);
-  if(cljs.core.truth_(G__2484__2485)) {
-    var G__2487__2489 = cljs.core.first.call(null, G__2484__2485);
-    var vec__2488__2490 = G__2487__2489;
-    var name__2491 = cljs.core.nth.call(null, vec__2488__2490, 0, null);
-    var value__2492 = cljs.core.nth.call(null, vec__2488__2490, 1, null);
-    var G__2484__2493 = G__2484__2485;
-    var G__2487__2494 = G__2487__2489;
-    var G__2484__2495 = G__2484__2493;
+  var G__2499__2500 = cljs.core.seq.call(null, attrs);
+  if(cljs.core.truth_(G__2499__2500)) {
+    var G__2502__2504 = cljs.core.first.call(null, G__2499__2500);
+    var vec__2503__2505 = G__2502__2504;
+    var name__2506 = cljs.core.nth.call(null, vec__2503__2505, 0, null);
+    var value__2507 = cljs.core.nth.call(null, vec__2503__2505, 1, null);
+    var G__2499__2508 = G__2499__2500;
+    var G__2502__2509 = G__2502__2504;
+    var G__2499__2510 = G__2499__2508;
     while(true) {
-      var vec__2496__2497 = G__2487__2494;
-      var name__2498 = cljs.core.nth.call(null, vec__2496__2497, 0, null);
-      var value__2499 = cljs.core.nth.call(null, vec__2496__2497, 1, null);
-      var G__2484__2500 = G__2484__2495;
-      domina.set_attr_BANG_.call(null, content, name__2498, value__2499);
-      var temp__3698__auto____2501 = cljs.core.next.call(null, G__2484__2500);
-      if(cljs.core.truth_(temp__3698__auto____2501)) {
-        var G__2484__2502 = temp__3698__auto____2501;
-        var G__2503 = cljs.core.first.call(null, G__2484__2502);
-        var G__2504 = G__2484__2502;
-        G__2487__2494 = G__2503;
-        G__2484__2495 = G__2504;
+      var vec__2511__2512 = G__2502__2509;
+      var name__2513 = cljs.core.nth.call(null, vec__2511__2512, 0, null);
+      var value__2514 = cljs.core.nth.call(null, vec__2511__2512, 1, null);
+      var G__2499__2515 = G__2499__2510;
+      domina.set_attr_BANG_.call(null, content, name__2513, value__2514);
+      var temp__3698__auto____2516 = cljs.core.next.call(null, G__2499__2515);
+      if(cljs.core.truth_(temp__3698__auto____2516)) {
+        var G__2499__2517 = temp__3698__auto____2516;
+        var G__2518 = cljs.core.first.call(null, G__2499__2517);
+        var G__2519 = G__2499__2517;
+        G__2502__2509 = G__2518;
+        G__2499__2510 = G__2519;
         continue
       }else {
       }
@@ -14637,19 +16655,19 @@ domina.has_class_QMARK_ = function has_class_QMARK_(content, class$) {
   return goog.dom.classes.has.call(null, domina.single_node.call(null, content), class$)
 };
 domina.add_class_BANG_ = function add_class_BANG_(content, class$) {
-  var G__2505__2506 = cljs.core.seq.call(null, domina.nodes.call(null, content));
-  if(cljs.core.truth_(G__2505__2506)) {
-    var node__2507 = cljs.core.first.call(null, G__2505__2506);
-    var G__2505__2508 = G__2505__2506;
+  var G__2520__2521 = cljs.core.seq.call(null, domina.nodes.call(null, content));
+  if(cljs.core.truth_(G__2520__2521)) {
+    var node__2522 = cljs.core.first.call(null, G__2520__2521);
+    var G__2520__2523 = G__2520__2521;
     while(true) {
-      goog.dom.classes.add.call(null, node__2507, class$);
-      var temp__3698__auto____2509 = cljs.core.next.call(null, G__2505__2508);
-      if(cljs.core.truth_(temp__3698__auto____2509)) {
-        var G__2505__2510 = temp__3698__auto____2509;
-        var G__2511 = cljs.core.first.call(null, G__2505__2510);
-        var G__2512 = G__2505__2510;
-        node__2507 = G__2511;
-        G__2505__2508 = G__2512;
+      goog.dom.classes.add.call(null, node__2522, class$);
+      var temp__3698__auto____2524 = cljs.core.next.call(null, G__2520__2523);
+      if(cljs.core.truth_(temp__3698__auto____2524)) {
+        var G__2520__2525 = temp__3698__auto____2524;
+        var G__2526 = cljs.core.first.call(null, G__2520__2525);
+        var G__2527 = G__2520__2525;
+        node__2522 = G__2526;
+        G__2520__2523 = G__2527;
         continue
       }else {
       }
@@ -14660,19 +16678,19 @@ domina.add_class_BANG_ = function add_class_BANG_(content, class$) {
   return content
 };
 domina.remove_class_BANG_ = function remove_class_BANG_(content, class$) {
-  var G__2513__2514 = cljs.core.seq.call(null, domina.nodes.call(null, content));
-  if(cljs.core.truth_(G__2513__2514)) {
-    var node__2515 = cljs.core.first.call(null, G__2513__2514);
-    var G__2513__2516 = G__2513__2514;
+  var G__2528__2529 = cljs.core.seq.call(null, domina.nodes.call(null, content));
+  if(cljs.core.truth_(G__2528__2529)) {
+    var node__2530 = cljs.core.first.call(null, G__2528__2529);
+    var G__2528__2531 = G__2528__2529;
     while(true) {
-      goog.dom.classes.remove.call(null, node__2515, class$);
-      var temp__3698__auto____2517 = cljs.core.next.call(null, G__2513__2516);
-      if(cljs.core.truth_(temp__3698__auto____2517)) {
-        var G__2513__2518 = temp__3698__auto____2517;
-        var G__2519 = cljs.core.first.call(null, G__2513__2518);
-        var G__2520 = G__2513__2518;
-        node__2515 = G__2519;
-        G__2513__2516 = G__2520;
+      goog.dom.classes.remove.call(null, node__2530, class$);
+      var temp__3698__auto____2532 = cljs.core.next.call(null, G__2528__2531);
+      if(cljs.core.truth_(temp__3698__auto____2532)) {
+        var G__2528__2533 = temp__3698__auto____2532;
+        var G__2534 = cljs.core.first.call(null, G__2528__2533);
+        var G__2535 = G__2528__2533;
+        node__2530 = G__2534;
+        G__2528__2531 = G__2535;
         continue
       }else {
       }
@@ -14687,10 +16705,10 @@ domina.classes = function classes(content) {
 };
 domina.text = function() {
   var text = null;
-  var text__2521 = function(content) {
+  var text__2536 = function(content) {
     return text.call(null, content, true)
   };
-  var text__2522 = function(content, normalize) {
+  var text__2537 = function(content, normalize) {
     if(cljs.core.truth_(normalize)) {
       return goog.string.trim.call(null, goog.dom.getTextContent.call(null, domina.single_node.call(null, content)))
     }else {
@@ -14700,28 +16718,28 @@ domina.text = function() {
   text = function(content, normalize) {
     switch(arguments.length) {
       case 1:
-        return text__2521.call(this, content);
+        return text__2536.call(this, content);
       case 2:
-        return text__2522.call(this, content, normalize)
+        return text__2537.call(this, content, normalize)
     }
     throw"Invalid arity: " + arguments.length;
   };
   return text
 }();
 domina.set_text_BANG_ = function set_text_BANG_(content, value) {
-  var G__2524__2525 = cljs.core.seq.call(null, domina.nodes.call(null, content));
-  if(cljs.core.truth_(G__2524__2525)) {
-    var node__2526 = cljs.core.first.call(null, G__2524__2525);
-    var G__2524__2527 = G__2524__2525;
+  var G__2539__2540 = cljs.core.seq.call(null, domina.nodes.call(null, content));
+  if(cljs.core.truth_(G__2539__2540)) {
+    var node__2541 = cljs.core.first.call(null, G__2539__2540);
+    var G__2539__2542 = G__2539__2540;
     while(true) {
-      goog.dom.setTextContent.call(null, node__2526, value);
-      var temp__3698__auto____2528 = cljs.core.next.call(null, G__2524__2527);
-      if(cljs.core.truth_(temp__3698__auto____2528)) {
-        var G__2524__2529 = temp__3698__auto____2528;
-        var G__2530 = cljs.core.first.call(null, G__2524__2529);
-        var G__2531 = G__2524__2529;
-        node__2526 = G__2530;
-        G__2524__2527 = G__2531;
+      goog.dom.setTextContent.call(null, node__2541, value);
+      var temp__3698__auto____2543 = cljs.core.next.call(null, G__2539__2542);
+      if(cljs.core.truth_(temp__3698__auto____2543)) {
+        var G__2539__2544 = temp__3698__auto____2543;
+        var G__2545 = cljs.core.first.call(null, G__2539__2544);
+        var G__2546 = G__2539__2544;
+        node__2541 = G__2545;
+        G__2539__2542 = G__2546;
         continue
       }else {
       }
@@ -14735,19 +16753,19 @@ domina.value = function value(content) {
   return goog.dom.forms.getValue.call(null, domina.single_node.call(null, content))
 };
 domina.set_value_BANG_ = function set_value_BANG_(content, value) {
-  var G__2532__2533 = cljs.core.seq.call(null, domina.nodes.call(null, content));
-  if(cljs.core.truth_(G__2532__2533)) {
-    var node__2534 = cljs.core.first.call(null, G__2532__2533);
-    var G__2532__2535 = G__2532__2533;
+  var G__2547__2548 = cljs.core.seq.call(null, domina.nodes.call(null, content));
+  if(cljs.core.truth_(G__2547__2548)) {
+    var node__2549 = cljs.core.first.call(null, G__2547__2548);
+    var G__2547__2550 = G__2547__2548;
     while(true) {
-      goog.dom.forms.setValue.call(null, node__2534, value);
-      var temp__3698__auto____2536 = cljs.core.next.call(null, G__2532__2535);
-      if(cljs.core.truth_(temp__3698__auto____2536)) {
-        var G__2532__2537 = temp__3698__auto____2536;
-        var G__2538 = cljs.core.first.call(null, G__2532__2537);
-        var G__2539 = G__2532__2537;
-        node__2534 = G__2538;
-        G__2532__2535 = G__2539;
+      goog.dom.forms.setValue.call(null, node__2549, value);
+      var temp__3698__auto____2551 = cljs.core.next.call(null, G__2547__2550);
+      if(cljs.core.truth_(temp__3698__auto____2551)) {
+        var G__2547__2552 = temp__3698__auto____2551;
+        var G__2553 = cljs.core.first.call(null, G__2547__2552);
+        var G__2554 = G__2547__2552;
+        node__2549 = G__2553;
+        G__2547__2550 = G__2554;
         continue
       }else {
       }
@@ -14761,19 +16779,19 @@ domina.html = function html(content) {
   return domina.single_node.call(null, content).innerHTML
 };
 domina.set_html_BANG_ = function set_html_BANG_(content, value) {
-  var G__2540__2541 = cljs.core.seq.call(null, domina.nodes.call(null, content));
-  if(cljs.core.truth_(G__2540__2541)) {
-    var node__2542 = cljs.core.first.call(null, G__2540__2541);
-    var G__2540__2543 = G__2540__2541;
+  var G__2555__2556 = cljs.core.seq.call(null, domina.nodes.call(null, content));
+  if(cljs.core.truth_(G__2555__2556)) {
+    var node__2557 = cljs.core.first.call(null, G__2555__2556);
+    var G__2555__2558 = G__2555__2556;
     while(true) {
-      node__2542.innerHTML = value;
-      var temp__3698__auto____2544 = cljs.core.next.call(null, G__2540__2543);
-      if(cljs.core.truth_(temp__3698__auto____2544)) {
-        var G__2540__2545 = temp__3698__auto____2544;
-        var G__2546 = cljs.core.first.call(null, G__2540__2545);
-        var G__2547 = G__2540__2545;
-        node__2542 = G__2546;
-        G__2540__2543 = G__2547;
+      node__2557.innerHTML = value;
+      var temp__3698__auto____2559 = cljs.core.next.call(null, G__2555__2558);
+      if(cljs.core.truth_(temp__3698__auto____2559)) {
+        var G__2555__2560 = temp__3698__auto____2559;
+        var G__2561 = cljs.core.first.call(null, G__2555__2560);
+        var G__2562 = G__2555__2560;
+        node__2557 = G__2561;
+        G__2555__2558 = G__2562;
         continue
       }else {
       }
@@ -14784,21 +16802,21 @@ domina.set_html_BANG_ = function set_html_BANG_(content, value) {
   return content
 };
 domina.apply_with_cloning = function apply_with_cloning(f, parent_content, child_content) {
-  var parents__2548 = domina.nodes.call(null, parent_content);
-  if(cljs.core.truth_(cljs.core.not.call(null, cljs.core.empty_QMARK_.call(null, parents__2548)))) {
-    var G__2549__2550 = cljs.core.seq.call(null, domina.nodes.call(null, child_content));
-    if(cljs.core.truth_(G__2549__2550)) {
-      var child__2551 = cljs.core.first.call(null, G__2549__2550);
-      var G__2549__2552 = G__2549__2550;
+  var parents__2563 = domina.nodes.call(null, parent_content);
+  if(cljs.core.truth_(cljs.core.not.call(null, cljs.core.empty_QMARK_.call(null, parents__2563)))) {
+    var G__2564__2565 = cljs.core.seq.call(null, domina.nodes.call(null, child_content));
+    if(cljs.core.truth_(G__2564__2565)) {
+      var child__2566 = cljs.core.first.call(null, G__2564__2565);
+      var G__2564__2567 = G__2564__2565;
       while(true) {
-        f.call(null, cljs.core.first.call(null, parents__2548), child__2551);
-        var temp__3698__auto____2553 = cljs.core.next.call(null, G__2549__2552);
-        if(cljs.core.truth_(temp__3698__auto____2553)) {
-          var G__2549__2554 = temp__3698__auto____2553;
-          var G__2567 = cljs.core.first.call(null, G__2549__2554);
-          var G__2568 = G__2549__2554;
-          child__2551 = G__2567;
-          G__2549__2552 = G__2568;
+        f.call(null, cljs.core.first.call(null, parents__2563), child__2566);
+        var temp__3698__auto____2568 = cljs.core.next.call(null, G__2564__2567);
+        if(cljs.core.truth_(temp__3698__auto____2568)) {
+          var G__2564__2569 = temp__3698__auto____2568;
+          var G__2582 = cljs.core.first.call(null, G__2564__2569);
+          var G__2583 = G__2564__2569;
+          child__2566 = G__2582;
+          G__2564__2567 = G__2583;
           continue
         }else {
         }
@@ -14806,24 +16824,24 @@ domina.apply_with_cloning = function apply_with_cloning(f, parent_content, child
       }
     }else {
     }
-    var G__2555__2557 = cljs.core.seq.call(null, cljs.core.rest.call(null, parents__2548));
-    if(cljs.core.truth_(G__2555__2557)) {
-      var parent__2558 = cljs.core.first.call(null, G__2555__2557);
-      var G__2555__2559 = G__2555__2557;
+    var G__2570__2572 = cljs.core.seq.call(null, cljs.core.rest.call(null, parents__2563));
+    if(cljs.core.truth_(G__2570__2572)) {
+      var parent__2573 = cljs.core.first.call(null, G__2570__2572);
+      var G__2570__2574 = G__2570__2572;
       while(true) {
-        var G__2556__2560 = cljs.core.seq.call(null, domina.nodes.call(null, domina.clone.call(null, child_content)));
-        if(cljs.core.truth_(G__2556__2560)) {
-          var child__2561 = cljs.core.first.call(null, G__2556__2560);
-          var G__2556__2562 = G__2556__2560;
+        var G__2571__2575 = cljs.core.seq.call(null, domina.nodes.call(null, domina.clone.call(null, child_content)));
+        if(cljs.core.truth_(G__2571__2575)) {
+          var child__2576 = cljs.core.first.call(null, G__2571__2575);
+          var G__2571__2577 = G__2571__2575;
           while(true) {
-            f.call(null, parent__2558, child__2561);
-            var temp__3698__auto____2563 = cljs.core.next.call(null, G__2556__2562);
-            if(cljs.core.truth_(temp__3698__auto____2563)) {
-              var G__2556__2564 = temp__3698__auto____2563;
-              var G__2569 = cljs.core.first.call(null, G__2556__2564);
-              var G__2570 = G__2556__2564;
-              child__2561 = G__2569;
-              G__2556__2562 = G__2570;
+            f.call(null, parent__2573, child__2576);
+            var temp__3698__auto____2578 = cljs.core.next.call(null, G__2571__2577);
+            if(cljs.core.truth_(temp__3698__auto____2578)) {
+              var G__2571__2579 = temp__3698__auto____2578;
+              var G__2584 = cljs.core.first.call(null, G__2571__2579);
+              var G__2585 = G__2571__2579;
+              child__2576 = G__2584;
+              G__2571__2577 = G__2585;
               continue
             }else {
             }
@@ -14831,13 +16849,13 @@ domina.apply_with_cloning = function apply_with_cloning(f, parent_content, child
           }
         }else {
         }
-        var temp__3698__auto____2565 = cljs.core.next.call(null, G__2555__2559);
-        if(cljs.core.truth_(temp__3698__auto____2565)) {
-          var G__2555__2566 = temp__3698__auto____2565;
-          var G__2571 = cljs.core.first.call(null, G__2555__2566);
-          var G__2572 = G__2555__2566;
-          parent__2558 = G__2571;
-          G__2555__2559 = G__2572;
+        var temp__3698__auto____2580 = cljs.core.next.call(null, G__2570__2574);
+        if(cljs.core.truth_(temp__3698__auto____2580)) {
+          var G__2570__2581 = temp__3698__auto____2580;
+          var G__2586 = cljs.core.first.call(null, G__2570__2581);
+          var G__2587 = G__2570__2581;
+          parent__2573 = G__2586;
+          G__2570__2574 = G__2587;
           continue
         }else {
           return null
@@ -14853,10 +16871,10 @@ domina.apply_with_cloning = function apply_with_cloning(f, parent_content, child
 };
 domina.lazy_nodelist = function() {
   var lazy_nodelist = null;
-  var lazy_nodelist__2573 = function(nl) {
+  var lazy_nodelist__2588 = function(nl) {
     return lazy_nodelist.call(null, nl, 0)
   };
-  var lazy_nodelist__2574 = function(nl, n) {
+  var lazy_nodelist__2589 = function(nl, n) {
     if(cljs.core.truth_(n < nl.length)) {
       return new cljs.core.LazySeq(null, false, function() {
         return cljs.core.cons.call(null, nl.item(n), lazy_nodelist.call(null, nl, n + 1))
@@ -14868,9 +16886,9 @@ domina.lazy_nodelist = function() {
   lazy_nodelist = function(nl, n) {
     switch(arguments.length) {
       case 1:
-        return lazy_nodelist__2573.call(this, nl);
+        return lazy_nodelist__2588.call(this, nl);
       case 2:
-        return lazy_nodelist__2574.call(this, nl, n)
+        return lazy_nodelist__2589.call(this, nl, n)
     }
     throw"Invalid arity: " + arguments.length;
   };
@@ -14903,27 +16921,27 @@ NodeList.prototype.cljs$core$ISeqable$_seq = function(nodelist) {
 };
 NodeList.prototype.cljs$core$IIndexed$ = true;
 NodeList.prototype.cljs$core$IIndexed$_nth = function() {
-  var G__2576 = null;
-  var G__2576__2577 = function(nodelist, n) {
+  var G__2591 = null;
+  var G__2591__2592 = function(nodelist, n) {
     return nodelist.item(n)
   };
-  var G__2576__2578 = function(nodelist, n, not_found) {
+  var G__2591__2593 = function(nodelist, n, not_found) {
     if(cljs.core.truth_(nodelist.length <= n)) {
       return not_found
     }else {
       return cljs.core.nth.call(null, nodelist, n)
     }
   };
-  G__2576 = function(nodelist, n, not_found) {
+  G__2591 = function(nodelist, n, not_found) {
     switch(arguments.length) {
       case 2:
-        return G__2576__2577.call(this, nodelist, n);
+        return G__2591__2592.call(this, nodelist, n);
       case 3:
-        return G__2576__2578.call(this, nodelist, n, not_found)
+        return G__2591__2593.call(this, nodelist, n, not_found)
     }
     throw"Invalid arity: " + arguments.length;
   };
-  return G__2576
+  return G__2591
 }();
 NodeList.prototype.cljs$core$ICounted$ = true;
 NodeList.prototype.cljs$core$ICounted$_count = function(nodelist) {
@@ -14936,27 +16954,27 @@ if(cljs.core.truth_(window.StaticNodeList)) {
   };
   StaticNodeList.prototype.cljs$core$IIndexed$ = true;
   StaticNodeList.prototype.cljs$core$IIndexed$_nth = function() {
-    var G__2580 = null;
-    var G__2580__2581 = function(nodelist, n) {
+    var G__2595 = null;
+    var G__2595__2596 = function(nodelist, n) {
       return nodelist.item(n)
     };
-    var G__2580__2582 = function(nodelist, n, not_found) {
+    var G__2595__2597 = function(nodelist, n, not_found) {
       if(cljs.core.truth_(nodelist.length <= n)) {
         return not_found
       }else {
         return cljs.core.nth.call(null, nodelist, n)
       }
     };
-    G__2580 = function(nodelist, n, not_found) {
+    G__2595 = function(nodelist, n, not_found) {
       switch(arguments.length) {
         case 2:
-          return G__2580__2581.call(this, nodelist, n);
+          return G__2595__2596.call(this, nodelist, n);
         case 3:
-          return G__2580__2582.call(this, nodelist, n, not_found)
+          return G__2595__2597.call(this, nodelist, n, not_found)
       }
       throw"Invalid arity: " + arguments.length;
     };
-    return G__2580
+    return G__2595
   }();
   StaticNodeList.prototype.cljs$core$ICounted$ = true;
   StaticNodeList.prototype.cljs$core$ICounted$_count = function(nodelist) {
@@ -14970,27 +16988,27 @@ HTMLCollection.prototype.cljs$core$ISeqable$_seq = function(coll) {
 };
 HTMLCollection.prototype.cljs$core$IIndexed$ = true;
 HTMLCollection.prototype.cljs$core$IIndexed$_nth = function() {
-  var G__2584 = null;
-  var G__2584__2585 = function(coll, n) {
+  var G__2599 = null;
+  var G__2599__2600 = function(coll, n) {
     return coll.item(n)
   };
-  var G__2584__2586 = function(coll, n, not_found) {
+  var G__2599__2601 = function(coll, n, not_found) {
     if(cljs.core.truth_(coll.length <= n)) {
       return not_found
     }else {
       return cljs.core.nth.call(null, coll, n)
     }
   };
-  G__2584 = function(coll, n, not_found) {
+  G__2599 = function(coll, n, not_found) {
     switch(arguments.length) {
       case 2:
-        return G__2584__2585.call(this, coll, n);
+        return G__2599__2600.call(this, coll, n);
       case 3:
-        return G__2584__2586.call(this, coll, n, not_found)
+        return G__2599__2601.call(this, coll, n, not_found)
     }
     throw"Invalid arity: " + arguments.length;
   };
-  return G__2584
+  return G__2599
 }();
 HTMLCollection.prototype.cljs$core$ICounted$ = true;
 HTMLCollection.prototype.cljs$core$ICounted$_count = function(coll) {
@@ -15000,6 +17018,7 @@ goog.provide("domina.xpath");
 goog.require("cljs.core");
 goog.require("domina");
 goog.require("goog.dom");
+goog.require("cybozu.xpath");
 domina.xpath.select_node_STAR_ = function select_node_STAR_(path, node, technique_1, technique_2) {
   var doc__2419 = goog.dom.getOwnerDocument.call(null, node);
   if(cljs.core.truth_(function() {

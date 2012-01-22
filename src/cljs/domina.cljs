@@ -6,6 +6,11 @@
             [goog.style :as style]
             [goog.string :as string]
             [cljs.core :as core]))
+;;;;;;;;;;;;;;;;;;; Debug Log ;;;;;;;;;;;;;;;;;
+(def debug true)
+(defn log-debug [mesg] 
+  (when (and debug (not (= (.-console js/window) js/undefined)))
+    (.log js/console mesg)))
 
 ;;;;;;;;;;;;;;;;;;; Protocols ;;;;;;;;;;;;;;;;;
 

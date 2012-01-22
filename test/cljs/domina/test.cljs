@@ -4,7 +4,9 @@
                        insert-after! swap-content! style attr set-style! set-attr! styles attrs
                        set-styles! set-attrs! has-class? add-class! remove-class! classes
                        text set-text! value set-value! html set-html!]]
-        [domina.xpath :only [xpath]]))
+        [domina.xpath :only [xpath]]
+        [domina.events :only [listen! unlisten! remove-listeners! fire-listeners!]])
+  (:require [goog.events :as events]))
 
 (comment
   (repl/connect "http://localhost:9000/repl")
@@ -492,6 +494,94 @@
                (append! (xpath "//body") "<div></div><div></div>")
                (set-html! (xpath "//div") "<p class='foobar'>some text</p>")
                (assert (= 2 (count (nodes (xpath "//body/div/p[@class='foobar']")))))))
+
+(add-test "can trigger a handler on a :mouseover event"
+          #(do (reset)
+               (append! (xpath "//body") "<div id='ref'>Some content</div>")
+               (listen! (by-id "ref") :mouseover (fn [] (append! (by-id "ref") "<p>Hello world!</p>")))
+               (let [target (by-id "ref")]
+                 (fire-listeners! target :mouseover false {:type :mouseover :target target}))
+               (assert (= "Hello world!" (text (xpath "//p"))))))
+
+(add-test "can trigger a handler on a :mouseout event"
+          #(do (reset)
+               (append! (xpath "//body") "<div id='ref'>Some content</div>")
+               (listen! (by-id "ref") :mouseout (fn [] (append! (by-id "ref") "<p>Hello world!</p>")))
+               (let [target (by-id "ref")]
+                 (fire-listeners! target :mouseout false {:type :mouseout :target target}))
+               (assert (= "Hello world!" (text (xpath "//p"))))))
+
+(add-test "can trigger a handler on a :click event"
+          #(do (reset)
+               (append! (xpath "//body") "<div id='ref'>Some content</div>")
+               (listen! (by-id "ref") :click (fn [] (append! (by-id "ref") "<p>Hello world!</p>")))
+               (let [target (by-id "ref")]
+                 (fire-listeners! target :click false {:type :click :target target}))
+               (assert (= "Hello world!" (text (xpath "//p"))))))
+
+
+(add-test "can trigger a handler on a :mouseenter event"
+          #(do (reset)
+               (append! (xpath "//body") "<div id='parent'><div id='ref'></div></div>")
+               (listen! (by-id "ref") :mouseenter (fn [] (append! (by-id "ref") "<p>Hello world!</p>")))
+               (let [rtarget (by-id "parent")
+                     target (by-id "ref")]
+                 (fire-listeners! target :mouseenter false {:type :mouseenter :related-target rtarget :target target}))
+               (assert (= "Hello world!" (text (xpath "//p"))))))
+
+
+(add-test "can trigger a handler on a :mouseleave event"
+          #(do (reset)
+               (append! (xpath "//body") "<div id='parent'><div id='ref'></div></div>")
+               (listen! (by-id "ref") :mouseleave (fn [] (append! (by-id "ref") "<p>Hello world!</p>")))
+               (let [rtarget (by-id "parent")
+                     target (by-id "ref")]
+                 (fire-listeners! target :mouseleave false {:type :mouseleave :related-target rtarget :target target}))
+               (assert (= "Hello world!" (text (xpath "//p"))))))
+
+(add-test "can remove-listeners on a :click event"
+          #(let [handler (fn [] (append! (by-id "ref") "<p>Hello world!</p>"))]
+             (reset)
+             (append! (xpath "//body") "<div id='ref'>Some content</div>")
+             (listen! (by-id "ref") :click handler)
+             (remove-listeners! (by-id "ref") :click)
+             (let [target (by-id "ref")]
+               (fire-listeners! target :click false {:type :click :target target}))
+             (assert (= "Some content" (text (xpath "//div"))))))
+
+(add-test "can remove-listeners on a :mouseenter event"
+          #(let [handler (fn [] (append! (by-id "ref") "<p>Hello world!</p>"))]
+             (reset)
+             (append! (xpath "//body") "<div id='parent'><div id='ref'>Some content</div></div>")
+             (listen! (by-id "ref") :mouseenter handler)
+             (remove-listeners! (by-id "ref") :mouseenter)
+             (let [rtarget (by-id "parent")
+                   target (by-id "ref")]
+               (fire-listeners! target :mouseenter false {:type :mouseenter :related-target rtarget :target target}))
+             (assert (= "Some content" (text (xpath "//div"))))))
+
+(add-test "can unlisten! on a :click event"
+          #(let [handler (fn [] (append! (by-id "ref") "<p>Hello world!</p>"))]
+             (reset)
+             (append! (xpath "//body") "<div id='ref'>Some content</div>")
+             (listen! (by-id "ref") :click handler)
+             (unlisten! (by-id "ref") :click handler)
+             (let [target (by-id "ref")]
+               (fire-listeners! target :click false {:type :click :target target}))
+             (assert (= "Some content" (text (xpath "//div"))))))
+
+(add-test "can unlisten! on a :mouseenter event"
+          #(let [handler (fn [] (append! (by-id "ref") "<p>Hello world!</p>"))]
+             (reset)
+             (append! (xpath "//body") "<div id='parent'><div id='ref'>Some content</div></div>")
+             (listen! (by-id "ref") :mouseenter handler)
+             (unlisten! (by-id "ref") :mouseenter handler)
+             (let [rtarget (by-id "parent")
+                   target (by-id "ref")]
+               (fire-listeners! target :mouseenter false {:type :mouseenter :related-target rtarget :target target}))
+             (assert (= "Some content" (text (xpath "//div"))))))
+
+
 
 (defn report
   [test-results]

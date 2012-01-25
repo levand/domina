@@ -2,7 +2,7 @@
 
 Domina is a jQuery inspired DOM manipulation library for ClojureScript. It provides a functional, idiomatic Clojure interface to the DOM manipulation facilities provided by the Google Closure library.
 
-**Warning**: Domina is still alpha-level software and is currently public only for testing and feedback. See the 'todo' section below for a list of known caveats and deficiencies.
+**Warning**: Domina is still alpha-level software and is currently public only for testing and feedback.
 
 Pull requests are extremely welcome!
 
@@ -115,9 +115,6 @@ It was decided *not* to compile this functionality directly into Domina for two 
 
 ## Todo
 
-There's still a lot of work to be done:
+See the projects [Trello page](https://trello.com/board/domina/4f1f09c9ffa52a1e570372eb)
 
-* Repackage for easier distribution
-* Comprehensive browser/OS testing (currently only tested against the latest Firefox and Chrome on MacOS 10.6.
-* Performance profiling and analysis.
-* Implement a css selector function.
+If you'd like to participate, please just let me know and I'll add you.

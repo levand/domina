@@ -1,7 +1,9 @@
-.repl
-build
+classes
+.cljsbuild
+.lein-deps-sum
 public/build_no_opt
 public/test_*.js
+public/domina.js
 domina-tests
-lib/*.jar
-script/run-tests
+lib
+*.jar

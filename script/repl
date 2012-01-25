@@ -1,6 +1,0 @@
-#!/bin/sh
-
-. `dirname $0`/set-classpath
-
-java -server clojure.main
-

@@ -43,7 +43,7 @@
   "Standard fixture html"
   []
   (append! (xpath "//body")
-          "<div class='d1'><p class='p1'>P1</p><p class='p2'>P2</p>
+           "<div class='d1'><p class='p1'>P1</p><p class='p2'>P2</p>
 <p id='id1' class='p3'>P3</p>"))
 
 ;;;;;; DOM Manipulation Tests
@@ -72,7 +72,7 @@
 (add-test "extended selection chaining"
           #(do (reset)
                (append! (xpath "//body")
-                       "<div><p><span>some text</span></p><p><span>more text</span></p></div>")
+                        "<div><p><span>some text</span></p><p><span>more text</span></p></div>")
                (assert (= 2 (count (nodes (-> (xpath "//body")
                                               (xpath "div")
                                               (xpath "p")
@@ -116,21 +116,21 @@
 (add-test "append multiple children to a single parent"
           #(do (reset)
                (append! (xpath "//body")
-                       "<p class='appended2'>test2-1</p><p class='appended2'>test2-2</p>")
+                        "<p class='appended2'>test2-1</p><p class='appended2'>test2-2</p>")
                (assert (= 2 (count (nodes (xpath "//body/p[@class='appended2']")))))))
 
 (add-test "append a single child to multiple parents"
           #(do (reset)
                (standard-fixture)
                (append! (xpath "//body/div/p")
-                       "<span>!!</span>")
+                        "<span>!!</span>")
                (assert (= 3 (count (nodes (xpath "//div/p/span")))))))
 
 (add-test "append multiple children to multiple parents"
           #(do (reset)
                (standard-fixture)
                (append! (xpath "//body/div/p")
-                       "some <span class='foo'>more</span> text")
+                        "some <span class='foo'>more</span> text")
                (assert (= 3 (count (nodes (xpath "//div/p/span[@class='foo']")))))))
 
 (add-test "prepend a single child to a single parent"
@@ -150,13 +150,13 @@
 (add-test "Insert a single child to a single parent"
           #(do (reset)
                (append! (xpath "//body")
-                       "<div class='testInserts'></div>")
+                        "<div class='testInserts'></div>")
                (append! (xpath "//div[@class='testInserts']")
-                       "<p class='i1'></p>")
+                        "<p class='i1'></p>")
                (append! (xpath "//div[@class='testInserts']")
-                       "<p class='i3'></p>")
+                        "<p class='i3'></p>")
                (insert! (xpath "//div[@class='testInserts']")
-                       "<p class='i2'></p>" 1)
+                        "<p class='i2'></p>" 1)
                (assert (= 3 (count (nodes (xpath "//div[@class='testInserts']/p")))))
                (assert (= 1 (count (nodes (xpath "//p[@class='i2']/preceding-sibling::*")))))
                (assert (= 1 (count (nodes (xpath "//p[@class='i2']/following-sibling::*")))))))
@@ -164,22 +164,22 @@
 (add-test "Insert a single child to multiple parents"
           #(do (reset)
                (append! (xpath "//body")
-                       "<div class='testInserts' id='testInsert1'></div>")
+                        "<div class='testInserts' id='testInsert1'></div>")
                (append! (xpath "//body")
-                       "<div class='testInserts' id='testInsert2'></div>")
+                        "<div class='testInserts' id='testInsert2'></div>")
                (append! (xpath "//div[@class='testInserts']")
-                       "<p class='i1'></p>")
+                        "<p class='i1'></p>")
                (append! (xpath "//div[@class='testInserts']")
-                       "<p class='i3'></p>")
+                        "<p class='i3'></p>")
                (insert! (xpath "//div[@class='testInserts']")
-                       "<p class='i2'></p>" 1)
+                        "<p class='i2'></p>" 1)
                (doseq [children [(xpath "//div[@id='testInsert1']")
                                  (xpath "//div[@id='testInsert2']")]]
                  (assert (= 3 (count (nodes (xpath children "p")))))
                  (assert (= 1 (count (nodes (xpath children
-                                                    "p[@class='i2']/preceding-sibling::*")))))
+                                                   "p[@class='i2']/preceding-sibling::*")))))
                  (assert (= 1 (count (nodes (xpath children
-                                                    "p[@class='i2']/following-sibling::*"))))))))
+                                                   "p[@class='i2']/following-sibling::*"))))))))
 
 (add-test "destroy a single node"
           #(do (reset)
@@ -191,7 +191,7 @@
 (add-test "destroy multiple nodes"
           #(do (reset)
                (append! (xpath "//body")
-                       "<p class='appended2'>app1</p><p class='appended2'>app2</p>")
+                        "<p class='appended2'>app1</p><p class='appended2'>app2</p>")
                (assert (= 2 (count (nodes (xpath "//body/p[@class='appended2']")))))
                (destroy! (xpath "//body/p[@class='appended2']"))
                (assert (= 0 (count (nodes (xpath "//body/p[@class='appended2']")))))))
@@ -289,18 +289,18 @@
 ;;;;;; Style / Attribute tests
 
 (add-test "can retrieve a css property value"
-            #(do (reset)
-                 (append! (xpath "//body") "<div style=\"background-color: maroon;\">Test</div>")
-                 (assert (= "maroon" (style (xpath "//div") "background-color")))
-                 (assert (= "maroon" (style (xpath "//div") :background-color)))
-                 (assert (nil? (style (xpath "//div") :no-such-style)))))
+          #(do (reset)
+               (append! (xpath "//body") "<div style=\"background-color: maroon;\">Test</div>")
+               (assert (= "maroon" (style (xpath "//div") "background-color")))
+               (assert (= "maroon" (style (xpath "//div") :background-color)))
+               (assert (nil? (style (xpath "//div") :no-such-style)))))
 
 (add-test "can retrieve an HTML attribute value"
-            #(do (reset)
-                 (append! (xpath "//body") "<div height=\"42\">Content!</div>")
-                 (assert (= "42" (attr (xpath "//div") "height")))
-                 (assert (= "42" (attr (xpath "//div") :height)))
-                 (assert (nil? (attr (xpath "//div") :no-such-attr:c)))))
+          #(do (reset)
+               (append! (xpath "//body") "<div height=\"42\">Content!</div>")
+               (assert (= "42" (attr (xpath "//div") "height")))
+               (assert (= "42" (attr (xpath "//div") :height)))
+               (assert (nil? (attr (xpath "//div") :no-such-attr:c)))))
 
 (add-test "can set a css property on a single node"
           #(do (reset)
@@ -352,7 +352,7 @@
           #(do (reset)
                (append! (xpath "//body") "<div>1</div>")
                (set-styles! (xpath "//div") {:color "red"
-                                            :background-color "black"})
+                                             :background-color "black"})
                (assert (= "black" (style (xpath "//div") "background-color")))
                (assert (= "red" (style (xpath "//div") "color")))))
 
@@ -360,7 +360,7 @@
           #(do (reset)
                (append! (xpath "//body") "<div>1</div><div>2</div>")
                (set-styles! (xpath "//div") {:color "red"
-                                            :background-color "black"})
+                                             :background-color "black"})
                (assert (= "black" (style (xpath "//div[1]") "background-color")))
                (assert (= "red" (style (xpath "//div[1]") "color")))
                (assert (= "black" (style (xpath "//div[2]") "background-color")))
@@ -370,7 +370,7 @@
           #(do (reset)
                (append! (xpath "//body") "<div>1</div>")
                (set-attrs! (xpath "//div") {:width 42
-                                           :height 24})
+                                            :height 24})
                (assert (= "42" (attr (xpath "//div") "width")))
                (assert (= "24" (attr (xpath "//div") "height")))))
 
@@ -378,7 +378,7 @@
           #(do (reset)
                (append! (xpath "//body") "<div>1</div><div>2</div>")
                (set-attrs! (xpath "//div") {:width 42
-                                           :height 24})
+                                            :height 24})
                (assert (= "42" (attr (xpath "//div[1]") "width")))
                (assert (= "24" (attr (xpath "//div[1]") "height")))
                (assert (= "42" (attr (xpath "//div[2]") "width")))
@@ -601,8 +601,6 @@
                    target (by-id "ref")]
                (fire-listeners! target :mouseenter false {:type :mouseenter :related-target rtarget :target target}))
              (assert (= "Some content" (text (xpath "//div"))))))
-
-
 
 (defn report
   [test-results]

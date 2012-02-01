@@ -8,7 +8,7 @@
             [cljs.core :as core]))
 ;;;;;;;;;;;;;;;;;;; Debug Log ;;;;;;;;;;;;;;;;;
 (def debug true)
-(defn log-debug [mesg] 
+(defn log-debug [mesg]
   (when (and debug (not (= (.-console js/window) js/undefined)))
     (.log js/console mesg)))
 
@@ -292,7 +292,6 @@
 ;;;;;;;;;;;;;;;;;;; Protocol Implementations ;;;;;;;;;;;;;;;;;
 
 (extend-protocol DomContent
-
   string
   (nodes [s] (nodes (string-to-dom s)))
   (single-node [s] (single-node (string-to-dom s)))
@@ -324,10 +323,12 @@
     (-count [nodelist] (. nodelist -length))
 
     IIndexed
-    (-nth ([nodelist n] (. nodelist (item n)))
-          ([nodelist n not-found] (if (<= (. nodelist -length) n)
-                              not-found
-                              (nth nodelist n))))
+    (-nth
+      ([nodelist n] (. nodelist (item n)))
+      ([nodelist n not-found] (if (<= (. nodelist -length) n)
+                                not-found
+                                (nth nodelist n))))
+
     ISeqable
     (-seq [nodelist] (lazy-nodelist nodelist))))
 
@@ -336,9 +337,11 @@
   (-count [coll] (. coll -length))
 
   IIndexed
-  (-nth ([coll n] (. coll (item n)))
+  (-nth
+    ([coll n] (. coll (item n)))
     ([coll n not-found] (if (<= (. coll -length) n)
                           not-found
                           (nth coll n))))
+
   ISeqable
   (-seq [coll] (lazy-nodelist coll)))

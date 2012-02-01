@@ -489,11 +489,32 @@
                (set-html! (xpath "//div") "<p class='foobar'>some text</p>")
                (assert (= 1 (count (nodes (xpath "//body/div/p[@class='foobar']")))))))
 
-(add-test "can set multiple node's innerHTML"
+(add-test "can set multiple nodes' innerHTML"
           #(do (reset)
                (append! (xpath "//body") "<div></div><div></div>")
                (set-html! (xpath "//div") "<p class='foobar'>some text</p>")
                (assert (= 2 (count (nodes (xpath "//body/div/p[@class='foobar']")))))))
+
+(add-test "can get nodes from strings containing cell-level table fragments"
+          #(do (reset)
+               (let [n (nodes "<td>Cell</td><th>Header</th>")]
+                 (assert (= (count n) 2))
+                 (doseq [h n]
+                   (assert (re-find #"TableCell" (pr-str h)))))))
+
+(add-test "can get nodes from strings containing row-level table fragments"
+          #(do (reset)
+               (let [n (nodes "<tr><td>Cell</td><th>Header</th></tr><tr><td>Another</td><th>Row</th></tr>")]
+                 (assert (= (count n) 2))
+                 (doseq [h n]
+                   (assert (re-find #"TableRow" (pr-str h)))))))
+
+(add-test "can get nodes from strings containing section-level table fragments"
+          #(do (reset)
+               (let [n (nodes "<thead><tr><td>Cell</td><th>Header</th></tr></thead><tbody><tr><td>Another</td><th>Row</th></tr></tbody>")]
+                 (assert (= (count n) 2))
+                 (doseq [h n]
+                   (assert (re-find #"TableSection" (pr-str h)))))))
 
 (add-test "can trigger a handler on a :mouseover event"
           #(do (reset)

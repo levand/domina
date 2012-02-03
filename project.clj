@@ -1,4 +1,3 @@
-
 (defproject domina "0.1.0"
   :description "A DOM manipulatio library for ClojureScript inspired by JQuery"
   :source-path "src/clj"

@@ -603,6 +603,14 @@
                (fire-listeners! target :mouseenter false {:type :mouseenter :related-target rtarget :target target}))
              (assert (= "Some content" (text (xpath "//div"))))))
 
+(add-test "can append to a document fragment"
+          #(do
+             (reset)
+             (let [frag (.createDocumentFragment js/document)]
+               (append! frag "<div>testing</div>")
+               (append! (xpath "//body") frag)
+               (assert (= "testing" (text (xpath "//div")))))))
+
 (defn report
   [test-results]
   (reset)

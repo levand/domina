@@ -238,11 +238,13 @@
 (defn- apply-with-cloning
   "Takes a two-arg function, a reference DomContent and new DomContent. Applies the function for each reference / content combination. Uses clones of the new content for each additional parent after the first."
   [f parent-content child-content]
-  (let [fragment (. js/document (createDocumentFragment))]
-    (doseq [child (nodes (clone child-content))]
-      (.appendChild fragment child))
-    (doseq [parent (nodes parent-content)]
-      (f parent (.cloneNode fragment true)))))
+  (let [parents (nodes parent-content)]
+    (when (not (empty? parents))
+      (doseq [child (nodes child-content)]
+        (f (first parents) child))
+      (doseq [parent (rest parents)
+              child (nodes (clone child-content))]
+        (f parent child)))))
 
 (defn- lazy-nodelist
   "A lazy seq view of a js/NodeList"
@@ -297,6 +299,10 @@
   (single-node [s] (single-node (string-to-dom s)))
 
   js/Element
+  (nodes [content] (cons content))
+  (single-node [content] content)
+
+  js/DocumentFragment
   (nodes [content] (cons content))
   (single-node [content] content)
 

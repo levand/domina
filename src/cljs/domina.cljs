@@ -241,10 +241,11 @@
   (let [fragment (. js/document (createDocumentFragment))
         parents  (nodes parent-content)
         children (nodes child-content)]
-    (doseq [child children]
-      (.appendChild fragment child))
-    (doseq [parent parents]
-      (f parent (.cloneNode fragment true)))))
+    (when (seq parents)
+      (doseq [child children]
+        (.appendChild fragment child))
+      (doseq [parent parents]
+        (f parent (.cloneNode fragment true))))))
 
 (defn- lazy-nodelist
   "A lazy seq view of a js/NodeList"

@@ -8,7 +8,7 @@
             [cljs.core :as core]))
 ;;;;;;;;;;;;;;;;;;; Debug Log ;;;;;;;;;;;;;;;;;
 (def debug true)
-(defn log-debug [mesg] 
+(defn log-debug [mesg]
   (when (and debug (not (= (.-console js/window) js/undefined)))
     (.log js/console mesg)))
 
@@ -254,13 +254,49 @@
              (cons (. nl (item n))
                    (lazy-nodelist nl (inc n)))))))
 
+;;;;;;;;;;;;;;;;;;; String to DOM ;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defn- create-wrapper
+  [table-level]
+  (.createElement
+   js/document
+   (if table-level
+     (if (#{"td" "th"} table-level)
+       "tr"
+       "table")
+     "div")))
+
+(defn- set-wrapper-html!
+  [wrapper content]
+  (if (.-INNER_HTML_NEEDS_SCOPED_ELEMENT dom/BrowserFeature)
+    (do
+      (set! (.-innerHTML wrapper) (str "<br>" content))
+      (.removeChild wrapper (.-firstChild wrapper)))
+    (set! (.-innerHTML wrapper) content)))
+
+(defn- extract-wrapper-dom
+  [wrapper table-level]
+  (let [inner-wrapper (if (= table-level "tr")
+                        (first (dom/getElementsByTagNameAndClass "tbody" nil wrapper))
+                        wrapper)
+        children (.-childNodes inner-wrapper)]
+    (if (= (.-length children) 1)
+      (.removeChild inner-wrapper (.-firstChild inner-wrapper))
+      children)))
+
+(defn- string-to-dom
+  [content]
+  (let [[_ table-level & _] (re-find #"^<(t(head|body|foot|[rhd]))" content)
+        wrapper (create-wrapper table-level)]
+    (set-wrapper-html! wrapper content)
+    (extract-wrapper-dom wrapper table-level)))
+
 ;;;;;;;;;;;;;;;;;;; Protocol Implementations ;;;;;;;;;;;;;;;;;
 
 (extend-protocol DomContent
-
   string
-  (nodes [s] (cons (dom/htmlToDocumentFragment s)))
-  (single-node [s] (dom/htmlToDocumentFragment s))
+  (nodes [s] (nodes (string-to-dom s)))
+  (single-node [s] (single-node (string-to-dom s)))
 
   js/Element
   (nodes [content] (cons content))
@@ -293,10 +329,12 @@
     (-count [nodelist] (. nodelist -length))
 
     IIndexed
-    (-nth ([nodelist n] (. nodelist (item n)))
-          ([nodelist n not-found] (if (<= (. nodelist -length) n)
-                              not-found
-                              (nth nodelist n))))
+    (-nth
+      ([nodelist n] (. nodelist (item n)))
+      ([nodelist n not-found] (if (<= (. nodelist -length) n)
+                                not-found
+                                (nth nodelist n))))
+
     ISeqable
     (-seq [nodelist] (lazy-nodelist nodelist))))
 
@@ -305,9 +343,11 @@
   (-count [coll] (. coll -length))
 
   IIndexed
-  (-nth ([coll n] (. coll (item n)))
+  (-nth
+    ([coll n] (. coll (item n)))
     ([coll n not-found] (if (<= (. coll -length) n)
                           not-found
                           (nth coll n))))
+
   ISeqable
   (-seq [coll] (lazy-nodelist coll)))

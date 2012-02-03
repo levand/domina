@@ -22,8 +22,7 @@ Entities which implement `DomContent` include:
 * Individual nodes
 * Sequences of nodes
 * Built-in HTML node collections such as `NodeList`
-* HTML `DocumentFragment` objects.
-* Strings (which are parsed into a `DocumentFragment` object)
+* Strings (which are parsed into one or more nodes)
 * Selectors (such as `xpath`) create reified `DomContent` objects directly
 
 ### Selectors

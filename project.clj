@@ -1,5 +1,5 @@
 (defproject domina "0.1.0"
-  :description "A DOM manipulatio library for ClojureScript inspired by JQuery"
+  :description "A DOM manipulation library for ClojureScript inspired by JQuery"
   :source-path "src/clj"
   :dependencies [[org.clojure/clojure "1.3.0"]
                  [goog-jar "1.0.0"]]
@@ -34,7 +34,3 @@
                            :pretty-print false
                            :output-dir ".cljsbuild/advanced"
                            :output-to "public/test_advanced.js"}}])
-
-
-
-

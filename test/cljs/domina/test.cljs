@@ -611,6 +611,13 @@
                (append! (xpath "//body") frag)
                (assert (= "testing" (text (xpath "//div")))))))
 
+(add-test "doesn't clone unless necessary"
+          #(do
+             (reset)
+             (let [child (single-node "<div>hello</div>")]
+               (append! (xpath "//body") child)
+               (assert (= child (single-node (xpath "//body/div")))))))
+
 (defn report
   [test-results]
   (reset)

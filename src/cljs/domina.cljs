@@ -236,16 +236,21 @@
 ;;;;;;;;;;;;;;;;;;; private helper functions ;;;;;;;;;;;;;;;;;
 
 (defn- apply-with-cloning
-  "Takes a two-arg function, a reference DomContent and new DomContent. Applies the function for each reference / content combination. Uses clones of the new content for each additional parent after the first."
+  "Takes a two-arg function, a reference DomContent and new
+  DomContent. Applies the function for each reference / content
+  combination. Uses clones of the new content for each additional
+  parent after the first."
   [f parent-content child-content]
-  (let [fragment (. js/document (createDocumentFragment))
-        parents  (nodes parent-content)
-        children (nodes child-content)]
+  (let [parents  (nodes parent-content)
+        children (nodes child-content)
+        first-child (let [frag (. js/document (createDocumentFragment))]
+                      (doseq [child children]
+                        (.appendChild frag child)) frag)
+        other-children (doall (repeatedly (dec (count parents))
+                                          #(.cloneNode first-child true)))]
     (when (seq parents)
-      (doseq [child children]
-        (.appendChild fragment child))
-      (doseq [parent parents]
-        (f parent (.cloneNode fragment true))))))
+      (f (first parents) first-child)
+      (doall (map #(f %1 %2) (rest parents) other-children)))))
 
 (defn- lazy-nodelist
   "A lazy seq view of a js/NodeList"

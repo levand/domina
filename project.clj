@@ -4,7 +4,7 @@
   :source-path "src/clj"
   :dependencies [[org.clojure/clojure "1.3.0"]
                  [goog-jar "1.0.0"]]
-  :dev-dependencies [[lein-cljsbuild "0.0.10-SNAPSHOT"]]
+  :dev-dependencies [[lein-cljsbuild "0.0.11-SNAPSHOT"]]
   :hooks [leiningen.cljsbuild]
   :cljsbuild [{:source-path "src/cljs"
                :jar true

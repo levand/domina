@@ -7,7 +7,7 @@
             [goog.string :as string]
             [cljs.core :as core]))
 ;;;;;;;;;;;;;;;;;;; Debug Log ;;;;;;;;;;;;;;;;;
-(def debug false)
+(def debug true)
 (defn log-debug [mesg]
   (when (and debug (not (= (.-console js/window) js/undefined)))
     (.log js/console mesg)))
@@ -238,10 +238,12 @@
 (defn- apply-with-cloning
   "Takes a two-arg function, a reference DomContent and new DomContent. Applies the function for each reference / content combination. Uses clones of the new content for each additional parent after the first."
   [f parent-content child-content]
-  (let [fragment (. js/document (createDocumentFragment))]
-    (doseq [child (nodes child-content)]
-      (.appendChild fragment (.cloneNode child true)))
-    (doseq [parent (nodes parent-content)]
+  (let [fragment (. js/document (createDocumentFragment))
+        parents  (nodes parent-content)
+        children (nodes child-content)]
+    (doseq [child children]
+      (.appendChild fragment child))
+    (doseq [parent parents]
       (f parent (.cloneNode fragment true)))))
 
 (defn- lazy-nodelist
@@ -277,8 +279,8 @@
   (let [inner-wrapper (if (= table-level "tr")
                         (first (dom/getElementsByTagNameAndClass "tbody" nil wrapper))
                         wrapper)
-        children (.-childNodes inner-wrapper)]
-    (if (= (.-length children) 1)
+        children (seq (.-childNodes inner-wrapper))]
+    (if (= (count children) 1)
       (.removeChild inner-wrapper (.-firstChild inner-wrapper))
       children)))
 

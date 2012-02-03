@@ -50,7 +50,7 @@
   (aget (dom/getElementsByTagNameAndClass "html") 0))
 
 (defn xpath
-  "Returns content based on an xpath expression. Takes an optional content as a base; if none is given, uses js/document as a base."
+  "Returns content based on an xpath expression. Takes an optional content as a base; if none is given, uses the HTML element as a base."
   ([expr] (xpath (root-element) expr))
   ([base expr] (reify domina/DomContent
                  (nodes [_] (mapcat (partial select-nodes expr) (domina/nodes base)))

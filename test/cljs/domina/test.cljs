@@ -5,6 +5,7 @@
                        set-styles! set-attrs! has-class? add-class! remove-class! classes
                        text set-text! value set-value! html set-html!]]
         [domina.xpath :only [xpath]]
+        [domina.css :only [sel]]
         [domina.events :only [listen! unlisten! remove-listeners! fire-listeners!]])
   (:require [goog.events :as events]))
 

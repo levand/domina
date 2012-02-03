@@ -266,6 +266,10 @@
   (nodes [content] (cons content))
   (single-node [content] content)
 
+  js/DocumentFragment
+  (nodes [content] (cons content))
+  (single-node [content] content)
+
   default
   (nodes [content] (seq content))
   (single-node [content] (first content)))

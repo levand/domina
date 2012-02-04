@@ -44,6 +44,27 @@ The `xpath` function also takes an optional first argument (which can be any `Do
     (xpath "span"))
 ```
 
+The `sel` function in the `domina.css` namespace works the same way for CSS selectors:
+
+```clojure
+(sel ".my-class")
+```
+
+```clojure
+(sel "#my-id")
+```
+
+```clojure
+(-> (sel "body")
+    (sel "div")
+    (sel "p")
+    (sel "span"))
+```
+
+```clojure
+(sel "body > div > p > span")
+```
+
 Other selector functions include the core functions `by-id` and `by-class` which return a `DomContent` based on node id and node class, respectively.
 
 ## Examples

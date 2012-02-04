@@ -4,7 +4,7 @@
   :dependencies [[org.clojure/clojure "1.3.0"]
                  [goog-jar "1.0.0"]]
   :dev-dependencies [[lein-cljsbuild "0.0.11-SNAPSHOT"]]
-  :hooks [leiningen.cljsbuild]
+  ;; :hooks [leiningen.cljsbuild]
   :cljsbuild [{:source-path "src/cljs"
                :jar true
                :compiler {:libs ["goog/dom/query.js"]
@@ -34,3 +34,12 @@
                            :pretty-print false
                            :output-dir ".cljsbuild/advanced"
                            :output-to "public/test_advanced.js"}}])
+
+(comment
+  (do
+    (require '[cljs.repl :as repl])
+    (require '[cljs.repl.browser :as browser])
+    (def env (browser/repl-env))
+    (repl/repl env))
+
+  )

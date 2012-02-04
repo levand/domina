@@ -7,11 +7,10 @@
         [domina.xpath :only [xpath]]
         [domina.css :only [sel]]
         [domina.events :only [listen! unlisten! remove-listeners! fire-listeners!]])
-  (:require [goog.events :as events]))
+  (:require [goog.events :as events]
+            [clojure.browser.repl :as repl]))
 
-(comment
-  (repl/connect "http://localhost:9000/repl")
-  )
+(repl/connect "http://localhost:9000/repl")
 
 (js* "
   window['tryfn'] = function(f) {
@@ -46,6 +45,39 @@
   (append! (xpath "//body")
            "<div class='d1'><p class='p1'>P1</p><p class='p2'>P2</p>
 <p id='id1' class='p3'>P3</p>"))
+
+
+;;;;;; CSS selection tests
+
+(add-test "basic CSS selection"
+          #(do (reset)
+               (standard-fixture)
+               (assert (= 3 (count (nodes (sel "p")))))))
+
+(add-test "basic CSS selection (single node)"
+          #(do (reset)
+               (standard-fixture)
+               (assert (instance? js/Element (single-node (sel "p"))))))
+
+(add-test "CSS selection with class specification"
+          #(do (reset)
+               (standard-fixture)
+               (assert (= 1 (count (nodes (sel ".d1")))))))
+
+(add-test "a relative CSS selector"
+          #(do (reset)
+               (standard-fixture)
+               (assert (= 3 (count (nodes (-> (sel ".d1")
+                                              (sel "p"))))))))
+
+(add-test "extended CSS chaining"
+          #(do (reset)
+               (append! (sel "body")
+                        "<div><p><span>some text</span></p><p><span>more text</span></p></div>")
+               (assert (= 2 (count (nodes (-> (sel "body")
+                                              (sel "div")
+                                              (sel "p")
+                                              (sel "span"))))))))
 
 ;;;;;; DOM Manipulation Tests
 

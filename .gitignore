@@ -8,4 +8,8 @@ domina-tests
 lib
 *.jar
 .repl
+<<<<<<< HEAD
 pom.xml
+=======
+pom.xml
+>>>>>>> master

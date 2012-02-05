@@ -8,3 +8,4 @@ domina-tests
 lib
 *.jar
 .repl
+pom.xml

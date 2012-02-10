@@ -280,7 +280,7 @@
   (if (.-INNER_HTML_NEEDS_SCOPED_ELEMENT dom/BrowserFeature)
     (do
       (set! (.-innerHTML wrapper) (str "<br>" content))
-      (.removeChild wrapper (.-firstChild wrapper)))
+      (.removeChild wrapper (dom/getFirstElementChild wrapper)))
     (set! (.-innerHTML wrapper) content)))
 
 (defn- extract-wrapper-dom
@@ -288,9 +288,9 @@
   (let [inner-wrapper (if (= table-level "tr")
                         (first (dom/getElementsByTagNameAndClass "tbody" nil wrapper))
                         wrapper)
-        children (seq (.-childNodes inner-wrapper))]
+        children (seq (dom/getChildren inner-wrapper))]
     (if (= (count children) 1)
-      (.removeChild inner-wrapper (.-firstChild inner-wrapper))
+      (.removeChild inner-wrapper (dom/getFirstElementChild inner-wrapper))
       children)))
 
 (defn- string-to-dom

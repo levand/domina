@@ -11503,24 +11503,24 @@ var domina = {debug:!0, log_debug:function(a) {
   return goog.dom.getElement.call(null, cljs.core.name.call(null, a))
 }};
 domina.by_class = function by_class(b) {
-  if(cljs.core.truth_(void 0 === domina.t14985)) {
-    domina.t14985 = function(b, d, e) {
+  if(cljs.core.truth_(void 0 === domina.t15847)) {
+    domina.t15847 = function(b, d, e) {
       this.class_name = b;
       this.by_class = d;
       this.__meta = e
-    }, domina.t14985.cljs$core$IPrintable$_pr_seq = function() {
-      return cljs.core.list.call(null, "domina.t14985")
-    }, domina.t14985.prototype.domina$DomContent$ = !0, domina.t14985.prototype.domina$DomContent$nodes = function() {
+    }, domina.t15847.cljs$core$IPrintable$_pr_seq = function() {
+      return cljs.core.list.call(null, "domina.t15847")
+    }, domina.t15847.prototype.domina$DomContent$ = !0, domina.t15847.prototype.domina$DomContent$nodes = function() {
       return goog.dom.getElementsByClass.call(null, cljs.core.name.call(null, this.class_name))
-    }, domina.t14985.prototype.domina$DomContent$single_node = function() {
+    }, domina.t15847.prototype.domina$DomContent$single_node = function() {
       return goog.dom.getElementByClass.call(null, cljs.core.name.call(null, this.class_name))
-    }, domina.t14985.prototype.cljs$core$IMeta$ = !0, domina.t14985.prototype.cljs$core$IMeta$_meta = function() {
+    }, domina.t15847.prototype.cljs$core$IMeta$ = !0, domina.t15847.prototype.cljs$core$IMeta$_meta = function() {
       return this.__meta
-    }, domina.t14985.prototype.cljs$core$IWithMeta$ = !0, domina.t14985.prototype.cljs$core$IWithMeta$_with_meta = function(b, d) {
-      return new domina.t14985(this.class_name, this.by_class, d)
+    }, domina.t15847.prototype.cljs$core$IWithMeta$ = !0, domina.t15847.prototype.cljs$core$IWithMeta$_with_meta = function(b, d) {
+      return new domina.t15847(this.class_name, this.by_class, d)
     }
   }
-  return new domina.t14985(b, by_class, null)
+  return new domina.t15847(b, by_class, null)
 };
 domina.children = function(a) {
   return cljs.core.mapcat.call(null, goog.dom.getChildren, domina.nodes.call(null, a))
@@ -11786,11 +11786,11 @@ domina.create_wrapper = function(a) {
   return document.createElement(cljs.core.truth_(a) ? cljs.core.truth_(cljs.core.set(["td", "th"]).call(null, a)) ? "tr" : "table" : "div")
 };
 domina.set_wrapper_html_BANG_ = function(a, b) {
-  return cljs.core.truth_(goog.dom.BrowserFeature.INNER_HTML_NEEDS_SCOPED_ELEMENT) ? (a.innerHTML = cljs.core.str.call(null, "<br>", b), a.removeChild(a.firstChild)) : a.innerHTML = b
+  return cljs.core.truth_(goog.dom.BrowserFeature.INNER_HTML_NEEDS_SCOPED_ELEMENT) ? (a.innerHTML = cljs.core.str.call(null, "<br>", b), a.removeChild(goog.dom.getFirstElementChild.call(null, a))) : a.innerHTML = b
 };
 domina.extract_wrapper_dom = function(a, b) {
-  var c = cljs.core.truth_(cljs.core._EQ_.call(null, b, "tr")) ? cljs.core.first.call(null, goog.dom.getElementsByTagNameAndClass.call(null, "tbody", null, a)) : a, d = cljs.core.seq.call(null, c.childNodes);
-  return cljs.core.truth_(cljs.core._EQ_.call(null, cljs.core.count.call(null, d), 1)) ? c.removeChild(c.firstChild) : d
+  var c = cljs.core.truth_(cljs.core._EQ_.call(null, b, "tr")) ? cljs.core.first.call(null, goog.dom.getElementsByTagNameAndClass.call(null, "tbody", null, a)) : a, d = cljs.core.seq.call(null, goog.dom.getChildren.call(null, c));
+  return cljs.core.truth_(cljs.core._EQ_.call(null, cljs.core.count.call(null, d), 1)) ? c.removeChild(goog.dom.getFirstElementChild.call(null, c)) : d
 };
 domina.string_to_dom = function(a) {
   var b = cljs.core.re_find.call(null, /^<(t(head|body|foot|[rhd]))/, a);
@@ -11927,25 +11927,25 @@ domina.xpath.root_element = function() {
 };
 domina.xpath.xpath = function() {
   var a = null, b = function(b, d) {
-    if(cljs.core.truth_(void 0 === domina.xpath.t14878)) {
-      domina.xpath.t14878 = function(a, b, c, d) {
+    if(cljs.core.truth_(void 0 === domina.xpath.t15777)) {
+      domina.xpath.t15777 = function(a, b, c, d) {
         this.expr = a;
         this.base = b;
         this.xpath = c;
         this.__meta = d
-      }, domina.xpath.t14878.cljs$core$IPrintable$_pr_seq = function() {
-        return cljs.core.list.call(null, "domina.xpath.t14878")
-      }, domina.xpath.t14878.prototype.domina$DomContent$ = !0, domina.xpath.t14878.prototype.domina$DomContent$nodes = function() {
+      }, domina.xpath.t15777.cljs$core$IPrintable$_pr_seq = function() {
+        return cljs.core.list.call(null, "domina.xpath.t15777")
+      }, domina.xpath.t15777.prototype.domina$DomContent$ = !0, domina.xpath.t15777.prototype.domina$DomContent$nodes = function() {
         return cljs.core.mapcat.call(null, cljs.core.partial.call(null, domina.xpath.select_nodes, this.expr), domina.nodes.call(null, this.base))
-      }, domina.xpath.t14878.prototype.domina$DomContent$single_node = function() {
+      }, domina.xpath.t15777.prototype.domina$DomContent$single_node = function() {
         return cljs.core.first.call(null, cljs.core.filter.call(null, cljs.core.complement.call(null, cljs.core.nil_QMARK_), cljs.core.map.call(null, cljs.core.partial.call(null, domina.xpath.select_node, this.expr), domina.nodes.call(null, this.base))))
-      }, domina.xpath.t14878.prototype.cljs$core$IMeta$ = !0, domina.xpath.t14878.prototype.cljs$core$IMeta$_meta = function() {
+      }, domina.xpath.t15777.prototype.cljs$core$IMeta$ = !0, domina.xpath.t15777.prototype.cljs$core$IMeta$_meta = function() {
         return this.__meta
-      }, domina.xpath.t14878.prototype.cljs$core$IWithMeta$ = !0, domina.xpath.t14878.prototype.cljs$core$IWithMeta$_with_meta = function(a, b) {
-        return new domina.xpath.t14878(this.expr, this.base, this.xpath, b)
+      }, domina.xpath.t15777.prototype.cljs$core$IWithMeta$ = !0, domina.xpath.t15777.prototype.cljs$core$IWithMeta$_with_meta = function(a, b) {
+        return new domina.xpath.t15777(this.expr, this.base, this.xpath, b)
       }
     }
-    return new domina.xpath.t14878(d, b, a, null)
+    return new domina.xpath.t15777(d, b, a, null)
   };
   return a = function(c, d) {
     switch(arguments.length) {
@@ -12123,31 +12123,31 @@ domina.css.root_element = function() {
 };
 domina.css.sel = function() {
   var a = null, b = function(b, d) {
-    if(cljs.core.truth_(void 0 === domina.css.t15625)) {
-      domina.css.t15625 = function(a, b, c, d) {
+    if(cljs.core.truth_(void 0 === domina.css.t16516)) {
+      domina.css.t16516 = function(a, b, c, d) {
         this.expr = a;
         this.base = b;
         this.sel = c;
         this.__meta = d
-      }, domina.css.t15625.cljs$core$IPrintable$_pr_seq = function() {
-        return cljs.core.list.call(null, "domina.css.t15625")
-      }, domina.css.t15625.prototype.domina$DomContent$ = !0, domina.css.t15625.prototype.domina$DomContent$nodes = function() {
+      }, domina.css.t16516.cljs$core$IPrintable$_pr_seq = function() {
+        return cljs.core.list.call(null, "domina.css.t16516")
+      }, domina.css.t16516.prototype.domina$DomContent$ = !0, domina.css.t16516.prototype.domina$DomContent$nodes = function() {
         var a = this;
         return cljs.core.mapcat.call(null, function(b) {
           return goog.dom.query.call(null, a.expr, b)
         }, domina.nodes.call(null, a.base))
-      }, domina.css.t15625.prototype.domina$DomContent$single_node = function() {
+      }, domina.css.t16516.prototype.domina$DomContent$single_node = function() {
         var a = this;
         return cljs.core.first.call(null, cljs.core.filter.call(null, cljs.core.complement.call(null, cljs.core.nil_QMARK_), cljs.core.mapcat.call(null, function(b) {
           return goog.dom.query.call(null, a.expr, b)
         }, domina.nodes.call(null, a.base))))
-      }, domina.css.t15625.prototype.cljs$core$IMeta$ = !0, domina.css.t15625.prototype.cljs$core$IMeta$_meta = function() {
+      }, domina.css.t16516.prototype.cljs$core$IMeta$ = !0, domina.css.t16516.prototype.cljs$core$IMeta$_meta = function() {
         return this.__meta
-      }, domina.css.t15625.prototype.cljs$core$IWithMeta$ = !0, domina.css.t15625.prototype.cljs$core$IWithMeta$_with_meta = function(a, b) {
-        return new domina.css.t15625(this.expr, this.base, this.sel, b)
+      }, domina.css.t16516.prototype.cljs$core$IWithMeta$ = !0, domina.css.t16516.prototype.cljs$core$IWithMeta$_with_meta = function(a, b) {
+        return new domina.css.t16516(this.expr, this.base, this.sel, b)
       }
     }
-    return new domina.css.t15625(d, b, a, null)
+    return new domina.css.t16516(d, b, a, null)
   };
   return a = function(c, d) {
     switch(arguments.length) {

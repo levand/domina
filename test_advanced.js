@@ -3998,7 +3998,7 @@ var xf = function() {
         this.Na = d;
         this.U = e
       }, sf.d = function() {
-        return x.call(g, "domina.css.t16538")
+        return x.call(g, "domina.css.t16456")
       }, sf.prototype.Z = function() {
         var b = this;
         return Ee.call(g, function(c) {
@@ -4058,7 +4058,7 @@ var Af = function zf(c) {
       this.Ea = e;
       this.U = h
     }, rf.d = function() {
-      return x.call(g, "domina.t16063")
+      return x.call(g, "domina.t15822")
     }, rf.prototype.Z = function() {
       return sb.call(g, $e.call(g, this.ia))
     }, rf.prototype.$ = function() {
@@ -4394,21 +4394,23 @@ if(q("undefined" != typeof NodeList)) {
     return b.length
   }
 }
-q("undefined" != typeof StaticNodeList) ? alert.call(g, "extending StaticNodeList") : (StaticNodeList.prototype.h = f, StaticNodeList.prototype.i = function(b) {
-  return eg.call(g, b)
-}, StaticNodeList.prototype.u = function() {
-  return function(b, c, d) {
-    switch(arguments.length) {
-      case 2:
-        return b.item(c);
-      case 3:
-        return q(b.length <= c) ? d : M.call(g, b, c)
+if(q("undefined" != typeof StaticNodeList)) {
+  alert("extending StaticNodeList"), StaticNodeList.prototype.h = f, StaticNodeList.prototype.i = function(b) {
+    return eg.call(g, b)
+  }, StaticNodeList.prototype.u = function() {
+    return function(b, c, d) {
+      switch(arguments.length) {
+        case 2:
+          return b.item(c);
+        case 3:
+          return q(b.length <= c) ? d : M.call(g, b, c)
+      }
+      a("Invalid arity: " + arguments.length)
     }
-    a("Invalid arity: " + arguments.length)
+  }(), StaticNodeList.prototype.n = function(b) {
+    return b.length
   }
-}(), StaticNodeList.prototype.n = function(b) {
-  return b.length
-});
+}
 if(q("undefined" != typeof HTMLCollection)) {
   HTMLCollection.prototype.h = f, HTMLCollection.prototype.i = function(b) {
     return eg.call(g, b)
@@ -4470,7 +4472,7 @@ var X = function() {
         this.Ra = d;
         this.U = e
       }, jg.d = function() {
-        return x.call(g, "domina.xpath.t15966")
+        return x.call(g, "domina.xpath.t15767")
       }, jg.prototype.Z = function() {
         return Ee.call(g, ve.call(g, mg, this.H), U.call(g, this.B))
       }, jg.prototype.$ = function() {

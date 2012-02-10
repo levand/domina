@@ -304,17 +304,15 @@
   (nodes [s] (nodes (string-to-dom s)))
   (single-node [s] (single-node (string-to-dom s)))
 
-  js/Element
-  (nodes [content] (cons content))
-  (single-node [content] content)
-
-  js/DocumentFragment
-  (nodes [content] (cons content))
-  (single-node [content] content)
-
   default
-  (nodes [content] (seq content))
-  (single-node [content] (first content)))
+  (nodes [content]
+         (if (satisfies? ISeqable content)
+           (seq content)
+           (cons content)))
+  (single-node [content]
+               (if (satisfies? ISeqable content)
+                 (first content)
+                 content)))
 
 (extend-type js/NodeList
   ICounted
@@ -322,9 +320,9 @@
 
   IIndexed
   (-nth ([nodelist n] (. nodelist (item n)))
-    ([nodelist n not-found] (if (<= (. nodelist -length) n)
-                              not-found
-                              (nth nodelist n))))
+        ([nodelist n not-found] (if (<= (. nodelist -length) n)
+                                  not-found
+                                  (nth nodelist n))))
   ISeqable
   (-seq [nodelist] (lazy-nodelist nodelist)))
 
@@ -350,10 +348,10 @@
 
   IIndexed
   (-nth
-    ([coll n] (. coll (item n)))
-    ([coll n not-found] (if (<= (. coll -length) n)
-                          not-found
-                          (nth coll n))))
+   ([coll n] (. coll (item n)))
+   ([coll n not-found] (if (<= (. coll -length) n)
+                         not-found
+                         (nth coll n))))
 
   ISeqable
   (-seq [coll] (lazy-nodelist coll)))

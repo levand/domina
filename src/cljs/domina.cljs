@@ -5,8 +5,11 @@
             [goog.dom.forms :as forms]
             [goog.style :as style]
             [goog.string :as string]
-            [cljs.core :as core]))
+            [cljs.core :as core])
+  (:require-macros [domina.macros :as dm]))
+
 ;;;;;;;;;;;;;;;;;;; Debug Log ;;;;;;;;;;;;;;;;;
+
 (def debug true)
 (defn log-debug [mesg]
   (when (and debug (not (= (.-console js/window) js/undefined)))
@@ -314,20 +317,20 @@
                  (first content)
                  content)))
 
-(extend-type js/NodeList
-  ICounted
-  (-count [nodelist] (. nodelist -length))
+(if (dm/defined? js/NodeList)
+  (extend-type js/NodeList
+    ICounted
+    (-count [nodelist] (. nodelist -length))
 
-  IIndexed
-  (-nth ([nodelist n] (. nodelist (item n)))
-        ([nodelist n not-found] (if (<= (. nodelist -length) n)
-                                  not-found
-                                  (nth nodelist n))))
-  ISeqable
-  (-seq [nodelist] (lazy-nodelist nodelist)))
+    IIndexed
+    (-nth ([nodelist n] (. nodelist (item n)))
+          ([nodelist n not-found] (if (<= (. nodelist -length) n)
+                                    not-found
+                                    (nth nodelist n))))
+    ISeqable
+    (-seq [nodelist] (lazy-nodelist nodelist))))
 
-;; StaticNodeList basically the same as NodeList, only present in IE8.
-(if (. js/window -StaticNodeList)
+(if (dm/defined? js/StaticNodeList)
   (extend-type js/StaticNodeList
     ICounted
     (-count [nodelist] (. nodelist -length))
@@ -342,16 +345,18 @@
     ISeqable
     (-seq [nodelist] (lazy-nodelist nodelist))))
 
-(extend-type js/HTMLCollection
-  ICounted
-  (-count [coll] (. coll -length))
 
-  IIndexed
-  (-nth
-   ([coll n] (. coll (item n)))
-   ([coll n not-found] (if (<= (. coll -length) n)
-                         not-found
-                         (nth coll n))))
+(if (dm/defined? js/HTMLCollection)
+  (extend-type js/HTMLCollection
+    ICounted
+    (-count [coll] (. coll -length))
 
-  ISeqable
-  (-seq [coll] (lazy-nodelist coll)))
+    IIndexed
+    (-nth
+     ([coll n] (. coll (item n)))
+     ([coll n not-found] (if (<= (. coll -length) n)
+                           not-found
+                           (nth coll n))))
+
+    ISeqable
+    (-seq [coll] (lazy-nodelist coll))))

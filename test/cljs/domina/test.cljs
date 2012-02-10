@@ -10,7 +10,7 @@
   (:require [goog.events :as events]
             [clojure.browser.repl :as repl]))
 
-(repl/connect "http://localhost:9000/repl")
+;(repl/connect "http://localhost:9000/repl")
 
 (js* "
   window['tryfn'] = function(f) {

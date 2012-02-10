@@ -32,7 +32,7 @@
               {:source-path "test/cljs"
                :compiler  {:libs ["goog/dom/query.js"]
                            :optimizations :advanced
-                           :pretty-print false
+                           :pretty-print true
                            :output-dir ".cljsbuild/advanced"
                            :output-to "public/test_advanced.js"}}])
 

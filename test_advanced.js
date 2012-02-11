@@ -4058,7 +4058,7 @@ var Af = function zf(c) {
       this.Ea = e;
       this.U = h
     }, rf.d = function() {
-      return x.call(g, "domina.t15814")
+      return x.call(g, "domina.t15818")
     }, rf.prototype.Z = function() {
       return sb.call(g, $e.call(g, this.ia))
     }, rf.prototype.$ = function() {
@@ -4482,7 +4482,7 @@ var X = function() {
         this.Ra = d;
         this.U = e
       }, jg.d = function() {
-        return x.call(g, "domina.xpath.t15743")
+        return x.call(g, "domina.xpath.t15755")
       }, jg.prototype.Z = function() {
         return Ee.call(g, ve.call(g, mg, this.H), U.call(g, this.B))
       }, jg.prototype.$ = function() {
@@ -4970,10 +4970,9 @@ Y.call(g, "insert-before! with multiple reference nodes and a single new node", 
   W.call(g, X.call(g, "//body"), "<div class='ref' id='ref1'>content1</div>");
   W.call(g, X.call(g, "//body"), "<div class='ref' id='ref2'>content2</div>");
   Gf.call(g, U.call(g, Af.call(g, "ref")), "<p>before</p>");
-  L.call(g, U.call(g, Af.call(g, "ref")));
-  L.call(g, U.call(g, X.call(g, "//p")));
-  alert("refs: num_refs__6796");
-  alert("refs: num_ps__6797");
+  var b = L.call(g, U.call(g, Af.call(g, "ref"))), c = L.call(g, U.call(g, X.call(g, "//p")));
+  alert("refs:" + b);
+  alert("refs:" + c);
   q(u.call(g, 2, L.call(g, U.call(g, X.call(g, "//p"))))) || a(Error(y.call(g, "Assert failed: ", S.call(g, O(x("\ufdd1'=", 2, O(x("\ufdd1'count", O(x("\ufdd1'nodes", O(x("\ufdd1'xpath", "//p"), z("\ufdd0'line", 278))), z("\ufdd0'line", 278))), z("\ufdd0'line", 278))), z("\ufdd0'line", 278))))));
   q(u.call(g, 1, L.call(g, U.call(g, X.call(g, "//div[@id='ref1']/preceding-sibling::p"))))) || a(Error(y.call(g, "Assert failed: ", S.call(g, O(x("\ufdd1'=", 1, O(x("\ufdd1'count", O(x("\ufdd1'nodes", O(x("\ufdd1'xpath", "//div[@id='ref1']/preceding-sibling::p"), z("\ufdd0'line", 279))), z("\ufdd0'line", 279))), z("\ufdd0'line", 279))), z("\ufdd0'line", 279))))));
   if(q(u.call(g, 2, L.call(g, U.call(g, X.call(g, "//div[@id='ref2']/preceding-sibling::p")))))) {

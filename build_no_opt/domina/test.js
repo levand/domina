@@ -10,7 +10,7 @@ goog.require('goog.events');
     try {
       return f.call();
     } catch (e) {
-      throw e;
+      return e;
     }
   };;
 domina.test.tests = cljs.core.atom.call(null,cljs.core.Vector.fromArray([]));
@@ -21,12 +21,12 @@ domina.test.run_test = (function run_test(testfn){
 return tryfn.call(null,testfn);
 });
 domina.test.run_tests = (function run_tests(){
-return cljs.core.map.call(null,(function (p__6600){
-var vec__6601__6602 = p__6600;
-var name__6603 = cljs.core.nth.call(null,vec__6601__6602,0,null);
-var testfn__6604 = cljs.core.nth.call(null,vec__6601__6602,1,null);
+return cljs.core.map.call(null,(function (p__6592){
+var vec__6593__6594 = p__6592;
+var name__6595 = cljs.core.nth.call(null,vec__6593__6594,0,null);
+var testfn__6604 = cljs.core.nth.call(null,vec__6593__6594,1,null);
 
-return cljs.core.Vector.fromArray([name__6603,domina.test.run_test.call(null,testfn__6604)]);
+return cljs.core.Vector.fromArray([name__6595,domina.test.run_test.call(null,testfn__6604)]);
 }),cljs.core.deref.call(null,domina.test.tests));
 });
 /**
@@ -278,35 +278,35 @@ domina.append_BANG_.call(null,domina.xpath.xpath.call(null,"//body"),"<div class
 domina.append_BANG_.call(null,domina.xpath.xpath.call(null,"//div[@class='testInserts']"),"<p class='i1'></p>");
 domina.append_BANG_.call(null,domina.xpath.xpath.call(null,"//div[@class='testInserts']"),"<p class='i3'></p>");
 domina.insert_BANG_.call(null,domina.xpath.xpath.call(null,"//div[@class='testInserts']"),"<p class='i2'></p>",1);
-var G__6703__6704 = cljs.core.seq.call(null,cljs.core.Vector.fromArray([domina.xpath.xpath.call(null,"//div[@id='testInsert1']"),domina.xpath.xpath.call(null,"//div[@id='testInsert2']")]));
+var G__6704__6705 = cljs.core.seq.call(null,cljs.core.Vector.fromArray([domina.xpath.xpath.call(null,"//div[@id='testInsert1']"),domina.xpath.xpath.call(null,"//div[@id='testInsert2']")]));
 
-if(cljs.core.truth_(G__6703__6704))
-{var children__6705 = cljs.core.first.call(null,G__6703__6704);
-var G__6703__6706 = G__6703__6704;
+if(cljs.core.truth_(G__6704__6705))
+{var children__6706 = cljs.core.first.call(null,G__6704__6705);
+var G__6704__6707 = G__6704__6705;
 
 while(true){
-if(cljs.core.truth_(cljs.core._EQ_.call(null,3,cljs.core.count.call(null,domina.nodes.call(null,domina.xpath.xpath.call(null,children__6705,"p"))))))
+if(cljs.core.truth_(cljs.core._EQ_.call(null,3,cljs.core.count.call(null,domina.nodes.call(null,domina.xpath.xpath.call(null,children__6706,"p"))))))
 {} else
 {throw (new Error(cljs.core.str.call(null,"Assert failed: ",cljs.core.pr_str.call(null,cljs.core.with_meta(cljs.core.list("﷑'=",3,cljs.core.with_meta(cljs.core.list("﷑'count",cljs.core.with_meta(cljs.core.list("﷑'nodes",cljs.core.with_meta(cljs.core.list("﷑'xpath","﷑'children","p"),cljs.core.hash_map("﷐'line",212))),cljs.core.hash_map("﷐'line",212))),cljs.core.hash_map("﷐'line",212))),cljs.core.hash_map("﷐'line",212))))));
 }
-if(cljs.core.truth_(cljs.core._EQ_.call(null,1,cljs.core.count.call(null,domina.nodes.call(null,domina.xpath.xpath.call(null,children__6705,"p[@class='i2']/preceding-sibling::*"))))))
+if(cljs.core.truth_(cljs.core._EQ_.call(null,1,cljs.core.count.call(null,domina.nodes.call(null,domina.xpath.xpath.call(null,children__6706,"p[@class='i2']/preceding-sibling::*"))))))
 {} else
 {throw (new Error(cljs.core.str.call(null,"Assert failed: ",cljs.core.pr_str.call(null,cljs.core.with_meta(cljs.core.list("﷑'=",1,cljs.core.with_meta(cljs.core.list("﷑'count",cljs.core.with_meta(cljs.core.list("﷑'nodes",cljs.core.with_meta(cljs.core.list("﷑'xpath","﷑'children","p[@class='i2']/preceding-sibling::*"),cljs.core.hash_map("﷐'line",213))),cljs.core.hash_map("﷐'line",213))),cljs.core.hash_map("﷐'line",213))),cljs.core.hash_map("﷐'line",213))))));
 }
-if(cljs.core.truth_(cljs.core._EQ_.call(null,1,cljs.core.count.call(null,domina.nodes.call(null,domina.xpath.xpath.call(null,children__6705,"p[@class='i2']/following-sibling::*"))))))
+if(cljs.core.truth_(cljs.core._EQ_.call(null,1,cljs.core.count.call(null,domina.nodes.call(null,domina.xpath.xpath.call(null,children__6706,"p[@class='i2']/following-sibling::*"))))))
 {} else
 {throw (new Error(cljs.core.str.call(null,"Assert failed: ",cljs.core.pr_str.call(null,cljs.core.with_meta(cljs.core.list("﷑'=",1,cljs.core.with_meta(cljs.core.list("﷑'count",cljs.core.with_meta(cljs.core.list("﷑'nodes",cljs.core.with_meta(cljs.core.list("﷑'xpath","﷑'children","p[@class='i2']/following-sibling::*"),cljs.core.hash_map("﷐'line",215))),cljs.core.hash_map("﷐'line",215))),cljs.core.hash_map("﷐'line",215))),cljs.core.hash_map("﷐'line",215))))));
 }
-var temp__3698__auto____6707 = cljs.core.next.call(null,G__6703__6706);
+var temp__3698__auto____6708 = cljs.core.next.call(null,G__6704__6707);
 
-if(cljs.core.truth_(temp__3698__auto____6707))
-{var G__6703__6708 = temp__3698__auto____6707;
+if(cljs.core.truth_(temp__3698__auto____6708))
+{var G__6704__6709 = temp__3698__auto____6708;
 
 {
-var G__6715 = cljs.core.first.call(null,G__6703__6708);
-var G__6716 = G__6703__6708;
-children__6705 = G__6715;
-G__6703__6706 = G__6716;
+var G__6718 = cljs.core.first.call(null,G__6704__6709);
+var G__6719 = G__6704__6709;
+children__6706 = G__6718;
+G__6704__6707 = G__6719;
 continue;
 }
 } else
@@ -349,13 +349,13 @@ if(cljs.core.truth_(cljs.core._EQ_.call(null,0,cljs.core.count.call(null,domina.
 domina.test.add_test.call(null,"detach and reattach a single node",(function (){
 domina.test.reset.call(null);
 domina.test.standard_fixture.call(null);
-var n__6744 = domina.detach_BANG_.call(null,domina.xpath.xpath.call(null,"//p[@class='p3']"));
+var n__6764 = domina.detach_BANG_.call(null,domina.xpath.xpath.call(null,"//p[@class='p3']"));
 
 if(cljs.core.truth_(cljs.core._EQ_.call(null,0,cljs.core.count.call(null,domina.nodes.call(null,domina.xpath.xpath.call(null,"//p[@class='p3']"))))))
 {} else
 {throw (new Error(cljs.core.str.call(null,"Assert failed: ",cljs.core.pr_str.call(null,cljs.core.with_meta(cljs.core.list("﷑'=",0,cljs.core.with_meta(cljs.core.list("﷑'count",cljs.core.with_meta(cljs.core.list("﷑'nodes",cljs.core.with_meta(cljs.core.list("﷑'xpath","//p[@class='p3']"),cljs.core.hash_map("﷐'line",237))),cljs.core.hash_map("﷐'line",237))),cljs.core.hash_map("﷐'line",237))),cljs.core.hash_map("﷐'line",237))))));
 }
-domina.append_BANG_.call(null,domina.xpath.xpath.call(null,"//div[@class='d1']"),n__6744);
+domina.append_BANG_.call(null,domina.xpath.xpath.call(null,"//div[@class='d1']"),n__6764);
 if(cljs.core.truth_(cljs.core._EQ_.call(null,1,cljs.core.count.call(null,domina.nodes.call(null,domina.xpath.xpath.call(null,"//p[@class='p3']"))))))
 {return null;
 } else
@@ -365,13 +365,13 @@ if(cljs.core.truth_(cljs.core._EQ_.call(null,1,cljs.core.count.call(null,domina.
 domina.test.add_test.call(null,"detach and reattach multiple nodes",(function (){
 domina.test.reset.call(null);
 domina.test.standard_fixture.call(null);
-var n__6749 = domina.detach_BANG_.call(null,domina.xpath.xpath.call(null,"//div[@class='d1']/p"));
+var n__6768 = domina.detach_BANG_.call(null,domina.xpath.xpath.call(null,"//div[@class='d1']/p"));
 
 if(cljs.core.truth_(cljs.core._EQ_.call(null,0,cljs.core.count.call(null,domina.nodes.call(null,domina.xpath.xpath.call(null,"//div[@class='d1']/p"))))))
 {} else
 {throw (new Error(cljs.core.str.call(null,"Assert failed: ",cljs.core.pr_str.call(null,cljs.core.with_meta(cljs.core.list("﷑'=",0,cljs.core.with_meta(cljs.core.list("﷑'count",cljs.core.with_meta(cljs.core.list("﷑'nodes",cljs.core.with_meta(cljs.core.list("﷑'xpath","//div[@class='d1']/p"),cljs.core.hash_map("﷐'line",245))),cljs.core.hash_map("﷐'line",245))),cljs.core.hash_map("﷐'line",245))),cljs.core.hash_map("﷐'line",245))))));
 }
-domina.append_BANG_.call(null,domina.xpath.xpath.call(null,"//div[@class='d1']"),n__6749);
+domina.append_BANG_.call(null,domina.xpath.xpath.call(null,"//div[@class='d1']"),n__6768);
 if(cljs.core.truth_(cljs.core._EQ_.call(null,3,cljs.core.count.call(null,domina.nodes.call(null,domina.xpath.xpath.call(null,"//div[@class='d1']/p"))))))
 {return null;
 } else
@@ -885,10 +885,10 @@ if(cljs.core.truth_(cljs.core._EQ_.call(null,"Test Value",domina.value.call(null
 domina.test.add_test.call(null,"can get a node's innerHTML",(function (){
 domina.test.reset.call(null);
 domina.append_BANG_.call(null,domina.xpath.xpath.call(null,"//body"),"<div><p class='foobar'>some text</p></div>");
-if(cljs.core.truth_((function (){var or__3548__auto____6962 = cljs.core._EQ_.call(null,"<p class=\"foobar\">some text</p>",domina.html.call(null,domina.xpath.xpath.call(null,"//div")));
+if(cljs.core.truth_((function (){var or__3548__auto____6928 = cljs.core._EQ_.call(null,"<p class=\"foobar\">some text</p>",domina.html.call(null,domina.xpath.xpath.call(null,"//div")));
 
-if(cljs.core.truth_(or__3548__auto____6962))
-{return or__3548__auto____6962;
+if(cljs.core.truth_(or__3548__auto____6928))
+{return or__3548__auto____6928;
 } else
 {return cljs.core._EQ_.call(null,"<P class=foobar>some text</P>",domina.html.call(null,domina.xpath.xpath.call(null,"//div")));
 }
@@ -920,33 +920,33 @@ if(cljs.core.truth_(cljs.core._EQ_.call(null,2,cljs.core.count.call(null,domina.
 }));
 domina.test.add_test.call(null,"can get nodes from strings containing cell-level table fragments",(function (){
 domina.test.reset.call(null);
-var n__6982 = domina.nodes.call(null,"<td>Cell</td><th>Header</th>");
+var n__6939 = domina.nodes.call(null,"<td>Cell</td><th>Header</th>");
 
-if(cljs.core.truth_(cljs.core._EQ_.call(null,cljs.core.count.call(null,n__6982),2)))
+if(cljs.core.truth_(cljs.core._EQ_.call(null,cljs.core.count.call(null,n__6939),2)))
 {} else
 {throw (new Error(cljs.core.str.call(null,"Assert failed: ",cljs.core.pr_str.call(null,cljs.core.with_meta(cljs.core.list("﷑'=",cljs.core.with_meta(cljs.core.list("﷑'count","﷑'n"),cljs.core.hash_map("﷐'line",535)),2),cljs.core.hash_map("﷐'line",535))))));
 }
-var G__6985__6986 = cljs.core.seq.call(null,n__6982);
+var G__6940__6941 = cljs.core.seq.call(null,n__6939);
 
-if(cljs.core.truth_(G__6985__6986))
-{var h__6987 = cljs.core.first.call(null,G__6985__6986);
-var G__6985__6988 = G__6985__6986;
+if(cljs.core.truth_(G__6940__6941))
+{var h__6942 = cljs.core.first.call(null,G__6940__6941);
+var G__6940__6943 = G__6940__6941;
 
 while(true){
-if(cljs.core.truth_(cljs.core.re_find.call(null,/TableCell/,cljs.core.pr_str.call(null,h__6987))))
+if(cljs.core.truth_(cljs.core.re_find.call(null,/TableCell/,cljs.core.pr_str.call(null,h__6942))))
 {} else
 {throw (new Error(cljs.core.str.call(null,"Assert failed: ",cljs.core.pr_str.call(null,cljs.core.with_meta(cljs.core.list("﷑'re-find",/TableCell/,cljs.core.with_meta(cljs.core.list("﷑'pr-str","﷑'h"),cljs.core.hash_map("﷐'line",537))),cljs.core.hash_map("﷐'line",537))))));
 }
-var temp__3698__auto____6989 = cljs.core.next.call(null,G__6985__6988);
+var temp__3698__auto____6944 = cljs.core.next.call(null,G__6940__6943);
 
-if(cljs.core.truth_(temp__3698__auto____6989))
-{var G__6985__6990 = temp__3698__auto____6989;
+if(cljs.core.truth_(temp__3698__auto____6944))
+{var G__6940__6945 = temp__3698__auto____6944;
 
 {
-var G__6994 = cljs.core.first.call(null,G__6985__6990);
-var G__6995 = G__6985__6990;
-h__6987 = G__6994;
-G__6985__6988 = G__6995;
+var G__6953 = cljs.core.first.call(null,G__6940__6945);
+var G__6954 = G__6940__6945;
+h__6942 = G__6953;
+G__6940__6943 = G__6954;
 continue;
 }
 } else
@@ -960,33 +960,33 @@ break;
 }));
 domina.test.add_test.call(null,"can get nodes from strings containing row-level table fragments",(function (){
 domina.test.reset.call(null);
-var n__7001 = domina.nodes.call(null,"<tr><td>Cell</td><th>Header</th></tr><tr><td>Another</td><th>Row</th></tr>");
+var n__6955 = domina.nodes.call(null,"<tr><td>Cell</td><th>Header</th></tr><tr><td>Another</td><th>Row</th></tr>");
 
-if(cljs.core.truth_(cljs.core._EQ_.call(null,cljs.core.count.call(null,n__7001),2)))
+if(cljs.core.truth_(cljs.core._EQ_.call(null,cljs.core.count.call(null,n__6955),2)))
 {} else
 {throw (new Error(cljs.core.str.call(null,"Assert failed: ",cljs.core.pr_str.call(null,cljs.core.with_meta(cljs.core.list("﷑'=",cljs.core.with_meta(cljs.core.list("﷑'count","﷑'n"),cljs.core.hash_map("﷐'line",542)),2),cljs.core.hash_map("﷐'line",542))))));
 }
-var G__7004__7005 = cljs.core.seq.call(null,n__7001);
+var G__6956__6957 = cljs.core.seq.call(null,n__6955);
 
-if(cljs.core.truth_(G__7004__7005))
-{var h__7006 = cljs.core.first.call(null,G__7004__7005);
-var G__7004__7007 = G__7004__7005;
+if(cljs.core.truth_(G__6956__6957))
+{var h__6958 = cljs.core.first.call(null,G__6956__6957);
+var G__6956__6959 = G__6956__6957;
 
 while(true){
-if(cljs.core.truth_(cljs.core.re_find.call(null,/TableRow/,cljs.core.pr_str.call(null,h__7006))))
+if(cljs.core.truth_(cljs.core.re_find.call(null,/TableRow/,cljs.core.pr_str.call(null,h__6958))))
 {} else
 {throw (new Error(cljs.core.str.call(null,"Assert failed: ",cljs.core.pr_str.call(null,cljs.core.with_meta(cljs.core.list("﷑'re-find",/TableRow/,cljs.core.with_meta(cljs.core.list("﷑'pr-str","﷑'h"),cljs.core.hash_map("﷐'line",544))),cljs.core.hash_map("﷐'line",544))))));
 }
-var temp__3698__auto____7008 = cljs.core.next.call(null,G__7004__7007);
+var temp__3698__auto____6960 = cljs.core.next.call(null,G__6956__6959);
 
-if(cljs.core.truth_(temp__3698__auto____7008))
-{var G__7004__7009 = temp__3698__auto____7008;
+if(cljs.core.truth_(temp__3698__auto____6960))
+{var G__6956__6963 = temp__3698__auto____6960;
 
 {
-var G__7020 = cljs.core.first.call(null,G__7004__7009);
-var G__7021 = G__7004__7009;
-h__7006 = G__7020;
-G__7004__7007 = G__7021;
+var G__6975 = cljs.core.first.call(null,G__6956__6963);
+var G__6976 = G__6956__6963;
+h__6958 = G__6975;
+G__6956__6959 = G__6976;
 continue;
 }
 } else
@@ -1000,33 +1000,33 @@ break;
 }));
 domina.test.add_test.call(null,"can get nodes from strings containing section-level table fragments",(function (){
 domina.test.reset.call(null);
-var n__7023 = domina.nodes.call(null,"<thead><tr><td>Cell</td><th>Header</th></tr></thead><tbody><tr><td>Another</td><th>Row</th></tr></tbody>");
+var n__6977 = domina.nodes.call(null,"<thead><tr><td>Cell</td><th>Header</th></tr></thead><tbody><tr><td>Another</td><th>Row</th></tr></tbody>");
 
-if(cljs.core.truth_(cljs.core._EQ_.call(null,cljs.core.count.call(null,n__7023),2)))
+if(cljs.core.truth_(cljs.core._EQ_.call(null,cljs.core.count.call(null,n__6977),2)))
 {} else
 {throw (new Error(cljs.core.str.call(null,"Assert failed: ",cljs.core.pr_str.call(null,cljs.core.with_meta(cljs.core.list("﷑'=",cljs.core.with_meta(cljs.core.list("﷑'count","﷑'n"),cljs.core.hash_map("﷐'line",549)),2),cljs.core.hash_map("﷐'line",549))))));
 }
-var G__7024__7025 = cljs.core.seq.call(null,n__7023);
+var G__6978__6979 = cljs.core.seq.call(null,n__6977);
 
-if(cljs.core.truth_(G__7024__7025))
-{var h__7026 = cljs.core.first.call(null,G__7024__7025);
-var G__7024__7027 = G__7024__7025;
+if(cljs.core.truth_(G__6978__6979))
+{var h__6980 = cljs.core.first.call(null,G__6978__6979);
+var G__6978__6981 = G__6978__6979;
 
 while(true){
-if(cljs.core.truth_(cljs.core.re_find.call(null,/TableSection/,cljs.core.pr_str.call(null,h__7026))))
+if(cljs.core.truth_(cljs.core.re_find.call(null,/TableSection/,cljs.core.pr_str.call(null,h__6980))))
 {} else
 {throw (new Error(cljs.core.str.call(null,"Assert failed: ",cljs.core.pr_str.call(null,cljs.core.with_meta(cljs.core.list("﷑'re-find",/TableSection/,cljs.core.with_meta(cljs.core.list("﷑'pr-str","﷑'h"),cljs.core.hash_map("﷐'line",551))),cljs.core.hash_map("﷐'line",551))))));
 }
-var temp__3698__auto____7028 = cljs.core.next.call(null,G__7024__7027);
+var temp__3698__auto____6982 = cljs.core.next.call(null,G__6978__6981);
 
-if(cljs.core.truth_(temp__3698__auto____7028))
-{var G__7024__7029 = temp__3698__auto____7028;
+if(cljs.core.truth_(temp__3698__auto____6982))
+{var G__6978__6983 = temp__3698__auto____6982;
 
 {
-var G__7042 = cljs.core.first.call(null,G__7024__7029);
-var G__7043 = G__7024__7029;
-h__7026 = G__7042;
-G__7024__7027 = G__7043;
+var G__6984 = cljs.core.first.call(null,G__6978__6983);
+var G__6985 = G__6978__6983;
+h__6980 = G__6984;
+G__6978__6981 = G__6985;
 continue;
 }
 } else
@@ -1044,9 +1044,9 @@ domina.append_BANG_.call(null,domina.xpath.xpath.call(null,"//body"),"<div id='r
 domina.events.listen_BANG_.call(null,domina.by_id.call(null,"ref"),"﷐'mouseover",(function (){
 return domina.append_BANG_.call(null,domina.by_id.call(null,"ref"),"<p>Hello world!</p>");
 }));
-var target__7044 = domina.by_id.call(null,"ref");
+var target__6986 = domina.by_id.call(null,"ref");
 
-domina.events.fire_listeners_BANG_.call(null,target__7044,"﷐'mouseover",false,cljs.core.ObjMap.fromObject(["﷐'type","﷐'target"],{"﷐'type":"﷐'mouseover","﷐'target":target__7044}));
+domina.events.fire_listeners_BANG_.call(null,target__6986,"﷐'mouseover",false,cljs.core.ObjMap.fromObject(["﷐'type","﷐'target"],{"﷐'type":"﷐'mouseover","﷐'target":target__6986}));
 if(cljs.core.truth_(cljs.core._EQ_.call(null,"Hello world!",domina.text.call(null,domina.xpath.xpath.call(null,"//p")))))
 {return null;
 } else
@@ -1059,9 +1059,9 @@ domina.append_BANG_.call(null,domina.xpath.xpath.call(null,"//body"),"<div id='r
 domina.events.listen_BANG_.call(null,domina.by_id.call(null,"ref"),"﷐'mouseout",(function (){
 return domina.append_BANG_.call(null,domina.by_id.call(null,"ref"),"<p>Hello world!</p>");
 }));
-var target__7046 = domina.by_id.call(null,"ref");
+var target__6994 = domina.by_id.call(null,"ref");
 
-domina.events.fire_listeners_BANG_.call(null,target__7046,"﷐'mouseout",false,cljs.core.ObjMap.fromObject(["﷐'type","﷐'target"],{"﷐'type":"﷐'mouseout","﷐'target":target__7046}));
+domina.events.fire_listeners_BANG_.call(null,target__6994,"﷐'mouseout",false,cljs.core.ObjMap.fromObject(["﷐'type","﷐'target"],{"﷐'type":"﷐'mouseout","﷐'target":target__6994}));
 if(cljs.core.truth_(cljs.core._EQ_.call(null,"Hello world!",domina.text.call(null,domina.xpath.xpath.call(null,"//p")))))
 {return null;
 } else
@@ -1074,9 +1074,9 @@ domina.append_BANG_.call(null,domina.xpath.xpath.call(null,"//body"),"<div id='r
 domina.events.listen_BANG_.call(null,domina.by_id.call(null,"ref"),"﷐'click",(function (){
 return domina.append_BANG_.call(null,domina.by_id.call(null,"ref"),"<p>Hello world!</p>");
 }));
-var target__7056 = domina.by_id.call(null,"ref");
+var target__7004 = domina.by_id.call(null,"ref");
 
-domina.events.fire_listeners_BANG_.call(null,target__7056,"﷐'click",false,cljs.core.ObjMap.fromObject(["﷐'type","﷐'target"],{"﷐'type":"﷐'click","﷐'target":target__7056}));
+domina.events.fire_listeners_BANG_.call(null,target__7004,"﷐'click",false,cljs.core.ObjMap.fromObject(["﷐'type","﷐'target"],{"﷐'type":"﷐'click","﷐'target":target__7004}));
 if(cljs.core.truth_(cljs.core._EQ_.call(null,"Hello world!",domina.text.call(null,domina.xpath.xpath.call(null,"//p")))))
 {return null;
 } else
@@ -1089,10 +1089,10 @@ domina.append_BANG_.call(null,domina.xpath.xpath.call(null,"//body"),"<div id='p
 domina.events.listen_BANG_.call(null,domina.by_id.call(null,"ref"),"﷐'mouseenter",(function (){
 return domina.append_BANG_.call(null,domina.by_id.call(null,"ref"),"<p>Hello world!</p>");
 }));
-var rtarget__7069 = domina.by_id.call(null,"parent");
-var target__7070 = domina.by_id.call(null,"ref");
+var rtarget__7007 = domina.by_id.call(null,"parent");
+var target__7009 = domina.by_id.call(null,"ref");
 
-domina.events.fire_listeners_BANG_.call(null,target__7070,"﷐'mouseenter",false,cljs.core.ObjMap.fromObject(["﷐'type","﷐'related-target","﷐'target"],{"﷐'type":"﷐'mouseenter","﷐'related-target":rtarget__7069,"﷐'target":target__7070}));
+domina.events.fire_listeners_BANG_.call(null,target__7009,"﷐'mouseenter",false,cljs.core.ObjMap.fromObject(["﷐'type","﷐'related-target","﷐'target"],{"﷐'type":"﷐'mouseenter","﷐'related-target":rtarget__7007,"﷐'target":target__7009}));
 if(cljs.core.truth_(cljs.core._EQ_.call(null,"Hello world!",domina.text.call(null,domina.xpath.xpath.call(null,"//p")))))
 {return null;
 } else
@@ -1105,10 +1105,10 @@ domina.append_BANG_.call(null,domina.xpath.xpath.call(null,"//body"),"<div id='p
 domina.events.listen_BANG_.call(null,domina.by_id.call(null,"ref"),"﷐'mouseleave",(function (){
 return domina.append_BANG_.call(null,domina.by_id.call(null,"ref"),"<p>Hello world!</p>");
 }));
-var rtarget__7071 = domina.by_id.call(null,"parent");
-var target__7073 = domina.by_id.call(null,"ref");
+var rtarget__7018 = domina.by_id.call(null,"parent");
+var target__7019 = domina.by_id.call(null,"ref");
 
-domina.events.fire_listeners_BANG_.call(null,target__7073,"﷐'mouseleave",false,cljs.core.ObjMap.fromObject(["﷐'type","﷐'related-target","﷐'target"],{"﷐'type":"﷐'mouseleave","﷐'related-target":rtarget__7071,"﷐'target":target__7073}));
+domina.events.fire_listeners_BANG_.call(null,target__7019,"﷐'mouseleave",false,cljs.core.ObjMap.fromObject(["﷐'type","﷐'related-target","﷐'target"],{"﷐'type":"﷐'mouseleave","﷐'related-target":rtarget__7018,"﷐'target":target__7019}));
 if(cljs.core.truth_(cljs.core._EQ_.call(null,"Hello world!",domina.text.call(null,domina.xpath.xpath.call(null,"//p")))))
 {return null;
 } else
@@ -1116,17 +1116,17 @@ if(cljs.core.truth_(cljs.core._EQ_.call(null,"Hello world!",domina.text.call(nul
 }
 }));
 domina.test.add_test.call(null,"can remove-listeners on a :click event",(function (){
-var handler__7076 = (function (){
+var handler__7026 = (function (){
 return domina.append_BANG_.call(null,domina.by_id.call(null,"ref"),"<p>Hello world!</p>");
 });
 
 domina.test.reset.call(null);
 domina.append_BANG_.call(null,domina.xpath.xpath.call(null,"//body"),"<div id='ref'>Some content</div>");
-domina.events.listen_BANG_.call(null,domina.by_id.call(null,"ref"),"﷐'click",handler__7076);
+domina.events.listen_BANG_.call(null,domina.by_id.call(null,"ref"),"﷐'click",handler__7026);
 domina.events.remove_listeners_BANG_.call(null,domina.by_id.call(null,"ref"),"﷐'click");
-var target__7078 = domina.by_id.call(null,"ref");
+var target__7027 = domina.by_id.call(null,"ref");
 
-domina.events.fire_listeners_BANG_.call(null,target__7078,"﷐'click",false,cljs.core.ObjMap.fromObject(["﷐'type","﷐'target"],{"﷐'type":"﷐'click","﷐'target":target__7078}));
+domina.events.fire_listeners_BANG_.call(null,target__7027,"﷐'click",false,cljs.core.ObjMap.fromObject(["﷐'type","﷐'target"],{"﷐'type":"﷐'click","﷐'target":target__7027}));
 if(cljs.core.truth_(cljs.core._EQ_.call(null,"Some content",domina.text.call(null,domina.xpath.xpath.call(null,"//div")))))
 {return null;
 } else
@@ -1134,18 +1134,18 @@ if(cljs.core.truth_(cljs.core._EQ_.call(null,"Some content",domina.text.call(nul
 }
 }));
 domina.test.add_test.call(null,"can remove-listeners on a :mouseenter event",(function (){
-var handler__7124 = (function (){
+var handler__7031 = (function (){
 return domina.append_BANG_.call(null,domina.by_id.call(null,"ref"),"<p>Hello world!</p>");
 });
 
 domina.test.reset.call(null);
 domina.append_BANG_.call(null,domina.xpath.xpath.call(null,"//body"),"<div id='parent'><div id='ref'>Some content</div></div>");
-domina.events.listen_BANG_.call(null,domina.by_id.call(null,"ref"),"﷐'mouseenter",handler__7124);
+domina.events.listen_BANG_.call(null,domina.by_id.call(null,"ref"),"﷐'mouseenter",handler__7031);
 domina.events.remove_listeners_BANG_.call(null,domina.by_id.call(null,"ref"),"﷐'mouseenter");
-var rtarget__7125 = domina.by_id.call(null,"parent");
-var target__7126 = domina.by_id.call(null,"ref");
+var rtarget__7033 = domina.by_id.call(null,"parent");
+var target__7034 = domina.by_id.call(null,"ref");
 
-domina.events.fire_listeners_BANG_.call(null,target__7126,"﷐'mouseenter",false,cljs.core.ObjMap.fromObject(["﷐'type","﷐'related-target","﷐'target"],{"﷐'type":"﷐'mouseenter","﷐'related-target":rtarget__7125,"﷐'target":target__7126}));
+domina.events.fire_listeners_BANG_.call(null,target__7034,"﷐'mouseenter",false,cljs.core.ObjMap.fromObject(["﷐'type","﷐'related-target","﷐'target"],{"﷐'type":"﷐'mouseenter","﷐'related-target":rtarget__7033,"﷐'target":target__7034}));
 if(cljs.core.truth_(cljs.core._EQ_.call(null,"Some content",domina.text.call(null,domina.xpath.xpath.call(null,"//div")))))
 {return null;
 } else
@@ -1153,17 +1153,17 @@ if(cljs.core.truth_(cljs.core._EQ_.call(null,"Some content",domina.text.call(nul
 }
 }));
 domina.test.add_test.call(null,"can unlisten! on a :click event",(function (){
-var handler__7150 = (function (){
+var handler__7037 = (function (){
 return domina.append_BANG_.call(null,domina.by_id.call(null,"ref"),"<p>Hello world!</p>");
 });
 
 domina.test.reset.call(null);
 domina.append_BANG_.call(null,domina.xpath.xpath.call(null,"//body"),"<div id='ref'>Some content</div>");
-domina.events.listen_BANG_.call(null,domina.by_id.call(null,"ref"),"﷐'click",handler__7150);
-domina.events.unlisten_BANG_.call(null,domina.by_id.call(null,"ref"),"﷐'click",handler__7150);
-var target__7151 = domina.by_id.call(null,"ref");
+domina.events.listen_BANG_.call(null,domina.by_id.call(null,"ref"),"﷐'click",handler__7037);
+domina.events.unlisten_BANG_.call(null,domina.by_id.call(null,"ref"),"﷐'click",handler__7037);
+var target__7038 = domina.by_id.call(null,"ref");
 
-domina.events.fire_listeners_BANG_.call(null,target__7151,"﷐'click",false,cljs.core.ObjMap.fromObject(["﷐'type","﷐'target"],{"﷐'type":"﷐'click","﷐'target":target__7151}));
+domina.events.fire_listeners_BANG_.call(null,target__7038,"﷐'click",false,cljs.core.ObjMap.fromObject(["﷐'type","﷐'target"],{"﷐'type":"﷐'click","﷐'target":target__7038}));
 if(cljs.core.truth_(cljs.core._EQ_.call(null,"Some content",domina.text.call(null,domina.xpath.xpath.call(null,"//div")))))
 {return null;
 } else
@@ -1171,18 +1171,18 @@ if(cljs.core.truth_(cljs.core._EQ_.call(null,"Some content",domina.text.call(nul
 }
 }));
 domina.test.add_test.call(null,"can unlisten! on a :mouseenter event",(function (){
-var handler__7154 = (function (){
+var handler__7039 = (function (){
 return domina.append_BANG_.call(null,domina.by_id.call(null,"ref"),"<p>Hello world!</p>");
 });
 
 domina.test.reset.call(null);
 domina.append_BANG_.call(null,domina.xpath.xpath.call(null,"//body"),"<div id='parent'><div id='ref'>Some content</div></div>");
-domina.events.listen_BANG_.call(null,domina.by_id.call(null,"ref"),"﷐'mouseenter",handler__7154);
-domina.events.unlisten_BANG_.call(null,domina.by_id.call(null,"ref"),"﷐'mouseenter",handler__7154);
-var rtarget__7155 = domina.by_id.call(null,"parent");
-var target__7156 = domina.by_id.call(null,"ref");
+domina.events.listen_BANG_.call(null,domina.by_id.call(null,"ref"),"﷐'mouseenter",handler__7039);
+domina.events.unlisten_BANG_.call(null,domina.by_id.call(null,"ref"),"﷐'mouseenter",handler__7039);
+var rtarget__7042 = domina.by_id.call(null,"parent");
+var target__7043 = domina.by_id.call(null,"ref");
 
-domina.events.fire_listeners_BANG_.call(null,target__7156,"﷐'mouseenter",false,cljs.core.ObjMap.fromObject(["﷐'type","﷐'related-target","﷐'target"],{"﷐'type":"﷐'mouseenter","﷐'related-target":rtarget__7155,"﷐'target":target__7156}));
+domina.events.fire_listeners_BANG_.call(null,target__7043,"﷐'mouseenter",false,cljs.core.ObjMap.fromObject(["﷐'type","﷐'related-target","﷐'target"],{"﷐'type":"﷐'mouseenter","﷐'related-target":rtarget__7042,"﷐'target":target__7043}));
 if(cljs.core.truth_(cljs.core._EQ_.call(null,"Some content",domina.text.call(null,domina.xpath.xpath.call(null,"//div")))))
 {return null;
 } else
@@ -1191,10 +1191,10 @@ if(cljs.core.truth_(cljs.core._EQ_.call(null,"Some content",domina.text.call(nul
 }));
 domina.test.add_test.call(null,"can append to a document fragment",(function (){
 domina.test.reset.call(null);
-var frag__7161 = document.createDocumentFragment();
+var frag__7044 = document.createDocumentFragment();
 
-domina.append_BANG_.call(null,frag__7161,"<div>testing</div>");
-domina.append_BANG_.call(null,domina.xpath.xpath.call(null,"//body"),frag__7161);
+domina.append_BANG_.call(null,frag__7044,"<div>testing</div>");
+domina.append_BANG_.call(null,domina.xpath.xpath.call(null,"//body"),frag__7044);
 if(cljs.core.truth_(cljs.core._EQ_.call(null,"testing",domina.text.call(null,domina.xpath.xpath.call(null,"//div")))))
 {return null;
 } else
@@ -1203,10 +1203,10 @@ if(cljs.core.truth_(cljs.core._EQ_.call(null,"testing",domina.text.call(null,dom
 }));
 domina.test.add_test.call(null,"doesn't clone unless necessary",(function (){
 domina.test.reset.call(null);
-var child__7181 = domina.single_node.call(null,"<div>hello</div>");
+var child__7053 = domina.single_node.call(null,"<div>hello</div>");
 
-domina.append_BANG_.call(null,domina.xpath.xpath.call(null,"//body"),child__7181);
-if(cljs.core.truth_(cljs.core._EQ_.call(null,child__7181,domina.single_node.call(null,domina.xpath.xpath.call(null,"//body/div")))))
+domina.append_BANG_.call(null,domina.xpath.xpath.call(null,"//body"),child__7053);
+if(cljs.core.truth_(cljs.core._EQ_.call(null,child__7053,domina.single_node.call(null,domina.xpath.xpath.call(null,"//body/div")))))
 {return null;
 } else
 {throw (new Error(cljs.core.str.call(null,"Assert failed: ",cljs.core.pr_str.call(null,cljs.core.with_meta(cljs.core.list("﷑'=","﷑'child",cljs.core.with_meta(cljs.core.list("﷑'single-node",cljs.core.with_meta(cljs.core.list("﷑'xpath","//body/div"),cljs.core.hash_map("﷐'line",652))),cljs.core.hash_map("﷐'line",652))),cljs.core.hash_map("﷐'line",652))))));
@@ -1214,44 +1214,44 @@ if(cljs.core.truth_(cljs.core._EQ_.call(null,child__7181,domina.single_node.call
 }));
 domina.test.report = (function report(test_results){
 domina.test.reset.call(null);
-var G__7184__7185 = cljs.core.seq.call(null,test_results);
+var G__7056__7057 = cljs.core.seq.call(null,test_results);
 
-if(cljs.core.truth_(G__7184__7185))
-{var G__7187__7189 = cljs.core.first.call(null,G__7184__7185);
-var vec__7188__7190 = G__7187__7189;
-var name__7191 = cljs.core.nth.call(null,vec__7188__7190,0,null);
-var result__7192 = cljs.core.nth.call(null,vec__7188__7190,1,null);
-var G__7184__7193 = G__7184__7185;
+if(cljs.core.truth_(G__7056__7057))
+{var G__7059__7064 = cljs.core.first.call(null,G__7056__7057);
+var vec__7063__7065 = G__7059__7064;
+var name__7066 = cljs.core.nth.call(null,vec__7063__7065,0,null);
+var result__7067 = cljs.core.nth.call(null,vec__7063__7065,1,null);
+var G__7056__7068 = G__7056__7057;
 
-var G__7187__7194 = G__7187__7189;
-var G__7184__7195 = G__7184__7193;
+var G__7059__7069 = G__7059__7064;
+var G__7056__7070 = G__7056__7068;
 
 while(true){
-var vec__7196__7197 = G__7187__7194;
-var name__7198 = cljs.core.nth.call(null,vec__7196__7197,0,null);
-var result__7199 = cljs.core.nth.call(null,vec__7196__7197,1,null);
-var G__7184__7200 = G__7184__7195;
+var vec__7071__7072 = G__7059__7069;
+var name__7073 = cljs.core.nth.call(null,vec__7071__7072,0,null);
+var result__7074 = cljs.core.nth.call(null,vec__7071__7072,1,null);
+var G__7056__7075 = G__7056__7070;
 
-var result_div__7201 = domina.single_node.call(null,"<div class='test-result'></div>");
+var result_div__7076 = domina.single_node.call(null,"<div class='test-result'></div>");
 
-domina.set_text_BANG_.call(null,result_div__7201,name__7198);
-if(cljs.core.truth_(cljs.core.not.call(null,cljs.core._EQ_.call(null,result__7199,null))))
-{domina.add_class_BANG_.call(null,result_div__7201,"failed");
-domina.append_BANG_.call(null,result_div__7201,cljs.core.str.call(null,"<div class='message'>",result__7199,"</div>"));
+domina.set_text_BANG_.call(null,result_div__7076,name__7073);
+if(cljs.core.truth_(cljs.core.not.call(null,cljs.core._EQ_.call(null,result__7074,null))))
+{domina.add_class_BANG_.call(null,result_div__7076,"failed");
+domina.append_BANG_.call(null,result_div__7076,cljs.core.str.call(null,"<div class='message'>",result__7074,"</div>"));
 } else
-{domina.add_class_BANG_.call(null,result_div__7201,"passed");
+{domina.add_class_BANG_.call(null,result_div__7076,"passed");
 }
-domina.append_BANG_.call(null,domina.xpath.xpath.call(null,"//body"),result_div__7201);
-var temp__3698__auto____7202 = cljs.core.next.call(null,G__7184__7200);
+domina.append_BANG_.call(null,domina.xpath.xpath.call(null,"//body"),result_div__7076);
+var temp__3698__auto____7077 = cljs.core.next.call(null,G__7056__7075);
 
-if(cljs.core.truth_(temp__3698__auto____7202))
-{var G__7184__7203 = temp__3698__auto____7202;
+if(cljs.core.truth_(temp__3698__auto____7077))
+{var G__7056__7078 = temp__3698__auto____7077;
 
 {
-var G__7205 = cljs.core.first.call(null,G__7184__7203);
-var G__7206 = G__7184__7203;
-G__7187__7194 = G__7205;
-G__7184__7195 = G__7206;
+var G__7080 = cljs.core.first.call(null,G__7056__7078);
+var G__7081 = G__7056__7078;
+G__7059__7069 = G__7080;
+G__7056__7070 = G__7081;
 continue;
 }
 } else
@@ -1262,10 +1262,10 @@ break;
 {}
 domina.prepend_BANG_.call(null,domina.xpath.xpath.call(null,"//body"),"<div id='test-summary'>ran <span id='total-tests'></span> tests with <span id='total-failures'></span> failures");
 domina.set_text_BANG_.call(null,domina.by_id.call(null,"total-tests"),cljs.core.count.call(null,test_results));
-var failure_count__7204 = cljs.core.count.call(null,cljs.core.filter.call(null,cljs.core.complement.call(null,cljs.core.nil_QMARK_),cljs.core.map.call(null,cljs.core.second,test_results)));
+var failure_count__7079 = cljs.core.count.call(null,cljs.core.filter.call(null,cljs.core.complement.call(null,cljs.core.nil_QMARK_),cljs.core.map.call(null,cljs.core.second,test_results)));
 
-domina.set_text_BANG_.call(null,domina.by_id.call(null,"total-failures"),failure_count__7204);
-if(cljs.core.truth_(cljs.core._EQ_.call(null,0,failure_count__7204)))
+domina.set_text_BANG_.call(null,domina.by_id.call(null,"total-failures"),failure_count__7079);
+if(cljs.core.truth_(cljs.core._EQ_.call(null,0,failure_count__7079)))
 {return domina.add_class_BANG_.call(null,domina.by_id.call(null,"test-summary"),"passed");
 } else
 {return domina.add_class_BANG_.call(null,domina.by_id.call(null,"test-summary"),"failed");

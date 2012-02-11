@@ -3998,7 +3998,7 @@ var xf = function() {
         this.Na = d;
         this.U = e
       }, sf.d = function() {
-        return x.call(g, "domina.css.t16456")
+        return x.call(g, "domina.css.t16555")
       }, sf.prototype.Z = function() {
         var b = this;
         return Ee.call(g, function(c) {
@@ -4058,7 +4058,7 @@ var Af = function zf(c) {
       this.Ea = e;
       this.U = h
     }, rf.d = function() {
-      return x.call(g, "domina.t15822")
+      return x.call(g, "domina.t15957")
     }, rf.prototype.Z = function() {
       return sb.call(g, $e.call(g, this.ia))
     }, rf.prototype.$ = function() {
@@ -4360,16 +4360,26 @@ function ig(b) {
   return hg.call(g, c, d)
 }
 U._ = function(b) {
-  var c;
-  q(b) ? (c = b.h, c = q(c) ? K.call(g, b.hasOwnProperty("cljs$core$ISeqable$")) : c) : c = b;
-  c = q(c) ? f : Oc.call(g, hd, b);
-  return q(c) ? D.call(g, b) : A.call(g, b)
+  return q(function() {
+    return q(function() {
+      if(q(b)) {
+        var c = b.h;
+        return q(c) ? (c = b.hasOwnProperty, q(c) ? K.call(g, b.hasOwnProperty("cljs$core$ISeqable$")) : c) : c
+      }
+      return b
+    }()) ? f : Oc.call(g, hd, b)
+  }()) ? D.call(g, b) : A.call(g, b)
 };
 yf._ = function(b) {
-  var c;
-  q(b) ? (c = b.h, c = q(c) ? K.call(g, b.hasOwnProperty("cljs$core$ISeqable$")) : c) : c = b;
-  c = q(c) ? f : Oc.call(g, hd, b);
-  return q(c) ? E.call(g, b) : b
+  return q(function() {
+    return q(function() {
+      if(q(b)) {
+        var c = b.h;
+        return q(c) ? (c = b.hasOwnProperty, q(c) ? K.call(g, b.hasOwnProperty("cljs$core$ISeqable$")) : c) : c
+      }
+      return b
+    }()) ? f : Oc.call(g, hd, b)
+  }()) ? E.call(g, b) : b
 };
 U.string = function(b) {
   return U.call(g, ig.call(g, b))
@@ -4472,7 +4482,7 @@ var X = function() {
         this.Ra = d;
         this.U = e
       }, jg.d = function() {
-        return x.call(g, "domina.xpath.t15767")
+        return x.call(g, "domina.xpath.t15836")
       }, jg.prototype.Z = function() {
         return Ee.call(g, ve.call(g, mg, this.H), U.call(g, this.B))
       }, jg.prototype.$ = function() {

@@ -254,24 +254,44 @@
       (f (first parents) first-child)
       (doall (map #(f %1 %2) (rest parents) other-children)))))
 
-(defn- lazy-nodelist
-  "A lazy seq view of a js/NodeList, or other array-like javascript things."
-  ([nl] (lazy-nodelist nl 0))
+(defn- lazy-nl-via-item
+  ([nl] (lazy-nl-via-item nl 0))
   ([nl n] (when (< n (. nl -length))
             (lazy-seq
              (cons (. nl (item n))
-                   (lazy-nodelist nl (inc n)))))))
+                   (lazy-nl-via-item nl (inc n)))))))
+
+(defn- lazy-nl-via-array-ref
+  ([nl] (lazy-nl-via-array-ref nl 0))
+  ([nl n] (when (< n (. nl -length))
+            (lazy-seq
+             (cons (aget nl n)
+                   (lazy-nl-via-array-ref nl (inc n)))))))
+
+(defn- lazy-nodelist
+  "A lazy seq view of a js/NodeList, or other array-like javascript things"
+  ;; Note: IE7 actually appears to have objects that are
+  ;; almost-but-not-exactly arrays: they have .length, you can pick
+  ;; out items via square brackets, but they aren't normal arrays and
+  ;; therefore they don't satisfy
+  ;; ISeqable. goog.dom.getElementsByClass returns one of these in
+  ;; IE7. This function needs to handle them, as well as NodeList-type
+  ;; things, so it forks to respective handler functions.
+  [nl]
+  (if (. nl -item)
+    (lazy-nl-via-item nl)
+    (lazy-nl-via-array-ref nl)))
 
 (defn- normalize-seq
   "Early versions of IE have things which are like arrays in that they
-  respond to .length and .item, but are not arrays. This returns a
+  respond to .length, but are not arrays nor NodeSets. This returns a
   real sequence view of such objects. If passed an object that is not
   a logical sequence at all, returns a single-item seq containing the
   object."
   [list-thing]
   (cond
    (dm/satisfies? ISeqable list-thing) (seq list-thing)
-   (. list-thing -item) (lazy-nodelist list-thing)
+   (. list-thing -length) (lazy-nodelist list-thing)
    :default (cons list-thing)))
 
 ;;;;;;;;;;;;;;;;;;; String to DOM ;;;;;;;;;;;;;;;;;;;;;;;;

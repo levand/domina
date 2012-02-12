@@ -673,7 +673,6 @@
       (add-class! (by-id "test-summary") "passed")
       (add-class! (by-id "test-summary") "failed"))))
 
-
 (def test-results (doall (run-tests)))
-#_(def test-results (doall (run-named "can set a html attribute on a single node")))
+#_(def test-results (doall (run-named "insert-before! with multiple reference nodes and a single new node")))
 (report test-results)

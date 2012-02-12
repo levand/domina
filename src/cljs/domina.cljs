@@ -8,13 +8,6 @@
             [cljs.core :as core])
   (:require-macros [domina.macros :as dm]))
 
-;;;;;;;;;;;;;;;;;;; Debug Log ;;;;;;;;;;;;;;;;;
-
-(def debug true)
-(defn log-debug [mesg]
-  (when (and debug (not (= (.-console js/window) js/undefined)))
-    (.log js/console mesg)))
-
 ;;;;;;;;;;;;;;;;;;; Protocols ;;;;;;;;;;;;;;;;;
 
 (defprotocol DomContent
@@ -23,17 +16,23 @@
 
 ;;;;;;;;;;;;;;;;;;; Public API ;;;;;;;;;;;;;;;;;
 
+(def *debug* true)
+(defn log-debug [mesg]
+  (when (and *debug* (not (= (.-console js/window) js/undefined)))
+    (.log js/console mesg)))
+
 (defn by-id
   "Returns content containing a single node by looking up the given ID"
   [id]
   (dom/getElement (core/name id)))
 
+(declare normalize-seq)
 (defn by-class
   "Returns content containing nodes which have the specified CSS class."
   [class-name]
   (reify DomContent
-    (nodes [_] (dom/getElementsByClass (core/name class-name)))
-    (single-node [_] (dom/getElementByClass (core/name class-name)))))
+         (nodes [_] (normalize-seq (dom/getElementsByClass (core/name class-name))))
+         (single-node [_] (normalize-seq (dom/getElementByClass (core/name class-name))))))
 
 (defn children
   "Gets all the child nodes of the elements in a content. Same as (xpath content '*') but more efficient."
@@ -115,17 +114,17 @@
   (.getAttribute (single-node content) (core/name name)))
 
 (defn set-style!
-  "Sets the value of a CSS property for each node in the content. Name may be a string or keyword."
-  [content name value]
+  "Sets the value of a CSS property for each node in the content. Name may be a string or keyword. Value will be cast to a string, multiple values wil be concatenated."
+  [content name & value]
   (doseq [n (nodes content)]
-    (style/setStyle n (core/name name) value))
+    (style/setStyle n (core/name name) (apply str value)))
   content)
 
 (defn set-attr!
-  "Sets the value of an HTML property for each node in the content. Name may be a string or keyword."
-  [content name value]
+  "Sets the value of an HTML property for each node in the content. Name may be a string or keyword. Value will be cast to a string, multiple values wil be concatenated."
+  [content name & value]
   (doseq [n (nodes content)]
-    (.setAttribute n (core/name name) value))
+    (.setAttribute n (core/name name) (apply str value)))
   content)
 
 ;; We don't use the existing style/parseStyleAttributes because it camelcases everything.
@@ -256,12 +255,24 @@
       (doall (map #(f %1 %2) (rest parents) other-children)))))
 
 (defn- lazy-nodelist
-  "A lazy seq view of a js/NodeList"
+  "A lazy seq view of a js/NodeList, or other array-like javascript things."
   ([nl] (lazy-nodelist nl 0))
   ([nl n] (when (< n (. nl -length))
             (lazy-seq
              (cons (. nl (item n))
                    (lazy-nodelist nl (inc n)))))))
+
+(defn- normalize-seq
+  "Early versions of IE have things which are like arrays in that they
+  respond to .length and .item, but are not arrays. This returns a
+  real sequence view of such objects. If passed an object that is not
+  a logical sequence at all, returns a single-item seq containing the
+  object."
+  [list-thing]
+  (cond
+   (dm/satisfies? ISeqable list-thing) (seq list-thing)
+   (. list-thing -item) (lazy-nodelist list-thing)
+   :default (cons list-thing)))
 
 ;;;;;;;;;;;;;;;;;;; String to DOM ;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -307,15 +318,21 @@
   (nodes [s] (nodes (string-to-dom s)))
   (single-node [s] (single-node (string-to-dom s)))
 
+  ;; We'd prefer to do this polymorphically with a protocol
+  ;; implementation instead of with a cond, except you can't create
+  ;; protocols on Element or things like DispStaticNodeList in early
+  ;; versions of IE.
   default
   (nodes [content]
-         (if (satisfies? ISeqable content)
-           (seq content)
-           (cons content)))
+         (cond
+          (dm/satisfies? ISeqable content) (seq content)
+          (if (. content -length)) (lazy-nodelist content)
+          :default (cons content)))
   (single-node [content]
-               (if (satisfies? ISeqable content)
-                 (first content)
-                 content)))
+               (cond
+                (dm/satisfies? ISeqable content) (first content)
+                (if (. content -length)) (. content (item 0))
+                :default content)))
 
 (if (dm/defined? js/NodeList)
   (extend-type js/NodeList
@@ -331,20 +348,20 @@
     (-seq [nodelist] (lazy-nodelist nodelist))))
 
 (if (dm/defined? js/StaticNodeList)
-  (extend-type js/StaticNodeList
-    ICounted
-    (-count [nodelist] (. nodelist -length))
+  (do
+    (extend-type js/StaticNodeList
+      ICounted
+      (-count [nodelist] (. nodelist -length))
 
-    IIndexed
-    (-nth
-      ([nodelist n] (. nodelist (item n)))
-      ([nodelist n not-found] (if (<= (. nodelist -length) n)
-                                not-found
-                                (nth nodelist n))))
+      IIndexed
+      (-nth
+       ([nodelist n] (. nodelist (item n)))
+       ([nodelist n not-found] (if (<= (. nodelist -length) n)
+                                 not-found
+                                 (nth nodelist n))))
 
-    ISeqable
-    (-seq [nodelist] (lazy-nodelist nodelist))))
-
+      ISeqable
+      (-seq [nodelist] (lazy-nodelist nodelist)))))
 
 (if (dm/defined? js/HTMLCollection)
   (extend-type js/HTMLCollection

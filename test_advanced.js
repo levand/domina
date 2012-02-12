@@ -556,24 +556,24 @@ var Sb = function() {
     if(!c) {
       return 1
     }
-    var d = vf(b);
+    var d = wf(b);
     return!c[d] ? c[d] = 1 : 0
   }
   function e(b, c) {
-    if(Td) {
-      var d = Ud[b];
+    if(Sd) {
+      var d = Td[b];
       if(d && !c) {
         return d
       }
     }
-    if(d = Vd[b]) {
+    if(d = Ud[b]) {
       return d
     }
     var d = b.charAt(0), k = -1 == b.indexOf(" ");
     0 <= b.indexOf("#") && k && (c = f);
-    if(Td && !c && -1 == ">~+".indexOf(d) && (!Qa || -1 == b.indexOf(":")) && !(Wd && 0 <= b.indexOf(".")) && -1 == b.indexOf(":contains") && -1 == b.indexOf("|=")) {
+    if(Sd && !c && -1 == ">~+".indexOf(d) && (!Qa || -1 == b.indexOf(":")) && !(Vd && 0 <= b.indexOf(".")) && -1 == b.indexOf(":contains") && -1 == b.indexOf("|=")) {
       var n = 0 <= ">~+".indexOf(b.charAt(b.length - 1)) ? b + " *" : b;
-      return Ud[b] = function(c) {
+      return Td[b] = function(c) {
         try {
           9 == c.nodeType || k || a("");
           var d = c.querySelectorAll(n);
@@ -585,7 +585,7 @@ var Sb = function() {
       }
     }
     var p = b.split(/\s*,\s*/);
-    return Vd[b] = 2 > p.length ? g(b) : function(b) {
+    return Ud[b] = 2 > p.length ? g(b) : function(b) {
       for(var c = 0, d = [], e;e = p[c++];) {
         d = d.concat(g(e)(b))
       }
@@ -593,7 +593,7 @@ var Sb = function() {
     }
   }
   function g(b) {
-    var c = Xd(ra(b));
+    var c = Wd(ra(b));
     if(1 == c.length) {
       var d = k(c[0]);
       return function(b) {
@@ -612,7 +612,7 @@ var Sb = function() {
           n = {}, p.ea = f
         }
         e = k(d);
-        for(var Sd = 0;d = b[Sd];Sd++) {
+        for(var Rd = 0;d = b[Rd];Rd++) {
           e(d, p, n)
         }
         if(!p.length) {
@@ -624,7 +624,7 @@ var Sb = function() {
     }
   }
   function k(b) {
-    var c = Yd[b.P];
+    var c = Xd[b.P];
     if(c) {
       return c
     }
@@ -655,7 +655,7 @@ var Sb = function() {
           }
         }
       }else {
-        if(k && /\{\s*\[native code\]\s*\}/.test("" + k) && b.t.length && !Wd) {
+        if(k && /\{\s*\[native code\]\s*\}/.test("" + k) && b.t.length && !Vd) {
           var e = B(b, {N:1, t:1, id:1}), I = b.t.join(" "), c = function(b, c) {
             for(var d = xb(0, c), g, k = 0, n = b.getElementsByClassName(I);g = n[k++];) {
               e(g, b) && d.push(g)
@@ -677,12 +677,12 @@ var Sb = function() {
         }
       }
     }
-    return Yd[b.P] = c
+    return Xd[b.P] = c
   }
   function n(b) {
     b = b || Rb;
     return function(c, e, g) {
-      for(var k = 0, n = c[Zd];c = n[k++];) {
+      for(var k = 0, n = c[Yd];c = n[k++];) {
         yb(c) && (!g || d(c, g)) && b(c, k) && e.push(c)
       }
       return e
@@ -729,13 +729,13 @@ var Sb = function() {
       });
       d.s = c
     });
-    c.K || Ba(b.K, function(b) {
+    c.J || Ba(b.J, function(b) {
       var c = b.name;
       Rc[c] && (d = cb(d, Rc[c](c, b.value)))
     });
     c.W || Ba(b.W, function(b) {
       var c, e = b.ga;
-      b.type && $d[b.type] ? c = $d[b.type](e, b.na) : e.length && (c = wf(e));
+      b.type && Zd[b.type] ? c = Zd[b.type](e, b.na) : e.length && (c = xf(e));
       c && (d = cb(d, c))
     });
     c.id || b.id && (d = cb(d, function(c) {
@@ -751,7 +751,7 @@ var Sb = function() {
     return!(H(b) % 2)
   }
   function H(b) {
-    var c = b.parentNode, d = 0, e = c[Zd], g = b._i || -1, k = c._l || -1;
+    var c = b.parentNode, d = 0, e = c[Yd], g = b._i || -1, k = c._l || -1;
     if(!e) {
       return-1
     }
@@ -777,7 +777,7 @@ var Sb = function() {
     return f
   }
   function Ta(b) {
-    for(;b = b[xf];) {
+    for(;b = b[yf];) {
       if(yb(b)) {
         return i
       }
@@ -795,7 +795,7 @@ var Sb = function() {
       return b.apply(window, arguments) && c.apply(window, arguments)
     }
   }
-  function Xd(b) {
+  function Wd(b) {
     function c() {
       if(0 <= B) {
         N.id = d(B, T).replace(/\\/g, ""), B = -1
@@ -812,7 +812,7 @@ var Sb = function() {
     }
     for(var b = 0 <= ">~+".indexOf(b.slice(-1)) ? b + " * " : b + " ", e = [], g = -1, k = -1, n = -1, p = -1, v = -1, B = -1, I = -1, F = "", H = "", $, T = 0, Ta = b.length, N = h, aa = h;F = H, H = b.charAt(T), T < Ta;T++) {
       if("\\" != F) {
-        if(N || ($ = T, N = {P:h, K:[], W:[], t:[], j:h, fa:h, id:h, la:function() {
+        if(N || ($ = T, N = {P:h, J:[], W:[], t:[], j:h, fa:h, id:h, la:function() {
           return bb ? this.Ka : this.j
         }}, I = T), 0 <= g) {
           if("]" == H) {
@@ -850,12 +850,12 @@ var Sb = function() {
                     c(), g = T, aa = {}
                   }else {
                     if("(" == H) {
-                      0 <= p && (aa = {name:d(p + 1, T), value:h}, N.K.push(aa)), k = T
+                      0 <= p && (aa = {name:d(p + 1, T), value:h}, N.J.push(aa)), k = T
                     }else {
                       if(" " == H && F != H) {
                         c();
-                        0 <= p && N.K.push({name:d(p + 1, T)});
-                        N.za = N.K.length || N.W.length || N.t.length;
+                        0 <= p && N.J.push({name:d(p + 1, T)});
+                        N.za = N.J.length || N.W.length || N.t.length;
                         N.Ta = N.P = d($, T);
                         N.Ka = N.j = N.fa ? h : N.j || "*";
                         if(N.j) {
@@ -883,7 +883,7 @@ var Sb = function() {
     b && d.push(b);
     return d
   }
-  var Wd = Sa && "BackCompat" == document.compatMode, Zd = document.firstChild.children ? "children" : "childNodes", bb = i, $d = {"*=":function(b, c) {
+  var Vd = Sa && "BackCompat" == document.compatMode, Yd = document.firstChild.children ? "children" : "childNodes", bb = i, Zd = {"*=":function(b, c) {
     return function(d) {
       return 0 <= aa(d, b).indexOf(c)
     }
@@ -911,7 +911,7 @@ var Sb = function() {
     return function(d) {
       return aa(d, b) == c
     }
-  }}, hc = "undefined" == typeof document.firstChild.nextElementSibling, zb = !hc ? "nextElementSibling" : "nextSibling", xf = !hc ? "previousElementSibling" : "previousSibling", yb = hc ? gc : Rb, Rc = {checked:function() {
+  }}, hc = "undefined" == typeof document.firstChild.nextElementSibling, zb = !hc ? "nextElementSibling" : "nextSibling", yf = !hc ? "previousElementSibling" : "previousSibling", yb = hc ? gc : Rb, Rc = {checked:function() {
     return function(b) {
       return b.checked || b.attributes.checked
     }
@@ -942,7 +942,7 @@ var Sb = function() {
       return 0 <= b.innerHTML.indexOf(c)
     }
   }, not:function(b, c) {
-    var d = Xd(c)[0], e = {N:1};
+    var d = Wd(c)[0], e = {N:1};
     if("*" != d.j) {
       e.j = 1
     }
@@ -975,7 +975,7 @@ var Sb = function() {
     return function(b) {
       return H(b) == p
     }
-  }}, wf = Qa ? function(b) {
+  }}, xf = Qa ? function(b) {
     var c = b.toLowerCase();
     "class" == c && (b = "className");
     return function(d) {
@@ -985,16 +985,16 @@ var Sb = function() {
     return function(c) {
       return c && c.getAttribute && c.hasAttribute(b)
     }
-  }, Yd = {}, Vd = {}, Ud = {}, Td = !!document.querySelectorAll && (!Sa || fb("526")), Ma = 0, vf = Qa ? function(b) {
+  }, Xd = {}, Ud = {}, Td = {}, Sd = !!document.querySelectorAll && (!Sa || fb("526")), Ma = 0, wf = Qa ? function(b) {
     return bb ? b.getAttribute("_uid") || b.setAttribute("_uid", ++Ma) || Ma : b.uniqueID
   } : function(b) {
     return b._uid || (b._uid = ++Ma)
   };
-  b.K = Rc;
+  b.J = Rc;
   return b
 }();
 fa("goog.dom.query", Sb);
-fa("goog.dom.query.pseudos", Sb.K);
+fa("goog.dom.query.pseudos", Sb.J);
 var Tb, Ub = (Tb = "ScriptEngine" in ea && "JScript" == ea.ScriptEngine()) ? ea.ScriptEngineMajorVersion() + "." + ea.ScriptEngineMinorVersion() + "." + ea.ScriptEngineBuildVersion() : "0";
 function Vb(b, c) {
   this.m = Tb ? [] : "";
@@ -1211,20 +1211,20 @@ l.handleEvent = function(b) {
 };
 function jc(b, c) {
   this.Aa = c;
-  this.J = [];
+  this.I = [];
   b > this.Aa && a(Error("[goog.structs.SimplePool] Initial cannot be greater than max"));
   for(var d = 0;d < b;d++) {
-    this.J.push(this.v ? this.v() : {})
+    this.I.push(this.v ? this.v() : {})
   }
 }
 pa(jc, Xb);
 jc.prototype.v = h;
 jc.prototype.ua = h;
 function kc(b) {
-  return b.J.length ? b.J.pop() : b.v ? b.v() : {}
+  return b.I.length ? b.I.pop() : b.v ? b.v() : {}
 }
 function lc(b, c) {
-  b.J.length < b.Aa ? b.J.push(c) : mc(b, c)
+  b.I.length < b.Aa ? b.I.push(c) : mc(b, c)
 }
 function mc(b, c) {
   if(b.ua) {
@@ -1243,10 +1243,10 @@ function mc(b, c) {
 }
 jc.prototype.M = function() {
   jc.Da.M.call(this);
-  for(var b = this.J;b.length;) {
+  for(var b = this.I;b.length;) {
     mc(this, b.pop())
   }
-  delete this.J
+  delete this.I
 };
 var nc, oc, pc, qc, rc, sc, tc, uc, vc, wc, xc;
 (function() {
@@ -1628,8 +1628,8 @@ var s = function() {
   }
 }(), Tc = {};
 function Uc(b) {
-  if(q(q(b) ? b.F : b)) {
-    b = b.F(b)
+  if(q(q(b) ? b.D : b)) {
+    b = b.D(b)
   }else {
     var c;
     var d = Uc[o.call(h, b)];
@@ -1639,8 +1639,8 @@ function Uc(b) {
   return b
 }
 function Vc(b) {
-  if(q(q(b) ? b.G : b)) {
-    b = b.G(b)
+  if(q(q(b) ? b.F : b)) {
+    b = b.F(b)
   }else {
     var c;
     var d = Vc[o.call(h, b)];
@@ -1730,8 +1730,8 @@ var ed = function() {
     switch(arguments.length) {
       case 2:
         var e;
-        if(q(q(b) ? b.L : b)) {
-          e = b.L(b, c)
+        if(q(q(b) ? b.K : b)) {
+          e = b.K(b, c)
         }else {
           var g = ed[o.call(h, b)];
           q(g) ? e = g : (g = ed._, q(g) ? e = g : a(r.call(h, "IReduce.-reduce", b)));
@@ -1739,7 +1739,7 @@ var ed = function() {
         }
         return e;
       case 3:
-        return q(q(b) ? b.L : b) ? e = b.L(b, c, d) : (e = ed[o.call(h, b)], q(e) ? g = e : (e = ed._, q(e) ? g = e : a(r.call(h, "IReduce.-reduce", b))), e = g.call(h, b, c, d)), e
+        return q(q(b) ? b.K : b) ? e = b.K(b, c, d) : (e = ed[o.call(h, b)], q(e) ? g = e : (e = ed._, q(e) ? g = e : a(r.call(h, "IReduce.-reduce", b))), e = g.call(h, b, c, d)), e
     }
     a("Invalid arity: " + arguments.length)
   }
@@ -1940,7 +1940,7 @@ l = od.prototype;
 l.o = function(b) {
   return pd.call(h, b)
 };
-l.L = function() {
+l.K = function() {
   return function(b, c, d) {
     switch(arguments.length) {
       case 2:
@@ -1957,7 +1957,7 @@ l.r = function(b, c) {
 l.e = function(b, c) {
   return qd.call(h, b, c)
 };
-l.H = f;
+l.G = f;
 l.u = function() {
   return function(b, c, d) {
     switch(arguments.length) {
@@ -1973,11 +1973,11 @@ l.u = function() {
 l.n = function() {
   return this.q.length - this.w
 };
-l.D = f;
-l.F = function() {
+l.L = f;
+l.D = function() {
   return this.q[this.w]
 };
-l.G = function() {
+l.F = function() {
   return q(this.w + 1 < this.q.length) ? new od(this.q, this.w + 1) : x.call(h)
 };
 l.h = f;
@@ -2182,7 +2182,7 @@ function Ad(b) {
 }
 function Bd(b) {
   var c;
-  q(b) ? (c = b.H, c = q(c) ? K.call(h, b.hasOwnProperty("cljs$core$ISequential$")) : c) : c = b;
+  q(b) ? (c = b.G, c = q(c) ? K.call(h, b.hasOwnProperty("cljs$core$ISequential$")) : c) : c = b;
   return q(c) ? f : Nc.call(h, jd, b)
 }
 function Cd(b) {
@@ -2219,7 +2219,7 @@ function Id(b) {
     b = i
   }else {
     var c;
-    q(b) ? (c = b.D, c = q(c) ? K.call(h, b.hasOwnProperty("cljs$core$ISeq$")) : c) : c = b;
+    q(b) ? (c = b.L, c = q(c) ? K.call(h, b.hasOwnProperty("cljs$core$ISeq$")) : c) : c = b;
     b = q(c) ? f : Nc.call(h, Tc, b)
   }
   return b
@@ -2328,7 +2328,7 @@ var Qd = function() {
   b.b = 2;
   b.a = c.a;
   return b
-}(), Rd = function() {
+}(), $d = function() {
   var b = h, c = function() {
     function b(d, k, n) {
       var p = h;
@@ -2515,16 +2515,16 @@ l = ge.prototype;
 l.o = function(b) {
   return pd.call(h, b)
 };
-l.H = f;
+l.G = f;
 l.r = function(b, c) {
   return new ge(this.c, c, b, this.s + 1)
 };
 l.h = f;
 l.i = ca();
 l.n = j("s");
-l.D = f;
-l.F = j("V");
-l.G = j("S");
+l.L = f;
+l.D = j("V");
+l.F = j("S");
 l.e = function(b, c) {
   return qd.call(h, b, c)
 };
@@ -2540,16 +2540,16 @@ l = he.prototype;
 l.o = function(b) {
   return pd.call(h, b)
 };
-l.H = f;
+l.G = f;
 l.r = function(b, c) {
   return new ge(this.c, c, h, 1)
 };
 l.h = f;
 l.i = da(h);
 l.n = da(0);
-l.D = f;
+l.L = f;
+l.D = da(h);
 l.F = da(h);
-l.G = da(h);
 l.e = function(b, c) {
   return qd.call(h, b, c)
 };
@@ -2589,13 +2589,13 @@ l.o = function(b) {
 l.e = function(b, c) {
   return qd.call(h, b, c)
 };
-l.H = f;
+l.G = f;
 l.r = function(b, c) {
   return new ke(h, c, b)
 };
-l.D = f;
-l.F = j("V");
-l.G = function() {
+l.L = f;
+l.D = j("V");
+l.F = function() {
   return q(w.call(h, this.S)) ? ie : this.S
 };
 l.f = f;
@@ -2688,15 +2688,15 @@ l.o = function(b) {
 l.e = function(b, c) {
   return qd.call(h, b, c)
 };
-l.H = f;
+l.G = f;
 l.r = function(b, c) {
   return A.call(h, c, b)
 };
-l.D = f;
-l.F = function(b) {
+l.L = f;
+l.D = function(b) {
   return E.call(h, le.call(h, b))
 };
-l.G = function(b) {
+l.F = function(b) {
   return G.call(h, le.call(h, b))
 };
 l.f = f;
@@ -3258,13 +3258,13 @@ l.call = function() {
     a("Invalid arity: " + arguments.length)
   }
 }();
-l.H = f;
+l.G = f;
 l.r = function(b, c) {
   var d = Oc.call(h, this.k);
   d.push(c);
   return new Je(this.c, d)
 };
-l.L = function() {
+l.K = function() {
   return function(b, c, d) {
     switch(arguments.length) {
       case 2:
@@ -3630,11 +3630,11 @@ l = bf.prototype;
 l.o = function(b) {
   return pd.call(h, b)
 };
-l.H = f;
+l.G = f;
 l.r = function(b, c) {
   return A.call(h, c, b)
 };
-l.L = function() {
+l.K = function() {
   return function(b, c, d) {
     switch(arguments.length) {
       case 2:
@@ -3647,14 +3647,14 @@ l.L = function() {
 }();
 l.h = f;
 l.i = function(b) {
-  return q((q(0 < this.step) ? Qd : Rd).call(h, this.start, this.end)) ? b : h
+  return q((q(0 < this.step) ? Qd : $d).call(h, this.start, this.end)) ? b : h
 };
 l.n = function(b) {
   return q(K.call(h, id.call(h, b))) ? 0 : Math.ceil.call(h, (this.end - this.start) / this.step)
 };
-l.D = f;
-l.F = j("start");
-l.G = function(b) {
+l.L = f;
+l.D = j("start");
+l.F = function(b) {
   return q(id.call(h, b)) ? new bf(this.c, this.start + this.step, this.end, this.step) : x.call(h)
 };
 l.e = function(b, c) {
@@ -3993,24 +3993,24 @@ var uf = function() {
   function b(b, e) {
     if(q(ba === sf)) {
       sf = function(b, c, d, e) {
-        this.I = b;
+        this.H = b;
         this.B = c;
         this.Na = d;
         this.U = e
       }, sf.d = function() {
-        return x.call(h, "domina.css.t16545")
+        return x.call(h, "domina.css.t16600")
       }, sf.prototype.Z = function() {
         var b = this;
         return Ee.call(h, function(c) {
-          return Sb.call(h, b.I, c)
+          return Sb.call(h, b.H, c)
         }, U.call(h, b.B))
       }, sf.prototype.$ = function() {
         var b = this;
         return E.call(h, Ge.call(h, ue.call(h, w), Ee.call(h, function(c) {
-          return Sb.call(h, b.I, c)
+          return Sb.call(h, b.H, c)
         }, U.call(h, b.B))))
       }, sf.prototype.f = f, sf.prototype.g = j("U"), sf.prototype.l = function(b, c) {
-        return new sf(this.I, this.B, this.Na, c)
+        return new sf(this.H, this.B, this.Na, c)
       }
     }
     return new sf(e, b, c, h)
@@ -4026,7 +4026,7 @@ var uf = function() {
     a("Invalid arity: " + arguments.length)
   }
 }();
-function yf(b) {
+function vf(b) {
   return q(q(f) ? K.call(h, u.call(h, window.console, ba)) : f) ? console.log(b) : h
 }
 function U(b) {
@@ -4061,7 +4061,7 @@ var Bf = function Af(c) {
       this.Ea = e;
       this.U = g
     }, rf.d = function() {
-      return x.call(h, "domina.t15827")
+      return x.call(h, "domina.t15882")
     }, rf.prototype.Z = function() {
       return sb.call(h, $e.call(h, this.ia))
     }, rf.prototype.$ = function() {
@@ -4322,8 +4322,8 @@ function Ef(b, c, d) {
   }(), d = ef.call(h, Ae.call(h, L.call(h, c) - 1, function() {
     return g.cloneNode(f)
   }));
-  yf.call(h, y.call(h, "parents:", L.call(h, c)));
-  yf.call(h, y.call(h, "children:", L.call(h, e)));
+  vf.call(h, y.call(h, "parents:", L.call(h, c)));
+  vf.call(h, y.call(h, "children:", L.call(h, e)));
   return q(D.call(h, c)) ? (b.call(h, E.call(h, c), g), ef.call(h, Q.call(h, function(c, d) {
     return b.call(h, c, d)
   }, G.call(h, c), d))) : h
@@ -4365,17 +4365,9 @@ function jg(b) {
   return ig.call(h, c, d)
 }
 U._ = function(b) {
-  yf.call(h, typeof b);
+  vf.call(h, typeof b);
   return q(function() {
-    var c = function() {
-      return q(function() {
-        if(q(b)) {
-          var c = b.D;
-          return q(c) ? (c = b.hasOwnProperty, q(c) ? K.call(h, b.hasOwnProperty("cljs$core$ISeq$")) : c) : c
-        }
-        return b
-      }()) ? f : Nc.call(h, Tc, b)
-    }();
+    var c = Id.call(h, b);
     return q(c) ? c : q(function() {
       if(q(b)) {
         var c = b.h;
@@ -4492,18 +4484,18 @@ var X = function() {
   function b(b, e) {
     if(q(ba === kg)) {
       kg = function(b, c, d, e) {
-        this.I = b;
+        this.H = b;
         this.B = c;
         this.Ra = d;
         this.U = e
       }, kg.d = function() {
-        return x.call(h, "domina.xpath.t15725")
+        return x.call(h, "domina.xpath.t15810")
       }, kg.prototype.Z = function() {
-        return Ee.call(h, ve.call(h, ng, this.I), U.call(h, this.B))
+        return Ee.call(h, ve.call(h, ng, this.H), U.call(h, this.B))
       }, kg.prototype.$ = function() {
-        return E.call(h, Ge.call(h, ue.call(h, w), Q.call(h, ve.call(h, mg, this.I), U.call(h, this.B))))
+        return E.call(h, Ge.call(h, ue.call(h, w), Q.call(h, ve.call(h, mg, this.H), U.call(h, this.B))))
       }, kg.prototype.f = f, kg.prototype.g = j("U"), kg.prototype.l = function(b, c) {
-        return new kg(this.I, this.B, this.Ra, c)
+        return new kg(this.H, this.B, this.Ra, c)
       }
     }
     return new kg(e, b, c, h)
@@ -4984,11 +4976,11 @@ Y.call(h, "insert-before! with multiple reference nodes and a single new node", 
   Z.call(h);
   W.call(h, X.call(h, "//body"), "<div class='ref' id='ref1'>content1</div>");
   W.call(h, X.call(h, "//body"), "<div class='ref' id='ref2'>content2</div>");
-  yf.call(h, "inserting...");
+  vf.call(h, "inserting...");
   Hf.call(h, U.call(h, Bf.call(h, "ref")), "<p>before</p>");
-  yf.call(h, "inserting take 2...");
+  vf.call(h, "inserting take 2...");
   Hf.call(h, Bf.call(h, "ref"), "<p>before</p>");
-  yf.call(h, "inserting take 3...");
+  vf.call(h, "inserting take 3...");
   Hf.call(h, X.call(h, "//div[@class='ref']"), "<p>before</p>");
   a("fail hard")
 });

@@ -731,7 +731,7 @@ var Sb = function() {
     });
     c.J || Ba(b.J, function(b) {
       var c = b.name;
-      Pc[c] && (d = cb(d, Pc[c](c, b.value)))
+      Qc[c] && (d = cb(d, Qc[c](c, b.value)))
     });
     c.W || Ba(b.W, function(b) {
       var c, e = b.ga;
@@ -911,7 +911,7 @@ var Sb = function() {
     return function(d) {
       return aa(d, b) == c
     }
-  }}, hc = "undefined" == typeof document.firstChild.nextElementSibling, xb = !hc ? "nextElementSibling" : "nextSibling", xf = !hc ? "previousElementSibling" : "previousSibling", wb = hc ? gc : Rb, Pc = {checked:function() {
+  }}, hc = "undefined" == typeof document.firstChild.nextElementSibling, xb = !hc ? "nextElementSibling" : "nextSibling", xf = !hc ? "previousElementSibling" : "previousSibling", wb = hc ? gc : Rb, Qc = {checked:function() {
     return function(b) {
       return b.checked || b.attributes.checked
     }
@@ -990,7 +990,7 @@ var Sb = function() {
   } : function(b) {
     return b._uid || (b._uid = ++Ma)
   };
-  b.J = Pc;
+  b.J = Qc;
   return b
 }();
 fa("goog.dom.query", Sb);
@@ -1583,7 +1583,7 @@ function r(b, c) {
 function Oc(b) {
   return Array.prototype.slice.call(b)
 }
-function Qc(b) {
+function Pc(b) {
   return Array.prototype.slice.call(arguments)
 }
 function Rc(b) {
@@ -2204,7 +2204,7 @@ function Ed() {
   return{}
 }
 function Fd(b) {
-  var c = Qc.call(h);
+  var c = Pc.call(h);
   nb.call(h, b, function(b, e) {
     return c.push(e)
   });
@@ -2702,7 +2702,7 @@ l.l = function(b, c) {
   return new P(c, this.pa, this.x)
 };
 function le(b) {
-  for(var c = Qc.call(h);;) {
+  for(var c = Pc.call(h);;) {
     if(q(D.call(h, b))) {
       c.push(E.call(h, b)), b = H.call(h, b)
     }else {
@@ -3305,7 +3305,7 @@ l.u = function() {
     a("Invalid arity: " + arguments.length)
   }
 }();
-var Je = new Ie(h, Qc.call(h));
+var Je = new Ie(h, Pc.call(h));
 function Ke(b) {
   return new Ie(h, b)
 }
@@ -3428,7 +3428,7 @@ l.l = function(b, c) {
 l.g = f;
 l.h = j("c");
 l.sa = f;
-Qc.call(h);
+Pc.call(h);
 function R(b, c) {
   return new Se(h, b, c)
 }
@@ -3466,7 +3466,7 @@ l.X = function(b, c, d) {
     return new Te(this.c, this.s + 1, g)
   }
   e = ob.call(h, this.A);
-  e[b] = Qc.call(h, c, d);
+  e[b] = Pc.call(h, c, d);
   return new Te(this.c, this.s + 1, e)
 };
 l.ja = function(b, c) {
@@ -4058,7 +4058,7 @@ var Bf = function zf(c) {
       this.Ea = e;
       this.U = g
     }, qf.d = function() {
-      return x.call(h, "domina.t15926")
+      return x.call(h, "domina.t15938")
     }, qf.prototype.Z = function() {
       return Af.call(h, sb.call(h, Ze.call(h, this.ia)))
     }, qf.prototype.$ = function() {
@@ -4520,7 +4520,7 @@ var X = function() {
         this.Ra = d;
         this.U = e
       }, kg.d = function() {
-        return x.call(h, "domina.xpath.t15859")
+        return x.call(h, "domina.xpath.t15877")
       }, kg.prototype.Z = function() {
         return De.call(h, ue.call(h, ng, this.H), T.call(h, this.B))
       }, kg.prototype.$ = function() {
@@ -5562,9 +5562,13 @@ Y.call(h, "doesn't clone unless necessary", function() {
   b = L.call(h, Fe.call(h, te.call(h, v), Q.call(h, sd, b)));
   ag.call(h, V.call(h, "total-failures"), b);
   return q(u.call(h, 0, b)) ? Xf.call(h, V.call(h, "test-summary"), "passed") : Xf.call(h, V.call(h, "test-summary"), "failed")
-}).call(h, df.call(h, function() {
+}).call(h, df.call(h, function(b) {
   return Q.call(h, function(b) {
-    var c = M.call(h, b, 0, h), b = M.call(h, b, 1, h);
-    return Ke([c, Ag.call(h, b)])
-  }, pf.call(h, zg))
-}.call(h)));
+    var d = M.call(h, b, 0, h), b = M.call(h, b, 1, h);
+    return Ke([d, Ag.call(h, b)])
+  }, Fe.call(h, function(c) {
+    var d = M.call(h, c, 0, h);
+    M.call(h, c, 1, h);
+    return u.call(h, d, b)
+  }, pf.call(h, zg)))
+}.call(h, "insert-before! with multiple reference nodes and a single new node")));

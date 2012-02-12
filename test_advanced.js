@@ -556,24 +556,24 @@ var Sb = function() {
     if(!c) {
       return 1
     }
-    var d = wf(b);
+    var d = vf(b);
     return!c[d] ? c[d] = 1 : 0
   }
   function e(b, c) {
-    if(Rd) {
-      var d = Sd[b];
+    if(Sd) {
+      var d = Td[b];
       if(d && !c) {
         return d
       }
     }
-    if(d = Td[b]) {
+    if(d = Ud[b]) {
       return d
     }
     var d = b.charAt(0), k = -1 == b.indexOf(" ");
     0 <= b.indexOf("#") && k && (c = f);
-    if(Rd && !c && -1 == ">~+".indexOf(d) && (!Qa || -1 == b.indexOf(":")) && !(Ud && 0 <= b.indexOf(".")) && -1 == b.indexOf(":contains") && -1 == b.indexOf("|=")) {
+    if(Sd && !c && -1 == ">~+".indexOf(d) && (!Qa || -1 == b.indexOf(":")) && !(Vd && 0 <= b.indexOf(".")) && -1 == b.indexOf(":contains") && -1 == b.indexOf("|=")) {
       var l = 0 <= ">~+".indexOf(b.charAt(b.length - 1)) ? b + " *" : b;
-      return Sd[b] = function(c) {
+      return Td[b] = function(c) {
         try {
           9 == c.nodeType || k || a("");
           var d = c.querySelectorAll(l);
@@ -585,7 +585,7 @@ var Sb = function() {
       }
     }
     var p = b.split(/\s*,\s*/);
-    return Td[b] = 2 > p.length ? g(b) : function(b) {
+    return Ud[b] = 2 > p.length ? g(b) : function(b) {
       for(var c = 0, d = [], e;e = p[c++];) {
         d = d.concat(g(e)(b))
       }
@@ -593,7 +593,7 @@ var Sb = function() {
     }
   }
   function g(b) {
-    var c = Vd(ra(b));
+    var c = Wd(ra(b));
     if(1 == c.length) {
       var d = k(c[0]);
       return function(b) {
@@ -612,7 +612,7 @@ var Sb = function() {
           l = {}, p.ea = f
         }
         e = k(d);
-        for(var Qd = 0;d = b[Qd];Qd++) {
+        for(var Rd = 0;d = b[Rd];Rd++) {
           e(d, p, l)
         }
         if(!p.length) {
@@ -624,7 +624,7 @@ var Sb = function() {
     }
   }
   function k(b) {
-    var c = Wd[b.P];
+    var c = Xd[b.P];
     if(c) {
       return c
     }
@@ -655,7 +655,7 @@ var Sb = function() {
           }
         }
       }else {
-        if(k && /\{\s*\[native code\]\s*\}/.test("" + k) && b.t.length && !Ud) {
+        if(k && /\{\s*\[native code\]\s*\}/.test("" + k) && b.t.length && !Vd) {
           var e = A(b, {N:1, t:1, id:1}), J = b.t.join(" "), c = function(b, c) {
             for(var d = vb(0, c), g, k = 0, l = b.getElementsByClassName(J);g = l[k++];) {
               e(g, b) && d.push(g)
@@ -677,12 +677,12 @@ var Sb = function() {
         }
       }
     }
-    return Wd[b.P] = c
+    return Xd[b.P] = c
   }
   function l(b) {
     b = b || Rb;
     return function(c, e, g) {
-      for(var k = 0, l = c[Xd];c = l[k++];) {
+      for(var k = 0, l = c[Yd];c = l[k++];) {
         wb(c) && (!g || d(c, g)) && b(c, k) && e.push(c)
       }
       return e
@@ -731,11 +731,11 @@ var Sb = function() {
     });
     c.J || Ba(b.J, function(b) {
       var c = b.name;
-      Pc[c] && (d = cb(d, Pc[c](c, b.value)))
+      Qc[c] && (d = cb(d, Qc[c](c, b.value)))
     });
     c.W || Ba(b.W, function(b) {
       var c, e = b.ga;
-      b.type && Yd[b.type] ? c = Yd[b.type](e, b.na) : e.length && (c = xf(e));
+      b.type && Zd[b.type] ? c = Zd[b.type](e, b.na) : e.length && (c = wf(e));
       c && (d = cb(d, c))
     });
     c.id || b.id && (d = cb(d, function(c) {
@@ -751,7 +751,7 @@ var Sb = function() {
     return!(I(b) % 2)
   }
   function I(b) {
-    var c = b.parentNode, d = 0, e = c[Xd], g = b._i || -1, k = c._l || -1;
+    var c = b.parentNode, d = 0, e = c[Yd], g = b._i || -1, k = c._l || -1;
     if(!e) {
       return-1
     }
@@ -777,7 +777,7 @@ var Sb = function() {
     return f
   }
   function Ta(b) {
-    for(;b = b[yf];) {
+    for(;b = b[xf];) {
       if(wb(b)) {
         return i
       }
@@ -795,7 +795,7 @@ var Sb = function() {
       return b.apply(window, arguments) && c.apply(window, arguments)
     }
   }
-  function Vd(b) {
+  function Wd(b) {
     function c() {
       if(0 <= A) {
         O.id = d(A, U).replace(/\\/g, ""), A = -1
@@ -813,7 +813,7 @@ var Sb = function() {
     for(var b = 0 <= ">~+".indexOf(b.slice(-1)) ? b + " * " : b + " ", e = [], g = -1, k = -1, l = -1, p = -1, w = -1, A = -1, J = -1, F = "", I = "", $, U = 0, Ta = b.length, O = h, aa = h;F = I, I = b.charAt(U), U < Ta;U++) {
       if("\\" != F) {
         if(O || ($ = U, O = {P:h, J:[], W:[], t:[], j:h, fa:h, id:h, la:function() {
-          return bb ? this.La : this.j
+          return bb ? this.Ka : this.j
         }}, J = U), 0 <= g) {
           if("]" == I) {
             aa.ga ? aa.na = d(l || g + 1, U) : aa.ga = d(g + 1, U);
@@ -856,8 +856,8 @@ var Sb = function() {
                         c();
                         0 <= p && O.J.push({name:d(p + 1, U)});
                         O.za = O.J.length || O.W.length || O.t.length;
-                        O.Ua = O.P = d($, U);
-                        O.La = O.j = O.fa ? h : O.j || "*";
+                        O.Ta = O.P = d($, U);
+                        O.Ka = O.j = O.fa ? h : O.j || "*";
                         if(O.j) {
                           O.j = O.j.toUpperCase()
                         }
@@ -883,7 +883,7 @@ var Sb = function() {
     b && d.push(b);
     return d
   }
-  var Ud = Sa && "BackCompat" == document.compatMode, Xd = document.firstChild.children ? "children" : "childNodes", bb = i, Yd = {"*=":function(b, c) {
+  var Vd = Sa && "BackCompat" == document.compatMode, Yd = document.firstChild.children ? "children" : "childNodes", bb = i, Zd = {"*=":function(b, c) {
     return function(d) {
       return 0 <= aa(d, b).indexOf(c)
     }
@@ -911,7 +911,7 @@ var Sb = function() {
     return function(d) {
       return aa(d, b) == c
     }
-  }}, hc = "undefined" == typeof document.firstChild.nextElementSibling, xb = !hc ? "nextElementSibling" : "nextSibling", yf = !hc ? "previousElementSibling" : "previousSibling", wb = hc ? gc : Rb, Pc = {checked:function() {
+  }}, hc = "undefined" == typeof document.firstChild.nextElementSibling, xb = !hc ? "nextElementSibling" : "nextSibling", xf = !hc ? "previousElementSibling" : "previousSibling", wb = hc ? gc : Rb, Qc = {checked:function() {
     return function(b) {
       return b.checked || b.attributes.checked
     }
@@ -942,7 +942,7 @@ var Sb = function() {
       return 0 <= b.innerHTML.indexOf(c)
     }
   }, not:function(b, c) {
-    var d = Vd(c)[0], e = {N:1};
+    var d = Wd(c)[0], e = {N:1};
     if("*" != d.j) {
       e.j = 1
     }
@@ -975,7 +975,7 @@ var Sb = function() {
     return function(b) {
       return I(b) == p
     }
-  }}, xf = Qa ? function(b) {
+  }}, wf = Qa ? function(b) {
     var c = b.toLowerCase();
     "class" == c && (b = "className");
     return function(d) {
@@ -985,12 +985,12 @@ var Sb = function() {
     return function(c) {
       return c && c.getAttribute && c.hasAttribute(b)
     }
-  }, Wd = {}, Td = {}, Sd = {}, Rd = !!document.querySelectorAll && (!Sa || fb("526")), Ma = 0, wf = Qa ? function(b) {
+  }, Xd = {}, Ud = {}, Td = {}, Sd = !!document.querySelectorAll && (!Sa || fb("526")), Ma = 0, vf = Qa ? function(b) {
     return bb ? b.getAttribute("_uid") || b.setAttribute("_uid", ++Ma) || Ma : b.uniqueID
   } : function(b) {
     return b._uid || (b._uid = ++Ma)
   };
-  b.J = Pc;
+  b.J = Qc;
   return b
 }();
 fa("goog.dom.query", Sb);
@@ -1048,7 +1048,7 @@ Yb.prototype.M = function() {
   delete this.currentTarget
 };
 Yb.prototype.oa = i;
-Yb.prototype.Na = f;
+Yb.prototype.Ma = f;
 var Zb = new Function("a", "return a");
 function $b(b, c) {
   b && this.ba(b, c)
@@ -1070,7 +1070,7 @@ m.ctrlKey = i;
 m.altKey = i;
 m.shiftKey = i;
 m.metaKey = i;
-m.Ma = i;
+m.La = i;
 m.wa = h;
 m.ba = function(b, c) {
   var d = this.type = b.type;
@@ -1109,10 +1109,10 @@ m.ba = function(b, c) {
   this.altKey = b.altKey;
   this.shiftKey = b.shiftKey;
   this.metaKey = b.metaKey;
-  this.Ma = Va ? b.metaKey : b.ctrlKey;
+  this.La = Va ? b.metaKey : b.ctrlKey;
   this.state = b.state;
   this.wa = b;
-  delete this.Na;
+  delete this.Ma;
   delete this.oa
 };
 m.M = function() {
@@ -1583,7 +1583,7 @@ function r(b, c) {
 function Oc(b) {
   return Array.prototype.slice.call(b)
 }
-function Qc(b) {
+function Pc(b) {
   return Array.prototype.slice.call(arguments)
 }
 function Rc(b) {
@@ -2204,7 +2204,7 @@ function Ed() {
   return{}
 }
 function Fd(b) {
-  var c = Qc.call(h);
+  var c = Pc.call(h);
   nb.call(h, b, function(b, e) {
     return c.push(e)
   });
@@ -2325,7 +2325,7 @@ var Pd = function() {
   b.b = 2;
   b.a = c.a;
   return b
-}(), Zd = function() {
+}(), Qd = function() {
   var b = h, c = function() {
     function b(d, k, l) {
       var p = h;
@@ -2702,7 +2702,7 @@ m.l = function(b, c) {
   return new P(c, this.pa, this.x)
 };
 function le(b) {
-  for(var c = Qc.call(h);;) {
+  for(var c = Pc.call(h);;) {
     if(q(D.call(h, b))) {
       c.push(E.call(h, b)), b = H.call(h, b)
     }else {
@@ -3305,7 +3305,7 @@ m.u = function() {
     a("Invalid arity: " + arguments.length)
   }
 }();
-var Je = new Ie(h, Qc.call(h));
+var Je = new Ie(h, Pc.call(h));
 function Ke(b) {
   return new Ie(h, b)
 }
@@ -3428,7 +3428,7 @@ m.l = function(b, c) {
 m.g = f;
 m.h = j("c");
 m.sa = f;
-Qc.call(h);
+Pc.call(h);
 function R(b, c) {
   return new Se(h, b, c)
 }
@@ -3466,7 +3466,7 @@ m.X = function(b, c, d) {
     return new Te(this.c, this.s + 1, g)
   }
   e = ob.call(h, this.A);
-  e[b] = Qc.call(h, c, d);
+  e[b] = Pc.call(h, c, d);
   return new Te(this.c, this.s + 1, e)
 };
 m.ja = function(b, c) {
@@ -3644,7 +3644,7 @@ m.K = function() {
 }();
 m.e = f;
 m.i = function(b) {
-  return q((q(0 < this.step) ? Pd : Zd).call(h, this.start, this.end)) ? b : h
+  return q((q(0 < this.step) ? Pd : Qd).call(h, this.start, this.end)) ? b : h
 };
 m.n = function(b) {
   return q(K.call(h, id.call(h, b))) ? 0 : Math.ceil.call(h, (this.end - this.start) / this.step)
@@ -3870,15 +3870,15 @@ Se.prototype.d = function(b, c) {
 function lf(b, c, d, e) {
   this.state = b;
   this.c = c;
-  this.Pa = d;
-  this.Qa = e
+  this.Oa = d;
+  this.Pa = e
 }
 m = lf.prototype;
 m.o = function(b) {
   return la.call(h, b)
 };
 m.ta = function(b, c, d) {
-  var e = D.call(h, this.Qa);
+  var e = D.call(h, this.Pa);
   if(q(e)) {
     var g = E.call(h, e);
     M.call(h, g, 0, h);
@@ -3937,7 +3937,7 @@ var mf = function() {
   return b
 }();
 function nf(b, c) {
-  var d = b.Pa;
+  var d = b.Oa;
   q(d) && !q(d.call(h, c)) && a(Error(y.call(h, "Assert failed: ", "Validator rejected reference state", "\n", S.call(h, N(x("\ufdd1'validate", "\ufdd1'new-value"), z("\ufdd0'line", 3061))))));
   d = b.state;
   b.state = c;
@@ -3992,10 +3992,10 @@ var tf = function() {
       rf = function(b, c, d, e) {
         this.H = b;
         this.B = c;
-        this.Oa = d;
+        this.Na = d;
         this.U = e
       }, rf.d = function() {
-        return x.call(h, "domina.css.t16611")
+        return x.call(h, "domina.css.t16437")
       }, rf.prototype.Z = function() {
         var b = this;
         return De.call(h, function(c) {
@@ -4007,7 +4007,7 @@ var tf = function() {
           return Sb.call(h, b.H, c)
         }, T.call(h, b.B))))
       }, rf.prototype.g = f, rf.prototype.h = j("U"), rf.prototype.l = function(b, c) {
-        return new rf(this.H, this.B, this.Oa, c)
+        return new rf(this.H, this.B, this.Na, c)
       }
     }
     return new rf(e, b, c, h)
@@ -4045,7 +4045,7 @@ function uf(b) {
   }
   return b
 }
-function vf(b) {
+function yf(b) {
   return q(q(f) ? K.call(h, u.call(h, window.console, ba)) : f) ? console.log(b) : h
 }
 function V(b) {
@@ -4058,7 +4058,7 @@ var Bf = function zf(c) {
       this.Ea = e;
       this.U = g
     }, qf.d = function() {
-      return x.call(h, "domina.t15920")
+      return x.call(h, "domina.t15815")
     }, qf.prototype.Z = function() {
       return Af.call(h, sb.call(h, Ze.call(h, this.ia)))
     }, qf.prototype.$ = function() {
@@ -4344,8 +4344,8 @@ function Ef(b, c, d) {
   }(), d = df.call(h, ze.call(h, L.call(h, c) - 1, function() {
     return g.cloneNode(f)
   }));
-  vf.call(h, y.call(h, "parent-count: ", L.call(h, c)));
-  vf.call(h, y.call(h, "child-count: ", L.call(h, e)));
+  yf.call(h, y.call(h, "parent-count: ", L.call(h, c)));
+  yf.call(h, y.call(h, "child-count: ", L.call(h, e)));
   return q(D.call(h, c)) ? (b.call(h, E.call(h, c), g), df.call(h, Q.call(h, function(c, d) {
     return b.call(h, c, d)
   }, G.call(h, c), d))) : h
@@ -4517,16 +4517,16 @@ var X = function() {
       kg = function(b, c, d, e) {
         this.H = b;
         this.B = c;
-        this.Sa = d;
+        this.Ra = d;
         this.U = e
       }, kg.d = function() {
-        return x.call(h, "domina.xpath.t15839")
+        return x.call(h, "domina.xpath.t15757")
       }, kg.prototype.Z = function() {
         return De.call(h, ue.call(h, ng, this.H), T.call(h, this.B))
       }, kg.prototype.$ = function() {
         return E.call(h, Fe.call(h, te.call(h, v), Q.call(h, ue.call(h, mg, this.H), T.call(h, this.B))))
       }, kg.prototype.g = f, kg.prototype.h = j("U"), kg.prototype.l = function(b, c) {
-        return new kg(this.H, this.B, this.Sa, c)
+        return new kg(this.H, this.B, this.Ra, c)
       }
     }
     return new kg(e, b, c, h)
@@ -4566,7 +4566,7 @@ function rg(b) {
 }
 function sg(b, c, d) {
   var e = {}, g = Ze.call(h, c), k = Ze.call(h, b);
-  e.Ra = g;
+  e.Qa = g;
   e.event = k;
   e.ca = function(b, c, e, A, J) {
     var F = d.call(h, c);
@@ -4574,7 +4574,7 @@ function sg(b, c, d) {
     F.scope = A;
     F.event = k;
     F.capture = e;
-    return q(pg.Ta) ? J.ca(b, g, F, e) : Cc.call(h, b, g, F, e)
+    return q(pg.Sa) ? J.ca(b, g, F, e) : Cc.call(h, b, g, F, e)
   };
   e.qa = function(b, c, d, e) {
     d = q(u.call(h, d, ba)) ? pe.call(h, Jc.call(h, b, g, i), Jc.call(h, b, g, f)) : Jc.call(h, b, g, d);
@@ -4678,7 +4678,7 @@ var vg = function() {
   return b
 }();
 function yg(b, c, d, e) {
-  var g = pf.call(h, tg).call(h, c), c = q(g) ? g.Ra : Ze.call(h, c), g = new Yb(e.call(h, "\ufdd0'type"), e.call(h, "\ufdd0'target"));
+  var g = pf.call(h, tg).call(h, c), c = q(g) ? g.Qa : Ze.call(h, c), g = new Yb(e.call(h, "\ufdd0'type"), e.call(h, "\ufdd0'target"));
   g.relatedTarget = e.call(h, "\ufdd0'related-target");
   e = D.call(h, T.call(h, b));
   if(q(e)) {
@@ -4695,26 +4695,25 @@ function yg(b, c, d, e) {
 }
 ug.call(h, "\ufdd0'mouseenter", "\ufdd0'mouseover", rg);
 ug.call(h, "\ufdd0'mouseleave", "\ufdd0'mouseout", rg);
-var zg = {};
 window.tryfn = function(b) {
   return b.call()
 };
-var Ag = mf.call(h, Ke([]));
+var zg = mf.call(h, Ke([]));
 function Y(b, c) {
-  return of.call(h, Ag, ud, Ke([b, c]))
+  return of.call(h, zg, ud, Ke([b, c]))
 }
-function Bg(b) {
+function Ag(b) {
   return tryfn.call(h, b)
 }
 function Z() {
   return Lf.call(h, X.call(h, "//body/*"))
 }
-function Cg() {
+function Bg() {
   return W.call(h, X.call(h, "//body"), "<div class='d1'><p class='p1'>P1</p><p class='p2'>P2</p>\n<p id='id1' class='p3'>P3</p>")
 }
 Y.call(h, "basic CSS selection", function() {
   Z.call(h);
-  Cg.call(h);
+  Bg.call(h);
   if(q(u.call(h, 3, L.call(h, T.call(h, tf.call(h, "p")))))) {
     return h
   }
@@ -4722,7 +4721,7 @@ Y.call(h, "basic CSS selection", function() {
 });
 Y.call(h, "basic CSS selection (single node)", function() {
   Z.call(h);
-  Cg.call(h);
+  Bg.call(h);
   if(q(K.call(h, v.call(h, uf.call(h, tf.call(h, "p")))))) {
     return h
   }
@@ -4730,7 +4729,7 @@ Y.call(h, "basic CSS selection (single node)", function() {
 });
 Y.call(h, "CSS selection with class specification", function() {
   Z.call(h);
-  Cg.call(h);
+  Bg.call(h);
   if(q(u.call(h, 1, L.call(h, T.call(h, tf.call(h, ".d1")))))) {
     return h
   }
@@ -4738,7 +4737,7 @@ Y.call(h, "CSS selection with class specification", function() {
 });
 Y.call(h, "a relative CSS selector", function() {
   Z.call(h);
-  Cg.call(h);
+  Bg.call(h);
   if(q(u.call(h, 3, L.call(h, T.call(h, tf.call(h, tf.call(h, ".d1"), "p")))))) {
     return h
   }
@@ -4754,7 +4753,7 @@ Y.call(h, "extended CSS chaining", function() {
 });
 Y.call(h, "basic xpath selection", function() {
   Z.call(h);
-  Cg.call(h);
+  Bg.call(h);
   if(q(u.call(h, 3, L.call(h, T.call(h, X.call(h, "//p")))))) {
     return h
   }
@@ -4762,7 +4761,7 @@ Y.call(h, "basic xpath selection", function() {
 });
 Y.call(h, "basic xpath selection (single node)", function() {
   Z.call(h);
-  Cg.call(h);
+  Bg.call(h);
   if(q(K.call(h, v.call(h, uf.call(h, X.call(h, "//p")))))) {
     return h
   }
@@ -4770,7 +4769,7 @@ Y.call(h, "basic xpath selection (single node)", function() {
 });
 Y.call(h, "xpath selection with class specification", function() {
   Z.call(h);
-  Cg.call(h);
+  Bg.call(h);
   if(q(u.call(h, 1, L.call(h, T.call(h, X.call(h, "//div[@class='d1']")))))) {
     return h
   }
@@ -4778,7 +4777,7 @@ Y.call(h, "xpath selection with class specification", function() {
 });
 Y.call(h, "a relative xpath expression", function() {
   Z.call(h);
-  Cg.call(h);
+  Bg.call(h);
   if(q(u.call(h, 3, L.call(h, T.call(h, X.call(h, X.call(h, "//body/div[@class='d1']"), "p")))))) {
     return h
   }
@@ -4794,7 +4793,7 @@ Y.call(h, "extended selection chaining", function() {
 });
 Y.call(h, "advanced xpath", function() {
   Z.call(h);
-  Cg.call(h);
+  Bg.call(h);
   if(q(u.call(h, 2, L.call(h, T.call(h, X.call(h, "//p[following-sibling::p[@class='p3']]")))))) {
     return h
   }
@@ -4802,7 +4801,7 @@ Y.call(h, "advanced xpath", function() {
 });
 Y.call(h, "look up node by id", function() {
   Z.call(h);
-  Cg.call(h);
+  Bg.call(h);
   if(q(u.call(h, 1, L.call(h, T.call(h, V.call(h, "id1")))))) {
     return h
   }
@@ -4810,7 +4809,7 @@ Y.call(h, "look up node by id", function() {
 });
 Y.call(h, "look up nodes by class", function() {
   Z.call(h);
-  Cg.call(h);
+  Bg.call(h);
   if(q(u.call(h, 1, L.call(h, T.call(h, Bf.call(h, "p3")))))) {
     return h
   }
@@ -4818,7 +4817,7 @@ Y.call(h, "look up nodes by class", function() {
 });
 Y.call(h, "child selection", function() {
   Z.call(h);
-  Cg.call(h);
+  Bg.call(h);
   if(q(u.call(h, 3, L.call(h, Cf.call(h, X.call(h, "//div[@class='d1']")))))) {
     return h
   }
@@ -4826,7 +4825,7 @@ Y.call(h, "child selection", function() {
 });
 Y.call(h, "clone a single node", function() {
   Z.call(h);
-  Cg.call(h);
+  Bg.call(h);
   if(q(u.call(h, 1, L.call(h, Df.call(h, uf.call(h, X.call(h, "//p"))))))) {
     return h
   }
@@ -4834,7 +4833,7 @@ Y.call(h, "clone a single node", function() {
 });
 Y.call(h, "clone multiple nodes", function() {
   Z.call(h);
-  Cg.call(h);
+  Bg.call(h);
   if(q(u.call(h, 3, L.call(h, Df.call(h, T.call(h, X.call(h, "//p"))))))) {
     return h
   }
@@ -4858,7 +4857,7 @@ Y.call(h, "append multiple children to a single parent", function() {
 });
 Y.call(h, "append a single child to multiple parents", function() {
   Z.call(h);
-  Cg.call(h);
+  Bg.call(h);
   W.call(h, X.call(h, "//body/div/p"), "<span>!!</span>");
   if(q(u.call(h, 3, L.call(h, T.call(h, X.call(h, "//div/p/span")))))) {
     return h
@@ -4867,7 +4866,7 @@ Y.call(h, "append a single child to multiple parents", function() {
 });
 Y.call(h, "append multiple children to multiple parents", function() {
   Z.call(h);
-  Cg.call(h);
+  Bg.call(h);
   W.call(h, X.call(h, "//body/div/p"), "some <span class='foo'>more</span> text");
   if(q(u.call(h, 3, L.call(h, T.call(h, X.call(h, "//div/p/span[@class='foo']")))))) {
     return h
@@ -4951,7 +4950,7 @@ Y.call(h, "destroy multiple nodes", function() {
 });
 Y.call(h, "detach and reattach a single node", function() {
   Z.call(h);
-  Cg.call(h);
+  Bg.call(h);
   var b = Kf.call(h, X.call(h, "//p[@class='p3']"));
   q(u.call(h, 0, L.call(h, T.call(h, X.call(h, "//p[@class='p3']"))))) || a(Error(y.call(h, "Assert failed: ", S.call(h, N(x("\ufdd1'=", 0, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'xpath", "//p[@class='p3']"), z("\ufdd0'line", 248))), z("\ufdd0'line", 248))), z("\ufdd0'line", 248))), z("\ufdd0'line", 248))))));
   W.call(h, X.call(h, "//div[@class='d1']"), b);
@@ -4962,7 +4961,7 @@ Y.call(h, "detach and reattach a single node", function() {
 });
 Y.call(h, "detach and reattach multiple nodes", function() {
   Z.call(h);
-  Cg.call(h);
+  Bg.call(h);
   var b = Kf.call(h, X.call(h, "//div[@class='d1']/p"));
   q(u.call(h, 0, L.call(h, T.call(h, X.call(h, "//div[@class='d1']/p"))))) || a(Error(y.call(h, "Assert failed: ", S.call(h, N(x("\ufdd1'=", 0, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'xpath", "//div[@class='d1']/p"), z("\ufdd0'line", 256))), z("\ufdd0'line", 256))), z("\ufdd0'line", 256))), z("\ufdd0'line", 256))))));
   W.call(h, X.call(h, "//div[@class='d1']"), b);
@@ -4973,7 +4972,7 @@ Y.call(h, "detach and reattach multiple nodes", function() {
 });
 Y.call(h, "clear a node's contents", function() {
   Z.call(h);
-  Cg.call(h);
+  Bg.call(h);
   Mf.call(h, X.call(h, "//div[@class='d1']"));
   q(u.call(h, 1, L.call(h, T.call(h, X.call(h, "//div[@class='d1']"))))) || a(Error(y.call(h, "Assert failed: ", S.call(h, N(x("\ufdd1'=", 1, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'xpath", "//div[@class='d1']"), z("\ufdd0'line", 264))), z("\ufdd0'line", 264))), z("\ufdd0'line", 264))), z("\ufdd0'line", 264))))));
   if(q(u.call(h, 0, L.call(h, T.call(h, X.call(h, "//div[@class='d1']/*")))))) {
@@ -5004,9 +5003,9 @@ Y.call(h, "insert-before! with multiple reference nodes and a single new node", 
   Z.call(h);
   W.call(h, X.call(h, "//body"), "<div class='ref' id='ref1'>content1</div>");
   W.call(h, X.call(h, "//body"), "<div class='ref' id='ref2'>content2</div>");
-  zg.Ka.call(h, "inserting...");
+  yf.call(h, "inserting...");
   Hf.call(h, T.call(h, Bf.call(h, "ref")), "<p>before</p>");
-  return zg.Ka.call(h, "done inserting...")
+  return yf.call(h, "done inserting...")
 });
 Y.call(h, "insert-after! with a single reference and single new node", function() {
   Z.call(h);
@@ -5556,10 +5555,10 @@ Y.call(h, "doesn't clone unless necessary", function() {
 }).call(h, df.call(h, function(b) {
   return Q.call(h, function(b) {
     var d = M.call(h, b, 0, h), b = M.call(h, b, 1, h);
-    return Ke([d, Bg.call(h, b)])
+    return Ke([d, Ag.call(h, b)])
   }, Fe.call(h, function(c) {
     var d = M.call(h, c, 0, h);
     M.call(h, c, 1, h);
     return u.call(h, d, b)
-  }, pf.call(h, Ag)))
+  }, pf.call(h, zg)))
 }.call(h, "insert-before! with multiple reference nodes and a single new node")));

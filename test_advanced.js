@@ -731,7 +731,7 @@ var Sb = function() {
     });
     c.J || Ba(b.J, function(b) {
       var c = b.name;
-      Oc[c] && (d = cb(d, Oc[c](c, b.value)))
+      Pc[c] && (d = cb(d, Pc[c](c, b.value)))
     });
     c.W || Ba(b.W, function(b) {
       var c, e = b.ga;
@@ -911,7 +911,7 @@ var Sb = function() {
     return function(d) {
       return aa(d, b) == c
     }
-  }}, hc = "undefined" == typeof document.firstChild.nextElementSibling, yb = !hc ? "nextElementSibling" : "nextSibling", wf = !hc ? "previousElementSibling" : "previousSibling", xb = hc ? gc : Rb, Oc = {checked:function() {
+  }}, hc = "undefined" == typeof document.firstChild.nextElementSibling, yb = !hc ? "nextElementSibling" : "nextSibling", wf = !hc ? "previousElementSibling" : "previousSibling", xb = hc ? gc : Rb, Pc = {checked:function() {
     return function(b) {
       return b.checked || b.attributes.checked
     }
@@ -990,7 +990,7 @@ var Sb = function() {
   } : function(b) {
     return b._uid || (b._uid = ++Ma)
   };
-  b.J = Oc;
+  b.J = Pc;
   return b
 }();
 fa("goog.dom.query", Sb);
@@ -1580,7 +1580,7 @@ function Nc(b, c) {
 function r(b, c) {
   return Error.call(g, "No protocol method " + b + " defined for type " + o.call(g, c) + ": " + c)
 }
-function Pc(b) {
+function Oc(b) {
   return Array.prototype.slice.call(b)
 }
 function Qc(b) {
@@ -3240,7 +3240,7 @@ l.C = function() {
   }
 }();
 l.X = function(b, c, d) {
-  b = Pc.call(g, this.k);
+  b = Oc.call(g, this.k);
   b[c] = d;
   return new Ie(this.c, b)
 };
@@ -3257,7 +3257,7 @@ l.call = function() {
 }();
 l.G = f;
 l.r = function(b, c) {
-  var d = Pc.call(g, this.k);
+  var d = Oc.call(g, this.k);
   d.push(c);
   return new Ie(this.c, d)
 };
@@ -3386,7 +3386,7 @@ l.X = function(b, c, d) {
     if(q(e)) {
       return new Se(this.c, this.keys, b)
     }
-    d = Pc.call(g, this.keys);
+    d = Oc.call(g, this.keys);
     d.push(c);
     return new Se(this.c, d, b)
   }
@@ -3456,7 +3456,7 @@ l.C = function() {
 l.X = function(b, c, d) {
   var b = yd.call(g, c), e = this.A[b];
   if(q(e)) {
-    var e = Pc.call(g, e), h = ob.call(g, this.A);
+    var e = Oc.call(g, e), h = ob.call(g, this.A);
     h[b] = e;
     b = Qe.call(g, 2, c, e);
     if(q(b)) {
@@ -3995,7 +3995,7 @@ var tf = function() {
         this.Na = d;
         this.U = e
       }, rf.d = function() {
-        return x.call(g, "domina.css.t16399")
+        return x.call(g, "domina.css.t16615")
       }, rf.prototype.Z = function() {
         var b = this;
         return De.call(g, function(c) {
@@ -4055,7 +4055,7 @@ var Af = function yf(c) {
       this.Ea = e;
       this.U = h
     }, qf.d = function() {
-      return x.call(g, "domina.t15789")
+      return x.call(g, "domina.t15864")
     }, qf.prototype.Z = function() {
       return zf.call(g, sb.call(g, Ze.call(g, this.ia)))
     }, qf.prototype.$ = function() {
@@ -4490,7 +4490,7 @@ var X = function() {
         this.Ra = d;
         this.U = e
       }, jg.d = function() {
-        return x.call(g, "domina.xpath.t15743")
+        return x.call(g, "domina.xpath.t15785")
       }, jg.prototype.Z = function() {
         return De.call(g, ue.call(g, mg, this.H), T.call(g, this.B))
       }, jg.prototype.$ = function() {
@@ -4666,11 +4666,7 @@ function xg(b, c, d, e) {
 tg.call(g, "\ufdd0'mouseenter", "\ufdd0'mouseover", qg);
 tg.call(g, "\ufdd0'mouseleave", "\ufdd0'mouseout", qg);
 window.tryfn = function(b) {
-  try {
-    return b.call()
-  }catch(c) {
-    return"fail hard" == c && a(c), c
-  }
+  return b.call()
 };
 var yg = mf.call(g, Ke([]));
 function Y(b, c) {
@@ -4691,7 +4687,7 @@ Y.call(g, "basic CSS selection", function() {
   if(q(u.call(g, 3, L.call(g, T.call(g, tf.call(g, "p")))))) {
     return g
   }
-  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 3, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'sel", "p"), z("\ufdd0'line", 66))), z("\ufdd0'line", 66))), z("\ufdd0'line", 66))), z("\ufdd0'line", 66))))))
+  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 3, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'sel", "p"), z("\ufdd0'line", 67))), z("\ufdd0'line", 67))), z("\ufdd0'line", 67))), z("\ufdd0'line", 67))))))
 });
 Y.call(g, "basic CSS selection (single node)", function() {
   Z.call(g);
@@ -4699,7 +4695,7 @@ Y.call(g, "basic CSS selection (single node)", function() {
   if(q(K.call(g, w.call(g, xf.call(g, tf.call(g, "p")))))) {
     return g
   }
-  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'not", N(x("\ufdd1'nil?", N(x("\ufdd1'single-node", N(x("\ufdd1'sel", "p"), z("\ufdd0'line", 71))), z("\ufdd0'line", 71))), z("\ufdd0'line", 71))), z("\ufdd0'line", 71))))))
+  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'not", N(x("\ufdd1'nil?", N(x("\ufdd1'single-node", N(x("\ufdd1'sel", "p"), z("\ufdd0'line", 72))), z("\ufdd0'line", 72))), z("\ufdd0'line", 72))), z("\ufdd0'line", 72))))))
 });
 Y.call(g, "CSS selection with class specification", function() {
   Z.call(g);
@@ -4707,7 +4703,7 @@ Y.call(g, "CSS selection with class specification", function() {
   if(q(u.call(g, 1, L.call(g, T.call(g, tf.call(g, ".d1")))))) {
     return g
   }
-  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 1, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'sel", ".d1"), z("\ufdd0'line", 76))), z("\ufdd0'line", 76))), z("\ufdd0'line", 76))), z("\ufdd0'line", 76))))))
+  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 1, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'sel", ".d1"), z("\ufdd0'line", 77))), z("\ufdd0'line", 77))), z("\ufdd0'line", 77))), z("\ufdd0'line", 77))))))
 });
 Y.call(g, "a relative CSS selector", function() {
   Z.call(g);
@@ -4715,7 +4711,7 @@ Y.call(g, "a relative CSS selector", function() {
   if(q(u.call(g, 3, L.call(g, T.call(g, tf.call(g, tf.call(g, ".d1"), "p")))))) {
     return g
   }
-  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 3, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'->", N(x("\ufdd1'sel", ".d1"), z("\ufdd0'line", 81)), N(x("\ufdd1'sel", "p"), z("\ufdd0'line", 82))), z("\ufdd0'line", 81))), z("\ufdd0'line", 81))), z("\ufdd0'line", 81))), z("\ufdd0'line", 81))))))
+  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 3, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'->", N(x("\ufdd1'sel", ".d1"), z("\ufdd0'line", 82)), N(x("\ufdd1'sel", "p"), z("\ufdd0'line", 83))), z("\ufdd0'line", 82))), z("\ufdd0'line", 82))), z("\ufdd0'line", 82))), z("\ufdd0'line", 82))))))
 });
 Y.call(g, "extended CSS chaining", function() {
   Z.call(g);
@@ -4723,7 +4719,7 @@ Y.call(g, "extended CSS chaining", function() {
   if(q(u.call(g, 2, L.call(g, T.call(g, tf.call(g, tf.call(g, tf.call(g, tf.call(g, "body"), "div"), "p"), "span")))))) {
     return g
   }
-  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 2, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'->", N(x("\ufdd1'sel", "body"), z("\ufdd0'line", 88)), N(x("\ufdd1'sel", "div"), z("\ufdd0'line", 89)), N(x("\ufdd1'sel", "p"), z("\ufdd0'line", 90)), N(x("\ufdd1'sel", "span"), z("\ufdd0'line", 91))), z("\ufdd0'line", 88))), z("\ufdd0'line", 88))), z("\ufdd0'line", 88))), z("\ufdd0'line", 88))))))
+  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 2, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'->", N(x("\ufdd1'sel", "body"), z("\ufdd0'line", 89)), N(x("\ufdd1'sel", "div"), z("\ufdd0'line", 90)), N(x("\ufdd1'sel", "p"), z("\ufdd0'line", 91)), N(x("\ufdd1'sel", "span"), z("\ufdd0'line", 92))), z("\ufdd0'line", 89))), z("\ufdd0'line", 89))), z("\ufdd0'line", 89))), z("\ufdd0'line", 89))))))
 });
 Y.call(g, "basic xpath selection", function() {
   Z.call(g);
@@ -4731,7 +4727,7 @@ Y.call(g, "basic xpath selection", function() {
   if(q(u.call(g, 3, L.call(g, T.call(g, X.call(g, "//p")))))) {
     return g
   }
-  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 3, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'xpath", "//p"), z("\ufdd0'line", 98))), z("\ufdd0'line", 98))), z("\ufdd0'line", 98))), z("\ufdd0'line", 98))))))
+  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 3, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'xpath", "//p"), z("\ufdd0'line", 99))), z("\ufdd0'line", 99))), z("\ufdd0'line", 99))), z("\ufdd0'line", 99))))))
 });
 Y.call(g, "basic xpath selection (single node)", function() {
   Z.call(g);
@@ -4739,7 +4735,7 @@ Y.call(g, "basic xpath selection (single node)", function() {
   if(q(K.call(g, w.call(g, xf.call(g, X.call(g, "//p")))))) {
     return g
   }
-  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'not", N(x("\ufdd1'nil?", N(x("\ufdd1'single-node", N(x("\ufdd1'xpath", "//p"), z("\ufdd0'line", 103))), z("\ufdd0'line", 103))), z("\ufdd0'line", 103))), z("\ufdd0'line", 103))))))
+  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'not", N(x("\ufdd1'nil?", N(x("\ufdd1'single-node", N(x("\ufdd1'xpath", "//p"), z("\ufdd0'line", 104))), z("\ufdd0'line", 104))), z("\ufdd0'line", 104))), z("\ufdd0'line", 104))))))
 });
 Y.call(g, "xpath selection with class specification", function() {
   Z.call(g);
@@ -4747,7 +4743,7 @@ Y.call(g, "xpath selection with class specification", function() {
   if(q(u.call(g, 1, L.call(g, T.call(g, X.call(g, "//div[@class='d1']")))))) {
     return g
   }
-  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 1, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'xpath", "//div[@class='d1']"), z("\ufdd0'line", 108))), z("\ufdd0'line", 108))), z("\ufdd0'line", 108))), z("\ufdd0'line", 108))))))
+  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 1, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'xpath", "//div[@class='d1']"), z("\ufdd0'line", 109))), z("\ufdd0'line", 109))), z("\ufdd0'line", 109))), z("\ufdd0'line", 109))))))
 });
 Y.call(g, "a relative xpath expression", function() {
   Z.call(g);
@@ -4755,7 +4751,7 @@ Y.call(g, "a relative xpath expression", function() {
   if(q(u.call(g, 3, L.call(g, T.call(g, X.call(g, X.call(g, "//body/div[@class='d1']"), "p")))))) {
     return g
   }
-  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 3, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'->", N(x("\ufdd1'xpath", "//body/div[@class='d1']"), z("\ufdd0'line", 113)), N(x("\ufdd1'xpath", "p"), z("\ufdd0'line", 114))), z("\ufdd0'line", 113))), z("\ufdd0'line", 113))), z("\ufdd0'line", 113))), z("\ufdd0'line", 113))))))
+  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 3, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'->", N(x("\ufdd1'xpath", "//body/div[@class='d1']"), z("\ufdd0'line", 114)), N(x("\ufdd1'xpath", "p"), z("\ufdd0'line", 115))), z("\ufdd0'line", 114))), z("\ufdd0'line", 114))), z("\ufdd0'line", 114))), z("\ufdd0'line", 114))))))
 });
 Y.call(g, "extended selection chaining", function() {
   Z.call(g);
@@ -4763,7 +4759,7 @@ Y.call(g, "extended selection chaining", function() {
   if(q(u.call(g, 2, L.call(g, T.call(g, X.call(g, X.call(g, X.call(g, X.call(g, "//body"), "div"), "p"), "span")))))) {
     return g
   }
-  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 2, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'->", N(x("\ufdd1'xpath", "//body"), z("\ufdd0'line", 120)), N(x("\ufdd1'xpath", "div"), z("\ufdd0'line", 121)), N(x("\ufdd1'xpath", "p"), z("\ufdd0'line", 122)), N(x("\ufdd1'xpath", "span"), z("\ufdd0'line", 123))), z("\ufdd0'line", 120))), z("\ufdd0'line", 120))), z("\ufdd0'line", 120))), z("\ufdd0'line", 120))))))
+  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 2, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'->", N(x("\ufdd1'xpath", "//body"), z("\ufdd0'line", 121)), N(x("\ufdd1'xpath", "div"), z("\ufdd0'line", 122)), N(x("\ufdd1'xpath", "p"), z("\ufdd0'line", 123)), N(x("\ufdd1'xpath", "span"), z("\ufdd0'line", 124))), z("\ufdd0'line", 121))), z("\ufdd0'line", 121))), z("\ufdd0'line", 121))), z("\ufdd0'line", 121))))))
 });
 Y.call(g, "advanced xpath", function() {
   Z.call(g);
@@ -4771,7 +4767,7 @@ Y.call(g, "advanced xpath", function() {
   if(q(u.call(g, 2, L.call(g, T.call(g, X.call(g, "//p[following-sibling::p[@class='p3']]")))))) {
     return g
   }
-  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 2, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'xpath", "//p[following-sibling::p[@class='p3']]"), z("\ufdd0'line", 127))), z("\ufdd0'line", 127))), z("\ufdd0'line", 127))), z("\ufdd0'line", 127))))))
+  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 2, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'xpath", "//p[following-sibling::p[@class='p3']]"), z("\ufdd0'line", 128))), z("\ufdd0'line", 128))), z("\ufdd0'line", 128))), z("\ufdd0'line", 128))))))
 });
 Y.call(g, "look up node by id", function() {
   Z.call(g);
@@ -4779,7 +4775,7 @@ Y.call(g, "look up node by id", function() {
   if(q(u.call(g, 1, L.call(g, T.call(g, V.call(g, "id1")))))) {
     return g
   }
-  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 1, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'by-id", "id1"), z("\ufdd0'line", 132))), z("\ufdd0'line", 132))), z("\ufdd0'line", 132))), z("\ufdd0'line", 132))))))
+  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 1, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'by-id", "id1"), z("\ufdd0'line", 133))), z("\ufdd0'line", 133))), z("\ufdd0'line", 133))), z("\ufdd0'line", 133))))))
 });
 Y.call(g, "look up nodes by class", function() {
   Z.call(g);
@@ -4787,7 +4783,7 @@ Y.call(g, "look up nodes by class", function() {
   if(q(u.call(g, 1, L.call(g, T.call(g, Af.call(g, "p3")))))) {
     return g
   }
-  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 1, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'by-class", "p3"), z("\ufdd0'line", 137))), z("\ufdd0'line", 137))), z("\ufdd0'line", 137))), z("\ufdd0'line", 137))))))
+  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 1, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'by-class", "p3"), z("\ufdd0'line", 138))), z("\ufdd0'line", 138))), z("\ufdd0'line", 138))), z("\ufdd0'line", 138))))))
 });
 Y.call(g, "child selection", function() {
   Z.call(g);
@@ -4795,7 +4791,7 @@ Y.call(g, "child selection", function() {
   if(q(u.call(g, 3, L.call(g, Bf.call(g, X.call(g, "//div[@class='d1']")))))) {
     return g
   }
-  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 3, N(x("\ufdd1'count", N(x("\ufdd1'children", N(x("\ufdd1'xpath", "//div[@class='d1']"), z("\ufdd0'line", 142))), z("\ufdd0'line", 142))), z("\ufdd0'line", 142))), z("\ufdd0'line", 142))))))
+  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 3, N(x("\ufdd1'count", N(x("\ufdd1'children", N(x("\ufdd1'xpath", "//div[@class='d1']"), z("\ufdd0'line", 143))), z("\ufdd0'line", 143))), z("\ufdd0'line", 143))), z("\ufdd0'line", 143))))))
 });
 Y.call(g, "clone a single node", function() {
   Z.call(g);
@@ -4803,7 +4799,7 @@ Y.call(g, "clone a single node", function() {
   if(q(u.call(g, 1, L.call(g, Cf.call(g, xf.call(g, X.call(g, "//p"))))))) {
     return g
   }
-  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 1, N(x("\ufdd1'count", N(x("\ufdd1'clone", N(x("\ufdd1'single-node", N(x("\ufdd1'xpath", "//p"), z("\ufdd0'line", 147))), z("\ufdd0'line", 147))), z("\ufdd0'line", 147))), z("\ufdd0'line", 147))), z("\ufdd0'line", 147))))))
+  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 1, N(x("\ufdd1'count", N(x("\ufdd1'clone", N(x("\ufdd1'single-node", N(x("\ufdd1'xpath", "//p"), z("\ufdd0'line", 148))), z("\ufdd0'line", 148))), z("\ufdd0'line", 148))), z("\ufdd0'line", 148))), z("\ufdd0'line", 148))))))
 });
 Y.call(g, "clone multiple nodes", function() {
   Z.call(g);
@@ -4811,7 +4807,7 @@ Y.call(g, "clone multiple nodes", function() {
   if(q(u.call(g, 3, L.call(g, Cf.call(g, T.call(g, X.call(g, "//p"))))))) {
     return g
   }
-  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 3, N(x("\ufdd1'count", N(x("\ufdd1'clone", N(x("\ufdd1'nodes", N(x("\ufdd1'xpath", "//p"), z("\ufdd0'line", 152))), z("\ufdd0'line", 152))), z("\ufdd0'line", 152))), z("\ufdd0'line", 152))), z("\ufdd0'line", 152))))))
+  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 3, N(x("\ufdd1'count", N(x("\ufdd1'clone", N(x("\ufdd1'nodes", N(x("\ufdd1'xpath", "//p"), z("\ufdd0'line", 153))), z("\ufdd0'line", 153))), z("\ufdd0'line", 153))), z("\ufdd0'line", 153))), z("\ufdd0'line", 153))))))
 });
 Y.call(g, "append a single child to a single parent", function() {
   Z.call(g);
@@ -4819,7 +4815,7 @@ Y.call(g, "append a single child to a single parent", function() {
   if(q(u.call(g, 1, L.call(g, T.call(g, X.call(g, "//body/p[@class='appended1']")))))) {
     return g
   }
-  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 1, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'xpath", "//body/p[@class='appended1']"), z("\ufdd0'line", 158))), z("\ufdd0'line", 158))), z("\ufdd0'line", 158))), z("\ufdd0'line", 158))))))
+  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 1, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'xpath", "//body/p[@class='appended1']"), z("\ufdd0'line", 159))), z("\ufdd0'line", 159))), z("\ufdd0'line", 159))), z("\ufdd0'line", 159))))))
 });
 Y.call(g, "append multiple children to a single parent", function() {
   Z.call(g);
@@ -4827,7 +4823,7 @@ Y.call(g, "append multiple children to a single parent", function() {
   if(q(u.call(g, 2, L.call(g, T.call(g, X.call(g, "//body/p[@class='appended2']")))))) {
     return g
   }
-  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 2, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'xpath", "//body/p[@class='appended2']"), z("\ufdd0'line", 164))), z("\ufdd0'line", 164))), z("\ufdd0'line", 164))), z("\ufdd0'line", 164))))))
+  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 2, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'xpath", "//body/p[@class='appended2']"), z("\ufdd0'line", 165))), z("\ufdd0'line", 165))), z("\ufdd0'line", 165))), z("\ufdd0'line", 165))))))
 });
 Y.call(g, "append a single child to multiple parents", function() {
   Z.call(g);
@@ -4836,7 +4832,7 @@ Y.call(g, "append a single child to multiple parents", function() {
   if(q(u.call(g, 3, L.call(g, T.call(g, X.call(g, "//div/p/span")))))) {
     return g
   }
-  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 3, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'xpath", "//div/p/span"), z("\ufdd0'line", 171))), z("\ufdd0'line", 171))), z("\ufdd0'line", 171))), z("\ufdd0'line", 171))))))
+  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 3, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'xpath", "//div/p/span"), z("\ufdd0'line", 172))), z("\ufdd0'line", 172))), z("\ufdd0'line", 172))), z("\ufdd0'line", 172))))))
 });
 Y.call(g, "append multiple children to multiple parents", function() {
   Z.call(g);
@@ -4845,18 +4841,18 @@ Y.call(g, "append multiple children to multiple parents", function() {
   if(q(u.call(g, 3, L.call(g, T.call(g, X.call(g, "//div/p/span[@class='foo']")))))) {
     return g
   }
-  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 3, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'xpath", "//div/p/span[@class='foo']"), z("\ufdd0'line", 178))), z("\ufdd0'line", 178))), z("\ufdd0'line", 178))), z("\ufdd0'line", 178))))))
+  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 3, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'xpath", "//div/p/span[@class='foo']"), z("\ufdd0'line", 179))), z("\ufdd0'line", 179))), z("\ufdd0'line", 179))), z("\ufdd0'line", 179))))))
 });
 Y.call(g, "prepend a single child to a single parent", function() {
   Z.call(g);
   W.call(g, X.call(g, "//body"), "<div>2</div><div>3</div>");
   Ff.call(g, X.call(g, "//body"), "<div>1</div>");
-  q(u.call(g, "1", Zf.call(g, X.call(g, "//body/div[1]")))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", "1", N(x("\ufdd1'text", N(x("\ufdd1'xpath", "//body/div[1]"), z("\ufdd0'line", 184))), z("\ufdd0'line", 184))), z("\ufdd0'line", 184))))));
-  q(u.call(g, "2", Zf.call(g, X.call(g, "//body/div[2]")))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", "2", N(x("\ufdd1'text", N(x("\ufdd1'xpath", "//body/div[2]"), z("\ufdd0'line", 185))), z("\ufdd0'line", 185))), z("\ufdd0'line", 185))))));
+  q(u.call(g, "1", Zf.call(g, X.call(g, "//body/div[1]")))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", "1", N(x("\ufdd1'text", N(x("\ufdd1'xpath", "//body/div[1]"), z("\ufdd0'line", 185))), z("\ufdd0'line", 185))), z("\ufdd0'line", 185))))));
+  q(u.call(g, "2", Zf.call(g, X.call(g, "//body/div[2]")))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", "2", N(x("\ufdd1'text", N(x("\ufdd1'xpath", "//body/div[2]"), z("\ufdd0'line", 186))), z("\ufdd0'line", 186))), z("\ufdd0'line", 186))))));
   if(q(u.call(g, "3", Zf.call(g, X.call(g, "//body/div[3]"))))) {
     return g
   }
-  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", "3", N(x("\ufdd1'text", N(x("\ufdd1'xpath", "//body/div[3]"), z("\ufdd0'line", 186))), z("\ufdd0'line", 186))), z("\ufdd0'line", 186))))))
+  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", "3", N(x("\ufdd1'text", N(x("\ufdd1'xpath", "//body/div[3]"), z("\ufdd0'line", 187))), z("\ufdd0'line", 187))), z("\ufdd0'line", 187))))))
 });
 Y.call(g, "prepend a single child to multiple parents", function() {
   Z.call(g);
@@ -4865,7 +4861,7 @@ Y.call(g, "prepend a single child to multiple parents", function() {
   if(q(u.call(g, 2, L.call(g, T.call(g, X.call(g, "//body/div/p[text()='2']")))))) {
     return g
   }
-  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 2, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'xpath", "//body/div/p[text()='2']"), z("\ufdd0'line", 192))), z("\ufdd0'line", 192))), z("\ufdd0'line", 192))), z("\ufdd0'line", 192))))))
+  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 2, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'xpath", "//body/div/p[text()='2']"), z("\ufdd0'line", 193))), z("\ufdd0'line", 193))), z("\ufdd0'line", 193))), z("\ufdd0'line", 193))))))
 });
 Y.call(g, "Insert a single child to a single parent", function() {
   Z.call(g);
@@ -4873,12 +4869,12 @@ Y.call(g, "Insert a single child to a single parent", function() {
   W.call(g, X.call(g, "//div[@class='testInserts']"), "<p class='i1'></p>");
   W.call(g, X.call(g, "//div[@class='testInserts']"), "<p class='i3'></p>");
   Ef.call(g, X.call(g, "//div[@class='testInserts']"), "<p class='i2'></p>", 1);
-  q(u.call(g, 3, L.call(g, T.call(g, X.call(g, "//div[@class='testInserts']/p"))))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 3, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'xpath", "//div[@class='testInserts']/p"), z("\ufdd0'line", 204))), z("\ufdd0'line", 204))), z("\ufdd0'line", 204))), z("\ufdd0'line", 204))))));
-  q(u.call(g, 1, L.call(g, T.call(g, X.call(g, "//p[@class='i2']/preceding-sibling::*"))))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 1, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'xpath", "//p[@class='i2']/preceding-sibling::*"), z("\ufdd0'line", 205))), z("\ufdd0'line", 205))), z("\ufdd0'line", 205))), z("\ufdd0'line", 205))))));
+  q(u.call(g, 3, L.call(g, T.call(g, X.call(g, "//div[@class='testInserts']/p"))))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 3, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'xpath", "//div[@class='testInserts']/p"), z("\ufdd0'line", 205))), z("\ufdd0'line", 205))), z("\ufdd0'line", 205))), z("\ufdd0'line", 205))))));
+  q(u.call(g, 1, L.call(g, T.call(g, X.call(g, "//p[@class='i2']/preceding-sibling::*"))))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 1, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'xpath", "//p[@class='i2']/preceding-sibling::*"), z("\ufdd0'line", 206))), z("\ufdd0'line", 206))), z("\ufdd0'line", 206))), z("\ufdd0'line", 206))))));
   if(q(u.call(g, 1, L.call(g, T.call(g, X.call(g, "//p[@class='i2']/following-sibling::*")))))) {
     return g
   }
-  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 1, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'xpath", "//p[@class='i2']/following-sibling::*"), z("\ufdd0'line", 206))), z("\ufdd0'line", 206))), z("\ufdd0'line", 206))), z("\ufdd0'line", 206))))))
+  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 1, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'xpath", "//p[@class='i2']/following-sibling::*"), z("\ufdd0'line", 207))), z("\ufdd0'line", 207))), z("\ufdd0'line", 207))), z("\ufdd0'line", 207))))))
 });
 Y.call(g, "Insert a single child to multiple parents", function() {
   Z.call(g);
@@ -4890,9 +4886,9 @@ Y.call(g, "Insert a single child to multiple parents", function() {
   var b = D.call(g, Ke([X.call(g, "//div[@id='testInsert1']"), X.call(g, "//div[@id='testInsert2']")]));
   if(q(b)) {
     for(var c = E.call(g, b);;) {
-      if(q(u.call(g, 3, L.call(g, T.call(g, X.call(g, c, "p"))))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 3, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'xpath", "\ufdd1'children", "p"), z("\ufdd0'line", 222))), z("\ufdd0'line", 222))), z("\ufdd0'line", 222))), z("\ufdd0'line", 222)))))), q(u.call(g, 1, L.call(g, T.call(g, X.call(g, c, "p[@class='i2']/preceding-sibling::*"))))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 1, N(x("\ufdd1'count", 
-      N(x("\ufdd1'nodes", N(x("\ufdd1'xpath", "\ufdd1'children", "p[@class='i2']/preceding-sibling::*"), z("\ufdd0'line", 223))), z("\ufdd0'line", 223))), z("\ufdd0'line", 223))), z("\ufdd0'line", 223)))))), q(u.call(g, 1, L.call(g, T.call(g, X.call(g, c, "p[@class='i2']/following-sibling::*"))))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 1, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'xpath", "\ufdd1'children", "p[@class='i2']/following-sibling::*"), z("\ufdd0'line", 
-      225))), z("\ufdd0'line", 225))), z("\ufdd0'line", 225))), z("\ufdd0'line", 225)))))), c = J.call(g, b), q(c)) {
+      if(q(u.call(g, 3, L.call(g, T.call(g, X.call(g, c, "p"))))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 3, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'xpath", "\ufdd1'children", "p"), z("\ufdd0'line", 223))), z("\ufdd0'line", 223))), z("\ufdd0'line", 223))), z("\ufdd0'line", 223)))))), q(u.call(g, 1, L.call(g, T.call(g, X.call(g, c, "p[@class='i2']/preceding-sibling::*"))))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 1, N(x("\ufdd1'count", 
+      N(x("\ufdd1'nodes", N(x("\ufdd1'xpath", "\ufdd1'children", "p[@class='i2']/preceding-sibling::*"), z("\ufdd0'line", 224))), z("\ufdd0'line", 224))), z("\ufdd0'line", 224))), z("\ufdd0'line", 224)))))), q(u.call(g, 1, L.call(g, T.call(g, X.call(g, c, "p[@class='i2']/following-sibling::*"))))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 1, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'xpath", "\ufdd1'children", "p[@class='i2']/following-sibling::*"), z("\ufdd0'line", 
+      226))), z("\ufdd0'line", 226))), z("\ufdd0'line", 226))), z("\ufdd0'line", 226)))))), c = J.call(g, b), q(c)) {
         b = c, c = E.call(g, b)
       }else {
         return g
@@ -4905,54 +4901,54 @@ Y.call(g, "Insert a single child to multiple parents", function() {
 Y.call(g, "destroy a single node", function() {
   Z.call(g);
   W.call(g, X.call(g, "//body"), "<p class='appended1'>app1</p>");
-  q(u.call(g, 1, L.call(g, T.call(g, X.call(g, "//body/p[@class='appended1']"))))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 1, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'xpath", "//body/p[@class='appended1']"), z("\ufdd0'line", 231))), z("\ufdd0'line", 231))), z("\ufdd0'line", 231))), z("\ufdd0'line", 231))))));
+  q(u.call(g, 1, L.call(g, T.call(g, X.call(g, "//body/p[@class='appended1']"))))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 1, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'xpath", "//body/p[@class='appended1']"), z("\ufdd0'line", 232))), z("\ufdd0'line", 232))), z("\ufdd0'line", 232))), z("\ufdd0'line", 232))))));
   Kf.call(g, X.call(g, "//body/p[@class='appended1']"));
   if(q(u.call(g, 0, L.call(g, T.call(g, X.call(g, "//body/p[@class='appended1']")))))) {
     return g
   }
-  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 0, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'xpath", "//body/p[@class='appended1']"), z("\ufdd0'line", 233))), z("\ufdd0'line", 233))), z("\ufdd0'line", 233))), z("\ufdd0'line", 233))))))
+  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 0, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'xpath", "//body/p[@class='appended1']"), z("\ufdd0'line", 234))), z("\ufdd0'line", 234))), z("\ufdd0'line", 234))), z("\ufdd0'line", 234))))))
 });
 Y.call(g, "destroy multiple nodes", function() {
   Z.call(g);
   W.call(g, X.call(g, "//body"), "<p class='appended2'>app1</p><p class='appended2'>app2</p>");
-  q(u.call(g, 2, L.call(g, T.call(g, X.call(g, "//body/p[@class='appended2']"))))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 2, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'xpath", "//body/p[@class='appended2']"), z("\ufdd0'line", 239))), z("\ufdd0'line", 239))), z("\ufdd0'line", 239))), z("\ufdd0'line", 239))))));
+  q(u.call(g, 2, L.call(g, T.call(g, X.call(g, "//body/p[@class='appended2']"))))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 2, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'xpath", "//body/p[@class='appended2']"), z("\ufdd0'line", 240))), z("\ufdd0'line", 240))), z("\ufdd0'line", 240))), z("\ufdd0'line", 240))))));
   Kf.call(g, X.call(g, "//body/p[@class='appended2']"));
   if(q(u.call(g, 0, L.call(g, T.call(g, X.call(g, "//body/p[@class='appended2']")))))) {
     return g
   }
-  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 0, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'xpath", "//body/p[@class='appended2']"), z("\ufdd0'line", 241))), z("\ufdd0'line", 241))), z("\ufdd0'line", 241))), z("\ufdd0'line", 241))))))
+  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 0, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'xpath", "//body/p[@class='appended2']"), z("\ufdd0'line", 242))), z("\ufdd0'line", 242))), z("\ufdd0'line", 242))), z("\ufdd0'line", 242))))))
 });
 Y.call(g, "detach and reattach a single node", function() {
   Z.call(g);
   Ag.call(g);
   var b = Jf.call(g, X.call(g, "//p[@class='p3']"));
-  q(u.call(g, 0, L.call(g, T.call(g, X.call(g, "//p[@class='p3']"))))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 0, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'xpath", "//p[@class='p3']"), z("\ufdd0'line", 247))), z("\ufdd0'line", 247))), z("\ufdd0'line", 247))), z("\ufdd0'line", 247))))));
+  q(u.call(g, 0, L.call(g, T.call(g, X.call(g, "//p[@class='p3']"))))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 0, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'xpath", "//p[@class='p3']"), z("\ufdd0'line", 248))), z("\ufdd0'line", 248))), z("\ufdd0'line", 248))), z("\ufdd0'line", 248))))));
   W.call(g, X.call(g, "//div[@class='d1']"), b);
   if(q(u.call(g, 1, L.call(g, T.call(g, X.call(g, "//p[@class='p3']")))))) {
     return g
   }
-  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 1, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'xpath", "//p[@class='p3']"), z("\ufdd0'line", 249))), z("\ufdd0'line", 249))), z("\ufdd0'line", 249))), z("\ufdd0'line", 249))))))
+  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 1, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'xpath", "//p[@class='p3']"), z("\ufdd0'line", 250))), z("\ufdd0'line", 250))), z("\ufdd0'line", 250))), z("\ufdd0'line", 250))))))
 });
 Y.call(g, "detach and reattach multiple nodes", function() {
   Z.call(g);
   Ag.call(g);
   var b = Jf.call(g, X.call(g, "//div[@class='d1']/p"));
-  q(u.call(g, 0, L.call(g, T.call(g, X.call(g, "//div[@class='d1']/p"))))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 0, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'xpath", "//div[@class='d1']/p"), z("\ufdd0'line", 255))), z("\ufdd0'line", 255))), z("\ufdd0'line", 255))), z("\ufdd0'line", 255))))));
+  q(u.call(g, 0, L.call(g, T.call(g, X.call(g, "//div[@class='d1']/p"))))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 0, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'xpath", "//div[@class='d1']/p"), z("\ufdd0'line", 256))), z("\ufdd0'line", 256))), z("\ufdd0'line", 256))), z("\ufdd0'line", 256))))));
   W.call(g, X.call(g, "//div[@class='d1']"), b);
   if(q(u.call(g, 3, L.call(g, T.call(g, X.call(g, "//div[@class='d1']/p")))))) {
     return g
   }
-  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 3, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'xpath", "//div[@class='d1']/p"), z("\ufdd0'line", 257))), z("\ufdd0'line", 257))), z("\ufdd0'line", 257))), z("\ufdd0'line", 257))))))
+  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 3, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'xpath", "//div[@class='d1']/p"), z("\ufdd0'line", 258))), z("\ufdd0'line", 258))), z("\ufdd0'line", 258))), z("\ufdd0'line", 258))))))
 });
 Y.call(g, "clear a node's contents", function() {
   Z.call(g);
   Ag.call(g);
   Lf.call(g, X.call(g, "//div[@class='d1']"));
-  q(u.call(g, 1, L.call(g, T.call(g, X.call(g, "//div[@class='d1']"))))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 1, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'xpath", "//div[@class='d1']"), z("\ufdd0'line", 263))), z("\ufdd0'line", 263))), z("\ufdd0'line", 263))), z("\ufdd0'line", 263))))));
+  q(u.call(g, 1, L.call(g, T.call(g, X.call(g, "//div[@class='d1']"))))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 1, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'xpath", "//div[@class='d1']"), z("\ufdd0'line", 264))), z("\ufdd0'line", 264))), z("\ufdd0'line", 264))), z("\ufdd0'line", 264))))));
   if(q(u.call(g, 0, L.call(g, T.call(g, X.call(g, "//div[@class='d1']/*")))))) {
     return g
   }
-  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 0, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'xpath", "//div[@class='d1']/*"), z("\ufdd0'line", 264))), z("\ufdd0'line", 264))), z("\ufdd0'line", 264))), z("\ufdd0'line", 264))))))
+  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 0, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'xpath", "//div[@class='d1']/*"), z("\ufdd0'line", 265))), z("\ufdd0'line", 265))), z("\ufdd0'line", 265))), z("\ufdd0'line", 265))))))
 });
 Y.call(g, "insert-before! with a single reference and single new node", function() {
   Z.call(g);
@@ -4961,29 +4957,29 @@ Y.call(g, "insert-before! with a single reference and single new node", function
   if(q(u.call(g, 1, L.call(g, T.call(g, X.call(g, "//div[@id='ref']/preceding-sibling::*[text()='before']")))))) {
     return g
   }
-  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 1, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'xpath", "//div[@id='ref']/preceding-sibling::*[text()='before']"), z("\ufdd0'line", 270))), z("\ufdd0'line", 270))), z("\ufdd0'line", 270))), z("\ufdd0'line", 270))))))
+  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 1, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'xpath", "//div[@id='ref']/preceding-sibling::*[text()='before']"), z("\ufdd0'line", 271))), z("\ufdd0'line", 271))), z("\ufdd0'line", 271))), z("\ufdd0'line", 271))))))
 });
 Y.call(g, "insert-before! with a single reference and multiple new nodes", function() {
   Z.call(g);
   W.call(g, X.call(g, "//body"), "<div id='ref'>Some content</div>");
   Gf.call(g, T.call(g, V.call(g, "ref")), "<p>before1</p><p>before2</p>");
-  q(u.call(g, 1, L.call(g, T.call(g, X.call(g, "//div[@id='ref']/preceding-sibling::*[text()='before2' and position()=1]"))))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 1, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'xpath", "//div[@id='ref']/preceding-sibling::*[text()='before2' and position()=1]"), z("\ufdd0'line", 276))), z("\ufdd0'line", 276))), z("\ufdd0'line", 276))), z("\ufdd0'line", 276))))));
+  q(u.call(g, 1, L.call(g, T.call(g, X.call(g, "//div[@id='ref']/preceding-sibling::*[text()='before2' and position()=1]"))))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 1, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'xpath", "//div[@id='ref']/preceding-sibling::*[text()='before2' and position()=1]"), z("\ufdd0'line", 277))), z("\ufdd0'line", 277))), z("\ufdd0'line", 277))), z("\ufdd0'line", 277))))));
   if(q(u.call(g, 1, L.call(g, T.call(g, X.call(g, "//div[@id='ref']/preceding-sibling::*[text()='before1' and position()=2]")))))) {
     return g
   }
-  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 1, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'xpath", "//div[@id='ref']/preceding-sibling::*[text()='before1' and position()=2]"), z("\ufdd0'line", 277))), z("\ufdd0'line", 277))), z("\ufdd0'line", 277))), z("\ufdd0'line", 277))))))
+  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 1, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'xpath", "//div[@id='ref']/preceding-sibling::*[text()='before1' and position()=2]"), z("\ufdd0'line", 278))), z("\ufdd0'line", 278))), z("\ufdd0'line", 278))), z("\ufdd0'line", 278))))))
 });
 Y.call(g, "insert-before! with multiple reference nodes and a single new node", function() {
   Z.call(g);
   W.call(g, X.call(g, "//body"), "<div class='ref' id='ref1'>content1</div>");
   W.call(g, X.call(g, "//body"), "<div class='ref' id='ref2'>content2</div>");
   Gf.call(g, T.call(g, Af.call(g, "ref")), "<p>before</p>");
-  q(u.call(g, 2, L.call(g, T.call(g, X.call(g, "//p"))))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 2, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'xpath", "//p"), z("\ufdd0'line", 284))), z("\ufdd0'line", 284))), z("\ufdd0'line", 284))), z("\ufdd0'line", 284))))));
-  q(u.call(g, 1, L.call(g, T.call(g, X.call(g, "//div[@id='ref1']/preceding-sibling::p"))))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 1, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'xpath", "//div[@id='ref1']/preceding-sibling::p"), z("\ufdd0'line", 285))), z("\ufdd0'line", 285))), z("\ufdd0'line", 285))), z("\ufdd0'line", 285))))));
+  q(u.call(g, 2, L.call(g, T.call(g, X.call(g, "//p"))))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 2, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'xpath", "//p"), z("\ufdd0'line", 285))), z("\ufdd0'line", 285))), z("\ufdd0'line", 285))), z("\ufdd0'line", 285))))));
+  q(u.call(g, 1, L.call(g, T.call(g, X.call(g, "//div[@id='ref1']/preceding-sibling::p"))))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 1, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'xpath", "//div[@id='ref1']/preceding-sibling::p"), z("\ufdd0'line", 286))), z("\ufdd0'line", 286))), z("\ufdd0'line", 286))), z("\ufdd0'line", 286))))));
   if(q(u.call(g, 2, L.call(g, T.call(g, X.call(g, "//div[@id='ref2']/preceding-sibling::p")))))) {
     return g
   }
-  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 2, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'xpath", "//div[@id='ref2']/preceding-sibling::p"), z("\ufdd0'line", 286))), z("\ufdd0'line", 286))), z("\ufdd0'line", 286))), z("\ufdd0'line", 286))))))
+  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 2, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'xpath", "//div[@id='ref2']/preceding-sibling::p"), z("\ufdd0'line", 287))), z("\ufdd0'line", 287))), z("\ufdd0'line", 287))), z("\ufdd0'line", 287))))))
 });
 Y.call(g, "insert-after! with a single reference and single new node", function() {
   Z.call(g);
@@ -4992,122 +4988,122 @@ Y.call(g, "insert-after! with a single reference and single new node", function(
   if(q(u.call(g, 1, L.call(g, T.call(g, X.call(g, "//div[@id='ref']/following-sibling::*[text()='after']")))))) {
     return g
   }
-  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 1, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'xpath", "//div[@id='ref']/following-sibling::*[text()='after']"), z("\ufdd0'line", 292))), z("\ufdd0'line", 292))), z("\ufdd0'line", 292))), z("\ufdd0'line", 292))))))
+  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 1, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'xpath", "//div[@id='ref']/following-sibling::*[text()='after']"), z("\ufdd0'line", 293))), z("\ufdd0'line", 293))), z("\ufdd0'line", 293))), z("\ufdd0'line", 293))))))
 });
 Y.call(g, "insert-after! with a single reference and multiple new nodes", function() {
   Z.call(g);
   W.call(g, X.call(g, "//body"), "<div id='ref'>Some content</div>");
   Hf.call(g, T.call(g, V.call(g, "ref")), "<p>after1</p><p>after2</p>");
-  q(u.call(g, 1, L.call(g, T.call(g, X.call(g, "//div[@id='ref']/following-sibling::*[text()='after1' and position()=1]"))))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 1, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'xpath", "//div[@id='ref']/following-sibling::*[text()='after1' and position()=1]"), z("\ufdd0'line", 298))), z("\ufdd0'line", 298))), z("\ufdd0'line", 298))), z("\ufdd0'line", 298))))));
+  q(u.call(g, 1, L.call(g, T.call(g, X.call(g, "//div[@id='ref']/following-sibling::*[text()='after1' and position()=1]"))))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 1, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'xpath", "//div[@id='ref']/following-sibling::*[text()='after1' and position()=1]"), z("\ufdd0'line", 299))), z("\ufdd0'line", 299))), z("\ufdd0'line", 299))), z("\ufdd0'line", 299))))));
   if(q(u.call(g, 1, L.call(g, T.call(g, X.call(g, "//div[@id='ref']/following-sibling::*[text()='after2' and position()=2]")))))) {
     return g
   }
-  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 1, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'xpath", "//div[@id='ref']/following-sibling::*[text()='after2' and position()=2]"), z("\ufdd0'line", 299))), z("\ufdd0'line", 299))), z("\ufdd0'line", 299))), z("\ufdd0'line", 299))))))
+  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 1, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'xpath", "//div[@id='ref']/following-sibling::*[text()='after2' and position()=2]"), z("\ufdd0'line", 300))), z("\ufdd0'line", 300))), z("\ufdd0'line", 300))), z("\ufdd0'line", 300))))))
 });
 Y.call(g, "insert-after! with multiple reference nodes and a single new node", function() {
   Z.call(g);
   W.call(g, X.call(g, "//body"), "<div class='ref' id='ref1'>content1</div>");
   W.call(g, X.call(g, "//body"), "<div class='ref' id='ref2'>content2</div>");
   Hf.call(g, T.call(g, Af.call(g, "ref")), "<p>after</p>");
-  q(u.call(g, 2, L.call(g, T.call(g, X.call(g, "//p"))))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 2, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'xpath", "//p"), z("\ufdd0'line", 306))), z("\ufdd0'line", 306))), z("\ufdd0'line", 306))), z("\ufdd0'line", 306))))));
-  q(u.call(g, 2, L.call(g, T.call(g, X.call(g, "//div[@id='ref1']/following-sibling::p"))))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 2, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'xpath", "//div[@id='ref1']/following-sibling::p"), z("\ufdd0'line", 307))), z("\ufdd0'line", 307))), z("\ufdd0'line", 307))), z("\ufdd0'line", 307))))));
+  q(u.call(g, 2, L.call(g, T.call(g, X.call(g, "//p"))))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 2, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'xpath", "//p"), z("\ufdd0'line", 307))), z("\ufdd0'line", 307))), z("\ufdd0'line", 307))), z("\ufdd0'line", 307))))));
+  q(u.call(g, 2, L.call(g, T.call(g, X.call(g, "//div[@id='ref1']/following-sibling::p"))))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 2, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'xpath", "//div[@id='ref1']/following-sibling::p"), z("\ufdd0'line", 308))), z("\ufdd0'line", 308))), z("\ufdd0'line", 308))), z("\ufdd0'line", 308))))));
   if(q(u.call(g, 1, L.call(g, T.call(g, X.call(g, "//div[@id='ref2']/following-sibling::p")))))) {
     return g
   }
-  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 1, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'xpath", "//div[@id='ref2']/following-sibling::p"), z("\ufdd0'line", 308))), z("\ufdd0'line", 308))), z("\ufdd0'line", 308))), z("\ufdd0'line", 308))))))
+  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 1, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'xpath", "//div[@id='ref2']/following-sibling::p"), z("\ufdd0'line", 309))), z("\ufdd0'line", 309))), z("\ufdd0'line", 309))), z("\ufdd0'line", 309))))))
 });
 Y.call(g, "swap-content! with a single reference node and a single new node", function() {
   Z.call(g);
   W.call(g, X.call(g, "//body"), "<div><p id='before'>TYPO</p></div>");
   If.call(g, X.call(g, "//p[@id='before']"), "<p id='after'>fixed</p>");
-  q(u.call(g, 0, L.call(g, T.call(g, X.call(g, "//p[@id='before']"))))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 0, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'xpath", "//p[@id='before']"), z("\ufdd0'line", 314))), z("\ufdd0'line", 314))), z("\ufdd0'line", 314))), z("\ufdd0'line", 314))))));
+  q(u.call(g, 0, L.call(g, T.call(g, X.call(g, "//p[@id='before']"))))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 0, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'xpath", "//p[@id='before']"), z("\ufdd0'line", 315))), z("\ufdd0'line", 315))), z("\ufdd0'line", 315))), z("\ufdd0'line", 315))))));
   if(q(u.call(g, 1, L.call(g, T.call(g, X.call(g, "//p[@id='after']")))))) {
     return g
   }
-  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 1, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'xpath", "//p[@id='after']"), z("\ufdd0'line", 315))), z("\ufdd0'line", 315))), z("\ufdd0'line", 315))), z("\ufdd0'line", 315))))))
+  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 1, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'xpath", "//p[@id='after']"), z("\ufdd0'line", 316))), z("\ufdd0'line", 316))), z("\ufdd0'line", 316))), z("\ufdd0'line", 316))))))
 });
 Y.call(g, "swap-content! with a single reference node and multiple new nodes", function() {
   Z.call(g);
   W.call(g, X.call(g, "//body"), "<div><p id='before'>TYPO</p></div>");
   If.call(g, X.call(g, "//p[@id='before']"), "<p class='after'>fixed1</p><p class='after'>fixed2</p>");
-  q(u.call(g, 0, L.call(g, T.call(g, X.call(g, "//p[@id='before']"))))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 0, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'xpath", "//p[@id='before']"), z("\ufdd0'line", 321))), z("\ufdd0'line", 321))), z("\ufdd0'line", 321))), z("\ufdd0'line", 321))))));
+  q(u.call(g, 0, L.call(g, T.call(g, X.call(g, "//p[@id='before']"))))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 0, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'xpath", "//p[@id='before']"), z("\ufdd0'line", 322))), z("\ufdd0'line", 322))), z("\ufdd0'line", 322))), z("\ufdd0'line", 322))))));
   if(q(u.call(g, 2, L.call(g, T.call(g, X.call(g, "//p[@class='after']")))))) {
     return g
   }
-  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 2, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'xpath", "//p[@class='after']"), z("\ufdd0'line", 322))), z("\ufdd0'line", 322))), z("\ufdd0'line", 322))), z("\ufdd0'line", 322))))))
+  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 2, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'xpath", "//p[@class='after']"), z("\ufdd0'line", 323))), z("\ufdd0'line", 323))), z("\ufdd0'line", 323))), z("\ufdd0'line", 323))))))
 });
 Y.call(g, "swap-content! with multiple reference nodes and multiple new nodes", function() {
   Z.call(g);
   W.call(g, X.call(g, "//body"), "<div><p class='before'>TYPO-1</p></div>");
   W.call(g, X.call(g, "//body"), "<div><p class='before'>TYPO-2</p></div>");
   If.call(g, X.call(g, "//p[@class='before']"), "<p class='after'>fixed1</p><p class='after'>fixed2</p>");
-  q(u.call(g, 0, L.call(g, T.call(g, X.call(g, "//p[@class='before']"))))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 0, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'xpath", "//p[@class='before']"), z("\ufdd0'line", 329))), z("\ufdd0'line", 329))), z("\ufdd0'line", 329))), z("\ufdd0'line", 329))))));
+  q(u.call(g, 0, L.call(g, T.call(g, X.call(g, "//p[@class='before']"))))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 0, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'xpath", "//p[@class='before']"), z("\ufdd0'line", 330))), z("\ufdd0'line", 330))), z("\ufdd0'line", 330))), z("\ufdd0'line", 330))))));
   if(q(u.call(g, 4, L.call(g, T.call(g, X.call(g, "//p[@class='after']")))))) {
     return g
   }
-  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 4, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'xpath", "//p[@class='after']"), z("\ufdd0'line", 330))), z("\ufdd0'line", 330))), z("\ufdd0'line", 330))), z("\ufdd0'line", 330))))))
+  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 4, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'xpath", "//p[@class='after']"), z("\ufdd0'line", 331))), z("\ufdd0'line", 331))), z("\ufdd0'line", 331))), z("\ufdd0'line", 331))))))
 });
 Y.call(g, "can retrieve a css property value", function() {
   Z.call(g);
   W.call(g, X.call(g, "//body"), '<div style="background-color: maroon;">Test</div>');
-  q(u.call(g, "maroon", Mf.call(g, X.call(g, "//div"), "background-color"))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", "maroon", N(x("\ufdd1'style", N(x("\ufdd1'xpath", "//div"), z("\ufdd0'line", 337)), "background-color"), z("\ufdd0'line", 337))), z("\ufdd0'line", 337))))));
-  q(u.call(g, "maroon", Mf.call(g, X.call(g, "//div"), "\ufdd0'background-color"))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", "maroon", N(x("\ufdd1'style", N(x("\ufdd1'xpath", "//div"), z("\ufdd0'line", 338)), "\ufdd0'background-color"), z("\ufdd0'line", 338))), z("\ufdd0'line", 338))))));
+  q(u.call(g, "maroon", Mf.call(g, X.call(g, "//div"), "background-color"))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", "maroon", N(x("\ufdd1'style", N(x("\ufdd1'xpath", "//div"), z("\ufdd0'line", 338)), "background-color"), z("\ufdd0'line", 338))), z("\ufdd0'line", 338))))));
+  q(u.call(g, "maroon", Mf.call(g, X.call(g, "//div"), "\ufdd0'background-color"))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", "maroon", N(x("\ufdd1'style", N(x("\ufdd1'xpath", "//div"), z("\ufdd0'line", 339)), "\ufdd0'background-color"), z("\ufdd0'line", 339))), z("\ufdd0'line", 339))))));
   if(q(w.call(g, Mf.call(g, X.call(g, "//div"), "\ufdd0'no-such-style")))) {
     return g
   }
-  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'nil?", N(x("\ufdd1'style", N(x("\ufdd1'xpath", "//div"), z("\ufdd0'line", 339)), "\ufdd0'no-such-style"), z("\ufdd0'line", 339))), z("\ufdd0'line", 339))))))
+  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'nil?", N(x("\ufdd1'style", N(x("\ufdd1'xpath", "//div"), z("\ufdd0'line", 340)), "\ufdd0'no-such-style"), z("\ufdd0'line", 340))), z("\ufdd0'line", 340))))))
 });
 Y.call(g, "can retrieve an HTML attribute value", function() {
   Z.call(g);
   W.call(g, X.call(g, "//body"), '<div height="42">Content!</div>');
-  q(u.call(g, "42", Nf.call(g, X.call(g, "//div"), "height"))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", "42", N(x("\ufdd1'attr", N(x("\ufdd1'xpath", "//div"), z("\ufdd0'line", 344)), "height"), z("\ufdd0'line", 344))), z("\ufdd0'line", 344))))));
-  q(u.call(g, "42", Nf.call(g, X.call(g, "//div"), "\ufdd0'height"))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", "42", N(x("\ufdd1'attr", N(x("\ufdd1'xpath", "//div"), z("\ufdd0'line", 345)), "\ufdd0'height"), z("\ufdd0'line", 345))), z("\ufdd0'line", 345))))));
+  q(u.call(g, "42", Nf.call(g, X.call(g, "//div"), "height"))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", "42", N(x("\ufdd1'attr", N(x("\ufdd1'xpath", "//div"), z("\ufdd0'line", 345)), "height"), z("\ufdd0'line", 345))), z("\ufdd0'line", 345))))));
+  q(u.call(g, "42", Nf.call(g, X.call(g, "//div"), "\ufdd0'height"))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", "42", N(x("\ufdd1'attr", N(x("\ufdd1'xpath", "//div"), z("\ufdd0'line", 346)), "\ufdd0'height"), z("\ufdd0'line", 346))), z("\ufdd0'line", 346))))));
   if(q(w.call(g, Nf.call(g, X.call(g, "//div"), "\ufdd0'no-such-attr:c")))) {
     return g
   }
-  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'nil?", N(x("\ufdd1'attr", N(x("\ufdd1'xpath", "//div"), z("\ufdd0'line", 346)), "\ufdd0'no-such-attr:c"), z("\ufdd0'line", 346))), z("\ufdd0'line", 346))))))
+  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'nil?", N(x("\ufdd1'attr", N(x("\ufdd1'xpath", "//div"), z("\ufdd0'line", 347)), "\ufdd0'no-such-attr:c"), z("\ufdd0'line", 347))), z("\ufdd0'line", 347))))))
 });
 Y.call(g, "can set a css property on a single node", function() {
   Z.call(g);
   W.call(g, X.call(g, "//body"), "<div>1</div><div>2</div>");
   Of.call(g, X.call(g, "//div[1]"), "background-color", "red");
   Of.call(g, X.call(g, "//div[2]"), "\ufdd0'background-color", "green");
-  q(u.call(g, "red", Mf.call(g, X.call(g, "//div[1]"), "background-color"))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", "red", N(x("\ufdd1'style", N(x("\ufdd1'xpath", "//div[1]"), z("\ufdd0'line", 353)), "background-color"), z("\ufdd0'line", 353))), z("\ufdd0'line", 353))))));
+  q(u.call(g, "red", Mf.call(g, X.call(g, "//div[1]"), "background-color"))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", "red", N(x("\ufdd1'style", N(x("\ufdd1'xpath", "//div[1]"), z("\ufdd0'line", 354)), "background-color"), z("\ufdd0'line", 354))), z("\ufdd0'line", 354))))));
   if(q(u.call(g, "green", Mf.call(g, X.call(g, "//div[2]"), "background-color")))) {
     return g
   }
-  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", "green", N(x("\ufdd1'style", N(x("\ufdd1'xpath", "//div[2]"), z("\ufdd0'line", 354)), "background-color"), z("\ufdd0'line", 354))), z("\ufdd0'line", 354))))))
+  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", "green", N(x("\ufdd1'style", N(x("\ufdd1'xpath", "//div[2]"), z("\ufdd0'line", 355)), "background-color"), z("\ufdd0'line", 355))), z("\ufdd0'line", 355))))))
 });
 Y.call(g, "can set a css property on multiple nodes", function() {
   Z.call(g);
   W.call(g, X.call(g, "//body"), "<div>1</div><div>2</div>");
   Of.call(g, X.call(g, "//div"), "color", "red");
-  q(u.call(g, "red", Mf.call(g, X.call(g, "//div[1]"), "color"))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", "red", N(x("\ufdd1'style", N(x("\ufdd1'xpath", "//div[1]"), z("\ufdd0'line", 360)), "color"), z("\ufdd0'line", 360))), z("\ufdd0'line", 360))))));
+  q(u.call(g, "red", Mf.call(g, X.call(g, "//div[1]"), "color"))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", "red", N(x("\ufdd1'style", N(x("\ufdd1'xpath", "//div[1]"), z("\ufdd0'line", 361)), "color"), z("\ufdd0'line", 361))), z("\ufdd0'line", 361))))));
   if(q(u.call(g, "red", Mf.call(g, X.call(g, "//div[2]"), "color")))) {
     return g
   }
-  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", "red", N(x("\ufdd1'style", N(x("\ufdd1'xpath", "//div[2]"), z("\ufdd0'line", 361)), "color"), z("\ufdd0'line", 361))), z("\ufdd0'line", 361))))))
+  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", "red", N(x("\ufdd1'style", N(x("\ufdd1'xpath", "//div[2]"), z("\ufdd0'line", 362)), "color"), z("\ufdd0'line", 362))), z("\ufdd0'line", 362))))))
 });
 Y.call(g, "can set a html attribute on a single node", function() {
   Z.call(g);
   W.call(g, X.call(g, "//body"), "<div>1</div><div>2</div>");
   Pf.call(g, X.call(g, "//div[1]"), "width", 42);
   Pf.call(g, X.call(g, "//div[2]"), "\ufdd0'width", 42);
-  q(u.call(g, "42", Nf.call(g, X.call(g, "//div[1]"), "width"))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", "42", N(x("\ufdd1'attr", N(x("\ufdd1'xpath", "//div[1]"), z("\ufdd0'line", 368)), "width"), z("\ufdd0'line", 368))), z("\ufdd0'line", 368))))));
+  q(u.call(g, "42", Nf.call(g, X.call(g, "//div[1]"), "width"))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", "42", N(x("\ufdd1'attr", N(x("\ufdd1'xpath", "//div[1]"), z("\ufdd0'line", 369)), "width"), z("\ufdd0'line", 369))), z("\ufdd0'line", 369))))));
   if(q(u.call(g, "42", Nf.call(g, X.call(g, "//div[2]"), "width")))) {
     return g
   }
-  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", "42", N(x("\ufdd1'attr", N(x("\ufdd1'xpath", "//div[2]"), z("\ufdd0'line", 369)), "width"), z("\ufdd0'line", 369))), z("\ufdd0'line", 369))))))
+  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", "42", N(x("\ufdd1'attr", N(x("\ufdd1'xpath", "//div[2]"), z("\ufdd0'line", 370)), "width"), z("\ufdd0'line", 370))), z("\ufdd0'line", 370))))))
 });
 Y.call(g, "can set a html attribute on a single node", function() {
   Z.call(g);
   W.call(g, X.call(g, "//body"), "<div>1</div><div>2</div>");
   Pf.call(g, X.call(g, "//div"), "width", 42);
-  q(u.call(g, "42", Nf.call(g, X.call(g, "//div[1]"), "width"))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", "42", N(x("\ufdd1'attr", N(x("\ufdd1'xpath", "//div[1]"), z("\ufdd0'line", 375)), "width"), z("\ufdd0'line", 375))), z("\ufdd0'line", 375))))));
+  q(u.call(g, "42", Nf.call(g, X.call(g, "//div[1]"), "width"))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", "42", N(x("\ufdd1'attr", N(x("\ufdd1'xpath", "//div[1]"), z("\ufdd0'line", 376)), "width"), z("\ufdd0'line", 376))), z("\ufdd0'line", 376))))));
   if(q(u.call(g, "42", Nf.call(g, X.call(g, "//div[2]"), "width")))) {
     return g
   }
-  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", "42", N(x("\ufdd1'attr", N(x("\ufdd1'xpath", "//div[2]"), z("\ufdd0'line", 376)), "width"), z("\ufdd0'line", 376))), z("\ufdd0'line", 376))))))
+  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", "42", N(x("\ufdd1'attr", N(x("\ufdd1'xpath", "//div[2]"), z("\ufdd0'line", 377)), "width"), z("\ufdd0'line", 377))), z("\ufdd0'line", 377))))))
 });
 Y.call(g, "can get multiple CSS styles from a single node.", function() {
   Z.call(g);
@@ -5117,7 +5113,7 @@ Y.call(g, "can get multiple CSS styles from a single node.", function() {
   if(q(u.call(g, R(["\ufdd0'color", "\ufdd0'background-color"], {"\ufdd0'color":"red", "\ufdd0'background-color":"black"}), Rf.call(g, X.call(g, "//div"))))) {
     return g
   }
-  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", z("\ufdd0'color", "red", "\ufdd0'background-color", "black"), N(x("\ufdd1'styles", N(x("\ufdd1'xpath", "//div"), z("\ufdd0'line", 384))), z("\ufdd0'line", 384))), z("\ufdd0'line", 383))))))
+  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", z("\ufdd0'color", "red", "\ufdd0'background-color", "black"), N(x("\ufdd1'styles", N(x("\ufdd1'xpath", "//div"), z("\ufdd0'line", 385))), z("\ufdd0'line", 385))), z("\ufdd0'line", 384))))))
 });
 Y.call(g, "can get multiple HTML attributes from a single node.", function() {
   Z.call(g);
@@ -5127,109 +5123,109 @@ Y.call(g, "can get multiple HTML attributes from a single node.", function() {
   if(q(u.call(g, R(["\ufdd0'width", "\ufdd0'height"], {"\ufdd0'width":"42", "\ufdd0'height":"24"}), Sf.call(g, X.call(g, "//div"))))) {
     return g
   }
-  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", z("\ufdd0'width", "42", "\ufdd0'height", "24"), N(x("\ufdd1'attrs", N(x("\ufdd1'xpath", "//div"), z("\ufdd0'line", 392))), z("\ufdd0'line", 392))), z("\ufdd0'line", 391))))))
+  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", z("\ufdd0'width", "42", "\ufdd0'height", "24"), N(x("\ufdd1'attrs", N(x("\ufdd1'xpath", "//div"), z("\ufdd0'line", 393))), z("\ufdd0'line", 393))), z("\ufdd0'line", 392))))))
 });
 Y.call(g, "can set multiple CSS styles on a single node", function() {
   Z.call(g);
   W.call(g, X.call(g, "//body"), "<div>1</div>");
   Tf.call(g, X.call(g, "//div"), R(["\ufdd0'color", "\ufdd0'background-color"], {"\ufdd0'color":"red", "\ufdd0'background-color":"black"}));
-  q(u.call(g, "black", Mf.call(g, X.call(g, "//div"), "background-color"))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", "black", N(x("\ufdd1'style", N(x("\ufdd1'xpath", "//div"), z("\ufdd0'line", 399)), "background-color"), z("\ufdd0'line", 399))), z("\ufdd0'line", 399))))));
+  q(u.call(g, "black", Mf.call(g, X.call(g, "//div"), "background-color"))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", "black", N(x("\ufdd1'style", N(x("\ufdd1'xpath", "//div"), z("\ufdd0'line", 400)), "background-color"), z("\ufdd0'line", 400))), z("\ufdd0'line", 400))))));
   if(q(u.call(g, "red", Mf.call(g, X.call(g, "//div"), "color")))) {
     return g
   }
-  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", "red", N(x("\ufdd1'style", N(x("\ufdd1'xpath", "//div"), z("\ufdd0'line", 400)), "color"), z("\ufdd0'line", 400))), z("\ufdd0'line", 400))))))
+  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", "red", N(x("\ufdd1'style", N(x("\ufdd1'xpath", "//div"), z("\ufdd0'line", 401)), "color"), z("\ufdd0'line", 401))), z("\ufdd0'line", 401))))))
 });
 Y.call(g, "can set multiple CSS styles on multiple nodes", function() {
   Z.call(g);
   W.call(g, X.call(g, "//body"), "<div>1</div><div>2</div>");
   Tf.call(g, X.call(g, "//div"), R(["\ufdd0'color", "\ufdd0'background-color"], {"\ufdd0'color":"red", "\ufdd0'background-color":"black"}));
-  q(u.call(g, "black", Mf.call(g, X.call(g, "//div[1]"), "background-color"))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", "black", N(x("\ufdd1'style", N(x("\ufdd1'xpath", "//div[1]"), z("\ufdd0'line", 407)), "background-color"), z("\ufdd0'line", 407))), z("\ufdd0'line", 407))))));
-  q(u.call(g, "red", Mf.call(g, X.call(g, "//div[1]"), "color"))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", "red", N(x("\ufdd1'style", N(x("\ufdd1'xpath", "//div[1]"), z("\ufdd0'line", 408)), "color"), z("\ufdd0'line", 408))), z("\ufdd0'line", 408))))));
-  q(u.call(g, "black", Mf.call(g, X.call(g, "//div[2]"), "background-color"))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", "black", N(x("\ufdd1'style", N(x("\ufdd1'xpath", "//div[2]"), z("\ufdd0'line", 409)), "background-color"), z("\ufdd0'line", 409))), z("\ufdd0'line", 409))))));
+  q(u.call(g, "black", Mf.call(g, X.call(g, "//div[1]"), "background-color"))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", "black", N(x("\ufdd1'style", N(x("\ufdd1'xpath", "//div[1]"), z("\ufdd0'line", 408)), "background-color"), z("\ufdd0'line", 408))), z("\ufdd0'line", 408))))));
+  q(u.call(g, "red", Mf.call(g, X.call(g, "//div[1]"), "color"))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", "red", N(x("\ufdd1'style", N(x("\ufdd1'xpath", "//div[1]"), z("\ufdd0'line", 409)), "color"), z("\ufdd0'line", 409))), z("\ufdd0'line", 409))))));
+  q(u.call(g, "black", Mf.call(g, X.call(g, "//div[2]"), "background-color"))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", "black", N(x("\ufdd1'style", N(x("\ufdd1'xpath", "//div[2]"), z("\ufdd0'line", 410)), "background-color"), z("\ufdd0'line", 410))), z("\ufdd0'line", 410))))));
   if(q(u.call(g, "red", Mf.call(g, X.call(g, "//div[2]"), "color")))) {
     return g
   }
-  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", "red", N(x("\ufdd1'style", N(x("\ufdd1'xpath", "//div[2]"), z("\ufdd0'line", 410)), "color"), z("\ufdd0'line", 410))), z("\ufdd0'line", 410))))))
+  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", "red", N(x("\ufdd1'style", N(x("\ufdd1'xpath", "//div[2]"), z("\ufdd0'line", 411)), "color"), z("\ufdd0'line", 411))), z("\ufdd0'line", 411))))))
 });
 Y.call(g, "can set multiple HTML attributes on a single node", function() {
   Z.call(g);
   W.call(g, X.call(g, "//body"), "<div>1</div>");
   Uf.call(g, X.call(g, "//div"), R(["\ufdd0'width", "\ufdd0'height"], {"\ufdd0'width":42, "\ufdd0'height":24}));
-  q(u.call(g, "42", Nf.call(g, X.call(g, "//div"), "width"))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", "42", N(x("\ufdd1'attr", N(x("\ufdd1'xpath", "//div"), z("\ufdd0'line", 417)), "width"), z("\ufdd0'line", 417))), z("\ufdd0'line", 417))))));
+  q(u.call(g, "42", Nf.call(g, X.call(g, "//div"), "width"))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", "42", N(x("\ufdd1'attr", N(x("\ufdd1'xpath", "//div"), z("\ufdd0'line", 418)), "width"), z("\ufdd0'line", 418))), z("\ufdd0'line", 418))))));
   if(q(u.call(g, "24", Nf.call(g, X.call(g, "//div"), "height")))) {
     return g
   }
-  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", "24", N(x("\ufdd1'attr", N(x("\ufdd1'xpath", "//div"), z("\ufdd0'line", 418)), "height"), z("\ufdd0'line", 418))), z("\ufdd0'line", 418))))))
+  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", "24", N(x("\ufdd1'attr", N(x("\ufdd1'xpath", "//div"), z("\ufdd0'line", 419)), "height"), z("\ufdd0'line", 419))), z("\ufdd0'line", 419))))))
 });
 Y.call(g, "can set multiple CSS styles on multiple nodes", function() {
   Z.call(g);
   W.call(g, X.call(g, "//body"), "<div>1</div><div>2</div>");
   Uf.call(g, X.call(g, "//div"), R(["\ufdd0'width", "\ufdd0'height"], {"\ufdd0'width":42, "\ufdd0'height":24}));
-  q(u.call(g, "42", Nf.call(g, X.call(g, "//div[1]"), "width"))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", "42", N(x("\ufdd1'attr", N(x("\ufdd1'xpath", "//div[1]"), z("\ufdd0'line", 425)), "width"), z("\ufdd0'line", 425))), z("\ufdd0'line", 425))))));
-  q(u.call(g, "24", Nf.call(g, X.call(g, "//div[1]"), "height"))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", "24", N(x("\ufdd1'attr", N(x("\ufdd1'xpath", "//div[1]"), z("\ufdd0'line", 426)), "height"), z("\ufdd0'line", 426))), z("\ufdd0'line", 426))))));
-  q(u.call(g, "42", Nf.call(g, X.call(g, "//div[2]"), "width"))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", "42", N(x("\ufdd1'attr", N(x("\ufdd1'xpath", "//div[2]"), z("\ufdd0'line", 427)), "width"), z("\ufdd0'line", 427))), z("\ufdd0'line", 427))))));
+  q(u.call(g, "42", Nf.call(g, X.call(g, "//div[1]"), "width"))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", "42", N(x("\ufdd1'attr", N(x("\ufdd1'xpath", "//div[1]"), z("\ufdd0'line", 426)), "width"), z("\ufdd0'line", 426))), z("\ufdd0'line", 426))))));
+  q(u.call(g, "24", Nf.call(g, X.call(g, "//div[1]"), "height"))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", "24", N(x("\ufdd1'attr", N(x("\ufdd1'xpath", "//div[1]"), z("\ufdd0'line", 427)), "height"), z("\ufdd0'line", 427))), z("\ufdd0'line", 427))))));
+  q(u.call(g, "42", Nf.call(g, X.call(g, "//div[2]"), "width"))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", "42", N(x("\ufdd1'attr", N(x("\ufdd1'xpath", "//div[2]"), z("\ufdd0'line", 428)), "width"), z("\ufdd0'line", 428))), z("\ufdd0'line", 428))))));
   if(q(u.call(g, "24", Nf.call(g, X.call(g, "//div[2]"), "height")))) {
     return g
   }
-  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", "24", N(x("\ufdd1'attr", N(x("\ufdd1'xpath", "//div[2]"), z("\ufdd0'line", 428)), "height"), z("\ufdd0'line", 428))), z("\ufdd0'line", 428))))))
+  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", "24", N(x("\ufdd1'attr", N(x("\ufdd1'xpath", "//div[2]"), z("\ufdd0'line", 429)), "height"), z("\ufdd0'line", 429))), z("\ufdd0'line", 429))))))
 });
 Y.call(g, "test the has-class? function", function() {
   Z.call(g);
   W.call(g, X.call(g, "//body"), "<div class='class1'>1</div>");
   W.call(g, X.call(g, "//body"), "<div class='class2'>2</div>");
-  q(u.call(g, f, Vf.call(g, X.call(g, "//div[1]"), "class1"))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", f, N(x("\ufdd1'has-class?", N(x("\ufdd1'xpath", "//div[1]"), z("\ufdd0'line", 434)), "class1"), z("\ufdd0'line", 434))), z("\ufdd0'line", 434))))));
-  q(u.call(g, f, Vf.call(g, X.call(g, "//div[2]"), "class2"))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", f, N(x("\ufdd1'has-class?", N(x("\ufdd1'xpath", "//div[2]"), z("\ufdd0'line", 435)), "class2"), z("\ufdd0'line", 435))), z("\ufdd0'line", 435))))));
-  q(u.call(g, i, Vf.call(g, X.call(g, "//div[1]"), "class2"))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", i, N(x("\ufdd1'has-class?", N(x("\ufdd1'xpath", "//div[1]"), z("\ufdd0'line", 436)), "class2"), z("\ufdd0'line", 436))), z("\ufdd0'line", 436))))));
+  q(u.call(g, f, Vf.call(g, X.call(g, "//div[1]"), "class1"))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", f, N(x("\ufdd1'has-class?", N(x("\ufdd1'xpath", "//div[1]"), z("\ufdd0'line", 435)), "class1"), z("\ufdd0'line", 435))), z("\ufdd0'line", 435))))));
+  q(u.call(g, f, Vf.call(g, X.call(g, "//div[2]"), "class2"))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", f, N(x("\ufdd1'has-class?", N(x("\ufdd1'xpath", "//div[2]"), z("\ufdd0'line", 436)), "class2"), z("\ufdd0'line", 436))), z("\ufdd0'line", 436))))));
+  q(u.call(g, i, Vf.call(g, X.call(g, "//div[1]"), "class2"))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", i, N(x("\ufdd1'has-class?", N(x("\ufdd1'xpath", "//div[1]"), z("\ufdd0'line", 437)), "class2"), z("\ufdd0'line", 437))), z("\ufdd0'line", 437))))));
   if(q(u.call(g, i, Vf.call(g, X.call(g, "//div[2]"), "class1")))) {
     return g
   }
-  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", i, N(x("\ufdd1'has-class?", N(x("\ufdd1'xpath", "//div[2]"), z("\ufdd0'line", 437)), "class1"), z("\ufdd0'line", 437))), z("\ufdd0'line", 437))))))
+  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", i, N(x("\ufdd1'has-class?", N(x("\ufdd1'xpath", "//div[2]"), z("\ufdd0'line", 438)), "class1"), z("\ufdd0'line", 438))), z("\ufdd0'line", 438))))))
 });
 Y.call(g, "can add a CSS class to a single node", function() {
   Z.call(g);
   W.call(g, X.call(g, "//body"), "<div>1</div>");
   Wf.call(g, X.call(g, "//div"), "class1");
   Wf.call(g, X.call(g, "//div"), "class2");
-  q(u.call(g, f, Vf.call(g, X.call(g, "//div"), "class1"))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", f, N(x("\ufdd1'has-class?", N(x("\ufdd1'xpath", "//div"), z("\ufdd0'line", 444)), "class1"), z("\ufdd0'line", 444))), z("\ufdd0'line", 444))))));
+  q(u.call(g, f, Vf.call(g, X.call(g, "//div"), "class1"))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", f, N(x("\ufdd1'has-class?", N(x("\ufdd1'xpath", "//div"), z("\ufdd0'line", 445)), "class1"), z("\ufdd0'line", 445))), z("\ufdd0'line", 445))))));
   if(q(u.call(g, f, Vf.call(g, X.call(g, "//div"), "class2")))) {
     return g
   }
-  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", f, N(x("\ufdd1'has-class?", N(x("\ufdd1'xpath", "//div"), z("\ufdd0'line", 445)), "class2"), z("\ufdd0'line", 445))), z("\ufdd0'line", 445))))))
+  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", f, N(x("\ufdd1'has-class?", N(x("\ufdd1'xpath", "//div"), z("\ufdd0'line", 446)), "class2"), z("\ufdd0'line", 446))), z("\ufdd0'line", 446))))))
 });
 Y.call(g, "can add a CSS class to multiple nodes", function() {
   Z.call(g);
   W.call(g, X.call(g, "//body"), "<div>1</div><div>2</div>");
   Wf.call(g, X.call(g, "//div"), "class1");
   Wf.call(g, X.call(g, "//div"), "class2");
-  q(u.call(g, f, Vf.call(g, X.call(g, "//div[1]"), "class1"))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", f, N(x("\ufdd1'has-class?", N(x("\ufdd1'xpath", "//div[1]"), z("\ufdd0'line", 452)), "class1"), z("\ufdd0'line", 452))), z("\ufdd0'line", 452))))));
-  q(u.call(g, f, Vf.call(g, X.call(g, "//div[2]"), "class1"))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", f, N(x("\ufdd1'has-class?", N(x("\ufdd1'xpath", "//div[2]"), z("\ufdd0'line", 453)), "class1"), z("\ufdd0'line", 453))), z("\ufdd0'line", 453))))));
-  q(u.call(g, f, Vf.call(g, X.call(g, "//div[1]"), "class2"))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", f, N(x("\ufdd1'has-class?", N(x("\ufdd1'xpath", "//div[1]"), z("\ufdd0'line", 454)), "class2"), z("\ufdd0'line", 454))), z("\ufdd0'line", 454))))));
+  q(u.call(g, f, Vf.call(g, X.call(g, "//div[1]"), "class1"))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", f, N(x("\ufdd1'has-class?", N(x("\ufdd1'xpath", "//div[1]"), z("\ufdd0'line", 453)), "class1"), z("\ufdd0'line", 453))), z("\ufdd0'line", 453))))));
+  q(u.call(g, f, Vf.call(g, X.call(g, "//div[2]"), "class1"))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", f, N(x("\ufdd1'has-class?", N(x("\ufdd1'xpath", "//div[2]"), z("\ufdd0'line", 454)), "class1"), z("\ufdd0'line", 454))), z("\ufdd0'line", 454))))));
+  q(u.call(g, f, Vf.call(g, X.call(g, "//div[1]"), "class2"))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", f, N(x("\ufdd1'has-class?", N(x("\ufdd1'xpath", "//div[1]"), z("\ufdd0'line", 455)), "class2"), z("\ufdd0'line", 455))), z("\ufdd0'line", 455))))));
   if(q(u.call(g, f, Vf.call(g, X.call(g, "//div[2]"), "class2")))) {
     return g
   }
-  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", f, N(x("\ufdd1'has-class?", N(x("\ufdd1'xpath", "//div[2]"), z("\ufdd0'line", 455)), "class2"), z("\ufdd0'line", 455))), z("\ufdd0'line", 455))))))
+  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", f, N(x("\ufdd1'has-class?", N(x("\ufdd1'xpath", "//div[2]"), z("\ufdd0'line", 456)), "class2"), z("\ufdd0'line", 456))), z("\ufdd0'line", 456))))))
 });
 Y.call(g, "can remove a CSS class from a single node", function() {
   Z.call(g);
   W.call(g, X.call(g, "//body"), "<div class='class1 class2'>1</div>");
   Xf.call(g, X.call(g, "//div"), "class1");
-  q(u.call(g, i, Vf.call(g, X.call(g, "//div"), "class1"))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", i, N(x("\ufdd1'has-class?", N(x("\ufdd1'xpath", "//div"), z("\ufdd0'line", 461)), "class1"), z("\ufdd0'line", 461))), z("\ufdd0'line", 461))))));
+  q(u.call(g, i, Vf.call(g, X.call(g, "//div"), "class1"))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", i, N(x("\ufdd1'has-class?", N(x("\ufdd1'xpath", "//div"), z("\ufdd0'line", 462)), "class1"), z("\ufdd0'line", 462))), z("\ufdd0'line", 462))))));
   if(q(u.call(g, f, Vf.call(g, X.call(g, "//div"), "class2")))) {
     return g
   }
-  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", f, N(x("\ufdd1'has-class?", N(x("\ufdd1'xpath", "//div"), z("\ufdd0'line", 462)), "class2"), z("\ufdd0'line", 462))), z("\ufdd0'line", 462))))))
+  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", f, N(x("\ufdd1'has-class?", N(x("\ufdd1'xpath", "//div"), z("\ufdd0'line", 463)), "class2"), z("\ufdd0'line", 463))), z("\ufdd0'line", 463))))))
 });
 Y.call(g, "can remove a CSS class from a multiple nodes", function() {
   Z.call(g);
   W.call(g, X.call(g, "//body"), "<div class='class1 class2'>1</div><div class='class1 class2'>2</div>");
   Xf.call(g, X.call(g, "//div"), "class1");
-  q(u.call(g, i, Vf.call(g, X.call(g, "//div[1]"), "class1"))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", i, N(x("\ufdd1'has-class?", N(x("\ufdd1'xpath", "//div[1]"), z("\ufdd0'line", 468)), "class1"), z("\ufdd0'line", 468))), z("\ufdd0'line", 468))))));
-  q(u.call(g, f, Vf.call(g, X.call(g, "//div[1]"), "class2"))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", f, N(x("\ufdd1'has-class?", N(x("\ufdd1'xpath", "//div[1]"), z("\ufdd0'line", 469)), "class2"), z("\ufdd0'line", 469))), z("\ufdd0'line", 469))))));
-  q(u.call(g, i, Vf.call(g, X.call(g, "//div[2]"), "class1"))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", i, N(x("\ufdd1'has-class?", N(x("\ufdd1'xpath", "//div[2]"), z("\ufdd0'line", 470)), "class1"), z("\ufdd0'line", 470))), z("\ufdd0'line", 470))))));
+  q(u.call(g, i, Vf.call(g, X.call(g, "//div[1]"), "class1"))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", i, N(x("\ufdd1'has-class?", N(x("\ufdd1'xpath", "//div[1]"), z("\ufdd0'line", 469)), "class1"), z("\ufdd0'line", 469))), z("\ufdd0'line", 469))))));
+  q(u.call(g, f, Vf.call(g, X.call(g, "//div[1]"), "class2"))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", f, N(x("\ufdd1'has-class?", N(x("\ufdd1'xpath", "//div[1]"), z("\ufdd0'line", 470)), "class2"), z("\ufdd0'line", 470))), z("\ufdd0'line", 470))))));
+  q(u.call(g, i, Vf.call(g, X.call(g, "//div[2]"), "class1"))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", i, N(x("\ufdd1'has-class?", N(x("\ufdd1'xpath", "//div[2]"), z("\ufdd0'line", 471)), "class1"), z("\ufdd0'line", 471))), z("\ufdd0'line", 471))))));
   if(q(u.call(g, f, Vf.call(g, X.call(g, "//div[2]"), "class2")))) {
     return g
   }
-  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", f, N(x("\ufdd1'has-class?", N(x("\ufdd1'xpath", "//div[2]"), z("\ufdd0'line", 471)), "class2"), z("\ufdd0'line", 471))), z("\ufdd0'line", 471))))))
+  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", f, N(x("\ufdd1'has-class?", N(x("\ufdd1'xpath", "//div[2]"), z("\ufdd0'line", 472)), "class2"), z("\ufdd0'line", 472))), z("\ufdd0'line", 472))))))
 });
 Y.call(g, "can get a list of all css classes for a node", function() {
   Z.call(g);
@@ -5237,16 +5233,16 @@ Y.call(g, "can get a list of all css classes for a node", function() {
   if(q(u.call(g, Ke(["class1", "class2", "class3"]), Yf.call(g, X.call(g, "//div"))))) {
     return g
   }
-  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", new Ie(g, ["class1", "class2", "class3"]), N(x("\ufdd1'classes", N(x("\ufdd1'xpath", "//div"), z("\ufdd0'line", 476))), z("\ufdd0'line", 476))), z("\ufdd0'line", 476))))))
+  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", new Ie(g, ["class1", "class2", "class3"]), N(x("\ufdd1'classes", N(x("\ufdd1'xpath", "//div"), z("\ufdd0'line", 477))), z("\ufdd0'line", 477))), z("\ufdd0'line", 477))))))
 });
 Y.call(g, "can retrieve the text value of a node with normalization.", function() {
   Z.call(g);
   W.call(g, X.call(g, "//body"), "<p>\n\n   Some text.  \n  </p>");
-  q(u.call(g, "Some text.", Zf.call(g, X.call(g, "//p")))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", "Some text.", N(x("\ufdd1'text", N(x("\ufdd1'xpath", "//p"), z("\ufdd0'line", 481))), z("\ufdd0'line", 481))), z("\ufdd0'line", 481))))));
+  q(u.call(g, "Some text.", Zf.call(g, X.call(g, "//p")))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", "Some text.", N(x("\ufdd1'text", N(x("\ufdd1'xpath", "//p"), z("\ufdd0'line", 482))), z("\ufdd0'line", 482))), z("\ufdd0'line", 482))))));
   if(q(u.call(g, "Some text.", Zf.call(g, X.call(g, "//p"), f)))) {
     return g
   }
-  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", "Some text.", N(x("\ufdd1'text", N(x("\ufdd1'xpath", "//p"), z("\ufdd0'line", 482)), f), z("\ufdd0'line", 482))), z("\ufdd0'line", 482))))))
+  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", "Some text.", N(x("\ufdd1'text", N(x("\ufdd1'xpath", "//p"), z("\ufdd0'line", 483)), f), z("\ufdd0'line", 483))), z("\ufdd0'line", 483))))))
 });
 Y.call(g, "can set text on a single node", function() {
   Z.call(g);
@@ -5255,17 +5251,17 @@ Y.call(g, "can set text on a single node", function() {
   if(q(u.call(g, "Hello world!", Zf.call(g, X.call(g, "//p"))))) {
     return g
   }
-  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", "Hello world!", N(x("\ufdd1'text", N(x("\ufdd1'xpath", "//p"), z("\ufdd0'line", 495))), z("\ufdd0'line", 495))), z("\ufdd0'line", 495))))))
+  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", "Hello world!", N(x("\ufdd1'text", N(x("\ufdd1'xpath", "//p"), z("\ufdd0'line", 496))), z("\ufdd0'line", 496))), z("\ufdd0'line", 496))))))
 });
 Y.call(g, "can set text on a multiple nodes", function() {
   Z.call(g);
   W.call(g, X.call(g, "//body"), "<p></p><p></p>");
   $f.call(g, X.call(g, "//p"), "Hello world!");
-  q(u.call(g, "Hello world!", Zf.call(g, X.call(g, "//p[1]")))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", "Hello world!", N(x("\ufdd1'text", N(x("\ufdd1'xpath", "//p[1]"), z("\ufdd0'line", 501))), z("\ufdd0'line", 501))), z("\ufdd0'line", 501))))));
+  q(u.call(g, "Hello world!", Zf.call(g, X.call(g, "//p[1]")))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", "Hello world!", N(x("\ufdd1'text", N(x("\ufdd1'xpath", "//p[1]"), z("\ufdd0'line", 502))), z("\ufdd0'line", 502))), z("\ufdd0'line", 502))))));
   if(q(u.call(g, "Hello world!", Zf.call(g, X.call(g, "//p[2]"))))) {
     return g
   }
-  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", "Hello world!", N(x("\ufdd1'text", N(x("\ufdd1'xpath", "//p[2]"), z("\ufdd0'line", 502))), z("\ufdd0'line", 502))), z("\ufdd0'line", 502))))))
+  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", "Hello world!", N(x("\ufdd1'text", N(x("\ufdd1'xpath", "//p[2]"), z("\ufdd0'line", 503))), z("\ufdd0'line", 503))), z("\ufdd0'line", 503))))))
 });
 Y.call(g, "can get a form field value", function() {
   Z.call(g);
@@ -5273,7 +5269,7 @@ Y.call(g, "can get a form field value", function() {
   if(q(u.call(g, "Test Value", ag.call(g, X.call(g, "//input"))))) {
     return g
   }
-  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", "Test Value", N(x("\ufdd1'value", N(x("\ufdd1'xpath", "//input"), z("\ufdd0'line", 507))), z("\ufdd0'line", 507))), z("\ufdd0'line", 507))))))
+  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", "Test Value", N(x("\ufdd1'value", N(x("\ufdd1'xpath", "//input"), z("\ufdd0'line", 508))), z("\ufdd0'line", 508))), z("\ufdd0'line", 508))))))
 });
 Y.call(g, "can set a form field value", function() {
   Z.call(g);
@@ -5282,17 +5278,17 @@ Y.call(g, "can set a form field value", function() {
   if(q(u.call(g, "Test Value", ag.call(g, X.call(g, "//input"))))) {
     return g
   }
-  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", "Test Value", N(x("\ufdd1'value", N(x("\ufdd1'xpath", "//input"), z("\ufdd0'line", 513))), z("\ufdd0'line", 513))), z("\ufdd0'line", 513))))))
+  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", "Test Value", N(x("\ufdd1'value", N(x("\ufdd1'xpath", "//input"), z("\ufdd0'line", 514))), z("\ufdd0'line", 514))), z("\ufdd0'line", 514))))))
 });
 Y.call(g, "can set multiple form field values", function() {
   Z.call(g);
   W.call(g, X.call(g, "//body"), "<form><input type='text' name='test'></input><input type='text' name='test'></input></form>");
   bg.call(g, X.call(g, "//input"), "Test Value");
-  q(u.call(g, "Test Value", ag.call(g, X.call(g, "//input[1]")))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", "Test Value", N(x("\ufdd1'value", N(x("\ufdd1'xpath", "//input[1]"), z("\ufdd0'line", 519))), z("\ufdd0'line", 519))), z("\ufdd0'line", 519))))));
+  q(u.call(g, "Test Value", ag.call(g, X.call(g, "//input[1]")))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", "Test Value", N(x("\ufdd1'value", N(x("\ufdd1'xpath", "//input[1]"), z("\ufdd0'line", 520))), z("\ufdd0'line", 520))), z("\ufdd0'line", 520))))));
   if(q(u.call(g, "Test Value", ag.call(g, X.call(g, "//input[2]"))))) {
     return g
   }
-  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", "Test Value", N(x("\ufdd1'value", N(x("\ufdd1'xpath", "//input[2]"), z("\ufdd0'line", 520))), z("\ufdd0'line", 520))), z("\ufdd0'line", 520))))))
+  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", "Test Value", N(x("\ufdd1'value", N(x("\ufdd1'xpath", "//input[2]"), z("\ufdd0'line", 521))), z("\ufdd0'line", 521))), z("\ufdd0'line", 521))))))
 });
 Y.call(g, "can get a node's innerHTML", function() {
   Z.call(g);
@@ -5303,7 +5299,7 @@ Y.call(g, "can get a node's innerHTML", function() {
   if(q(b)) {
     return g
   }
-  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'or", N(x("\ufdd1'=", '<p class="foobar">some text</p>', N(x("\ufdd1'html", N(x("\ufdd1'xpath", "//div"), z("\ufdd0'line", 526))), z("\ufdd0'line", 526))), z("\ufdd0'line", 526)), N(x("\ufdd1'=", "<P class=foobar>some text</P>", N(x("\ufdd1'html", N(x("\ufdd1'xpath", "//div"), z("\ufdd0'line", 527))), z("\ufdd0'line", 527))), z("\ufdd0'line", 527))), z("\ufdd0'line", 526))))))
+  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'or", N(x("\ufdd1'=", '<p class="foobar">some text</p>', N(x("\ufdd1'html", N(x("\ufdd1'xpath", "//div"), z("\ufdd0'line", 527))), z("\ufdd0'line", 527))), z("\ufdd0'line", 527)), N(x("\ufdd1'=", "<P class=foobar>some text</P>", N(x("\ufdd1'html", N(x("\ufdd1'xpath", "//div"), z("\ufdd0'line", 528))), z("\ufdd0'line", 528))), z("\ufdd0'line", 528))), z("\ufdd0'line", 527))))))
 });
 Y.call(g, "can set a node's innerHTML", function() {
   Z.call(g);
@@ -5312,7 +5308,7 @@ Y.call(g, "can set a node's innerHTML", function() {
   if(q(u.call(g, 1, L.call(g, T.call(g, X.call(g, "//body/div/p[@class='foobar']")))))) {
     return g
   }
-  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 1, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'xpath", "//body/div/p[@class='foobar']"), z("\ufdd0'line", 533))), z("\ufdd0'line", 533))), z("\ufdd0'line", 533))), z("\ufdd0'line", 533))))))
+  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 1, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'xpath", "//body/div/p[@class='foobar']"), z("\ufdd0'line", 534))), z("\ufdd0'line", 534))), z("\ufdd0'line", 534))), z("\ufdd0'line", 534))))))
 });
 Y.call(g, "can set multiple nodes' innerHTML", function() {
   Z.call(g);
@@ -5321,16 +5317,16 @@ Y.call(g, "can set multiple nodes' innerHTML", function() {
   if(q(u.call(g, 2, L.call(g, T.call(g, X.call(g, "//body/div/p[@class='foobar']")))))) {
     return g
   }
-  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 2, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'xpath", "//body/div/p[@class='foobar']"), z("\ufdd0'line", 539))), z("\ufdd0'line", 539))), z("\ufdd0'line", 539))), z("\ufdd0'line", 539))))))
+  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", 2, N(x("\ufdd1'count", N(x("\ufdd1'nodes", N(x("\ufdd1'xpath", "//body/div/p[@class='foobar']"), z("\ufdd0'line", 540))), z("\ufdd0'line", 540))), z("\ufdd0'line", 540))), z("\ufdd0'line", 540))))))
 });
 Y.call(g, "can get nodes from strings containing cell-level table fragments", function() {
   Z.call(g);
   var b = T.call(g, "<td>Cell</td><th>Header</th>");
-  q(u.call(g, L.call(g, b), 2)) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", N(x("\ufdd1'count", "\ufdd1'n"), z("\ufdd0'line", 544)), 2), z("\ufdd0'line", 544))))));
+  q(u.call(g, L.call(g, b), 2)) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", N(x("\ufdd1'count", "\ufdd1'n"), z("\ufdd0'line", 545)), 2), z("\ufdd0'line", 545))))));
   var c = D.call(g, b);
   if(q(c)) {
     for(b = E.call(g, c);;) {
-      if(q(ef.call(g, /TableCell/, S.call(g, b))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1're-find", /TableCell/, N(x("\ufdd1'pr-str", "\ufdd1'h"), z("\ufdd0'line", 546))), z("\ufdd0'line", 546)))))), b = J.call(g, c), q(b)) {
+      if(q(ef.call(g, /TableCell/, S.call(g, b))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1're-find", /TableCell/, N(x("\ufdd1'pr-str", "\ufdd1'h"), z("\ufdd0'line", 547))), z("\ufdd0'line", 547)))))), b = J.call(g, c), q(b)) {
         c = b, b = E.call(g, c)
       }else {
         return g
@@ -5343,11 +5339,11 @@ Y.call(g, "can get nodes from strings containing cell-level table fragments", fu
 Y.call(g, "can get nodes from strings containing row-level table fragments", function() {
   Z.call(g);
   var b = T.call(g, "<tr><td>Cell</td><th>Header</th></tr><tr><td>Another</td><th>Row</th></tr>");
-  q(u.call(g, L.call(g, b), 2)) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", N(x("\ufdd1'count", "\ufdd1'n"), z("\ufdd0'line", 551)), 2), z("\ufdd0'line", 551))))));
+  q(u.call(g, L.call(g, b), 2)) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", N(x("\ufdd1'count", "\ufdd1'n"), z("\ufdd0'line", 552)), 2), z("\ufdd0'line", 552))))));
   var c = D.call(g, b);
   if(q(c)) {
     for(b = E.call(g, c);;) {
-      if(q(ef.call(g, /TableRow/, S.call(g, b))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1're-find", /TableRow/, N(x("\ufdd1'pr-str", "\ufdd1'h"), z("\ufdd0'line", 553))), z("\ufdd0'line", 553)))))), b = J.call(g, c), q(b)) {
+      if(q(ef.call(g, /TableRow/, S.call(g, b))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1're-find", /TableRow/, N(x("\ufdd1'pr-str", "\ufdd1'h"), z("\ufdd0'line", 554))), z("\ufdd0'line", 554)))))), b = J.call(g, c), q(b)) {
         c = b, b = E.call(g, c)
       }else {
         return g
@@ -5360,11 +5356,11 @@ Y.call(g, "can get nodes from strings containing row-level table fragments", fun
 Y.call(g, "can get nodes from strings containing section-level table fragments", function() {
   Z.call(g);
   var b = T.call(g, "<thead><tr><td>Cell</td><th>Header</th></tr></thead><tbody><tr><td>Another</td><th>Row</th></tr></tbody>");
-  q(u.call(g, L.call(g, b), 2)) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", N(x("\ufdd1'count", "\ufdd1'n"), z("\ufdd0'line", 558)), 2), z("\ufdd0'line", 558))))));
+  q(u.call(g, L.call(g, b), 2)) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", N(x("\ufdd1'count", "\ufdd1'n"), z("\ufdd0'line", 559)), 2), z("\ufdd0'line", 559))))));
   var c = D.call(g, b);
   if(q(c)) {
     for(b = E.call(g, c);;) {
-      if(q(ef.call(g, /TableSection/, S.call(g, b))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1're-find", /TableSection/, N(x("\ufdd1'pr-str", "\ufdd1'h"), z("\ufdd0'line", 560))), z("\ufdd0'line", 560)))))), b = J.call(g, c), q(b)) {
+      if(q(ef.call(g, /TableSection/, S.call(g, b))) || a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1're-find", /TableSection/, N(x("\ufdd1'pr-str", "\ufdd1'h"), z("\ufdd0'line", 561))), z("\ufdd0'line", 561)))))), b = J.call(g, c), q(b)) {
         c = b, b = E.call(g, c)
       }else {
         return g
@@ -5385,7 +5381,7 @@ Y.call(g, "can trigger a handler on a :mouseover event", function() {
   if(q(u.call(g, "Hello world!", Zf.call(g, X.call(g, "//p"))))) {
     return g
   }
-  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", "Hello world!", N(x("\ufdd1'text", N(x("\ufdd1'xpath", "//p"), z("\ufdd0'line", 568))), z("\ufdd0'line", 568))), z("\ufdd0'line", 568))))))
+  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", "Hello world!", N(x("\ufdd1'text", N(x("\ufdd1'xpath", "//p"), z("\ufdd0'line", 569))), z("\ufdd0'line", 569))), z("\ufdd0'line", 569))))))
 });
 Y.call(g, "can trigger a handler on a :mouseout event", function() {
   Z.call(g);
@@ -5398,7 +5394,7 @@ Y.call(g, "can trigger a handler on a :mouseout event", function() {
   if(q(u.call(g, "Hello world!", Zf.call(g, X.call(g, "//p"))))) {
     return g
   }
-  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", "Hello world!", N(x("\ufdd1'text", N(x("\ufdd1'xpath", "//p"), z("\ufdd0'line", 576))), z("\ufdd0'line", 576))), z("\ufdd0'line", 576))))))
+  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", "Hello world!", N(x("\ufdd1'text", N(x("\ufdd1'xpath", "//p"), z("\ufdd0'line", 577))), z("\ufdd0'line", 577))), z("\ufdd0'line", 577))))))
 });
 Y.call(g, "can trigger a handler on a :click event", function() {
   Z.call(g);
@@ -5411,7 +5407,7 @@ Y.call(g, "can trigger a handler on a :click event", function() {
   if(q(u.call(g, "Hello world!", Zf.call(g, X.call(g, "//p"))))) {
     return g
   }
-  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", "Hello world!", N(x("\ufdd1'text", N(x("\ufdd1'xpath", "//p"), z("\ufdd0'line", 584))), z("\ufdd0'line", 584))), z("\ufdd0'line", 584))))))
+  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", "Hello world!", N(x("\ufdd1'text", N(x("\ufdd1'xpath", "//p"), z("\ufdd0'line", 585))), z("\ufdd0'line", 585))), z("\ufdd0'line", 585))))))
 });
 Y.call(g, "can trigger a handler on a :mouseenter event", function() {
   Z.call(g);
@@ -5424,7 +5420,7 @@ Y.call(g, "can trigger a handler on a :mouseenter event", function() {
   if(q(u.call(g, "Hello world!", Zf.call(g, X.call(g, "//p"))))) {
     return g
   }
-  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", "Hello world!", N(x("\ufdd1'text", N(x("\ufdd1'xpath", "//p"), z("\ufdd0'line", 594))), z("\ufdd0'line", 594))), z("\ufdd0'line", 594))))))
+  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", "Hello world!", N(x("\ufdd1'text", N(x("\ufdd1'xpath", "//p"), z("\ufdd0'line", 595))), z("\ufdd0'line", 595))), z("\ufdd0'line", 595))))))
 });
 Y.call(g, "can trigger a handler on a :mouseleave event", function() {
   Z.call(g);
@@ -5437,7 +5433,7 @@ Y.call(g, "can trigger a handler on a :mouseleave event", function() {
   if(q(u.call(g, "Hello world!", Zf.call(g, X.call(g, "//p"))))) {
     return g
   }
-  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", "Hello world!", N(x("\ufdd1'text", N(x("\ufdd1'xpath", "//p"), z("\ufdd0'line", 604))), z("\ufdd0'line", 604))), z("\ufdd0'line", 604))))))
+  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", "Hello world!", N(x("\ufdd1'text", N(x("\ufdd1'xpath", "//p"), z("\ufdd0'line", 605))), z("\ufdd0'line", 605))), z("\ufdd0'line", 605))))))
 });
 Y.call(g, "can remove-listeners on a :click event", function() {
   Z.call(g);
@@ -5451,7 +5447,7 @@ Y.call(g, "can remove-listeners on a :click event", function() {
   if(q(u.call(g, "Some content", Zf.call(g, X.call(g, "//div"))))) {
     return g
   }
-  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", "Some content", N(x("\ufdd1'text", N(x("\ufdd1'xpath", "//div"), z("\ufdd0'line", 614))), z("\ufdd0'line", 614))), z("\ufdd0'line", 614))))))
+  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", "Some content", N(x("\ufdd1'text", N(x("\ufdd1'xpath", "//div"), z("\ufdd0'line", 615))), z("\ufdd0'line", 615))), z("\ufdd0'line", 615))))))
 });
 Y.call(g, "can remove-listeners on a :mouseenter event", function() {
   Z.call(g);
@@ -5465,7 +5461,7 @@ Y.call(g, "can remove-listeners on a :mouseenter event", function() {
   if(q(u.call(g, "Some content", Zf.call(g, X.call(g, "//div"))))) {
     return g
   }
-  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", "Some content", N(x("\ufdd1'text", N(x("\ufdd1'xpath", "//div"), z("\ufdd0'line", 625))), z("\ufdd0'line", 625))), z("\ufdd0'line", 625))))))
+  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", "Some content", N(x("\ufdd1'text", N(x("\ufdd1'xpath", "//div"), z("\ufdd0'line", 626))), z("\ufdd0'line", 626))), z("\ufdd0'line", 626))))))
 });
 Y.call(g, "can unlisten! on a :click event", function() {
   function b() {
@@ -5480,7 +5476,7 @@ Y.call(g, "can unlisten! on a :click event", function() {
   if(q(u.call(g, "Some content", Zf.call(g, X.call(g, "//div"))))) {
     return g
   }
-  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", "Some content", N(x("\ufdd1'text", N(x("\ufdd1'xpath", "//div"), z("\ufdd0'line", 635))), z("\ufdd0'line", 635))), z("\ufdd0'line", 635))))))
+  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", "Some content", N(x("\ufdd1'text", N(x("\ufdd1'xpath", "//div"), z("\ufdd0'line", 636))), z("\ufdd0'line", 636))), z("\ufdd0'line", 636))))))
 });
 Y.call(g, "can unlisten! on a :mouseenter event", function() {
   function b() {
@@ -5495,7 +5491,7 @@ Y.call(g, "can unlisten! on a :mouseenter event", function() {
   if(q(u.call(g, "Some content", Zf.call(g, X.call(g, "//div"))))) {
     return g
   }
-  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", "Some content", N(x("\ufdd1'text", N(x("\ufdd1'xpath", "//div"), z("\ufdd0'line", 646))), z("\ufdd0'line", 646))), z("\ufdd0'line", 646))))))
+  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", "Some content", N(x("\ufdd1'text", N(x("\ufdd1'xpath", "//div"), z("\ufdd0'line", 647))), z("\ufdd0'line", 647))), z("\ufdd0'line", 647))))))
 });
 Y.call(g, "can append to a document fragment", function() {
   Z.call(g);
@@ -5505,7 +5501,7 @@ Y.call(g, "can append to a document fragment", function() {
   if(q(u.call(g, "testing", Zf.call(g, X.call(g, "//div"))))) {
     return g
   }
-  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", "testing", N(x("\ufdd1'text", N(x("\ufdd1'xpath", "//div"), z("\ufdd0'line", 654))), z("\ufdd0'line", 654))), z("\ufdd0'line", 654))))))
+  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", "testing", N(x("\ufdd1'text", N(x("\ufdd1'xpath", "//div"), z("\ufdd0'line", 655))), z("\ufdd0'line", 655))), z("\ufdd0'line", 655))))))
 });
 Y.call(g, "doesn't clone unless necessary", function() {
   Z.call(g);
@@ -5514,7 +5510,7 @@ Y.call(g, "doesn't clone unless necessary", function() {
   if(q(u.call(g, b, xf.call(g, X.call(g, "//body/div"))))) {
     return g
   }
-  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", "\ufdd1'child", N(x("\ufdd1'single-node", N(x("\ufdd1'xpath", "//body/div"), z("\ufdd0'line", 661))), z("\ufdd0'line", 661))), z("\ufdd0'line", 661))))))
+  a(Error(y.call(g, "Assert failed: ", S.call(g, N(x("\ufdd1'=", "\ufdd1'child", N(x("\ufdd1'single-node", N(x("\ufdd1'xpath", "//body/div"), z("\ufdd0'line", 662))), z("\ufdd0'line", 662))), z("\ufdd0'line", 662))))))
 });
 (function(b) {
   Z.call(g);
@@ -5540,9 +5536,13 @@ Y.call(g, "doesn't clone unless necessary", function() {
   b = L.call(g, Fe.call(g, te.call(g, w), Q.call(g, sd, b)));
   $f.call(g, V.call(g, "total-failures"), b);
   return q(u.call(g, 0, b)) ? Wf.call(g, V.call(g, "test-summary"), "passed") : Wf.call(g, V.call(g, "test-summary"), "failed")
-}).call(g, df.call(g, function() {
+}).call(g, df.call(g, function(b) {
   return Q.call(g, function(b) {
-    var c = M.call(g, b, 0, g), b = M.call(g, b, 1, g);
-    return Ke([c, zg.call(g, b)])
-  }, pf.call(g, yg))
-}.call(g)));
+    var d = M.call(g, b, 0, g), b = M.call(g, b, 1, g);
+    return Ke([d, zg.call(g, b)])
+  }, Fe.call(g, function(c) {
+    var d = M.call(g, c, 0, g);
+    M.call(g, c, 1, g);
+    return u.call(g, d, b)
+  }, pf.call(g, yg)))
+}.call(g, "can set a html attribute on a single node")));

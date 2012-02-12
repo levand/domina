@@ -3995,7 +3995,7 @@ var tf = function() {
         this.Na = d;
         this.U = e
       }, rf.d = function() {
-        return x.call(h, "domina.css.t16485")
+        return x.call(h, "domina.css.t16615")
       }, rf.prototype.Z = function() {
         var b = this;
         return De.call(h, function(c) {
@@ -4055,7 +4055,7 @@ var Af = function yf(c) {
       this.Ea = e;
       this.U = g
     }, qf.d = function() {
-      return x.call(h, "domina.t15916")
+      return x.call(h, "domina.t15954")
     }, qf.prototype.Z = function() {
       return zf.call(h, sb.call(h, Ze.call(h, this.ia)))
     }, qf.prototype.$ = function() {
@@ -4490,7 +4490,7 @@ var X = function() {
         this.Ra = d;
         this.U = e
       }, jg.d = function() {
-        return x.call(h, "domina.xpath.t15819")
+        return x.call(h, "domina.xpath.t15880")
       }, jg.prototype.Z = function() {
         return De.call(h, ue.call(h, mg, this.H), T.call(h, this.B))
       }, jg.prototype.$ = function() {
@@ -5088,7 +5088,8 @@ Y.call(h, "can set a html attribute on a single node", function() {
   Z.call(h);
   W.call(h, X.call(h, "//body"), "<div>1</div><div>2</div>");
   Pf.call(h, X.call(h, "//div[1]"), "width", 42);
-  return Pf.call(h, X.call(h, "//div[2]"), "\ufdd0'width", 42)
+  Pf.call(h, X.call(h, "//div[2]"), "\ufdd0'width", 42);
+  a("yes")
 });
 Y.call(h, "can get multiple CSS styles from a single node.", function() {
   Z.call(h);

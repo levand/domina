@@ -731,7 +731,7 @@ var Sb = function() {
     });
     c.J || Ba(b.J, function(b) {
       var c = b.name;
-      Pc[c] && (d = cb(d, Pc[c](c, b.value)))
+      Oc[c] && (d = cb(d, Oc[c](c, b.value)))
     });
     c.W || Ba(b.W, function(b) {
       var c, e = b.ga;
@@ -911,7 +911,7 @@ var Sb = function() {
     return function(d) {
       return aa(d, b) == c
     }
-  }}, hc = "undefined" == typeof document.firstChild.nextElementSibling, yb = !hc ? "nextElementSibling" : "nextSibling", xf = !hc ? "previousElementSibling" : "previousSibling", xb = hc ? gc : Rb, Pc = {checked:function() {
+  }}, hc = "undefined" == typeof document.firstChild.nextElementSibling, yb = !hc ? "nextElementSibling" : "nextSibling", xf = !hc ? "previousElementSibling" : "previousSibling", xb = hc ? gc : Rb, Oc = {checked:function() {
     return function(b) {
       return b.checked || b.attributes.checked
     }
@@ -990,7 +990,7 @@ var Sb = function() {
   } : function(b) {
     return b._uid || (b._uid = ++Ma)
   };
-  b.J = Pc;
+  b.J = Oc;
   return b
 }();
 fa("goog.dom.query", Sb);
@@ -1580,7 +1580,7 @@ function Nc(b, c) {
 function r(b, c) {
   return Error.call(g, "No protocol method " + b + " defined for type " + o.call(g, c) + ": " + c)
 }
-function Oc(b) {
+function Pc(b) {
   return Array.prototype.slice.call(b)
 }
 function Qc(b) {
@@ -3243,7 +3243,7 @@ l.C = function() {
   }
 }();
 l.X = function(b, c, d) {
-  b = Oc.call(g, this.k);
+  b = Pc.call(g, this.k);
   b[c] = d;
   return new Je(this.c, b)
 };
@@ -3260,7 +3260,7 @@ l.call = function() {
 }();
 l.G = f;
 l.r = function(b, c) {
-  var d = Oc.call(g, this.k);
+  var d = Pc.call(g, this.k);
   d.push(c);
   return new Je(this.c, d)
 };
@@ -3389,7 +3389,7 @@ l.X = function(b, c, d) {
     if(q(e)) {
       return new Te(this.c, this.keys, b)
     }
-    d = Oc.call(g, this.keys);
+    d = Pc.call(g, this.keys);
     d.push(c);
     return new Te(this.c, d, b)
   }
@@ -3459,7 +3459,7 @@ l.C = function() {
 l.X = function(b, c, d) {
   var b = yd.call(g, c), e = this.A[b];
   if(q(e)) {
-    var e = Oc.call(g, e), h = ob.call(g, this.A);
+    var e = Pc.call(g, e), h = ob.call(g, this.A);
     h[b] = e;
     b = Re.call(g, 2, c, e);
     if(q(b)) {
@@ -3998,7 +3998,7 @@ var uf = function() {
         this.Na = d;
         this.U = e
       }, sf.d = function() {
-        return x.call(g, "domina.css.t16379")
+        return x.call(g, "domina.css.t16585")
       }, sf.prototype.Z = function() {
         var b = this;
         return Ee.call(g, function(c) {
@@ -4058,7 +4058,7 @@ var Bf = function zf(c) {
       this.Ea = e;
       this.U = h
     }, rf.d = function() {
-      return x.call(g, "domina.t15681")
+      return x.call(g, "domina.t16019")
     }, rf.prototype.Z = function() {
       return Af.call(g, sb.call(g, $e.call(g, this.ia)))
     }, rf.prototype.$ = function() {
@@ -4493,7 +4493,7 @@ var X = function() {
         this.Ra = d;
         this.U = e
       }, kg.d = function() {
-        return x.call(g, "domina.xpath.t15620")
+        return x.call(g, "domina.xpath.t15943")
       }, kg.prototype.Z = function() {
         return Ee.call(g, ve.call(g, ng, this.H), U.call(g, this.B))
       }, kg.prototype.$ = function() {
@@ -5543,13 +5543,9 @@ Y.call(g, "doesn't clone unless necessary", function() {
   b = L.call(g, Ge.call(g, ue.call(g, w), Q.call(g, sd, b)));
   ag.call(g, V.call(g, "total-failures"), b);
   return q(u.call(g, 0, b)) ? Xf.call(g, V.call(g, "test-summary"), "passed") : Xf.call(g, V.call(g, "test-summary"), "failed")
-}).call(g, ef.call(g, function(b) {
+}).call(g, ef.call(g, function() {
   return Q.call(g, function(b) {
-    var d = M.call(g, b, 0, g), b = M.call(g, b, 1, g);
-    return Le([d, Ag.call(g, b)])
-  }, Ge.call(g, function(c) {
-    var d = M.call(g, c, 0, g);
-    M.call(g, c, 1, g);
-    return u.call(g, d, b)
-  }, qf.call(g, zg)))
-}.call(g, "insert-before! with multiple reference nodes and a single new node")));
+    var c = M.call(g, b, 0, g), b = M.call(g, b, 1, g);
+    return Le([c, Ag.call(g, b)])
+  }, qf.call(g, zg))
+}.call(g)));

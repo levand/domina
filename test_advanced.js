@@ -220,15 +220,15 @@ function La() {
   return ea.navigator ? ea.navigator.userAgent : h
 }
 Ka = Ja = Ia = Ha = i;
-var Na;
-if(Na = La()) {
+var Ma;
+if(Ma = La()) {
   var Oa = ea.navigator;
-  Ha = 0 == Na.indexOf("Opera");
-  Ia = !Ha && -1 != Na.indexOf("MSIE");
-  Ja = !Ha && -1 != Na.indexOf("WebKit");
+  Ha = 0 == Ma.indexOf("Opera");
+  Ia = !Ha && -1 != Ma.indexOf("MSIE");
+  Ja = !Ha && -1 != Ma.indexOf("WebKit");
   Ka = !Ha && !Ja && "Gecko" == Oa.product
 }
-var Pa = Ha, Qa = Ia, Ra = Ka, Sa = Ja, Ua = ea.navigator, Va = -1 != (Ua && Ua.platform || "").indexOf("Mac"), Wa;
+var Pa = Ha, Qa = Ia, Ra = Ka, Sa = Ja, Ta = ea.navigator, Va = -1 != (Ta && Ta.platform || "").indexOf("Mac"), Wa;
 a: {
   var Xa = "", Ya;
   if(Pa && ea.opera) {
@@ -528,9 +528,9 @@ var Sb = function() {
     if(2 > b.length) {
       return c
     }
-    Ma++;
+    Na++;
     if(Qa && cb) {
-      var d = Ma + "";
+      var d = Na + "";
       b[0].setAttribute("_zipIdx", d);
       for(var e = 1, g;g = b[e];e++) {
         b[e].getAttribute("_zipIdx") != d && c.push(g), g.setAttribute("_zipIdx", d)
@@ -544,9 +544,9 @@ var Sb = function() {
         }catch(k) {
         }
       }else {
-        b[0] && (b[0]._zipIdx = Ma);
+        b[0] && (b[0]._zipIdx = Na);
         for(e = 1;g = b[e];e++) {
-          b[e]._zipIdx != Ma && c.push(g), g._zipIdx = Ma
+          b[e]._zipIdx != Na && c.push(g), g._zipIdx = Na
         }
       }
     }
@@ -556,7 +556,7 @@ var Sb = function() {
     if(!c) {
       return 1
     }
-    var d = vf(b);
+    var d = wf(b);
     return!c[d] ? c[d] = 1 : 0
   }
   function e(b, c) {
@@ -735,7 +735,7 @@ var Sb = function() {
     });
     c.W || Ba(b.W, function(b) {
       var c, e = b.ga;
-      b.type && Zd[b.type] ? c = Zd[b.type](e, b.na) : e.length && (c = wf(e));
+      b.type && Zd[b.type] ? c = Zd[b.type](e, b.na) : e.length && (c = xf(e));
       c && (d = db(d, c))
     });
     c.id || b.id && (d = db(d, function(c) {
@@ -776,8 +776,8 @@ var Sb = function() {
     }
     return f
   }
-  function Ta(b) {
-    for(;b = b[xf];) {
+  function Ua(b) {
+    for(;b = b[yf];) {
       if(yb(b)) {
         return i
       }
@@ -810,7 +810,7 @@ var Sb = function() {
     function d(c, e) {
       return ra(b.slice(c, e))
     }
-    for(var b = 0 <= ">~+".indexOf(b.slice(-1)) ? b + " * " : b + " ", e = [], g = -1, k = -1, n = -1, p = -1, v = -1, B = -1, I = -1, F = "", H = "", $, T = 0, Ta = b.length, N = h, aa = h;F = H, H = b.charAt(T), T < Ta;T++) {
+    for(var b = 0 <= ">~+".indexOf(b.slice(-1)) ? b + " * " : b + " ", e = [], g = -1, k = -1, n = -1, p = -1, v = -1, B = -1, I = -1, F = "", H = "", $, T = 0, Ua = b.length, N = h, aa = h;F = H, H = b.charAt(T), T < Ua;T++) {
       if("\\" != F) {
         if(N || ($ = T, N = {P:h, J:[], W:[], t:[], j:h, fa:h, id:h, la:function() {
           return cb ? this.Ka : this.j
@@ -911,17 +911,17 @@ var Sb = function() {
     return function(d) {
       return aa(d, b) == c
     }
-  }}, hc = "undefined" == typeof document.firstChild.nextElementSibling, zb = !hc ? "nextElementSibling" : "nextSibling", xf = !hc ? "previousElementSibling" : "previousSibling", yb = hc ? gc : Rb, Rc = {checked:function() {
+  }}, hc = "undefined" == typeof document.firstChild.nextElementSibling, zb = !hc ? "nextElementSibling" : "nextSibling", yf = !hc ? "previousElementSibling" : "previousSibling", yb = hc ? gc : Rb, Rc = {checked:function() {
     return function(b) {
       return b.checked || b.attributes.checked
     }
   }, "first-child":function() {
-    return Ta
+    return Ua
   }, "last-child":function() {
     return $
   }, "only-child":function() {
     return function(b) {
-      return!Ta(b) || !$(b) ? i : f
+      return!Ua(b) || !$(b) ? i : f
     }
   }, empty:function() {
     return function(b) {
@@ -975,7 +975,7 @@ var Sb = function() {
     return function(b) {
       return H(b) == p
     }
-  }}, wf = Qa ? function(b) {
+  }}, xf = Qa ? function(b) {
     var c = b.toLowerCase();
     "class" == c && (b = "className");
     return function(d) {
@@ -985,10 +985,10 @@ var Sb = function() {
     return function(c) {
       return c && c.getAttribute && c.hasAttribute(b)
     }
-  }, Xd = {}, Ud = {}, Td = {}, Sd = !!document.querySelectorAll && (!Sa || fb("526")), Ma = 0, vf = Qa ? function(b) {
-    return cb ? b.getAttribute("_uid") || b.setAttribute("_uid", ++Ma) || Ma : b.uniqueID
+  }, Xd = {}, Ud = {}, Td = {}, Sd = !!document.querySelectorAll && (!Sa || fb("526")), Na = 0, wf = Qa ? function(b) {
+    return cb ? b.getAttribute("_uid") || b.setAttribute("_uid", ++Na) || Na : b.uniqueID
   } : function(b) {
-    return b._uid || (b._uid = ++Ma)
+    return b._uid || (b._uid = ++Na)
   };
   b.J = Rc;
   return b
@@ -3998,7 +3998,7 @@ var uf = function() {
         this.Na = d;
         this.U = e
       }, sf.d = function() {
-        return x.call(h, "domina.css.t16545")
+        return x.call(h, "domina.css.t16530")
       }, sf.prototype.Z = function() {
         var b = this;
         return Ee.call(h, function(c) {
@@ -4026,7 +4026,7 @@ var uf = function() {
     a("Invalid arity: " + arguments.length)
   }
 }();
-function yf(b) {
+function vf(b) {
   return q(q(f) ? K.call(h, u.call(h, window.console, ba)) : f) ? console.log(b) : h
 }
 function U(b) {
@@ -4061,7 +4061,7 @@ var Bf = function Af(c) {
       this.Ea = e;
       this.U = g
     }, rf.d = function() {
-      return x.call(h, "domina.t15822")
+      return x.call(h, "domina.t15866")
     }, rf.prototype.Z = function() {
       return sb.call(h, $e.call(h, this.ia))
     }, rf.prototype.$ = function() {
@@ -4322,8 +4322,8 @@ function Ef(b, c, d) {
   }(), d = ef.call(h, Ae.call(h, L.call(h, c) - 1, function() {
     return g.cloneNode(f)
   }));
-  yf.call(h, y.call(h, "parents:", L.call(h, c)));
-  yf.call(h, y.call(h, "children:", L.call(h, e)));
+  vf.call(h, y.call(h, "parents:", L.call(h, c)));
+  vf.call(h, y.call(h, "children:", L.call(h, e)));
   return q(D.call(h, c)) ? (b.call(h, E.call(h, c), g), ef.call(h, Q.call(h, function(c, d) {
     return b.call(h, c, d)
   }, G.call(h, c), d))) : h
@@ -4365,6 +4365,8 @@ function jg(b) {
   return ig.call(h, c, d)
 }
 U._ = function(b) {
+  vf.call(h, y.call(h, "typof", o.call(h, b)));
+  vf.call(h, y.call(h, "seq?", Id.call(h, b)));
   if(q(function() {
     return q(function() {
       if(q(b)) {
@@ -4374,9 +4376,9 @@ U._ = function(b) {
       return b
     }()) ? f : Nc.call(h, hd, b)
   }())) {
-    return yf.call(h, "sequing content"), D.call(h, b)
+    return vf.call(h, "sequing content"), D.call(h, b)
   }
-  yf.call(h, "consing content");
+  vf.call(h, "consing content");
   return A.call(h, b)
 };
 zf._ = function(b) {
@@ -4491,7 +4493,7 @@ var X = function() {
         this.Ra = d;
         this.U = e
       }, kg.d = function() {
-        return x.call(h, "domina.xpath.t15759")
+        return x.call(h, "domina.xpath.t15782")
       }, kg.prototype.Z = function() {
         return Ee.call(h, ve.call(h, ng, this.H), U.call(h, this.B))
       }, kg.prototype.$ = function() {
@@ -4551,7 +4553,7 @@ function sg(b, c, d) {
     d = q(u.call(h, d, ba)) ? qe.call(h, Jc.call(h, b, g, i), Jc.call(h, b, g, f)) : Jc.call(h, b, g, d);
     return df.call(h, Q.call(h, function(d) {
       var d = d.O, k = d.ca, v = d.scope, $ = d.capture;
-      var Ta = K.call(h, c), k = q(Ta) ? Ta : u.call(h, k, c);
+      var Ua = K.call(h, c), k = q(Ua) ? Ua : u.call(h, k, c);
       q(k) ? (k = K.call(h, e), v = q(k) ? k : u.call(h, v, e)) : v = k;
       return q(v) ? q(ba) ? ba.qa(b, g, d, $) : Ec.call(h, b, g, d, $) : h
     }, d))
@@ -4978,11 +4980,11 @@ Y.call(h, "insert-before! with multiple reference nodes and a single new node", 
   Z.call(h);
   W.call(h, X.call(h, "//body"), "<div class='ref' id='ref1'>content1</div>");
   W.call(h, X.call(h, "//body"), "<div class='ref' id='ref2'>content2</div>");
-  yf.call(h, "inserting...");
+  vf.call(h, "inserting...");
   Hf.call(h, U.call(h, Bf.call(h, "ref")), "<p>before</p>");
-  yf.call(h, "inserting take 2...");
+  vf.call(h, "inserting take 2...");
   Hf.call(h, Bf.call(h, "ref"), "<p>before</p>");
-  yf.call(h, "inserting take 3...");
+  vf.call(h, "inserting take 3...");
   Hf.call(h, X.call(h, "//div[@class='ref']"), "<p>before</p>");
   a("fail hard")
 });

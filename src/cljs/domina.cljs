@@ -1,5 +1,6 @@
 (ns domina
-  (:require [goog.dom :as dom]
+  (:require
+   [goog.dom :as dom]
             [goog.dom.xml :as xml]
             [goog.dom.classes :as classes]
             [goog.dom.forms :as forms]
@@ -143,18 +144,25 @@
 (defn styles
   "Returns a map of the CSS styles/values. Assumes content will be a single node. Style names are returned as keywords."
   [content]
-  (parse-style-attributes (attr content "style")))
+  (let [style (attr content "style")]
+    (if (string? style)
+      (parse-style-attributes style)
+      (if (. style -cssText)
+        (parse-style-attributes (. style -cssText))))))
 
 (defn attrs
   "Returns a map of the HTML attributes/values. Assumes content will be a single node. Attribute names are returned as keywords."
   [content]
   (let [node (single-node content)
         attrs (. node -attributes)]
-    (reduce conj (map
-                  #(let [attr (. attrs item %)]
-                     {(keyword (.. attr -nodeName (toLowerCase)))
-                      (. attr -nodeValue)})
-                  (range (. attrs -length))))))
+    (reduce conj (filter (complement nil?)
+                         (map
+                          #(let [attr (. attrs item %)
+                                 value (. attr -nodeValue)]
+                             (if (and (not= nil value) (not= "" value))
+                               {(keyword (.. attr -nodeName (toLowerCase)))
+                                (. attr -nodeValue)}))
+                          (range (. attrs -length)))))))
 
 (defn set-styles!
   "Sets the specified CSS styles for each node in the content, given a map of names and values. Style names may be keywords or strings."

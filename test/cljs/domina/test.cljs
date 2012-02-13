@@ -381,8 +381,9 @@
                (append! (xpath "//body") "<div>1</div>")
                (set-attr! (xpath "//div") "width" 42)
                (set-attr! (xpath "//div") "height" 24)
-               (assert (= {:width "42" :height "24"}
-                          (attrs (xpath "//div"))))))
+               (let [attributes (attrs (xpath "//div"))]
+                 (assert (= "42" (:width attributes)))
+                 (assert (= "24" (:height attributes))))))
 
 (add-test "can set multiple CSS styles on a single node"
           #(do (reset)
@@ -674,5 +675,5 @@
       (add-class! (by-id "test-summary") "failed"))))
 
 (def test-results (doall (run-tests)))
-#_(def test-results (doall (run-named "insert-before! with multiple reference nodes and a single new node")))
+#_(def test-results (doall (run-named "can get multiple HTML attributes from a single node.")))
 (report test-results)

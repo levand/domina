@@ -3995,7 +3995,7 @@ var tf = function() {
         this.Na = d;
         this.U = e
       }, rf.d = function() {
-        return x.call(h, "domina.css.t16645")
+        return x.call(h, "domina.css.t16562")
       }, rf.prototype.Z = function() {
         var b = this;
         return De.call(h, function(c) {
@@ -4055,7 +4055,7 @@ var Af = function vf(c) {
       this.Ea = e;
       this.U = g
     }, qf.d = function() {
-      return x.call(h, "domina.t16177")
+      return x.call(h, "domina.t15832")
     }, qf.prototype.Z = function() {
       return zf.call(h, sb.call(h, Ze.call(h, this.ia)))
     }, qf.prototype.$ = function() {
@@ -4535,7 +4535,7 @@ var X = function() {
         this.Ra = d;
         this.U = e
       }, lg.d = function() {
-        return x.call(h, "domina.xpath.t16025")
+        return x.call(h, "domina.xpath.t15730")
       }, lg.prototype.Z = function() {
         return De.call(h, ue.call(h, og, this.H), T.call(h, this.B))
       }, lg.prototype.$ = function() {
@@ -4711,7 +4711,11 @@ function zg(b, c, d, e) {
 vg.call(h, "\ufdd0'mouseenter", "\ufdd0'mouseover", sg);
 vg.call(h, "\ufdd0'mouseleave", "\ufdd0'mouseout", sg);
 window.tryfn = function(b) {
-  return b.call()
+  try {
+    return b.call()
+  }catch(c) {
+    return"fail hard" == c && a(c), c
+  }
 };
 var Ag = mf.call(h, Ke([]));
 function Y(b, c) {

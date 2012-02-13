@@ -4022,7 +4022,7 @@ var uf = function() {
         this.Na = d;
         this.U = e
       }, sf.d = function() {
-        return x.call(h, "domina.css.t16431")
+        return x.call(h, "domina.css.t16594")
       }, sf.prototype.Z = function() {
         var b = this;
         return Ee.call(h, function(c) {
@@ -4082,7 +4082,7 @@ var Bf = function wf(c) {
       this.Ea = e;
       this.U = g
     }, rf.d = function() {
-      return x.call(h, "domina.t15717")
+      return x.call(h, "domina.t16034")
     }, rf.prototype.Z = function() {
       return Af.call(h, tb.call(h, $e.call(h, this.ia)))
     }, rf.prototype.$ = function() {
@@ -4213,7 +4213,7 @@ function Sf(b) {
 }
 function Tf(b) {
   var c = vf.call(h, b).attributes;
-  return Ge.call(h, ue.call(h, v), Od.call(h, vd, R.call(h, function(b) {
+  return Od.call(h, vd, Ge.call(h, ue.call(h, v), R.call(h, function(b) {
     var e = c.item(b), b = e.nodeValue, g = re.call(h, h, b), b = p(g) ? re.call(h, "", b) : g;
     if(p(b)) {
       a: {
@@ -4567,7 +4567,7 @@ var Y = function() {
         this.Ra = d;
         this.U = e
       }, mg.d = function() {
-        return x.call(h, "domina.xpath.t15686")
+        return x.call(h, "domina.xpath.t15722")
       }, mg.prototype.Z = function() {
         return Ee.call(h, ve.call(h, pg, this.H), V.call(h, this.B))
       }, mg.prototype.$ = function() {
@@ -5188,11 +5188,11 @@ Z.call(h, "can get multiple HTML attributes from a single node.", function() {
   Qf.call(h, Y.call(h, "//div"), "width", 42);
   Qf.call(h, Y.call(h, "//div"), "height", 24);
   var b = Tf.call(h, Y.call(h, "//div"));
-  p(u.call(h, 42, "\ufdd0'width".call(h, b))) || a(Error(y.call(h, "Assert failed: ", T.call(h, N(x("\ufdd1'=", 42, N(x("\ufdd0'width", "\ufdd1'attributes"), z("\ufdd0'line", 386))), z("\ufdd0'line", 386))))));
-  if(p(u.call(h, 24, "\ufdd0'height".call(h, b)))) {
+  p(u.call(h, "42", "\ufdd0'width".call(h, b))) || a(Error(y.call(h, "Assert failed: ", T.call(h, N(x("\ufdd1'=", "42", N(x("\ufdd0'width", "\ufdd1'attributes"), z("\ufdd0'line", 386))), z("\ufdd0'line", 386))))));
+  if(p(u.call(h, "24", "\ufdd0'height".call(h, b)))) {
     return h
   }
-  a(Error(y.call(h, "Assert failed: ", T.call(h, N(x("\ufdd1'=", 24, N(x("\ufdd0'height", "\ufdd1'attributes"), z("\ufdd0'line", 387))), z("\ufdd0'line", 387))))))
+  a(Error(y.call(h, "Assert failed: ", T.call(h, N(x("\ufdd1'=", "24", N(x("\ufdd0'height", "\ufdd1'attributes"), z("\ufdd0'line", 387))), z("\ufdd0'line", 387))))))
 });
 Z.call(h, "can set multiple CSS styles on a single node", function() {
   $.call(h);

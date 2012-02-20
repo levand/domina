@@ -528,6 +528,18 @@
                (set-html! (xpath "//div") "<p class='foobar'>some text</p>")
                (assert (= 2 (count (nodes (xpath "//body/div/p[@class='foobar']")))))))
 
+(add-test "can set a table's innerHTML"
+          #(do (reset)
+               (append! (xpath "//body") "<table></table>")
+               (set-html! (xpath "//table") "<tr class='foobar'><th>some</th><td>text</td></tr>")
+               (assert (= 1 (count (nodes (xpath "//body/table/tr[@class='foobar']")))))))
+
+(add-test "can set multiple tables' innerHTML"
+          #(do (reset)
+               (append! (xpath "//body") "<table></table><table></table>")
+               (set-html! (xpath "//table") "<tr class='foobar'><th>some</th><td>text</td></tr>")
+               (assert (= 2 (count (nodes (xpath "//body/table/tr[@class='foobar']")))))))
+
 (add-test "can get nodes from strings containing cell-level table fragments"
           #(do (reset)
                (let [n (nodes "<td>Cell</td><th>Header</th>")]

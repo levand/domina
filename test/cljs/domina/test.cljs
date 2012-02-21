@@ -548,22 +548,22 @@
           #(do (reset)
                (let [n (nodes "<td>Cell</td><th>Header</th>")]
                  (assert (= (count n) 2))
-                 (doseq [h n]
-                   (assert (re-find #"TableCell" (pr-str h)))))))
+                 (assert (= "TD" (. (first n) -tagName)))
+                 (assert (= "TH" (. (second n) -tagName))))))
 
 (add-test "can get nodes from strings containing row-level table fragments"
           #(do (reset)
                (let [n (nodes "<tr><td>Cell</td><th>Header</th></tr><tr><td>Another</td><th>Row</th></tr>")]
                  (assert (= (count n) 2))
-                 (doseq [h n]
-                   (assert (re-find #"TableRow" (pr-str h)))))))
+                 (assert (= "TR" (. (first n) -tagName)))
+                 (assert (= "TR" (. (second n) -tagName))))))
 
 (add-test "can get nodes from strings containing section-level table fragments"
           #(do (reset)
                (let [n (nodes "<thead><tr><td>Cell</td><th>Header</th></tr></thead><tbody><tr><td>Another</td><th>Row</th></tr></tbody>")]
                  (assert (= (count n) 2))
-                 (doseq [h n]
-                   (assert (re-find #"TableSection" (pr-str h)))))))
+                 (assert (= "THEAD" (. (first n) -tagName)))
+                 (assert (= "TBODY" (. (second n) -tagName))))))
 
 (add-test "can trigger a handler on a :mouseover event"
           #(do (reset)

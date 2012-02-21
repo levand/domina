@@ -420,12 +420,12 @@
   (nodes [content]
          (cond
           (dm/satisfies? ISeqable content) (seq content)
-          (if (. content -length)) (lazy-nodelist content)
+          (. content -length) (lazy-nodelist content)
           :default (cons content)))
   (single-node [content]
                (cond
                 (dm/satisfies? ISeqable content) (first content)
-                (if (. content -length)) (. content (item 0))
+                (. content -length) (. content (item 0))
                 :default content)))
 
 (if (dm/defined? js/NodeList)

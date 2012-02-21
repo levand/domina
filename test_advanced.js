@@ -3919,7 +3919,7 @@ var pf = function() {
         this.Ka = d;
         this.T = e
       }, nf.d = function() {
-        return u.call(h, "domina.css.t16856")
+        return u.call(h, "domina.css.t16929")
       }, nf.prototype.Z = function() {
         var b = this;
         return Be.call(h, function(c) {
@@ -4056,7 +4056,7 @@ var Pf = function Nf(c) {
       this.Ca = e;
       this.T = g
     }, mf.d = function() {
-      return u.call(h, "domina.t16025")
+      return u.call(h, "domina.t16009")
     }, mf.prototype.Z = function() {
       return Of.call(h, tb.call(h, Te.call(h, this.ha)))
     }, mf.prototype.$ = function() {
@@ -4544,7 +4544,7 @@ var X = function() {
         this.Oa = d;
         this.T = e
       }, wg.d = function() {
-        return u.call(h, "domina.xpath.t15850")
+        return u.call(h, "domina.xpath.t15882")
       }, wg.prototype.Z = function() {
         return Be.call(h, se.call(h, zg, this.F), S.call(h, this.A))
       }, wg.prototype.$ = function() {
@@ -5394,7 +5394,7 @@ Y.call(h, "can get nodes from strings containing cell-level table fragments", fu
   var c = B.call(h, b);
   if(o(c)) {
     for(b = C.call(h, c);;) {
-      Mf.call(h, T.call(h, b).name);
+      Mf.call(h, T.call(h, b).tagName);
       var d = $e.call(h, /TableCell/, R.call(h, b)), b = o(d) ? d : $e.call(h, /TableDataCell/, R.call(h, b));
       o(b) || a(Error(v.call(h, "Assert failed: ", R.call(h, L(u("\ufdd1'or", L(u("\ufdd1're-find", /TableCell/, L(u("\ufdd1'pr-str", "\ufdd1'h"), x("\ufdd0'line", 553))), x("\ufdd0'line", 553)), L(u("\ufdd1're-find", /TableDataCell/, L(u("\ufdd1'pr-str", "\ufdd1'h"), x("\ufdd0'line", 554))), x("\ufdd0'line", 554))), x("\ufdd0'line", 553))))));
       b = E.call(h, c);
@@ -5415,7 +5415,7 @@ Y.call(h, "can get nodes from strings containing row-level table fragments", fun
   var c = B.call(h, b);
   if(o(c)) {
     for(b = C.call(h, c);;) {
-      if(Mf.call(h, T.call(h, b).name), o($e.call(h, /TableRow/, R.call(h, b))) || a(Error(v.call(h, "Assert failed: ", R.call(h, L(u("\ufdd1're-find", /TableRow/, L(u("\ufdd1'pr-str", "\ufdd1'h"), x("\ufdd0'line", 562))), x("\ufdd0'line", 562)))))), b = E.call(h, c), o(b)) {
+      if(Mf.call(h, T.call(h, b).tagName), o($e.call(h, /TableRow/, R.call(h, b))) || a(Error(v.call(h, "Assert failed: ", R.call(h, L(u("\ufdd1're-find", /TableRow/, L(u("\ufdd1'pr-str", "\ufdd1'h"), x("\ufdd0'line", 562))), x("\ufdd0'line", 562)))))), b = E.call(h, c), o(b)) {
         c = b, b = C.call(h, c)
       }else {
         return h
@@ -5432,7 +5432,7 @@ Y.call(h, "can get nodes from strings containing section-level table fragments",
   var c = B.call(h, b);
   if(o(c)) {
     for(b = C.call(h, c);;) {
-      if(Mf.call(h, T.call(h, b).name), o($e.call(h, /TableSection/, R.call(h, b))) || a(Error(v.call(h, "Assert failed: ", R.call(h, L(u("\ufdd1're-find", /TableSection/, L(u("\ufdd1'pr-str", "\ufdd1'h"), x("\ufdd0'line", 570))), x("\ufdd0'line", 570)))))), b = E.call(h, c), o(b)) {
+      if(Mf.call(h, T.call(h, b).tagName), o($e.call(h, /TableSection/, R.call(h, b))) || a(Error(v.call(h, "Assert failed: ", R.call(h, L(u("\ufdd1're-find", /TableSection/, L(u("\ufdd1'pr-str", "\ufdd1'h"), x("\ufdd0'line", 570))), x("\ufdd0'line", 570)))))), b = E.call(h, c), o(b)) {
         c = b, b = C.call(h, c)
       }else {
         return h

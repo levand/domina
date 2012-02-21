@@ -4,10 +4,94 @@
             [goog.dom.xml :as xml]
             [goog.dom.classes :as classes]
             [goog.dom.forms :as forms]
+            [goog.events :as events]
             [goog.style :as style]
             [goog.string :as string]
-            [cljs.core :as core])
+            [cljs.core :as core]
+            [clojure.string :as cstring]
+            [domina.support :as support])
   (:require-macros [domina.macros :as dm]))
+
+;;;;;;;;;;;;;;;;;;; Parse HTML to DOM ;;
+
+(def re-html #"<|&#?\w+;")
+(def re-leading-whitespace #"^\s+")
+(def re-xhtml-tag #"(?i)<(?!area|br|col|embed|hr|img|input|link|meta|param)(([\w:]+)[^>]*)/>")
+(def re-tag-name #"<([\w:]+)")
+(def re-no-inner-html #"(?i)<(?:script|style)")
+(def re-tbody #"(?i)<tbody")
+(let [opt-wrapper [1 "<select multiple='multiple'>" "</select>"]
+      table-section-wrapper  [1 "<table>" "</table>"]
+      cell-wrapper     [3 "<table><tbody><tr>" "</tr></tbody></table>"]]
+  (def wrap-map {"option"   opt-wrapper
+                 "optgroup" opt-wrapper
+                 "legend"   [ 1 "<fieldset>" "</fieldset>" ]
+                 "thead"    table-section-wrapper
+                 "tbody"    table-section-wrapper
+                 "tfoot"    table-section-wrapper
+                 "colgroup" table-section-wrapper
+                 "caption"  table-section-wrapper
+                 "tr"       [ 2 "<table><tbody>" "</tbody></table>" ]
+                 "td"       cell-wrapper
+                 "th"       cell-wrapper
+                 "col"      [ 2 "<table><tbody></tbody><colgroup>" "</colgroup></table>" ]
+                 "area"     [ 1 "<map>" "</map>" ]
+                 :default   [ 0 "" "" ]})) ;; TODO IE can't serialize <link> and <script> tags normally
+
+(defn- remove-extraneous-tbody!
+  [div html]
+  (let [no-tbody? (not (re-find re-tbody html))
+        tbody (if (and (= tag-name "table")
+                       no-tbody?)
+                (and (.-firstChild div)
+                     (.-childNodes (.-firstChild div)))
+                (if (and (= start-wrap "<table>")
+                         no-tbody?)
+                  div.childNodes
+                  []))]
+    (doseq [child tbody]
+      (when (and (= (.-nodeName child) "tbody")
+                 (= (.-length (.-childNodes child)) 0))
+        (.removeChild (.-parentNode child)
+                      child)))))
+
+(defn- restore-leading-whitespace!
+  [div html]
+  (.insertBefore div
+                 (.createTextNode js/document
+                                  (first (re-find re-leading-whitespace
+                                                  html)))
+                 (.-firstChild div)))
+
+(defn- html-to-dom
+  [html]
+  (let [html (cstring/replace html re-xhtml-tag "<$1></$2>")
+        tag-name (. (str (second (re-find re-tag-name html)))
+                    (toLowerCase))
+        [depth start-wrap end-wrap] (get wrap-map
+                                         tag-name
+                                         (:default wrap-map))
+
+        div (loop [wrapper (let [div (.createElement js/document "div")]
+                             (set! (.-innerHTML div)
+                                   (str start-wrap html end-wrap))
+                             div)
+                   level   depth]
+              (if (> level 0)
+                (recur (.-lastChild wrapper) (dec level))
+                wrapper))]
+    (when support/extraneous-tbody?
+      (remove-extraneous-tbody! div html))
+    (when (and (not support/leading-whitespace?)
+               (re-find re-leading-whitespace html))
+      (restore-leading-whitespace! div html))
+    (.-childNodes div)))
+
+(defn- string-to-dom
+  [s]
+  (if (re-find re-html s)
+    (html-to-dom s)
+    (.createTextNode js/document s)))
 
 ;;;;;;;;;;;;;;;;;;; Protocols ;;;;;;;;;;;;;;;;;
 
@@ -107,7 +191,7 @@
   "Gets the value of a CSS property. Assumes content will be a single node. Name may be a string or keyword. Returns nil if there is no value set for the style."
   [content name]
   (let [s (style/getStyle (single-node content) (core/name name))]
-    (if (not (string/isEmptySafe s)) s)))
+    (when-not (cstring/blank? s) s)))
 
 (defn attr
   "Gets the value of an HTML attribute. Assumes content will be a single node. Name may be a stirng or keyword. Returns nil if there is no value set for the style."
@@ -238,9 +322,27 @@
 
 (defn set-html!
   "Sets the innerHTML value for all the nodes in the given content."
-  [content value]
-  (doseq [node (nodes content)]
-    (set! (. node -innerHTML) value))
+  [content html-string]
+  (let [allows-inner-html?  (not (re-find re-no-inner-html html-string))
+        leading-whitespace? (re-find re-leading-whitespace html-string)
+        tag-name (. (str (second (re-find re-tag-name html-string))) (toLowerCase))
+        special-tag? (contains? wrap-map tag-name)
+        fallback #(-> content
+                      destroy-children!
+                      (append! %))]
+    (if (and allows-inner-html?
+             (or
+              support/leading-whitespace?
+              (not leading-whitespace?))
+             (not special-tag?))
+      (let [value (cstring/replace html-string re-xhtml-tag "<$1></$2>")]
+        (try
+          (doseq [node (nodes content)]
+            (events/removeAll node)
+            (set! (. node -innerHTML) value))
+          (catch Exception e
+            (fallback value))))
+      (fallback html-string)))
   content)
 
 ;;;;;;;;;;;;;;;;;;; private helper functions ;;;;;;;;;;;;;;;;;
@@ -255,7 +357,8 @@
         children (nodes child-content)
         first-child (let [frag (. js/document (createDocumentFragment))]
                       (doseq [child children]
-                        (.appendChild frag child)) frag)
+                        (.appendChild frag child))
+                      frag)
         other-children (doall (repeatedly (dec (count parents))
                                           #(.cloneNode first-child true)))]
     (when (seq parents)
@@ -302,48 +405,11 @@
    (. list-thing -length) (lazy-nodelist list-thing)
    :default (cons list-thing)))
 
-;;;;;;;;;;;;;;;;;;; String to DOM ;;;;;;;;;;;;;;;;;;;;;;;;
-
-(defn- create-wrapper
-  [table-level]
-  (.createElement
-   js/document
-   (if table-level
-     (if (#{"td" "th"} table-level)
-       "tr"
-       "table")
-     "div")))
-
-(defn- set-wrapper-html!
-  [wrapper content]
-  (if (.-INNER_HTML_NEEDS_SCOPED_ELEMENT dom/BrowserFeature)
-    (do
-      (set! (.-innerHTML wrapper) (str "<br>" content))
-      (.removeChild wrapper (dom/getFirstElementChild wrapper)))
-    (set! (.-innerHTML wrapper) content)))
-
-(defn- extract-wrapper-dom
-  [wrapper table-level]
-  (let [inner-wrapper (if (= table-level "tr")
-                        (first (dom/getElementsByTagNameAndClass "tbody" nil wrapper))
-                        wrapper)
-        children (seq (dom/getChildren inner-wrapper))]
-    (if (= (count children) 1)
-      (.removeChild inner-wrapper (dom/getFirstElementChild inner-wrapper))
-      children)))
-
-(defn- string-to-dom
-  [content]
-  (let [[_ table-level & _] (re-find #"^<(t(head|body|foot|[rhd]))" content)
-        wrapper (create-wrapper table-level)]
-    (set-wrapper-html! wrapper content)
-    (extract-wrapper-dom wrapper table-level)))
-
 ;;;;;;;;;;;;;;;;;;; Protocol Implementations ;;;;;;;;;;;;;;;;;
 
 (extend-protocol DomContent
   string
-  (nodes [s] (nodes (string-to-dom s)))
+  (nodes [s] (doall (nodes (string-to-dom s))))
   (single-node [s] (single-node (string-to-dom s)))
 
   ;; We'd prefer to do this polymorphically with a protocol

@@ -11470,11 +11470,11 @@ cljs.core.get_method = function(a, b) {
 cljs.core.prefers = function(a) {
   return cljs.core._prefers.call(null, a)
 };
-var domina = {support:{}}, div__16811 = document.createElement("div"), test_html__16812 = "   <link/><table></table><a href='/a' style='top:1px;float:left;opacity:.55;'>a</a><input type='checkbox'/>";
-div__16811.innerHTML = test_html__16812;
-domina.support.leading_whitespace_QMARK_ = cljs.core._EQ_.call(null, div__16811.firstChild.nodeType, 3);
-domina.support.extraneous_tbody_QMARK_ = cljs.core._EQ_.call(null, div__16811.getElementsByTagName("tbody").length, 0);
-domina.support.unscoped_html_elements_QMARK_ = cljs.core._EQ_.call(null, div__16811.getElementsByTagName("link").length, 0);
+var domina = {support:{}}, div__16686 = document.createElement("div"), test_html__16687 = "   <link/><table></table><a href='/a' style='top:1px;float:left;opacity:.55;'>a</a><input type='checkbox'/>";
+div__16686.innerHTML = test_html__16687;
+domina.support.leading_whitespace_QMARK_ = cljs.core._EQ_.call(null, div__16686.firstChild.nodeType, 3);
+domina.support.extraneous_tbody_QMARK_ = cljs.core._EQ_.call(null, div__16686.getElementsByTagName("tbody").length, 0);
+domina.support.unscoped_html_elements_QMARK_ = cljs.core._EQ_.call(null, div__16686.getElementsByTagName("link").length, 0);
 var clojure = {string:{}};
 clojure.string.seq_reverse = function(a) {
   return cljs.core.reduce.call(null, cljs.core.conj, cljs.core.List.EMPTY, a)
@@ -11605,9 +11605,9 @@ domina.re_xhtml_tag = /<(?!area|br|col|embed|hr|img|input|link|meta|param)(([\w:
 domina.re_tag_name = /<([\w:]+)/;
 domina.re_no_inner_html = /<(?:script|style)/i;
 domina.re_tbody = /<tbody/i;
-var opt_wrapper__15958 = cljs.core.Vector.fromArray([1, "<select multiple='multiple'>", "</select>"]), table_section_wrapper__15959 = cljs.core.Vector.fromArray([1, "<table>", "</table>"]), cell_wrapper__15960 = cljs.core.Vector.fromArray([3, "<table><tbody><tr>", "</tr></tbody></table>"]);
-domina.wrap_map = cljs.core.ObjMap.fromObject("col,\ufdd0'default,tfoot,caption,optgroup,legend,area,td,thead,th,option,tbody,tr,colgroup".split(","), {col:cljs.core.Vector.fromArray([2, "<table><tbody></tbody><colgroup>", "</colgroup></table>"]), "\ufdd0'default":cljs.core.Vector.fromArray([0, "", ""]), tfoot:table_section_wrapper__15959, caption:table_section_wrapper__15959, optgroup:opt_wrapper__15958, legend:cljs.core.Vector.fromArray([1, "<fieldset>", "</fieldset>"]), area:cljs.core.Vector.fromArray([1, 
-"<map>", "</map>"]), td:cell_wrapper__15960, thead:table_section_wrapper__15959, th:cell_wrapper__15960, option:opt_wrapper__15958, tbody:table_section_wrapper__15959, tr:cljs.core.Vector.fromArray([2, "<table><tbody>", "</tbody></table>"]), colgroup:table_section_wrapper__15959});
+var opt_wrapper__15805 = cljs.core.Vector.fromArray([1, "<select multiple='multiple'>", "</select>"]), table_section_wrapper__15806 = cljs.core.Vector.fromArray([1, "<table>", "</table>"]), cell_wrapper__15807 = cljs.core.Vector.fromArray([3, "<table><tbody><tr>", "</tr></tbody></table>"]);
+domina.wrap_map = cljs.core.ObjMap.fromObject("col,\ufdd0'default,tfoot,caption,optgroup,legend,area,td,thead,th,option,tbody,tr,colgroup".split(","), {col:cljs.core.Vector.fromArray([2, "<table><tbody></tbody><colgroup>", "</colgroup></table>"]), "\ufdd0'default":cljs.core.Vector.fromArray([0, "", ""]), tfoot:table_section_wrapper__15806, caption:table_section_wrapper__15806, optgroup:opt_wrapper__15805, legend:cljs.core.Vector.fromArray([1, "<fieldset>", "</fieldset>"]), area:cljs.core.Vector.fromArray([1, 
+"<map>", "</map>"]), td:cell_wrapper__15807, thead:table_section_wrapper__15806, th:cell_wrapper__15807, option:opt_wrapper__15805, tbody:table_section_wrapper__15806, tr:cljs.core.Vector.fromArray([2, "<table><tbody>", "</tbody></table>"]), colgroup:table_section_wrapper__15806});
 domina.remove_extraneous_tbody_BANG_ = function(a, b) {
   var c = cljs.core.not.call(null, cljs.core.re_find.call(null, domina.re_tbody, b)), d = cljs.core.truth_(function() {
     var a = cljs.core._EQ_.call(null, domina.tag_name, "table");
@@ -11698,24 +11698,24 @@ domina.by_id = function(a) {
   return goog.dom.getElement.call(null, cljs.core.name.call(null, a))
 };
 domina.by_class = function by_class(b) {
-  if(cljs.core.truth_(void 0 === domina.t16072)) {
-    domina.t16072 = function(b, d, e) {
+  if(cljs.core.truth_(void 0 === domina.t15971)) {
+    domina.t15971 = function(b, d, e) {
       this.class_name = b;
       this.by_class = d;
       this.__meta = e
-    }, domina.t16072.cljs$core$IPrintable$_pr_seq = function() {
-      return cljs.core.list.call(null, "domina.t16072")
-    }, domina.t16072.prototype.domina$DomContent$ = !0, domina.t16072.prototype.domina$DomContent$nodes = function() {
+    }, domina.t15971.cljs$core$IPrintable$_pr_seq = function() {
+      return cljs.core.list.call(null, "domina.t15971")
+    }, domina.t15971.prototype.domina$DomContent$ = !0, domina.t15971.prototype.domina$DomContent$nodes = function() {
       return domina.normalize_seq.call(null, goog.dom.getElementsByClass.call(null, cljs.core.name.call(null, this.class_name)))
-    }, domina.t16072.prototype.domina$DomContent$single_node = function() {
+    }, domina.t15971.prototype.domina$DomContent$single_node = function() {
       return domina.normalize_seq.call(null, goog.dom.getElementByClass.call(null, cljs.core.name.call(null, this.class_name)))
-    }, domina.t16072.prototype.cljs$core$IMeta$ = !0, domina.t16072.prototype.cljs$core$IMeta$_meta = function() {
+    }, domina.t15971.prototype.cljs$core$IMeta$ = !0, domina.t15971.prototype.cljs$core$IMeta$_meta = function() {
       return this.__meta
-    }, domina.t16072.prototype.cljs$core$IWithMeta$ = !0, domina.t16072.prototype.cljs$core$IWithMeta$_with_meta = function(b, d) {
-      return new domina.t16072(this.class_name, this.by_class, d)
+    }, domina.t15971.prototype.cljs$core$IWithMeta$ = !0, domina.t15971.prototype.cljs$core$IWithMeta$_with_meta = function(b, d) {
+      return new domina.t15971(this.class_name, this.by_class, d)
     }
   }
-  return new domina.t16072(b, by_class, null)
+  return new domina.t15971(b, by_class, null)
 };
 domina.children = function(a) {
   return cljs.core.mapcat.call(null, goog.dom.getChildren, domina.nodes.call(null, a))
@@ -12190,25 +12190,25 @@ domina.xpath.root_element = function() {
 };
 domina.xpath.xpath = function() {
   var a = null, b = function(b, d) {
-    if(cljs.core.truth_(void 0 === domina.xpath.t15907)) {
-      domina.xpath.t15907 = function(a, b, c, d) {
+    if(cljs.core.truth_(void 0 === domina.xpath.t15708)) {
+      domina.xpath.t15708 = function(a, b, c, d) {
         this.expr = a;
         this.base = b;
         this.xpath = c;
         this.__meta = d
-      }, domina.xpath.t15907.cljs$core$IPrintable$_pr_seq = function() {
-        return cljs.core.list.call(null, "domina.xpath.t15907")
-      }, domina.xpath.t15907.prototype.domina$DomContent$ = !0, domina.xpath.t15907.prototype.domina$DomContent$nodes = function() {
+      }, domina.xpath.t15708.cljs$core$IPrintable$_pr_seq = function() {
+        return cljs.core.list.call(null, "domina.xpath.t15708")
+      }, domina.xpath.t15708.prototype.domina$DomContent$ = !0, domina.xpath.t15708.prototype.domina$DomContent$nodes = function() {
         return cljs.core.mapcat.call(null, cljs.core.partial.call(null, domina.xpath.select_nodes, this.expr), domina.nodes.call(null, this.base))
-      }, domina.xpath.t15907.prototype.domina$DomContent$single_node = function() {
+      }, domina.xpath.t15708.prototype.domina$DomContent$single_node = function() {
         return cljs.core.first.call(null, cljs.core.filter.call(null, cljs.core.complement.call(null, cljs.core.nil_QMARK_), cljs.core.map.call(null, cljs.core.partial.call(null, domina.xpath.select_node, this.expr), domina.nodes.call(null, this.base))))
-      }, domina.xpath.t15907.prototype.cljs$core$IMeta$ = !0, domina.xpath.t15907.prototype.cljs$core$IMeta$_meta = function() {
+      }, domina.xpath.t15708.prototype.cljs$core$IMeta$ = !0, domina.xpath.t15708.prototype.cljs$core$IMeta$_meta = function() {
         return this.__meta
-      }, domina.xpath.t15907.prototype.cljs$core$IWithMeta$ = !0, domina.xpath.t15907.prototype.cljs$core$IWithMeta$_with_meta = function(a, b) {
-        return new domina.xpath.t15907(this.expr, this.base, this.xpath, b)
+      }, domina.xpath.t15708.prototype.cljs$core$IWithMeta$ = !0, domina.xpath.t15708.prototype.cljs$core$IWithMeta$_with_meta = function(a, b) {
+        return new domina.xpath.t15708(this.expr, this.base, this.xpath, b)
       }
     }
-    return new domina.xpath.t15907(d, b, a, null)
+    return new domina.xpath.t15708(d, b, a, null)
   };
   return a = function(c, d) {
     switch(arguments.length) {
@@ -12386,31 +12386,31 @@ domina.css.root_element = function() {
 };
 domina.css.sel = function() {
   var a = null, b = function(b, d) {
-    if(cljs.core.truth_(void 0 === domina.css.t16969)) {
-      domina.css.t16969 = function(a, b, c, d) {
+    if(cljs.core.truth_(void 0 === domina.css.t16844)) {
+      domina.css.t16844 = function(a, b, c, d) {
         this.expr = a;
         this.base = b;
         this.sel = c;
         this.__meta = d
-      }, domina.css.t16969.cljs$core$IPrintable$_pr_seq = function() {
-        return cljs.core.list.call(null, "domina.css.t16969")
-      }, domina.css.t16969.prototype.domina$DomContent$ = !0, domina.css.t16969.prototype.domina$DomContent$nodes = function() {
+      }, domina.css.t16844.cljs$core$IPrintable$_pr_seq = function() {
+        return cljs.core.list.call(null, "domina.css.t16844")
+      }, domina.css.t16844.prototype.domina$DomContent$ = !0, domina.css.t16844.prototype.domina$DomContent$nodes = function() {
         var a = this;
         return cljs.core.mapcat.call(null, function(b) {
           return goog.dom.query.call(null, a.expr, b)
         }, domina.nodes.call(null, a.base))
-      }, domina.css.t16969.prototype.domina$DomContent$single_node = function() {
+      }, domina.css.t16844.prototype.domina$DomContent$single_node = function() {
         var a = this;
         return cljs.core.first.call(null, cljs.core.filter.call(null, cljs.core.complement.call(null, cljs.core.nil_QMARK_), cljs.core.mapcat.call(null, function(b) {
           return goog.dom.query.call(null, a.expr, b)
         }, domina.nodes.call(null, a.base))))
-      }, domina.css.t16969.prototype.cljs$core$IMeta$ = !0, domina.css.t16969.prototype.cljs$core$IMeta$_meta = function() {
+      }, domina.css.t16844.prototype.cljs$core$IMeta$ = !0, domina.css.t16844.prototype.cljs$core$IMeta$_meta = function() {
         return this.__meta
-      }, domina.css.t16969.prototype.cljs$core$IWithMeta$ = !0, domina.css.t16969.prototype.cljs$core$IWithMeta$_with_meta = function(a, b) {
-        return new domina.css.t16969(this.expr, this.base, this.sel, b)
+      }, domina.css.t16844.prototype.cljs$core$IWithMeta$ = !0, domina.css.t16844.prototype.cljs$core$IWithMeta$_with_meta = function(a, b) {
+        return new domina.css.t16844(this.expr, this.base, this.sel, b)
       }
     }
-    return new domina.css.t16969(d, b, a, null)
+    return new domina.css.t16844(d, b, a, null)
   };
   return a = function(c, d) {
     switch(arguments.length) {
@@ -13235,75 +13235,41 @@ domina.test.add_test.call(null, "can get nodes from strings containing cell-leve
   if(!cljs.core.truth_(cljs.core._EQ_.call(null, cljs.core.count.call(null, a), 2))) {
     throw Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", cljs.core.with_meta(cljs.core.list("\ufdd1'count", "\ufdd1'n"), cljs.core.hash_map("\ufdd0'line", 550)), 2), cljs.core.hash_map("\ufdd0'line", 550)))));
   }
-  a = cljs.core.seq.call(null, a);
-  if(cljs.core.truth_(a)) {
-    for(var b = cljs.core.first.call(null, a);;) {
-      domina.log_debug.call(null, domina.single_node.call(null, b).tagName);
-      if(!cljs.core.truth_(function() {
-        var a = cljs.core.re_find.call(null, /TableCell/, cljs.core.pr_str.call(null, b));
-        return cljs.core.truth_(a) ? a : cljs.core.re_find.call(null, /TableDataCell/, cljs.core.pr_str.call(null, b))
-      }())) {
-        throw Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'or", cljs.core.with_meta(cljs.core.list("\ufdd1're-find", /TableCell/, cljs.core.with_meta(cljs.core.list("\ufdd1'pr-str", "\ufdd1'h"), cljs.core.hash_map("\ufdd0'line", 553))), cljs.core.hash_map("\ufdd0'line", 553)), cljs.core.with_meta(cljs.core.list("\ufdd1're-find", /TableDataCell/, cljs.core.with_meta(cljs.core.list("\ufdd1'pr-str", "\ufdd1'h"), cljs.core.hash_map("\ufdd0'line", 
-        554))), cljs.core.hash_map("\ufdd0'line", 554))), cljs.core.hash_map("\ufdd0'line", 553)))));
-      }
-      a = cljs.core.next.call(null, a);
-      if(cljs.core.truth_(a)) {
-        var c = a, b = a = cljs.core.first.call(null, c), a = c
-      }else {
-        return null
-      }
-    }
-  }else {
+  if(!cljs.core.truth_(cljs.core._EQ_.call(null, "TD", cljs.core.first.call(null, a).tagName))) {
+    throw Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "TD", cljs.core.with_meta(cljs.core.list("\ufdd1'.", cljs.core.with_meta(cljs.core.list("\ufdd1'first", "\ufdd1'n"), cljs.core.hash_map("\ufdd0'line", 551)), "\ufdd1'-tagName"), cljs.core.hash_map("\ufdd0'line", 551))), cljs.core.hash_map("\ufdd0'line", 551)))));
+  }
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, "TH", cljs.core.second.call(null, a).tagName))) {
     return null
   }
+  throw Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "TH", cljs.core.with_meta(cljs.core.list("\ufdd1'.", cljs.core.with_meta(cljs.core.list("\ufdd1'second", "\ufdd1'n"), cljs.core.hash_map("\ufdd0'line", 552)), "\ufdd1'-tagName"), cljs.core.hash_map("\ufdd0'line", 552))), cljs.core.hash_map("\ufdd0'line", 552)))));
 });
 domina.test.add_test.call(null, "can get nodes from strings containing row-level table fragments", function() {
   domina.test.reset.call(null);
   var a = domina.nodes.call(null, "<tr><td>Cell</td><th>Header</th></tr><tr><td>Another</td><th>Row</th></tr>");
   if(!cljs.core.truth_(cljs.core._EQ_.call(null, cljs.core.count.call(null, a), 2))) {
-    throw Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", cljs.core.with_meta(cljs.core.list("\ufdd1'count", "\ufdd1'n"), cljs.core.hash_map("\ufdd0'line", 559)), 2), cljs.core.hash_map("\ufdd0'line", 559)))));
+    throw Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", cljs.core.with_meta(cljs.core.list("\ufdd1'count", "\ufdd1'n"), cljs.core.hash_map("\ufdd0'line", 557)), 2), cljs.core.hash_map("\ufdd0'line", 557)))));
   }
-  var b = cljs.core.seq.call(null, a);
-  if(cljs.core.truth_(b)) {
-    for(a = cljs.core.first.call(null, b);;) {
-      domina.log_debug.call(null, domina.single_node.call(null, a).tagName);
-      if(!cljs.core.truth_(cljs.core.re_find.call(null, /TableRow/, cljs.core.pr_str.call(null, a)))) {
-        throw Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1're-find", /TableRow/, cljs.core.with_meta(cljs.core.list("\ufdd1'pr-str", "\ufdd1'h"), cljs.core.hash_map("\ufdd0'line", 562))), cljs.core.hash_map("\ufdd0'line", 562)))));
-      }
-      a = cljs.core.next.call(null, b);
-      if(cljs.core.truth_(a)) {
-        b = a, a = cljs.core.first.call(null, b)
-      }else {
-        return null
-      }
-    }
-  }else {
+  if(!cljs.core.truth_(cljs.core._EQ_.call(null, "TR"))) {
+    throw Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.first.call(null, a).tagName, "\n", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "TR"), cljs.core.hash_map("\ufdd0'line", 558)))));
+  }
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, "TR"))) {
     return null
   }
+  throw Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.second.call(null, a).tagName, "\n", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "TR"), cljs.core.hash_map("\ufdd0'line", 559)))));
 });
 domina.test.add_test.call(null, "can get nodes from strings containing section-level table fragments", function() {
   domina.test.reset.call(null);
   var a = domina.nodes.call(null, "<thead><tr><td>Cell</td><th>Header</th></tr></thead><tbody><tr><td>Another</td><th>Row</th></tr></tbody>");
   if(!cljs.core.truth_(cljs.core._EQ_.call(null, cljs.core.count.call(null, a), 2))) {
-    throw Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", cljs.core.with_meta(cljs.core.list("\ufdd1'count", "\ufdd1'n"), cljs.core.hash_map("\ufdd0'line", 567)), 2), cljs.core.hash_map("\ufdd0'line", 567)))));
+    throw Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", cljs.core.with_meta(cljs.core.list("\ufdd1'count", "\ufdd1'n"), cljs.core.hash_map("\ufdd0'line", 564)), 2), cljs.core.hash_map("\ufdd0'line", 564)))));
   }
-  var b = cljs.core.seq.call(null, a);
-  if(cljs.core.truth_(b)) {
-    for(a = cljs.core.first.call(null, b);;) {
-      domina.log_debug.call(null, domina.single_node.call(null, a).tagName);
-      if(!cljs.core.truth_(cljs.core.re_find.call(null, /TableSection/, cljs.core.pr_str.call(null, a)))) {
-        throw Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1're-find", /TableSection/, cljs.core.with_meta(cljs.core.list("\ufdd1'pr-str", "\ufdd1'h"), cljs.core.hash_map("\ufdd0'line", 570))), cljs.core.hash_map("\ufdd0'line", 570)))));
-      }
-      a = cljs.core.next.call(null, b);
-      if(cljs.core.truth_(a)) {
-        b = a, a = cljs.core.first.call(null, b)
-      }else {
-        return null
-      }
-    }
-  }else {
+  if(!cljs.core.truth_(cljs.core._EQ_.call(null, "THEAD", cljs.core.first.call(null, a).tagName))) {
+    throw Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "THEAD", cljs.core.with_meta(cljs.core.list("\ufdd1'.", cljs.core.with_meta(cljs.core.list("\ufdd1'first", "\ufdd1'n"), cljs.core.hash_map("\ufdd0'line", 565)), "\ufdd1'-tagName"), cljs.core.hash_map("\ufdd0'line", 565))), cljs.core.hash_map("\ufdd0'line", 565)))));
+  }
+  if(cljs.core.truth_(cljs.core._EQ_.call(null, "TBODY", cljs.core.second.call(null, a).tagName))) {
     return null
   }
+  throw Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "TBODY", cljs.core.with_meta(cljs.core.list("\ufdd1'.", cljs.core.with_meta(cljs.core.list("\ufdd1'second", "\ufdd1'n"), cljs.core.hash_map("\ufdd0'line", 566)), "\ufdd1'-tagName"), cljs.core.hash_map("\ufdd0'line", 566))), cljs.core.hash_map("\ufdd0'line", 566)))));
 });
 domina.test.add_test.call(null, "can trigger a handler on a :mouseover event", function() {
   domina.test.reset.call(null);
@@ -13316,7 +13282,7 @@ domina.test.add_test.call(null, "can trigger a handler on a :mouseover event", f
   if(cljs.core.truth_(cljs.core._EQ_.call(null, "Hello world!", domina.text.call(null, domina.xpath.xpath.call(null, "//p"))))) {
     return null
   }
-  throw Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "Hello world!", cljs.core.with_meta(cljs.core.list("\ufdd1'text", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p"), cljs.core.hash_map("\ufdd0'line", 578))), cljs.core.hash_map("\ufdd0'line", 578))), cljs.core.hash_map("\ufdd0'line", 578)))));
+  throw Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "Hello world!", cljs.core.with_meta(cljs.core.list("\ufdd1'text", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p"), cljs.core.hash_map("\ufdd0'line", 574))), cljs.core.hash_map("\ufdd0'line", 574))), cljs.core.hash_map("\ufdd0'line", 574)))));
 });
 domina.test.add_test.call(null, "can trigger a handler on a :mouseout event", function() {
   domina.test.reset.call(null);
@@ -13329,7 +13295,7 @@ domina.test.add_test.call(null, "can trigger a handler on a :mouseout event", fu
   if(cljs.core.truth_(cljs.core._EQ_.call(null, "Hello world!", domina.text.call(null, domina.xpath.xpath.call(null, "//p"))))) {
     return null
   }
-  throw Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "Hello world!", cljs.core.with_meta(cljs.core.list("\ufdd1'text", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p"), cljs.core.hash_map("\ufdd0'line", 586))), cljs.core.hash_map("\ufdd0'line", 586))), cljs.core.hash_map("\ufdd0'line", 586)))));
+  throw Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "Hello world!", cljs.core.with_meta(cljs.core.list("\ufdd1'text", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p"), cljs.core.hash_map("\ufdd0'line", 582))), cljs.core.hash_map("\ufdd0'line", 582))), cljs.core.hash_map("\ufdd0'line", 582)))));
 });
 domina.test.add_test.call(null, "can trigger a handler on a :click event", function() {
   domina.test.reset.call(null);
@@ -13342,7 +13308,7 @@ domina.test.add_test.call(null, "can trigger a handler on a :click event", funct
   if(cljs.core.truth_(cljs.core._EQ_.call(null, "Hello world!", domina.text.call(null, domina.xpath.xpath.call(null, "//p"))))) {
     return null
   }
-  throw Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "Hello world!", cljs.core.with_meta(cljs.core.list("\ufdd1'text", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p"), cljs.core.hash_map("\ufdd0'line", 594))), cljs.core.hash_map("\ufdd0'line", 594))), cljs.core.hash_map("\ufdd0'line", 594)))));
+  throw Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "Hello world!", cljs.core.with_meta(cljs.core.list("\ufdd1'text", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p"), cljs.core.hash_map("\ufdd0'line", 590))), cljs.core.hash_map("\ufdd0'line", 590))), cljs.core.hash_map("\ufdd0'line", 590)))));
 });
 domina.test.add_test.call(null, "can trigger a handler on a :mouseenter event", function() {
   domina.test.reset.call(null);
@@ -13355,7 +13321,7 @@ domina.test.add_test.call(null, "can trigger a handler on a :mouseenter event", 
   if(cljs.core.truth_(cljs.core._EQ_.call(null, "Hello world!", domina.text.call(null, domina.xpath.xpath.call(null, "//p"))))) {
     return null
   }
-  throw Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "Hello world!", cljs.core.with_meta(cljs.core.list("\ufdd1'text", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p"), cljs.core.hash_map("\ufdd0'line", 604))), cljs.core.hash_map("\ufdd0'line", 604))), cljs.core.hash_map("\ufdd0'line", 604)))));
+  throw Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "Hello world!", cljs.core.with_meta(cljs.core.list("\ufdd1'text", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p"), cljs.core.hash_map("\ufdd0'line", 600))), cljs.core.hash_map("\ufdd0'line", 600))), cljs.core.hash_map("\ufdd0'line", 600)))));
 });
 domina.test.add_test.call(null, "can trigger a handler on a :mouseleave event", function() {
   domina.test.reset.call(null);
@@ -13368,7 +13334,7 @@ domina.test.add_test.call(null, "can trigger a handler on a :mouseleave event", 
   if(cljs.core.truth_(cljs.core._EQ_.call(null, "Hello world!", domina.text.call(null, domina.xpath.xpath.call(null, "//p"))))) {
     return null
   }
-  throw Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "Hello world!", cljs.core.with_meta(cljs.core.list("\ufdd1'text", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p"), cljs.core.hash_map("\ufdd0'line", 614))), cljs.core.hash_map("\ufdd0'line", 614))), cljs.core.hash_map("\ufdd0'line", 614)))));
+  throw Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "Hello world!", cljs.core.with_meta(cljs.core.list("\ufdd1'text", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//p"), cljs.core.hash_map("\ufdd0'line", 610))), cljs.core.hash_map("\ufdd0'line", 610))), cljs.core.hash_map("\ufdd0'line", 610)))));
 });
 domina.test.add_test.call(null, "can remove-listeners on a :click event", function() {
   domina.test.reset.call(null);
@@ -13382,7 +13348,7 @@ domina.test.add_test.call(null, "can remove-listeners on a :click event", functi
   if(cljs.core.truth_(cljs.core._EQ_.call(null, "Some content", domina.text.call(null, domina.xpath.xpath.call(null, "//div"))))) {
     return null
   }
-  throw Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "Some content", cljs.core.with_meta(cljs.core.list("\ufdd1'text", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div"), cljs.core.hash_map("\ufdd0'line", 624))), cljs.core.hash_map("\ufdd0'line", 624))), cljs.core.hash_map("\ufdd0'line", 624)))));
+  throw Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "Some content", cljs.core.with_meta(cljs.core.list("\ufdd1'text", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div"), cljs.core.hash_map("\ufdd0'line", 620))), cljs.core.hash_map("\ufdd0'line", 620))), cljs.core.hash_map("\ufdd0'line", 620)))));
 });
 domina.test.add_test.call(null, "can remove-listeners on a :mouseenter event", function() {
   domina.test.reset.call(null);
@@ -13396,7 +13362,7 @@ domina.test.add_test.call(null, "can remove-listeners on a :mouseenter event", f
   if(cljs.core.truth_(cljs.core._EQ_.call(null, "Some content", domina.text.call(null, domina.xpath.xpath.call(null, "//div"))))) {
     return null
   }
-  throw Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "Some content", cljs.core.with_meta(cljs.core.list("\ufdd1'text", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div"), cljs.core.hash_map("\ufdd0'line", 635))), cljs.core.hash_map("\ufdd0'line", 635))), cljs.core.hash_map("\ufdd0'line", 635)))));
+  throw Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "Some content", cljs.core.with_meta(cljs.core.list("\ufdd1'text", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div"), cljs.core.hash_map("\ufdd0'line", 631))), cljs.core.hash_map("\ufdd0'line", 631))), cljs.core.hash_map("\ufdd0'line", 631)))));
 });
 domina.test.add_test.call(null, "can unlisten! on a :click event", function() {
   var a = function() {
@@ -13411,7 +13377,7 @@ domina.test.add_test.call(null, "can unlisten! on a :click event", function() {
   if(cljs.core.truth_(cljs.core._EQ_.call(null, "Some content", domina.text.call(null, domina.xpath.xpath.call(null, "//div"))))) {
     return null
   }
-  throw Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "Some content", cljs.core.with_meta(cljs.core.list("\ufdd1'text", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div"), cljs.core.hash_map("\ufdd0'line", 645))), cljs.core.hash_map("\ufdd0'line", 645))), cljs.core.hash_map("\ufdd0'line", 645)))));
+  throw Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "Some content", cljs.core.with_meta(cljs.core.list("\ufdd1'text", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div"), cljs.core.hash_map("\ufdd0'line", 641))), cljs.core.hash_map("\ufdd0'line", 641))), cljs.core.hash_map("\ufdd0'line", 641)))));
 });
 domina.test.add_test.call(null, "can unlisten! on a :mouseenter event", function() {
   var a = function() {
@@ -13426,7 +13392,7 @@ domina.test.add_test.call(null, "can unlisten! on a :mouseenter event", function
   if(cljs.core.truth_(cljs.core._EQ_.call(null, "Some content", domina.text.call(null, domina.xpath.xpath.call(null, "//div"))))) {
     return null
   }
-  throw Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "Some content", cljs.core.with_meta(cljs.core.list("\ufdd1'text", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div"), cljs.core.hash_map("\ufdd0'line", 656))), cljs.core.hash_map("\ufdd0'line", 656))), cljs.core.hash_map("\ufdd0'line", 656)))));
+  throw Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "Some content", cljs.core.with_meta(cljs.core.list("\ufdd1'text", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div"), cljs.core.hash_map("\ufdd0'line", 652))), cljs.core.hash_map("\ufdd0'line", 652))), cljs.core.hash_map("\ufdd0'line", 652)))));
 });
 domina.test.add_test.call(null, "can append to a document fragment", function() {
   domina.test.reset.call(null);
@@ -13436,7 +13402,7 @@ domina.test.add_test.call(null, "can append to a document fragment", function() 
   if(cljs.core.truth_(cljs.core._EQ_.call(null, "testing", domina.text.call(null, domina.xpath.xpath.call(null, "//div"))))) {
     return null
   }
-  throw Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "testing", cljs.core.with_meta(cljs.core.list("\ufdd1'text", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div"), cljs.core.hash_map("\ufdd0'line", 664))), cljs.core.hash_map("\ufdd0'line", 664))), cljs.core.hash_map("\ufdd0'line", 664)))));
+  throw Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "testing", cljs.core.with_meta(cljs.core.list("\ufdd1'text", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//div"), cljs.core.hash_map("\ufdd0'line", 660))), cljs.core.hash_map("\ufdd0'line", 660))), cljs.core.hash_map("\ufdd0'line", 660)))));
 });
 domina.test.add_test.call(null, "doesn't clone unless necessary", function() {
   domina.test.reset.call(null);
@@ -13445,7 +13411,7 @@ domina.test.add_test.call(null, "doesn't clone unless necessary", function() {
   if(cljs.core.truth_(cljs.core._EQ_.call(null, a, domina.single_node.call(null, domina.xpath.xpath.call(null, "//body/div"))))) {
     return null
   }
-  throw Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "\ufdd1'child", cljs.core.with_meta(cljs.core.list("\ufdd1'single-node", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//body/div"), cljs.core.hash_map("\ufdd0'line", 671))), cljs.core.hash_map("\ufdd0'line", 671))), cljs.core.hash_map("\ufdd0'line", 671)))));
+  throw Error(cljs.core.str.call(null, "Assert failed: ", cljs.core.pr_str.call(null, cljs.core.with_meta(cljs.core.list("\ufdd1'=", "\ufdd1'child", cljs.core.with_meta(cljs.core.list("\ufdd1'single-node", cljs.core.with_meta(cljs.core.list("\ufdd1'xpath", "//body/div"), cljs.core.hash_map("\ufdd0'line", 667))), cljs.core.hash_map("\ufdd0'line", 667))), cljs.core.hash_map("\ufdd0'line", 667)))));
 });
 domina.test.report = function(a) {
   domina.test.reset.call(null);

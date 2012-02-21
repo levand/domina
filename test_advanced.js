@@ -546,7 +546,7 @@ var Rb = function() {
     if(!c) {
       return 1
     }
-    var d = Ff(b);
+    var d = Gf(b);
     return!c[d] ? c[d] = 1 : 0
   }
   function e(b, c) {
@@ -725,7 +725,7 @@ var Rb = function() {
     });
     c.W || Ba(b.W, function(b) {
       var c, e = b.fa;
-      b.type && $d[b.type] ? c = $d[b.type](e, b.la) : e.length && (c = Gf(e));
+      b.type && $d[b.type] ? c = $d[b.type](e, b.la) : e.length && (c = Hf(e));
       c && (d = db(d, c))
     });
     c.id || b.id && (d = db(d, function(c) {
@@ -767,7 +767,7 @@ var Rb = function() {
     return f
   }
   function Ua(b) {
-    for(;b = b[Hf];) {
+    for(;b = b[If];) {
       if(yb(b)) {
         return i
       }
@@ -901,7 +901,7 @@ var Rb = function() {
     return function(d) {
       return $(d, b) == c
     }
-  }}, ic = "undefined" == typeof document.firstChild.nextElementSibling, zb = !ic ? "nextElementSibling" : "nextSibling", Hf = !ic ? "previousElementSibling" : "previousSibling", yb = ic ? hc : Qb, Qc = {checked:function() {
+  }}, ic = "undefined" == typeof document.firstChild.nextElementSibling, zb = !ic ? "nextElementSibling" : "nextSibling", If = !ic ? "previousElementSibling" : "previousSibling", yb = ic ? hc : Qb, Qc = {checked:function() {
     return function(b) {
       return b.checked || b.attributes.checked
     }
@@ -965,7 +965,7 @@ var Rb = function() {
     return function(b) {
       return H(b) == q
     }
-  }}, Gf = Qa ? function(b) {
+  }}, Hf = Qa ? function(b) {
     var c = b.toLowerCase();
     "class" == c && (b = "className");
     return function(d) {
@@ -975,7 +975,7 @@ var Rb = function() {
     return function(c) {
       return c && c.getAttribute && c.hasAttribute(b)
     }
-  }, Yd = {}, Vd = {}, Ud = {}, Td = !!document.querySelectorAll && (!Sa || fb("526")), Na = 0, Ff = Qa ? function(b) {
+  }, Yd = {}, Vd = {}, Ud = {}, Td = !!document.querySelectorAll && (!Sa || fb("526")), Na = 0, Gf = Qa ? function(b) {
     return cb ? b.getAttribute("_uid") || b.setAttribute("_uid", ++Na) || Na : b.uniqueID
   } : function(b) {
     return b._uid || (b._uid = ++Na)
@@ -3919,7 +3919,7 @@ var of = function() {
         this.Ka = d;
         this.T = e
       }, mf.d = function() {
-        return u.call(h, "domina.css.t16989")
+        return u.call(h, "domina.css.t16883")
       }, mf.prototype.Z = function() {
         var b = this;
         return Ae.call(h, function(c) {
@@ -3995,7 +3995,7 @@ function Ef(b, c) {
     return h
   }
 }
-function If(b, c) {
+function Ff(b, c) {
   return b.insertBefore(document.createTextNode(C.call(h, Ze.call(h, vf, c))), b.firstChild)
 }
 function Jf(b) {
@@ -4015,7 +4015,7 @@ function Jf(b) {
   o(function() {
     var b = G.call(h, sf);
     return o(b) ? Ze.call(h, vf, c) : b
-  }()) && If.call(h, b, c);
+  }()) && Ff.call(h, b, c);
   return b.childNodes
 }
 function Kf(b) {
@@ -4056,7 +4056,7 @@ var Pf = function Nf(c) {
       this.Ca = e;
       this.T = g
     }, lf.d = function() {
-      return u.call(h, "domina.t16215")
+      return u.call(h, "domina.t15996")
     }, lf.prototype.Z = function() {
       return Of.call(h, sb.call(h, Se.call(h, this.ha)))
     }, lf.prototype.$ = function() {
@@ -4544,7 +4544,7 @@ var W = function() {
         this.Oa = d;
         this.T = e
       }, wg.d = function() {
-        return u.call(h, "domina.xpath.t15998")
+        return u.call(h, "domina.xpath.t15848")
       }, wg.prototype.Z = function() {
         return Ae.call(h, re.call(h, zg, this.F), S.call(h, this.A))
       }, wg.prototype.$ = function() {
@@ -5394,7 +5394,7 @@ X.call(h, "can get nodes from strings containing cell-level table fragments", fu
   var c = B.call(h, b);
   if(o(c)) {
     for(b = C.call(h, c);;) {
-      if(o(Ze.call(h, /TableCell/, R.call(h, b))) || a(Error(v.call(h, "Assert failed: ", R.call(h, L(u("\ufdd1're-find", /TableCell/, L(u("\ufdd1'pr-str", "\ufdd1'h"), x("\ufdd0'line", 552))), x("\ufdd0'line", 552)))))), b = E.call(h, c), o(b)) {
+      if(Mf.call(h, v.call(h, "debugging: [", R.call(h, b), "]")), Mf.call(h, v.call(h, "value: [", Ze.call(h, /TableCell/, R.call(h, b)), "]")), o(Ze.call(h, /TableCell/, R.call(h, b))) || a(Error(v.call(h, "Assert failed: ", R.call(h, L(u("\ufdd1're-find", /TableCell/, L(u("\ufdd1'pr-str", "\ufdd1'h"), x("\ufdd0'line", 554))), x("\ufdd0'line", 554)))))), b = E.call(h, c), o(b)) {
         c = b, b = C.call(h, c)
       }else {
         return h
@@ -5407,11 +5407,11 @@ X.call(h, "can get nodes from strings containing cell-level table fragments", fu
 X.call(h, "can get nodes from strings containing row-level table fragments", function() {
   Y.call(h);
   var b = S.call(h, "<tr><td>Cell</td><th>Header</th></tr><tr><td>Another</td><th>Row</th></tr>");
-  o(s.call(h, J.call(h, b), 2)) || a(Error(v.call(h, "Assert failed: ", R.call(h, L(u("\ufdd1'=", L(u("\ufdd1'count", "\ufdd1'n"), x("\ufdd0'line", 557)), 2), x("\ufdd0'line", 557))))));
+  o(s.call(h, J.call(h, b), 2)) || a(Error(v.call(h, "Assert failed: ", R.call(h, L(u("\ufdd1'=", L(u("\ufdd1'count", "\ufdd1'n"), x("\ufdd0'line", 559)), 2), x("\ufdd0'line", 559))))));
   var c = B.call(h, b);
   if(o(c)) {
     for(b = C.call(h, c);;) {
-      if(o(Ze.call(h, /TableRow/, R.call(h, b))) || a(Error(v.call(h, "Assert failed: ", R.call(h, L(u("\ufdd1're-find", /TableRow/, L(u("\ufdd1'pr-str", "\ufdd1'h"), x("\ufdd0'line", 559))), x("\ufdd0'line", 559)))))), b = E.call(h, c), o(b)) {
+      if(o(Ze.call(h, /TableRow/, R.call(h, b))) || a(Error(v.call(h, "Assert failed: ", R.call(h, L(u("\ufdd1're-find", /TableRow/, L(u("\ufdd1'pr-str", "\ufdd1'h"), x("\ufdd0'line", 561))), x("\ufdd0'line", 561)))))), b = E.call(h, c), o(b)) {
         c = b, b = C.call(h, c)
       }else {
         return h
@@ -5424,11 +5424,11 @@ X.call(h, "can get nodes from strings containing row-level table fragments", fun
 X.call(h, "can get nodes from strings containing section-level table fragments", function() {
   Y.call(h);
   var b = S.call(h, "<thead><tr><td>Cell</td><th>Header</th></tr></thead><tbody><tr><td>Another</td><th>Row</th></tr></tbody>");
-  o(s.call(h, J.call(h, b), 2)) || a(Error(v.call(h, "Assert failed: ", R.call(h, L(u("\ufdd1'=", L(u("\ufdd1'count", "\ufdd1'n"), x("\ufdd0'line", 564)), 2), x("\ufdd0'line", 564))))));
+  o(s.call(h, J.call(h, b), 2)) || a(Error(v.call(h, "Assert failed: ", R.call(h, L(u("\ufdd1'=", L(u("\ufdd1'count", "\ufdd1'n"), x("\ufdd0'line", 566)), 2), x("\ufdd0'line", 566))))));
   var c = B.call(h, b);
   if(o(c)) {
     for(b = C.call(h, c);;) {
-      if(Mf.call(h, v.call(h, "debugging: [", R.call(h, b), "]")), o(Ze.call(h, /TableSection/, R.call(h, b))) || a(Error(v.call(h, "Assert failed: ", R.call(h, L(u("\ufdd1're-find", /TableSection/, L(u("\ufdd1'pr-str", "\ufdd1'h"), x("\ufdd0'line", 567))), x("\ufdd0'line", 567)))))), b = E.call(h, c), o(b)) {
+      if(o(Ze.call(h, /TableSection/, R.call(h, b))) || a(Error(v.call(h, "Assert failed: ", R.call(h, L(u("\ufdd1're-find", /TableSection/, L(u("\ufdd1'pr-str", "\ufdd1'h"), x("\ufdd0'line", 568))), x("\ufdd0'line", 568)))))), b = E.call(h, c), o(b)) {
         c = b, b = C.call(h, c)
       }else {
         return h
@@ -5449,7 +5449,7 @@ X.call(h, "can trigger a handler on a :mouseover event", function() {
   if(o(s.call(h, "Hello world!", ng.call(h, W.call(h, "//p"))))) {
     return h
   }
-  a(Error(v.call(h, "Assert failed: ", R.call(h, L(u("\ufdd1'=", "Hello world!", L(u("\ufdd1'text", L(u("\ufdd1'xpath", "//p"), x("\ufdd0'line", 575))), x("\ufdd0'line", 575))), x("\ufdd0'line", 575))))))
+  a(Error(v.call(h, "Assert failed: ", R.call(h, L(u("\ufdd1'=", "Hello world!", L(u("\ufdd1'text", L(u("\ufdd1'xpath", "//p"), x("\ufdd0'line", 576))), x("\ufdd0'line", 576))), x("\ufdd0'line", 576))))))
 });
 X.call(h, "can trigger a handler on a :mouseout event", function() {
   Y.call(h);
@@ -5462,7 +5462,7 @@ X.call(h, "can trigger a handler on a :mouseout event", function() {
   if(o(s.call(h, "Hello world!", ng.call(h, W.call(h, "//p"))))) {
     return h
   }
-  a(Error(v.call(h, "Assert failed: ", R.call(h, L(u("\ufdd1'=", "Hello world!", L(u("\ufdd1'text", L(u("\ufdd1'xpath", "//p"), x("\ufdd0'line", 583))), x("\ufdd0'line", 583))), x("\ufdd0'line", 583))))))
+  a(Error(v.call(h, "Assert failed: ", R.call(h, L(u("\ufdd1'=", "Hello world!", L(u("\ufdd1'text", L(u("\ufdd1'xpath", "//p"), x("\ufdd0'line", 584))), x("\ufdd0'line", 584))), x("\ufdd0'line", 584))))))
 });
 X.call(h, "can trigger a handler on a :click event", function() {
   Y.call(h);
@@ -5475,7 +5475,7 @@ X.call(h, "can trigger a handler on a :click event", function() {
   if(o(s.call(h, "Hello world!", ng.call(h, W.call(h, "//p"))))) {
     return h
   }
-  a(Error(v.call(h, "Assert failed: ", R.call(h, L(u("\ufdd1'=", "Hello world!", L(u("\ufdd1'text", L(u("\ufdd1'xpath", "//p"), x("\ufdd0'line", 591))), x("\ufdd0'line", 591))), x("\ufdd0'line", 591))))))
+  a(Error(v.call(h, "Assert failed: ", R.call(h, L(u("\ufdd1'=", "Hello world!", L(u("\ufdd1'text", L(u("\ufdd1'xpath", "//p"), x("\ufdd0'line", 592))), x("\ufdd0'line", 592))), x("\ufdd0'line", 592))))))
 });
 X.call(h, "can trigger a handler on a :mouseenter event", function() {
   Y.call(h);
@@ -5488,7 +5488,7 @@ X.call(h, "can trigger a handler on a :mouseenter event", function() {
   if(o(s.call(h, "Hello world!", ng.call(h, W.call(h, "//p"))))) {
     return h
   }
-  a(Error(v.call(h, "Assert failed: ", R.call(h, L(u("\ufdd1'=", "Hello world!", L(u("\ufdd1'text", L(u("\ufdd1'xpath", "//p"), x("\ufdd0'line", 601))), x("\ufdd0'line", 601))), x("\ufdd0'line", 601))))))
+  a(Error(v.call(h, "Assert failed: ", R.call(h, L(u("\ufdd1'=", "Hello world!", L(u("\ufdd1'text", L(u("\ufdd1'xpath", "//p"), x("\ufdd0'line", 602))), x("\ufdd0'line", 602))), x("\ufdd0'line", 602))))))
 });
 X.call(h, "can trigger a handler on a :mouseleave event", function() {
   Y.call(h);
@@ -5501,7 +5501,7 @@ X.call(h, "can trigger a handler on a :mouseleave event", function() {
   if(o(s.call(h, "Hello world!", ng.call(h, W.call(h, "//p"))))) {
     return h
   }
-  a(Error(v.call(h, "Assert failed: ", R.call(h, L(u("\ufdd1'=", "Hello world!", L(u("\ufdd1'text", L(u("\ufdd1'xpath", "//p"), x("\ufdd0'line", 611))), x("\ufdd0'line", 611))), x("\ufdd0'line", 611))))))
+  a(Error(v.call(h, "Assert failed: ", R.call(h, L(u("\ufdd1'=", "Hello world!", L(u("\ufdd1'text", L(u("\ufdd1'xpath", "//p"), x("\ufdd0'line", 612))), x("\ufdd0'line", 612))), x("\ufdd0'line", 612))))))
 });
 X.call(h, "can remove-listeners on a :click event", function() {
   Y.call(h);
@@ -5515,7 +5515,7 @@ X.call(h, "can remove-listeners on a :click event", function() {
   if(o(s.call(h, "Some content", ng.call(h, W.call(h, "//div"))))) {
     return h
   }
-  a(Error(v.call(h, "Assert failed: ", R.call(h, L(u("\ufdd1'=", "Some content", L(u("\ufdd1'text", L(u("\ufdd1'xpath", "//div"), x("\ufdd0'line", 621))), x("\ufdd0'line", 621))), x("\ufdd0'line", 621))))))
+  a(Error(v.call(h, "Assert failed: ", R.call(h, L(u("\ufdd1'=", "Some content", L(u("\ufdd1'text", L(u("\ufdd1'xpath", "//div"), x("\ufdd0'line", 622))), x("\ufdd0'line", 622))), x("\ufdd0'line", 622))))))
 });
 X.call(h, "can remove-listeners on a :mouseenter event", function() {
   Y.call(h);
@@ -5529,7 +5529,7 @@ X.call(h, "can remove-listeners on a :mouseenter event", function() {
   if(o(s.call(h, "Some content", ng.call(h, W.call(h, "//div"))))) {
     return h
   }
-  a(Error(v.call(h, "Assert failed: ", R.call(h, L(u("\ufdd1'=", "Some content", L(u("\ufdd1'text", L(u("\ufdd1'xpath", "//div"), x("\ufdd0'line", 632))), x("\ufdd0'line", 632))), x("\ufdd0'line", 632))))))
+  a(Error(v.call(h, "Assert failed: ", R.call(h, L(u("\ufdd1'=", "Some content", L(u("\ufdd1'text", L(u("\ufdd1'xpath", "//div"), x("\ufdd0'line", 633))), x("\ufdd0'line", 633))), x("\ufdd0'line", 633))))))
 });
 X.call(h, "can unlisten! on a :click event", function() {
   function b() {
@@ -5544,7 +5544,7 @@ X.call(h, "can unlisten! on a :click event", function() {
   if(o(s.call(h, "Some content", ng.call(h, W.call(h, "//div"))))) {
     return h
   }
-  a(Error(v.call(h, "Assert failed: ", R.call(h, L(u("\ufdd1'=", "Some content", L(u("\ufdd1'text", L(u("\ufdd1'xpath", "//div"), x("\ufdd0'line", 642))), x("\ufdd0'line", 642))), x("\ufdd0'line", 642))))))
+  a(Error(v.call(h, "Assert failed: ", R.call(h, L(u("\ufdd1'=", "Some content", L(u("\ufdd1'text", L(u("\ufdd1'xpath", "//div"), x("\ufdd0'line", 643))), x("\ufdd0'line", 643))), x("\ufdd0'line", 643))))))
 });
 X.call(h, "can unlisten! on a :mouseenter event", function() {
   function b() {
@@ -5559,7 +5559,7 @@ X.call(h, "can unlisten! on a :mouseenter event", function() {
   if(o(s.call(h, "Some content", ng.call(h, W.call(h, "//div"))))) {
     return h
   }
-  a(Error(v.call(h, "Assert failed: ", R.call(h, L(u("\ufdd1'=", "Some content", L(u("\ufdd1'text", L(u("\ufdd1'xpath", "//div"), x("\ufdd0'line", 653))), x("\ufdd0'line", 653))), x("\ufdd0'line", 653))))))
+  a(Error(v.call(h, "Assert failed: ", R.call(h, L(u("\ufdd1'=", "Some content", L(u("\ufdd1'text", L(u("\ufdd1'xpath", "//div"), x("\ufdd0'line", 654))), x("\ufdd0'line", 654))), x("\ufdd0'line", 654))))))
 });
 X.call(h, "can append to a document fragment", function() {
   Y.call(h);
@@ -5569,7 +5569,7 @@ X.call(h, "can append to a document fragment", function() {
   if(o(s.call(h, "testing", ng.call(h, W.call(h, "//div"))))) {
     return h
   }
-  a(Error(v.call(h, "Assert failed: ", R.call(h, L(u("\ufdd1'=", "testing", L(u("\ufdd1'text", L(u("\ufdd1'xpath", "//div"), x("\ufdd0'line", 661))), x("\ufdd0'line", 661))), x("\ufdd0'line", 661))))))
+  a(Error(v.call(h, "Assert failed: ", R.call(h, L(u("\ufdd1'=", "testing", L(u("\ufdd1'text", L(u("\ufdd1'xpath", "//div"), x("\ufdd0'line", 662))), x("\ufdd0'line", 662))), x("\ufdd0'line", 662))))))
 });
 X.call(h, "doesn't clone unless necessary", function() {
   Y.call(h);
@@ -5578,7 +5578,7 @@ X.call(h, "doesn't clone unless necessary", function() {
   if(o(s.call(h, b, Lf.call(h, W.call(h, "//body/div"))))) {
     return h
   }
-  a(Error(v.call(h, "Assert failed: ", R.call(h, L(u("\ufdd1'=", "\ufdd1'child", L(u("\ufdd1'single-node", L(u("\ufdd1'xpath", "//body/div"), x("\ufdd0'line", 668))), x("\ufdd0'line", 668))), x("\ufdd0'line", 668))))))
+  a(Error(v.call(h, "Assert failed: ", R.call(h, L(u("\ufdd1'=", "\ufdd1'child", L(u("\ufdd1'single-node", L(u("\ufdd1'xpath", "//body/div"), x("\ufdd0'line", 669))), x("\ufdd0'line", 669))), x("\ufdd0'line", 669))))))
 });
 (function(b) {
   Y.call(h);

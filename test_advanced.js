@@ -3919,7 +3919,7 @@ var of = function() {
         this.Ka = d;
         this.T = e
       }, mf.d = function() {
-        return u.call(g, "domina.css.t16869")
+        return u.call(g, "domina.css.t16862")
       }, mf.prototype.Z = function() {
         var b = this;
         return Ae.call(g, function(c) {
@@ -4053,7 +4053,7 @@ var Of = function Mf(c) {
       this.Ca = e;
       this.T = h
     }, lf.d = function() {
-      return u.call(g, "domina.t16003")
+      return u.call(g, "domina.t15910")
     }, lf.prototype.Z = function() {
       return Nf.call(g, sb.call(g, Se.call(g, this.ha)))
     }, lf.prototype.$ = function() {
@@ -4541,7 +4541,7 @@ var W = function() {
         this.Oa = d;
         this.T = e
       }, vg.d = function() {
-        return u.call(g, "domina.xpath.t15851")
+        return u.call(g, "domina.xpath.t15796")
       }, vg.prototype.Z = function() {
         return Ae.call(g, re.call(g, yg, this.F), S.call(g, this.A))
       }, vg.prototype.$ = function() {
@@ -5398,11 +5398,11 @@ X.call(g, "can get nodes from strings containing row-level table fragments", fun
   Y.call(g);
   var b = S.call(g, "<tr><td>Cell</td><th>Header</th></tr><tr><td>Another</td><th>Row</th></tr>");
   o(s.call(g, J.call(g, b), 2)) || a(Error(w.call(g, "Assert failed: ", R.call(g, L(u("\ufdd1'=", L(u("\ufdd1'count", "\ufdd1'n"), x("\ufdd0'line", 557)), 2), x("\ufdd0'line", 557))))));
-  o(s.call(g, "TR")) || a(Error(w.call(g, "Assert failed: ", C.call(g, b).tagName, "\n", R.call(g, L(u("\ufdd1'=", "TR"), x("\ufdd0'line", 558))))));
-  if(o(s.call(g, "TR"))) {
+  o(s.call(g, "TR", C.call(g, b).tagName)) || a(Error(w.call(g, "Assert failed: ", R.call(g, L(u("\ufdd1'=", "TR", L(u("\ufdd1'.", L(u("\ufdd1'first", "\ufdd1'n"), x("\ufdd0'line", 558)), "\ufdd1'-tagName"), x("\ufdd0'line", 558))), x("\ufdd0'line", 558))))));
+  if(o(s.call(g, "TR", qd.call(g, b).tagName))) {
     return g
   }
-  a(Error(w.call(g, "Assert failed: ", qd.call(g, b).tagName, "\n", R.call(g, L(u("\ufdd1'=", "TR"), x("\ufdd0'line", 559))))))
+  a(Error(w.call(g, "Assert failed: ", R.call(g, L(u("\ufdd1'=", "TR", L(u("\ufdd1'.", L(u("\ufdd1'second", "\ufdd1'n"), x("\ufdd0'line", 559)), "\ufdd1'-tagName"), x("\ufdd0'line", 559))), x("\ufdd0'line", 559))))))
 });
 X.call(g, "can get nodes from strings containing section-level table fragments", function() {
   Y.call(g);

@@ -3919,7 +3919,7 @@ var of = function() {
         this.Ka = d;
         this.T = e
       }, mf.d = function() {
-        return u.call(h, "domina.css.t16741")
+        return u.call(h, "domina.css.t16989")
       }, mf.prototype.Z = function() {
         var b = this;
         return Ae.call(h, function(c) {
@@ -4056,7 +4056,7 @@ var Pf = function Nf(c) {
       this.Ca = e;
       this.T = g
     }, lf.d = function() {
-      return u.call(h, "domina.t15921")
+      return u.call(h, "domina.t16215")
     }, lf.prototype.Z = function() {
       return Of.call(h, sb.call(h, Se.call(h, this.ha)))
     }, lf.prototype.$ = function() {
@@ -4544,7 +4544,7 @@ var W = function() {
         this.Oa = d;
         this.T = e
       }, wg.d = function() {
-        return u.call(h, "domina.xpath.t15777")
+        return u.call(h, "domina.xpath.t15998")
       }, wg.prototype.Z = function() {
         return Ae.call(h, re.call(h, zg, this.F), S.call(h, this.A))
       }, wg.prototype.$ = function() {
@@ -5428,7 +5428,7 @@ X.call(h, "can get nodes from strings containing section-level table fragments",
   var c = B.call(h, b);
   if(o(c)) {
     for(b = C.call(h, c);;) {
-      if(Mf.call(h, "debugging: ", R.call(h, b)), o(Ze.call(h, /TableSection/, R.call(h, b))) || a(Error(v.call(h, "Assert failed: ", R.call(h, L(u("\ufdd1're-find", /TableSection/, L(u("\ufdd1'pr-str", "\ufdd1'h"), x("\ufdd0'line", 567))), x("\ufdd0'line", 567)))))), b = E.call(h, c), o(b)) {
+      if(Mf.call(h, v.call(h, "debugging: [", R.call(h, b), "]")), o(Ze.call(h, /TableSection/, R.call(h, b))) || a(Error(v.call(h, "Assert failed: ", R.call(h, L(u("\ufdd1're-find", /TableSection/, L(u("\ufdd1'pr-str", "\ufdd1'h"), x("\ufdd0'line", 567))), x("\ufdd0'line", 567)))))), b = E.call(h, c), o(b)) {
         c = b, b = C.call(h, c)
       }else {
         return h

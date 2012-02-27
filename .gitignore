@@ -9,3 +9,4 @@ lib
 *.jar
 .repl
 pom.xml
+.lein-plugins

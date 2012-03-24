@@ -401,6 +401,7 @@
   object."
   [list-thing]
   (cond
+   (nil? list-thing) '()
    (dm/satisfies? ISeqable list-thing) (seq list-thing)
    (. list-thing -length) (lazy-nodelist list-thing)
    :default (cons list-thing)))
@@ -418,15 +419,17 @@
   ;; versions of IE.
   default
   (nodes [content]
-         (cond
-          (dm/satisfies? ISeqable content) (seq content)
-          (. content -length) (lazy-nodelist content)
-          :default (cons content)))
+    (cond
+     (nil? content) '()
+     (dm/satisfies? ISeqable content) (seq content)
+     (. content -length) (lazy-nodelist content)
+     :default (cons content)))
   (single-node [content]
-               (cond
-                (dm/satisfies? ISeqable content) (first content)
-                (. content -length) (. content (item 0))
-                :default content)))
+    (cond
+     (nil? content) nil
+     (dm/satisfies? ISeqable content) (first content)
+     (. content -length) (. content (item 0))
+     :default content)))
 
 (if (dm/defined? js/NodeList)
   (extend-type js/NodeList

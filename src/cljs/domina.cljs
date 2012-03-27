@@ -393,8 +393,8 @@
     (lazy-nl-via-item nl)
     (lazy-nl-via-array-ref nl)))
 
-(defn- normalize-seq
-  "Early versions of IE have things which are like arrays in that they
+(defn normalize-seq
+  "Some versions of IE have things that are like arrays in that they
   respond to .length, but are not arrays nor NodeSets. This returns a
   real sequence view of such objects. If passed an object that is not
   a logical sequence at all, returns a single-item seq containing the

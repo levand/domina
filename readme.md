@@ -118,22 +118,49 @@ Get the values of all `<input>` elements on the page:
 
 For examples of every currently implemented function, see the `test.cljs` file in the code repository, which exercises each function in unit tests against a DOM page. The `test.html` file loads and runs `test.cljs` in the context of the DOM.
 
-## Important note on IE compatibility
+## Important note on browser XPath compatibility (IE and Android).
 
-Internet Explorer does not support DOM Level 3 XPath selectors. In order to utilize the `domina.xpath` namespace, you will need to conditionally include a pure-javascript XPath DOM Level 3 implementation.
+Internet Explorer does not support DOM Level 3 XPath selectors. In order to utilize the `domina.xpath` namespace, you will need to include a pure-javascript XPath DOM Level 3 implementation.
 
-A fast implementation known to work is provided by Cybozu Labs at http://coderepos.org/share/wiki/JavaScript-XPath
+A fast implementation known to work is provided by Cybozu Labs at <http://coderepos.org/share/wiki/JavaScript-XPath>. It is ignored on all browssers which already have native XPath support.
 
-Including it looks like this:
+To include it on your page, enter the following line in your `head` element, *before* you reference any ClojureScript scripts.
 
 ```html
-    <!--[if IE]><script type="text/javascript" src="cybozu-xpath.js"></script><![endif]-->
+    <script type="text/javascript" src="cybozu-xpath.js"></script>
 ```
 
-It was decided *not* to compile this functionality directly into Domina for two reasons:
+#### Android
+
+The situation with the Android browser (version 2.x, it is fixed in version 3) is even worse. The browser does not support XPath, but erroneously reports that it does. To make Domina's XPath support work on an Android device, you must include the following code snippet on your HTML page before including the `cybozu-xpath.js` file:
+
+```html
+    <script type="text/javascript">
+      /* Android 2.x claims XPath support, but has none.  Force non-native
+         XPath implementation in this case */
+      if (document.implementation
+           && document.implementation.hasFeature
+           && document.implementation.hasFeature("XPath",null)
+           && !document.evaluate) {
+        window.jsxpath = {
+          targetFrame: undefined,
+          exportInstaller: false,
+          useNative: false, /* force non-native implementation */
+          useInnerText: true
+        };
+      }
+    </script>
+    <script type="text/javascript" src="xpath.js"></script>
+```
+
+This script checks that if the browser claims XPath support, if it actually *has* it (via the presence of the `document.evaluate`function) and if not, sets a flag that tells Cybozu's XPath implementation to override native support.
+
+If you're using a different XPath implementation, you'll need to use whatever means it provides to override native XPath handling.
+
+We decided *not* to compile this functionality directly into Domina for two reasons:
 
 - Potential licensing issues
-- Reduced code size. With a conditional comment, the script isn't even downloaded for browsers which support XPath natively, which is obviously not possible to determine at compile-time.
+- Reduced code size. With some server side conditions, it is possible to avoid downloading the script altogether for browsers which support XPath natively, which is obviously not possible to determine at compile-time.
 
 ## Todo
 

@@ -3919,7 +3919,7 @@ var of = function() {
         this.Ka = d;
         this.T = e
       }, mf.d = function() {
-        return u.call(g, "domina.css.t16852")
+        return u.call(g, "domina.css.t16896")
       }, mf.prototype.Z = function() {
         var b = this;
         return Ae.call(g, function(c) {
@@ -4053,7 +4053,7 @@ var Of = function Mf(c) {
       this.Ca = e;
       this.T = h
     }, lf.d = function() {
-      return u.call(g, "domina.t15938")
+      return u.call(g, "domina.t16160")
     }, lf.prototype.Z = function() {
       return Nf.call(g, sb.call(g, Se.call(g, this.ha)))
     }, lf.prototype.$ = function() {
@@ -4541,7 +4541,7 @@ var W = function() {
         this.Oa = d;
         this.T = e
       }, vg.d = function() {
-        return u.call(g, "domina.xpath.t15653")
+        return u.call(g, "domina.xpath.t15969")
       }, vg.prototype.Z = function() {
         return Ae.call(g, re.call(g, yg, this.F), S.call(g, this.A))
       }, vg.prototype.$ = function() {
@@ -4811,10 +4811,10 @@ X.call(g, "a relative xpath expression", function() {
 X.call(g, "extended selection chaining", function() {
   Y.call(g);
   V.call(g, W.call(g, "//body"), "<div><p><span>some text</span></p><p><span>more text</span></p></div>");
-  if(o(s.call(g, 2, J.call(g, S.call(g, W.call(g, W.call(g, W.call(g, W.call(g, "//body"), "div"), "p"), "span")))))) {
+  if(o(s.call(g, 2, J.call(g, S.call(g, W.call(g, W.call(g, W.call(g, W.call(g, "//body"), "./div"), "./p"), "./span")))))) {
     return g
   }
-  a(Error(w.call(g, "Assert failed: ", R.call(g, L(u("\ufdd1'=", 2, L(u("\ufdd1'count", L(u("\ufdd1'nodes", L(u("\ufdd1'->", L(u("\ufdd1'xpath", "//body"), x("\ufdd0'line", 120)), L(u("\ufdd1'xpath", "div"), x("\ufdd0'line", 121)), L(u("\ufdd1'xpath", "p"), x("\ufdd0'line", 122)), L(u("\ufdd1'xpath", "span"), x("\ufdd0'line", 123))), x("\ufdd0'line", 120))), x("\ufdd0'line", 120))), x("\ufdd0'line", 120))), x("\ufdd0'line", 120))))))
+  a(Error(w.call(g, "Assert failed: ", R.call(g, L(u("\ufdd1'=", 2, L(u("\ufdd1'count", L(u("\ufdd1'nodes", L(u("\ufdd1'->", L(u("\ufdd1'xpath", "//body"), x("\ufdd0'line", 120)), L(u("\ufdd1'xpath", "./div"), x("\ufdd0'line", 121)), L(u("\ufdd1'xpath", "./p"), x("\ufdd0'line", 122)), L(u("\ufdd1'xpath", "./span"), x("\ufdd0'line", 123))), x("\ufdd0'line", 120))), x("\ufdd0'line", 120))), x("\ufdd0'line", 120))), x("\ufdd0'line", 120))))))
 });
 X.call(g, "advanced xpath", function() {
   Y.call(g);

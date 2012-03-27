@@ -118,9 +118,9 @@
                (append! (xpath "//body")
                         "<div><p><span>some text</span></p><p><span>more text</span></p></div>")
                (assert (= 2 (count (nodes (-> (xpath "//body")
-                                              (xpath "div")
-                                              (xpath "p")
-                                              (xpath "span"))))))))
+                                              (xpath "./div")
+                                              (xpath "./p")
+                                              (xpath "./span"))))))))
 (add-test "advanced xpath"
           #(do (reset)
                (standard-fixture)

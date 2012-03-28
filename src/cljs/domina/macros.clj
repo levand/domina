@@ -1,4 +1,5 @@
-(ns domina.macros)
+(ns domina.macros
+  (:refer-clojure :exclude [satisfies?]))
 
 (defmacro defined? [x]
   (list 'js* "(typeof ~{} != 'undefined')" x))

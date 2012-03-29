@@ -3,7 +3,7 @@
                        prepend! detach! destroy! destroy-children! insert! insert-before!
                        insert-after! swap-content! style attr set-style! set-attr! styles attrs
                        set-styles! set-attrs! has-class? add-class! remove-class! classes
-                       text set-text! value set-value! html set-html! log-debug]]
+                       text set-text! value set-value! html set-html! set-data! get-data log-debug]]
         [domina.xpath :only [xpath]]
         [domina.css :only [sel]]
         [domina.events :only [listen! unlisten! remove-listeners! fire-listeners!]])
@@ -130,6 +130,15 @@
           #(do (reset)
                (standard-fixture)
                (assert (= 1 (count (nodes (by-id "id1")))))))
+
+(add-test "look up node by id with context"
+          #(do (reset)
+               (append! (sel "body")
+                        "<div><p><span>some text</span></p><p><span>more text</span></p></div>")
+               (assert (= 2 (count (nodes (-> (sel "body")
+                                              (sel "div")
+                                              (sel "p")
+                                              (sel "span"))))))))
 
 (add-test "look up nodes by class"
           #(do (reset)
@@ -665,6 +674,23 @@
              (let [child (single-node "<div>hello</div>")]
                (append! (xpath "//body") child)
                (assert (= child (single-node (xpath "//body/div")))))))
+
+
+(add-test "test that data works"
+          #(do
+             (reset)
+             (append! (xpath "//body") "<div id='testingdata'>hello</div>")
+             (let [data {:some "complex data"}]
+               (set-data! (by-id "testingdata") :my-impeccable-data data)
+               (assert (= data (get-data (by-id "testingdata") :my-impeccable-data))))))
+
+(add-test "test that data works with bubbling"
+          #(do
+             (reset)
+             (append! (xpath "//body") "<div id='outerdata'><div id='innerdata'>hello</div></div>")
+             (let [data {:some "complex data"}]
+               (set-data! (by-id "outerdata") :my-impeccable-data data)
+               (assert (= data (get-data (by-id "innerdata") :my-impeccable-data true))))))
 
 (defn report
   [test-results]

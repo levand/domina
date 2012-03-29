@@ -345,6 +345,28 @@
       (fallback html-string)))
   content)
 
+(defn get-data
+  "Returns data associated with a node for a given key. Assumes
+  content is a single node. If the bubble parameter is set to true,
+  will search parent nodes if the key is not found."
+  ([node key] (get-data node key false))
+  ([node key bubble] (let [m (.-__domina_data (single-node node))
+                           value (when m (get m key))]
+                       (if (and bubble (nil? value))
+                         (when-let [parent (.-parentNode (single-node node))]
+                           (get-data parent key true))
+                         value))))
+
+(defn set-data!
+  "Sets a data on the node for a given key. Assumes content is a
+  single node. Data should be ClojureScript values and data structures
+  only; using other objects as data may result in memory leaks on some
+  browsers."
+  [node key value]
+  (let [m (or (.-__domina_data (single-node node)) {})]
+    (set! (.-__domina_data (single-node node))
+          (assoc m key value))))
+
 ;;;;;;;;;;;;;;;;;;; private helper functions ;;;;;;;;;;;;;;;;;
 
 (defn- apply-with-cloning

@@ -2,6 +2,10 @@
   (:require [domina :as domina]
             [goog.events :as events]))
 
+
+
+
+(comment
 ;;;;;;;;;;;;;;;;;;; Event Wrappers ;;;;;;;;;;;;;;;;;
 
 (defn child-of? 
@@ -113,3 +117,5 @@
 ;;;;;;;;;;;;;;;;;;; Initialization ;;;;;;;;;;;;;;;;;
 (reg-event-wrapper! :mouseenter :mouseover mouse-enter-leave)
 (reg-event-wrapper! :mouseleave :mouseout mouse-enter-leave)
+
+)

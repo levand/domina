@@ -415,6 +415,11 @@
     (lazy-nl-via-item nl)
     (lazy-nl-via-array-ref nl)))
 
+(defn- array-like?
+  [obj]
+  (and (.-length obj)
+       (or (.-indexOf obj) (.-item obj))))
+
 (defn normalize-seq
   "Some versions of IE have things that are like arrays in that they
   respond to .length, but are not arrays nor NodeSets. This returns a
@@ -425,7 +430,7 @@
   (cond
    (nil? list-thing) '()
    (dm/satisfies? ISeqable list-thing) (seq list-thing)
-   (. list-thing -length) (lazy-nodelist list-thing)
+   (array-like? list-thing) (lazy-nodelist list-thing)
    :default (cons list-thing)))
 
 ;;;;;;;;;;;;;;;;;;; Protocol Implementations ;;;;;;;;;;;;;;;;;
@@ -444,13 +449,13 @@
     (cond
      (nil? content) '()
      (dm/satisfies? ISeqable content) (seq content)
-     (. content -length) (lazy-nodelist content)
+     (array-like? content) (lazy-nodelist content)
      :default (cons content)))
   (single-node [content]
     (cond
      (nil? content) nil
      (dm/satisfies? ISeqable content) (first content)
-     (. content -length) (. content (item 0))
+     (array-like? item) (. content (item 0))
      :default content)))
 
 (if (dm/defined? js/NodeList)

@@ -455,7 +455,7 @@
     (cond
      (nil? content) nil
      (dm/satisfies? ISeqable content) (first content)
-     (array-like? item) (. content (item 0))
+     (array-like? content) (. content (item 0))
      :default content)))
 
 (if (dm/defined? js/NodeList)

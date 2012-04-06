@@ -39,8 +39,11 @@
          (event-type [_] (.-type evt))
          (raw-event [_] evt)
          ILookup
-         (-lookup [o k] (aget evt k))
-         (-lookup [o k not-found] (or (aget evt k)
+         (-lookup [o k]
+           (if-let [val (aget evt k)]
+             val
+             (aget evt (name k))))
+         (-lookup [o k not-found] (or (-lookup o k)
                                       not-found))))
     true))
 

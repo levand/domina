@@ -611,6 +611,20 @@
               (simulate-click-event (sel "#mybutton"))
               (assert @clicked))))
 
+(add-test "can extract string keys from an event using keyword accessors"
+          (fn []
+            (reset)
+            (append! (xpath "//body") "<button id='mybutton'>Text</button>")
+            (let [coords (atom nil)]
+              (listen! (sel "#mybutton") :foobar (fn [e]
+                                                   (reset! coords
+                                                           [(:clientX e)
+                                                            (:clientY e)])))
+              (dispatch! (sel "#mybutton") :foobar {"clientX" 42
+                                                    "clientY" 42})
+              (assert (= [42 42] @coords)))))
+
+
 (add-test "can dispatch an event, execute default action is true"
           (fn []
             (reset)

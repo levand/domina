@@ -99,7 +99,7 @@
 ;; bubbling/capturing functionality as native browser events, on native browser nodes,
 ;; so we can dispatch against things that do not inherit from goog.event.EventTarget.
 (defn dispatch-browser!
-  "Dispatches an event as a simulated browser event from the given source node. Returns false if any handlers called prevent-default, otherwise true."
+  "Dispatches an event as a simulated browser event from the given source node. Emulates capture/bubble behavior. Returns false if any handlers called prevent-default, otherwise true."
   [source evt]
   (let [ancestors (ancestor-nodes (domina/single-node source))]
     ;; Capture phase

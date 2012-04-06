@@ -146,7 +146,7 @@ Note that the content argument is optional: in this case, the listener is added 
 
 ### Event Objects
 
-When an event is triggered, it invokes the provided listener function, passing it an event object. The event object will be an instance of the `goog.events.Event` prototype, but will also implement ClojureScript's `ILookup` protocol, as well as the `domina.events.Event` protocol.
+When an event is triggered, it invokes the provided listener function, passing it an event object. The event object will implement ClojureScript's `ILookup` protocol, as well as the `domina.events.Event` protocol.
 
 Implementing the `ILookup` protocol makes it easy to pull values from browser events using ClojureScript's built in lookup functions such as `get` and `contains?`, as well as using keywords in function position. Note that although native events only have string keys, Domina will attempt to translate keywords to strings for lookup purposes.
 
@@ -176,9 +176,12 @@ The `domina.events.Event` protocol supports the following methods:
   <tr>
     <td>`event-type`</td><td>Returns the type of the event</td>
   </tr>
+   <tr>
+    <td>`raw-event`</td><td>Returns the underlying `goog.events.Event` object, rather than it's Domina wrapper.</td>
+  </tr>
 </table>
 
-## De-registering Event Handlers
+### De-registering Event Handlers
 
 There are several ways to de-register an event handler.
 
@@ -192,6 +195,24 @@ If you do not have the key in hand, you can remove all listeners from a node (or
 ```
 
 There are also `listen-once!` and `capture-once!` variants of `listen!` and `capture!` which de-register themselves after the first time they are triggered.
+
+### Custom Events
+
+In addition to native events dispatched by the browser, Domina allows you to create and dispatch arbitary events using the `dispatch!` function.
+
+The `dispatch!` function takes an event target as a DomContent (assumed to be a single node), an event type, and an event map. Keys and values in the event map are merged in to the event object, and can be used to pass arbitrary data to event handlers.
+
+```clojure
+(dispatch! (by-id "evt-target") :my-event {:some-key "some value"})
+```
+
+The event will be propegated through the capture and bubble phases just like a browser event, and can be caught in the normal way:
+
+```clojure
+(listen! (by-id "evt-target") :my-event (fn [evt] (log (:some-key evt))))
+```
+
+Note that if you omit the event target when calling `dispatch!` (or when registering a listener), it will default to the root node of the document. This is often desirable when using custom application-wide events that have no logical mapping to any particular location in the DOM tree.
 
 ## Important note on browser XPath compatibility (IE and Android).
 

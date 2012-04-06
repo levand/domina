@@ -104,11 +104,13 @@
   (let [ancestors (ancestor-nodes (domina/single-node source))]
     ;; Capture phase
     (doseq [n ancestors]
-      (if-not (.-propagationStopped n)
+      (when-not (.-propagationStopped n)
+        (set! (.-currentTarget evt) n)
         (events/fireListeners n (.-type evt) true evt)))
     ;; Bubble phase
     (doseq [n (reverse ancestors)]
-      (if-not (.-propagationStopped n)
+      (when-not (.-propagationStopped n)
+        (set! (.-currentTarget evt) n)
         (events/fireListeners n (.-type evt) false evt)))
     (.-returnValue_ evt)))
 

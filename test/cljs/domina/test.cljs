@@ -641,6 +641,21 @@
               (simulate-click-event (sel "#mybutton"))
               (assert (= [:captured :listened] @clicked)))))
 
+(add-test "current-target is correct when capturing custom events"
+          (fn []
+            (reset)
+            (append! (xpath "//body")
+                     "<div><button id='mybutton'>Text</button></div>")
+            (let [actual-elements (atom [])
+                  body (domina/single-node (sel "body"))
+                  button (domina/single-node (sel "button"))]
+              (listen! (sel "body") :foobar #(swap! actual-elements conj
+                                                    (current-target %)))
+              (listen! (sel "button") :foobar #(swap! actual-elements conj
+                                                      (current-target %)))
+              (dispatch! (sel "#mybutton") :foobar {:some "data"})
+              (assert (= [button body] @actual-elements)))))
+
 (add-test "can stop event propagation in the capture phase."
           (fn []
             (reset)

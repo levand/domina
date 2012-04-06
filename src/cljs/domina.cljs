@@ -417,7 +417,8 @@
 
 (defn- array-like?
   [obj]
-  (and (.-length obj)
+  (and obj
+       (.-length obj)
        (or (.-indexOf obj) (.-item obj))))
 
 (defn normalize-seq

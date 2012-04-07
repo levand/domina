@@ -99,10 +99,10 @@
        so-far)))
 
 ;; See closure.goog.testing.events.fireBrowserEvent. This function will give us the same
-;; bubbling/capturing functionality as native browser events, on native browser nodes,
+;; bubbling/capturing functionality as W3C DOM level 2 events, on native browser nodes,
 ;; so we can dispatch against things that do not inherit from goog.event.EventTarget.
 (defn dispatch-browser!
-  "Dispatches an event as a simulated browser event from the given source node. Emulates capture/bubble behavior. Returns false if any handlers called prevent-default, otherwise true."
+  "Intended for internal/testing use only. Clients should prefer dispatch!. Dispatches an event as a simulated browser event from the given source node. Emulates capture/bubble behavior. Returns false if any handlers called prevent-default, otherwise true."
   [source evt]
   (let [ancestors (ancestor-nodes (domina/single-node source))]
     ;; Capture phase
@@ -118,7 +118,7 @@
     (.-returnValue_ evt)))
 
 (defn dispatch-event-target!
-  "Dispatches an event using GClosure's event handling. The event source must extend goog.event.EventTarget"
+  "Intended for internal/testing use only. Clients should prefer dispatch!. Dispatches an event using GClosure's event handling. The event source must extend goog.event.EventTarget"
   [source evt]
   (events/dispatchEvent source evt))
 

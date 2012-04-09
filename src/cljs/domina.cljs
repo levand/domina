@@ -212,6 +212,13 @@
     (.setAttribute n (core/name name) (apply str value)))
   content)
 
+(defn remove-attr!
+  "Removes the specified HTML property for each node in the content. Name may be a string or keyword."
+  [content name]
+  (doseq [n (nodes content)]
+    (.removeAttribute n (core/name name)))
+  content)
+
 ;; We don't use the existing style/parseStyleAttributes because it camelcases everything.
 ;; This uses the same technique, however.
 (defn parse-style-attributes

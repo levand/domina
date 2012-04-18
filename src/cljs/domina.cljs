@@ -331,16 +331,18 @@
   [content]
   (. (single-node content) -innerHTML))
 
-(defn set-html!
-  "Sets the innerHTML value for all the nodes in the given content."
+(defn- replace-children!
+  [content inner-content]
+  (-> content
+      destroy-children!
+      (append! inner-content)))
+
+(defn- set-inner-html!
   [content html-string]
   (let [allows-inner-html?  (not (re-find re-no-inner-html html-string))
         leading-whitespace? (re-find re-leading-whitespace html-string)
         tag-name (. (str (second (re-find re-tag-name html-string))) (toLowerCase))
-        special-tag? (contains? wrap-map tag-name)
-        fallback #(-> content
-                      destroy-children!
-                      (append! %))]
+        special-tag? (contains? wrap-map tag-name)]
     (if (and allows-inner-html?
              (or
               support/leading-whitespace?
@@ -352,9 +354,16 @@
             (events/removeAll node)
             (set! (. node -innerHTML) value))
           (catch Exception e
-            (fallback value))))
-      (fallback html-string)))
-  content)
+            (replace-children! content value))))
+      (replace-children! content html-string))
+    content))
+
+(defn set-html!
+  "Sets the innerHTML value for all the nodes in the given content."
+  [content inner-content]
+  (if (string? inner-content)
+    (set-inner-html!   content inner-content)
+    (replace-children! content inner-content)))
 
 (defn get-data
   "Returns data associated with a node for a given key. Assumes

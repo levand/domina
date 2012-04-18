@@ -550,10 +550,22 @@
                (set-html! (xpath "//div") "<p class='foobar'>some text</p>")
                (assert (= 1 (count (nodes (xpath "//body/div/p[@class='foobar']")))))))
 
+(add-test "can set a node's innerHTML to non-string content"
+          #(do (reset)
+               (append! (xpath "//body") "<div></div>")
+               (set-html! (xpath "//div") (nodes "<p class='foobar'>some text</p>"))
+               (assert (= 1 (count (nodes (xpath "//body/div/p[@class='foobar']")))))))
+
 (add-test "can set multiple nodes' innerHTML"
           #(do (reset)
                (append! (xpath "//body") "<div></div><div></div>")
                (set-html! (xpath "//div") "<p class='foobar'>some text</p>")
+               (assert (= 2 (count (nodes (xpath "//body/div/p[@class='foobar']")))))))
+
+(add-test "can set multiple nodes' innerHTML to non-string content"
+          #(do (reset)
+               (append! (xpath "//body") "<div></div><div></div>")
+               (set-html! (xpath "//div") (nodes "<p class='foobar'>some text</p>"))
                (assert (= 2 (count (nodes (xpath "//body/div/p[@class='foobar']")))))))
 
 (add-test "can set a table's innerHTML"

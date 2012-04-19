@@ -87,7 +87,7 @@ Move a `<div>` from the end of the document to the beginning:
 Add a CSS class on a node with a particular id:
 
 ```clojure
-(add-class! (by-id "foobar")
+(add-class! (by-id "foobar") "baz")
 ```
 
 Delete all nodes of a given class:

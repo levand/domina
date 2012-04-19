@@ -2,7 +2,7 @@
   (:use [domina :only [nodes single-node by-id by-class children clone append!
                        prepend! detach! destroy! destroy-children! insert! insert-before!
                        insert-after! swap-content! style attr set-style! set-attr! styles attrs
-                       set-styles! set-attrs! has-class? add-class! remove-class! classes
+                       remove-attr! set-styles! set-attrs! has-class? add-class! remove-class! classes
                        text set-text! value set-value! html set-html! set-data! get-data log-debug]]
         [domina.xpath :only [xpath]]
         [domina.css :only [sel]]
@@ -381,6 +381,21 @@
                (assert (= "42" (attr (xpath "//div[1]") "width")))
                (assert (= "42" (attr (xpath "//div[2]") "width")))))
 
+(add-test "can remove an html attribute from a single node"
+          #(do (reset)
+               (append! (xpath "//body") "<div width='42'>1</div><div width='42'>2</div>")
+               (remove-attr! (xpath "//div[1]") "width")
+               (remove-attr! (xpath "//div[2]") :width)
+               (assert (nil? (attr (xpath "//div[1]") "width")))
+               (assert (nil? (attr (xpath "//div[2]") "width")))))
+
+(add-test "can remove an html attribute from multiple nodes"
+          #(do (reset)
+               (append! (xpath "//body") "<div width='42'>1</div><div width='42'>2</div>")
+               (remove-attr! (xpath "//div") "width")
+               (assert (nil? (attr (xpath "//div[1]") "width")))
+               (assert (nil? (attr (xpath "//div[2]") "width")))))
+
 (add-test "can get multiple CSS styles from a single node."
           #(do (reset)
                (append! (xpath "//body") "<div>1</div>")
@@ -538,10 +553,22 @@
                (set-html! (xpath "//div") "<p class='foobar'>some text</p>")
                (assert (= 1 (count (nodes (xpath "//body/div/p[@class='foobar']")))))))
 
+(add-test "can set a node's innerHTML to non-string content"
+          #(do (reset)
+               (append! (xpath "//body") "<div></div>")
+               (set-html! (xpath "//div") (nodes "<p class='foobar'>some text</p>"))
+               (assert (= 1 (count (nodes (xpath "//body/div/p[@class='foobar']")))))))
+
 (add-test "can set multiple nodes' innerHTML"
           #(do (reset)
                (append! (xpath "//body") "<div></div><div></div>")
                (set-html! (xpath "//div") "<p class='foobar'>some text</p>")
+               (assert (= 2 (count (nodes (xpath "//body/div/p[@class='foobar']")))))))
+
+(add-test "can set multiple nodes' innerHTML to non-string content"
+          #(do (reset)
+               (append! (xpath "//body") "<div></div><div></div>")
+               (set-html! (xpath "//div") (nodes "<p class='foobar'>some text</p>"))
                (assert (= 2 (count (nodes (xpath "//body/div/p[@class='foobar']")))))))
 
 (add-test "can set a table's innerHTML"

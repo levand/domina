@@ -66,7 +66,7 @@
   "Add an event listener to each node in a DomContent. Listens for events during the capture phase.  Returns a sequence of listener keys (one for each item in the content). If content is omitted, binds a listener to the document's root element."
   ([type listener] (capture! root-element type listener))
   ([content type listener]
-      (listen-internal! content type listener true false)))
+     (listen-internal! content type listener true false)))
 
 (defn listen-once!
   "Add an event listener to each node in a DomContent. Listens for events during the bubble phase. De-registers the listener after the first time it is invoked.  Returns a sequence of listener keys (one for each item in the content). If content is omitted, binds a listener to the document's root element."
@@ -132,7 +132,7 @@
   "Dispatches an event of the given type, adding the values in event map to the event object. Optionally takes an event source. If none is provided, dispatches on the document's root element. Returns false if any handlers called prevent-default, otherwise true."
   ([type evt-map] (dispatch! root-element type evt-map))
   ([source type evt-map]
-     (let [evt (events/Event. type)]
+     (let [evt (events/Event. (find-builtin-type type))]
        (doseq [[k v] evt-map] (aset evt k v))
        (if (is-event-target? source)
          (dispatch-event-target! source evt)

@@ -66,7 +66,7 @@
   "Add an event listener to each node in a DomContent. Listens for events during the capture phase.  Returns a sequence of listener keys (one for each item in the content). If content is omitted, binds a listener to the document's root element."
   ([type listener] (capture! root-element type listener))
   ([content type listener]
-      (listen-internal! content type listener true false)))
+     (listen-internal! content type listener true false)))
 
 (defn listen-once!
   "Add an event listener to each node in a DomContent. Listens for events during the bubble phase. De-registers the listener after the first time it is invoked.  Returns a sequence of listener keys (one for each item in the content). If content is omitted, binds a listener to the document's root element."

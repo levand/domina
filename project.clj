@@ -7,7 +7,7 @@
   :plugins [[lein-cljsbuild "0.1.7"]]
   :dev-dependencies [[lein-clojars "0.6.0"]]
   :hooks [leiningen.cljsbuild]
-e  :cljsbuild {:builds [{:source-path "src/cljs"
+  :cljsbuild {:builds [{:source-path "src/cljs"
                         :jar true
                         :compiler {:libs ["goog/dom/query.js"]
                                    :pretty-print true

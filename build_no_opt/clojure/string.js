@@ -3,7 +3,7 @@ goog.require('cljs.core');
 goog.require('goog.string');
 goog.require('goog.string.StringBuffer');
 clojure.string.seq_reverse = (function seq_reverse(coll){
-return cljs.core.reduce.call(null,cljs.core.conj,cljs.core.List.EMPTY,coll);
+return cljs.core.reduce.__3(cljs.core.conj,cljs.core.List.EMPTY,coll);
 });
 /**
 * Returns s with its characters reversed.
@@ -19,14 +19,14 @@ return s.split("").reverse().join("");
 * pattern / (string or function of match).
 */
 clojure.string.replace = (function replace(s,match,replacement){
-if(cljs.core.truth_(cljs.core.string_QMARK_.call(null,match)))
+if((cljs.core.string_QMARK_(match)))
 {return s.replace((new RegExp(goog.string.regExpEscape.call(null,match),"g")),replacement);
 } else
 {if(cljs.core.truth_(match.hasOwnProperty("source")))
 {return s.replace((new RegExp(match.source,"g")),replacement);
 } else
-{if(cljs.core.truth_("﷐'else"))
-{throw cljs.core.str.call(null,"Invalid match arg: ",match);
+{if(("\uFDD0'else"))
+{throw cljs.core.str("Invalid match arg: ",match);
 } else
 {return null;
 }
@@ -49,21 +49,23 @@ return s.replace(match,replacement);
 */
 clojure.string.join = (function() {
 var join = null;
-var join__16848 = (function (coll){
-return cljs.core.apply.call(null,cljs.core.str,coll);
+var join__1 = (function (coll){
+return cljs.core.apply.__2(cljs.core.str,coll);
 });
-var join__16849 = (function (separator,coll){
-return cljs.core.apply.call(null,cljs.core.str,cljs.core.interpose.call(null,separator,coll));
+var join__2 = (function (separator,coll){
+return cljs.core.apply.__2(cljs.core.str,cljs.core.interpose(separator,coll));
 });
 join = function(separator,coll){
 switch(arguments.length){
 case  1 :
-return join__16848.call(this,separator);
+return join__1.call(this,separator);
 case  2 :
-return join__16849.call(this,separator,coll);
+return join__2.call(this,separator,coll);
 }
 throw('Invalid arity: ' + arguments.length);
 };
+join.__1 = join__1;
+join.__2 = join__2;
 return join;
 })()
 ;
@@ -84,10 +86,10 @@ return s.toLowerCase();
 * characters to lower-case.
 */
 clojure.string.capitalize = (function capitalize(s){
-if(cljs.core.truth_((cljs.core.count.call(null,s) < 2)))
-{return clojure.string.upper_case.call(null,s);
+if(((cljs.core.count(s) < 2)))
+{return clojure.string.upper_case(s);
 } else
-{return cljs.core.str.call(null,clojure.string.upper_case.call(null,cljs.core.subs.call(null,s,0,1)),clojure.string.lower_case.call(null,cljs.core.subs.call(null,s,1)));
+{return cljs.core.str(clojure.string.upper_case(cljs.core.subs.__3(s,0,1)),clojure.string.lower_case(cljs.core.subs.__2(s,1)));
 }
 });
 /**
@@ -96,39 +98,39 @@ if(cljs.core.truth_((cljs.core.count.call(null,s) < 2)))
 */
 clojure.string.split = (function() {
 var split = null;
-var split__16863 = (function (s,re){
-return cljs.core.vec.call(null,cljs.core.str.call(null,s).split(re));
+var split__2 = (function (s,re){
+return cljs.core.vec(cljs.core.str.__1(s).split(re));
 });
-var split__16864 = (function (s,re,limit){
-if(cljs.core.truth_((limit < 1)))
-{return cljs.core.vec.call(null,cljs.core.str.call(null,s).split(re));
+var split__3 = (function (s,re,limit){
+if(((limit < 1)))
+{return cljs.core.vec(cljs.core.str.__1(s).split(re));
 } else
-{var s__16854 = s;
-var limit__16855 = limit;
-var parts__16857 = cljs.core.Vector.fromArray([]);
+{var s__21462 = s;
+var limit__21463 = limit;
+var parts__21464 = cljs.core.PersistentVector.fromArray([]);
 
 while(true){
-if(cljs.core.truth_(cljs.core._EQ_.call(null,limit__16855,1)))
-{return cljs.core.conj.call(null,parts__16857,s__16854);
+if((cljs.core._EQ_.__2(limit__21463,1)))
+{return cljs.core.conj.__2(parts__21464,s__21462);
 } else
-{var temp__3695__auto____16858 = cljs.core.re_find.call(null,re,s__16854);
+{var temp__3695__auto____21465 = cljs.core.re_find(re,s__21462);
 
-if(cljs.core.truth_(temp__3695__auto____16858))
-{var m__16860 = temp__3695__auto____16858;
+if(cljs.core.truth_(temp__3695__auto____21465))
+{var m__21466 = temp__3695__auto____21465;
 
-var index__16862 = s__16854.indexOf(m__16860);
+var index__21467 = s__21462.indexOf(m__21466);
 
 {
-var G__16868 = s__16854.substring((index__16862 + cljs.core.count.call(null,m__16860)));
-var G__16869 = (limit__16855 - 1);
-var G__16870 = cljs.core.conj.call(null,parts__16857,s__16854.substring(0,index__16862));
-s__16854 = G__16868;
-limit__16855 = G__16869;
-parts__16857 = G__16870;
+var G__21471 = s__21462.substring((index__21467 + cljs.core.count(m__21466)));
+var G__21472 = (limit__21463 - 1);
+var G__21473 = cljs.core.conj.__2(parts__21464,s__21462.substring(0,index__21467));
+s__21462 = G__21471;
+limit__21463 = G__21472;
+parts__21464 = G__21473;
 continue;
 }
 } else
-{return cljs.core.conj.call(null,parts__16857,s__16854);
+{return cljs.core.conj.__2(parts__21464,s__21462);
 }
 }
 break;
@@ -138,12 +140,14 @@ break;
 split = function(s,re,limit){
 switch(arguments.length){
 case  2 :
-return split__16863.call(this,s,re);
+return split__2.call(this,s,re);
 case  3 :
-return split__16864.call(this,s,re,limit);
+return split__3.call(this,s,re,limit);
 }
 throw('Invalid arity: ' + arguments.length);
 };
+split.__2 = split__2;
+split.__3 = split__3;
 return split;
 })()
 ;
@@ -153,7 +157,7 @@ return split;
 * .
 */
 clojure.string.split_lines = (function split_lines(s){
-return clojure.string.split.call(null,s,/\n|\r\n/);
+return clojure.string.split.__2(s,/\n|\r\n/);
 });
 /**
 * Removes whitespace from both ends of string.
@@ -178,29 +182,29 @@ return goog.string.trimRight.call(null,s);
 * string.  Similar to Perl's chomp.
 */
 clojure.string.trim_newline = (function trim_newline(s){
-var index__16880 = s.length;
+var index__21474 = s.length;
 
 while(true){
-if(cljs.core.truth_((index__16880 === 0)))
+if(((index__21474 === 0)))
 {return "";
 } else
-{var ch__16881 = cljs.core.get.call(null,s,(index__16880 - 1));
+{var ch__21475 = cljs.core.get.__2(s,(index__21474 - 1));
 
-if(cljs.core.truth_((function (){var or__3548__auto____16882 = cljs.core._EQ_.call(null,ch__16881,"\n");
+if(((function (){var or__3548__auto____21476 = cljs.core._EQ_.__2(ch__21475,"\n");
 
-if(cljs.core.truth_(or__3548__auto____16882))
-{return or__3548__auto____16882;
+if((or__3548__auto____21476))
+{return or__3548__auto____21476;
 } else
-{return cljs.core._EQ_.call(null,ch__16881,"\r");
+{return cljs.core._EQ_.__2(ch__21475,"\r");
 }
 })()))
 {{
-var G__16883 = (index__16880 - 1);
-index__16880 = G__16883;
+var G__21480 = (index__21474 - 1);
+index__21474 = G__21480;
 continue;
 }
 } else
-{return s.substring(0,index__16880);
+{return s.substring(0,index__21474);
 }
 }
 break;
@@ -210,19 +214,19 @@ break;
 * True is s is nil, empty, or contains only whitespace.
 */
 clojure.string.blank_QMARK_ = (function blank_QMARK_(s){
-var s__16884 = cljs.core.str.call(null,s);
+var s__21481 = cljs.core.str.__1(s);
 
-if(cljs.core.truth_((function (){var or__3548__auto____16885 = cljs.core.not.call(null,s__16884);
+if(cljs.core.truth_((function (){var or__3548__auto____21482 = cljs.core.not(s__21481);
 
-if(cljs.core.truth_(or__3548__auto____16885))
-{return or__3548__auto____16885;
+if((or__3548__auto____21482))
+{return or__3548__auto____21482;
 } else
-{var or__3548__auto____16886 = cljs.core._EQ_.call(null,"",s__16884);
+{var or__3548__auto____21483 = cljs.core._EQ_.__2("",s__21481);
 
-if(cljs.core.truth_(or__3548__auto____16886))
-{return or__3548__auto____16886;
+if((or__3548__auto____21483))
+{return or__3548__auto____21483;
 } else
-{return cljs.core.re_matches.call(null,/\s+/,s__16884);
+{return cljs.core.re_matches(/\s+/,s__21481);
 }
 }
 })()))
@@ -239,29 +243,29 @@ if(cljs.core.truth_(or__3548__auto____16886))
 * If (cmap ch) is non-nil, append (str (cmap ch)) instead.
 */
 clojure.string.escape = (function escape(s,cmap){
-var buffer__16887 = (new goog.string.StringBuffer());
-var length__16888 = s.length;
+var buffer__21487 = (new goog.string.StringBuffer());
+var length__21488 = s.length;
 
-var index__16889 = 0;
+var index__21489 = 0;
 
 while(true){
-if(cljs.core.truth_(cljs.core._EQ_.call(null,length__16888,index__16889)))
-{return buffer__16887.toString();
+if((cljs.core._EQ_.__2(length__21488,index__21489)))
+{return buffer__21487.toString();
 } else
-{var ch__16890 = s.charAt(index__16889);
+{var ch__21490 = s.charAt(index__21489);
 
-var temp__3695__auto____16891 = cljs.core.get.call(null,cmap,ch__16890);
+var temp__3695__auto____21491 = cljs.core.get.__2(cmap,ch__21490);
 
-if(cljs.core.truth_(temp__3695__auto____16891))
-{var replacement__16892 = temp__3695__auto____16891;
+if(cljs.core.truth_(temp__3695__auto____21491))
+{var replacement__21492 = temp__3695__auto____21491;
 
-buffer__16887.append(cljs.core.str.call(null,replacement__16892));
+buffer__21487.append(cljs.core.str.__1(replacement__21492));
 } else
-{buffer__16887.append(ch__16890);
+{buffer__21487.append(ch__21490);
 }
 {
-var G__16893 = (index__16889 + 1);
-index__16889 = G__16893;
+var G__21495 = (index__21489 + 1);
+index__21489 = G__21495;
 continue;
 }
 }

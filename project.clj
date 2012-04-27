@@ -1,4 +1,4 @@
-(defproject domina "1.0.0-SNAPSHOT"
+(defproject domina "1.0.0-beta4"
   :description "A DOM manipulation library for ClojureScript inspired by JQuery"
   :source-path "src/clj"
   :dependencies [[org.clojure/clojurescript "0.0-1069"]
@@ -7,7 +7,7 @@
   :plugins [[lein-cljsbuild "0.1.7"]]
   :dev-dependencies [[lein-clojars "0.6.0"]]
   :hooks [leiningen.cljsbuild]
-  :cljsbuild {:builds [{:source-path "src/cljs"
+e  :cljsbuild {:builds [{:source-path "src/cljs"
                         :jar true
                         :compiler {:libs ["goog/dom/query.js"]
                                    :pretty-print true

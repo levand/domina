@@ -106,6 +106,10 @@
   (when (and *debug* (not (= (.-console js/window) js/undefined)))
     (.log js/console mesg)))
 
+(defn log [mesg]
+  (when (.-console js/window)
+    (.log js/console mesg)))
+
 (defn by-id
   "Returns content containing a single node by looking up the given ID"
   [id]
@@ -424,7 +428,8 @@
 
 (defn- array-like?
   [obj]
-  (and (.-length obj)
+  (and obj
+       (.-length obj)
        (or (.-indexOf obj) (.-item obj))))
 
 (defn normalize-seq

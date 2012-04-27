@@ -118,6 +118,102 @@ Get the values of all `<input>` elements on the page:
 
 For examples of every currently implemented function, see the `test.cljs` file in the code repository, which exercises each function in unit tests against a DOM page. The `test.html` file loads and runs `test.cljs` in the context of the DOM.
 
+## Event Handling
+
+Domina contains a robust event handling API that wraps the Google Closure event handling code, while exposing it in a idiomatic functional way.
+
+### Event Propagation
+
+In Domina, every event has a *target*. This is the DOM node that is logically "causing" the event. All events triggered by the browser (such as clicks or key presses) are associated with a node. User defined events must also specify a target node.
+
+ Event listeners are also attached to nodes, and may trigger on either the *capture* or *bubble* phases of event propegation. The capture phase starts at the root node of the document, and successively fires any listeners on ancestors of the target node from the top down, down to the event target itself. In the bubble phase, the process is reversed, first firing listeners on the target node, then on each of its ancestors in succession back to the document root.
+
+### Registering Event Listeners
+
+Use the `listen!` function to register an event handler in the bubble phase, and `capture!` to register a handle for the capture phase. Both take similar argument: a Domina DomContent, the event type, and a listener function. They return a sequence of event handler keys (see section below on de-registering event handlers)
+
+```clojure
+(listen! (sel "button") :click (fn [evt] (log "button clicked!")))
+```
+
+This above snippet adds an event handler  to every `<button>` element on the page, which logs a message when the button is clicked.
+
+Note that the content argument is optional: in this case, the listener is added to the root node of the document, and will catch all click events on the entire page.
+
+```clojure
+(listen! :click (fn [evt] (log "button clicked!")))
+```
+
+### Event Objects
+
+When an event is triggered, it invokes the provided listener function, passing it an event object. The event object will implement ClojureScript's `ILookup` protocol, as well as the `domina.events.Event` protocol.
+
+Implementing the `ILookup` protocol makes it easy to pull values from browser events using ClojureScript's built in lookup functions such as `get` and `contains?`, as well as using keywords in function position. Note that although native events only have string keys, Domina will attempt to translate keywords to strings for lookup purposes.
+
+```clojure
+(defn sample-click-handler [evt]
+   (let [x (:clientX evt)
+          y (:clientY evt)]
+       (log (str "Click occurred at window coordinates " x "," y))))
+```
+
+The `domina.events.Event` protocol supports the following methods:
+
+<table>
+  <tr><th>Method</th><th>Effect</th></tr>
+  <tr>
+    <td>`prevent-default`</td><td>Prevents the default action for an event from firing. For example, if you invoke `prevent-default` on a click event on a link, it will prevent the browser from navigating the browser as it normally would with a clicked link</td>
+  </tr>
+  <tr>
+    <td>`stop-propagation`</td><td>Prevents all future event listeners (in both the bubble and capture phases) from recieving the event.</td>
+  </tr>
+  <tr>
+    <td>`target`</td><td>Returns the target node of the event.</td>
+  </tr>
+   <tr>
+    <td>`current-target`</td><td>Returns the current target of the event (the node to which the current listener was attached).</td>
+  </tr>
+  <tr>
+    <td>`event-type`</td><td>Returns the type of the event</td>
+  </tr>
+   <tr>
+    <td>`raw-event`</td><td>Returns the underlying `goog.events.Event` object, rather than it's Domina wrapper.</td>
+  </tr>
+</table>
+
+### De-registering Event Handlers
+
+There are several ways to de-register an event handler.
+
+If you have they key returned by the registration function, you can de-register the handler by calling the `unlisten-by-key!` function, passing it the key as a single argument.
+
+If you do not have the key in hand, you can remove all listeners from a node (or set of nodes) using the `unlisten!` function. It takes a DomContent, and an optional event type. If the event type is specified, it will only de-register handlers for that type, otherwise it will de-register everything from the specified node.
+
+```clojure
+(unlisten! (sel "button") :click)  ; removes all click event handlers from all button elements
+(unlisten! (sel "button"))  ; removes all event handlers of any type  from all button elements
+```
+
+There are also `listen-once!` and `capture-once!` variants of `listen!` and `capture!` which de-register themselves after the first time they are triggered.
+
+### Custom Events
+
+In addition to native events dispatched by the browser, Domina allows you to create and dispatch arbitary events using the `dispatch!` function.
+
+The `dispatch!` function takes an event target as a DomContent (assumed to be a single node), an event type, and an event map. Keys and values in the event map are merged in to the event object, and can be used to pass arbitrary data to event handlers.
+
+```clojure
+(dispatch! (by-id "evt-target") :my-event {:some-key "some value"})
+```
+
+The event will be propegated through the capture and bubble phases just like a browser event, and can be caught in the normal way:
+
+```clojure
+(listen! (by-id "evt-target") :my-event (fn [evt] (log (:some-key evt))))
+```
+
+Note that if you omit the event target when calling `dispatch!` (or when registering a listener), it will default to the root node of the document. This is often desirable when using custom application-wide events that have no logical mapping to any particular location in the DOM tree.
+
 ## Important note on browser XPath compatibility (IE and Android).
 
 Internet Explorer does not support DOM Level 3 XPath selectors. In order to utilize the `domina.xpath` namespace, you will need to include a pure-javascript XPath DOM Level 3 implementation.

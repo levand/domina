@@ -6,7 +6,10 @@
                        text set-text! value set-value! html set-html! set-data! get-data log-debug]]
         [domina.xpath :only [xpath]]
         [domina.css :only [sel]]
-        [domina.events :only [listen! unlisten! remove-listeners! fire-listeners!]])
+        [domina.events :only [listen! capture! listen-once! capture-once!
+                              unlisten! dispatch-event! dispatch! unlisten-by-key!
+                              get-listeners prevent-default stop-propagation
+                              target current-target event-type raw-event]])
   (:require [goog.events :as events]
             ; [clojure.browser.repl :as repl]
             ))
@@ -48,7 +51,8 @@
 (defn reset
   "resets the page"
   []
-  (destroy! (xpath "//body/*")))
+  (destroy! (xpath "//body/*"))
+  (unlisten! (xpath "//*")))
 
 (defn standard-fixture
   "Standard fixture html"
@@ -500,11 +504,10 @@
                (assert (= "Some text." (text (xpath "//p") true)))))
 
 ;; Temporarily removed this test: IE8 handles this differently than other browsers.
-(comment
-  (add-test "can retrieve the text value of a node without normalization."
-            #(do (reset)
-                 (append! (xpath "//body") "<p>\n\n   Some text.  \n  </p>")
-                 (assert (= "\n\n   Some text.  \n  " (text (xpath "//p") false))))))
+(add-test "can retrieve the text value of a node without normalization."
+          #(do (reset)
+               (append! (xpath "//body") "<p>\n\n   Some text.  \n  </p>")
+               (assert (= "\n\n   Some text.  \n  " (text (xpath "//p") false)))))
 
 (add-test "can set text on a single node"
           #(do (reset)
@@ -589,99 +592,192 @@
                  (assert (= "THEAD" (. (first n) -tagName)))
                  (assert (= "TBODY" (. (second n) -tagName))))))
 
-(add-test "can trigger a handler on a :mouseover event"
-          #(do (reset)
-               (append! (xpath "//body") "<div id='ref'>Some content</div>")
-               (listen! (by-id "ref") :mouseover (fn [] (append! (by-id "ref") "<p>Hello world!</p>")))
-               (let [target (by-id "ref")]
-                 (fire-listeners! target :mouseover false {:type :mouseover :target target}))
-               (assert (= "Hello world!" (text (xpath "//p"))))))
+;; Events
 
-(add-test "can trigger a handler on a :mouseout event"
-          #(do (reset)
-               (append! (xpath "//body") "<div id='ref'>Some content</div>")
-               (listen! (by-id "ref") :mouseout (fn [] (append! (by-id "ref") "<p>Hello world!</p>")))
-               (let [target (by-id "ref")]
-                 (fire-listeners! target :mouseout false {:type :mouseout :target target}))
-               (assert (= "Hello world!" (text (xpath "//p"))))))
+(add-test "can add and retrieve a listener"
+          (fn []
+            (reset)
+            (append! (xpath "//body") "<button id='mybutton'>Text</button>")
+            (listen! (sel "#mybutton") :click (fn [e]
+                                                (reset! clicked true)))
+            (assert (= 1 (count (get-listeners (sel "#mybutton") :click))))))
 
-(add-test "can trigger a handler on a :click event"
-          #(do (reset)
-               (append! (xpath "//body") "<div id='ref'>Some content</div>")
-               (listen! (by-id "ref") :click (fn [] (append! (by-id "ref") "<p>Hello world!</p>")))
-               (let [target (by-id "ref")]
-                 (fire-listeners! target :click false {:type :click :target target}))
-               (assert (= "Hello world!" (text (xpath "//p"))))))
+(defn simulate-click-event
+  "Doesn't use GClosure, to be more realistic"
+  [el]
+  (let [el (single-node el)
+        document (.-document js/window)]
+    (cond
+     (.-click el) (.click el)
+     (.-createEvent document) (let [e (.createEvent document "MouseEvents")]
+                                (.initMouseEvent e "click" true true
+                                                 js/window 0 0 0 0 0
+                                                 false false false false 0 nil)
+                                (.dispatchEvent el e))
+     :default (throw "Unable to simulate click event"))))
+
+(add-test "can listen for a browser event"
+          (fn []
+            (reset)
+            (append! (xpath "//body") "<button id='mybutton'>Text</button>")
+            (let [clicked (atom false)]
+              (listen! (sel "#mybutton") :click (fn [e]
+                                                  (reset! clicked true)))
+              (simulate-click-event (sel "#mybutton"))
+              (assert @clicked))))
+
+(add-test "can extract string keys from an event using keyword accessors"
+          (fn []
+            (reset)
+            (append! (xpath "//body") "<button id='mybutton'>Text</button>")
+            (let [coords (atom nil)]
+              (listen! (sel "#mybutton") :foobar (fn [e]
+                                                   (reset! coords
+                                                           [(:clientX e)
+                                                            (:clientY e)])))
+              (dispatch! (sel "#mybutton") :foobar {"clientX" 42
+                                                    "clientY" 42})
+              (assert (= [42 42] @coords)))))
 
 
-(add-test "can trigger a handler on a :mouseenter event"
-          #(do (reset)
-               (append! (xpath "//body") "<div id='parent'><div id='ref'></div></div>")
-               (listen! (by-id "ref") :mouseenter (fn [] (append! (by-id "ref") "<p>Hello world!</p>")))
-               (let [rtarget (by-id "parent")
-                     target (by-id "ref")]
-                 (fire-listeners! target :mouseenter false {:type :mouseenter :related-target rtarget :target target}))
-               (assert (= "Hello world!" (text (xpath "//p"))))))
+(add-test "can dispatch an event, execute default action is true"
+          (fn []
+            (reset)
+            (append! (xpath "//body") "<button id='mybutton'>Text</button>")
+            (let [clicked (atom false)]
+              (listen! (sel "#mybutton") :click (fn [e]
+                                                  (reset! clicked true)))
+              (let [default (dispatch! (sel "#mybutton") "click" {})]
+                (assert @clicked)
+                (assert default)))))
 
+(add-test "can prevent the default action on an event"
+          (fn []
+            (reset)
+            (append! (xpath "//body") "<button id='mybutton'>Text</button>")
+            (listen! (sel "#mybutton") :click (fn [e]
+                                                (prevent-default e)))
+            (assert (not (dispatch! (sel "#mybutton") "click" {})))))
 
-(add-test "can trigger a handler on a :mouseleave event"
-          #(do (reset)
-               (append! (xpath "//body") "<div id='parent'><div id='ref'></div></div>")
-               (listen! (by-id "ref") :mouseleave (fn [] (append! (by-id "ref") "<p>Hello world!</p>")))
-               (let [rtarget (by-id "parent")
-                     target (by-id "ref")]
-                 (fire-listeners! target :mouseleave false {:type :mouseleave :related-target rtarget :target target}))
-               (assert (= "Hello world!" (text (xpath "//p"))))))
+(add-test "capture and bubble listeners are triggered in the correct order."
+          (fn []
+            (reset)
+            (append! (xpath "//body")
+                     "<div><button id='mybutton'>Text</button></div>")
+            (let [clicked (atom [])]
+              (listen! (sel "body") :click #(swap! clicked conj :listened))
+              (capture! (sel "body") :click #(swap! clicked conj :captured))
+              (simulate-click-event (sel "#mybutton"))
+              (assert (= [:captured :listened] @clicked)))))
 
-(add-test "can remove-listeners on a :click event"
-          #(let [handler (fn [] (append! (by-id "ref") "<p>Hello world!</p>"))]
-             (reset)
-             (append! (xpath "//body") "<div id='ref'>Some content</div>")
-             (listen! (by-id "ref") :click handler)
-             (remove-listeners! (by-id "ref") :click)
-             (let [target (by-id "ref")]
-               (fire-listeners! target :click false {:type :click :target target}))
-             (assert (= "Some content" (text (xpath "//div"))))))
+(add-test "current-target is correct when capturing custom events"
+          (fn []
+            (reset)
+            (append! (xpath "//body")
+                     "<div><button id='mybutton'>Text</button></div>")
+            (let [actual-elements (atom [])
+                  body (domina/single-node (sel "body"))
+                  button (domina/single-node (sel "button"))]
+              (listen! (sel "body") :foobar #(swap! actual-elements conj
+                                                    (current-target %)))
+              (listen! (sel "button") :foobar #(swap! actual-elements conj
+                                                      (current-target %)))
+              (dispatch! (sel "#mybutton") :foobar {:some "data"})
+              (assert (= [button body] @actual-elements)))))
 
-(add-test "can remove-listeners on a :mouseenter event"
-          #(let [handler (fn [] (append! (by-id "ref") "<p>Hello world!</p>"))]
-             (reset)
-             (append! (xpath "//body") "<div id='parent'><div id='ref'>Some content</div></div>")
-             (listen! (by-id "ref") :mouseenter handler)
-             (remove-listeners! (by-id "ref") :mouseenter)
-             (let [rtarget (by-id "parent")
-                   target (by-id "ref")]
-               (fire-listeners! target :mouseenter false {:type :mouseenter :related-target rtarget :target target}))
-             (assert (= "Some content" (text (xpath "//div"))))))
+(add-test "can stop event propagation in the capture phase."
+          (fn []
+            (reset)
+            (append! (xpath "//body")
+                     "<div><button id='mybutton'>Text</button></div>")
+            (let [clicked (atom false)]
+              (capture! (sel "div") :click #(stop-propagation %))
+              (listen! (sel "#mybutton") :click #(reset! clicked true))
+              (simulate-click-event (sel "#mybutton"))
+              (assert (not @clicked)))))
 
-(add-test "can unlisten! on a :click event"
-          #(let [handler (fn [] (append! (by-id "ref") "<p>Hello world!</p>"))]
-             (reset)
-             (append! (xpath "//body") "<div id='ref'>Some content</div>")
-             (listen! (by-id "ref") :click handler)
-             (unlisten! (by-id "ref") :click handler)
-             (let [target (by-id "ref")]
-               (fire-listeners! target :click false {:type :click :target target}))
-             (assert (= "Some content" (text (xpath "//div"))))))
+(add-test "can stop event propagation in the bubble phase."
+          (fn []
+            (reset)
+            (append! (xpath "//body")
+                     "<div><button id='mybutton'>Text</button></div>")
+            (let [clicked (atom false)]
+              (listen! (sel "body") :click (fn [e]
+                                             (reset! clicked true)))
+              (listen! (sel "#mybutton") :click (fn [e]
+                                                  (stop-propagation e)))
+              (simulate-click-event (sel "#mybutton"))
+              (assert (not @clicked)))))
 
-(add-test "can unlisten! on a :mouseenter event"
-          #(let [handler (fn [] (append! (by-id "ref") "<p>Hello world!</p>"))]
-             (reset)
-             (append! (xpath "//body") "<div id='parent'><div id='ref'>Some content</div></div>")
-             (listen! (by-id "ref") :mouseenter handler)
-             (unlisten! (by-id "ref") :mouseenter handler)
-             (let [rtarget (by-id "parent")
-                   target (by-id "ref")]
-               (fire-listeners! target :mouseenter false {:type :mouseenter :related-target rtarget :target target}))
-             (assert (= "Some content" (text (xpath "//div"))))))
+(add-test "listen-once triggers only once"
+          (fn []
+            (reset)
+            (append! (xpath "//body")
+                     "<div><button id='mybutton'>Text</button></div>")
+            (let [clicked (atom 0)]
+              (listen-once! (sel "body") :click #(swap! clicked inc))
+              (simulate-click-event (sel "#mybutton"))
+              (simulate-click-event (sel "#mybutton"))
+              (assert (= 1 @clicked)))))
 
-(add-test "can append to a document fragment"
-          #(do
-             (reset)
-             (let [frag (.createDocumentFragment js/document)]
-               (append! frag "<div>testing</div>")
-               (append! (xpath "//body") frag)
-               (assert (= "testing" (text (xpath "//div")))))))
+(add-test "listen-once triggers only once"
+          (fn []
+            (reset)
+            (append! (xpath "//body")
+                     "<div><button id='mybutton'>Text</button></div>")
+            (let [clicked (atom 0)]
+              (listen-once! (sel "body") :click #(swap! clicked inc))
+              (simulate-click-event (sel "#mybutton"))
+              (simulate-click-event (sel "#mybutton"))
+              (assert (= 1 @clicked)))))
+
+(add-test "can unlisten generically"
+          (fn []
+            (reset)
+            (append! (xpath "//body")
+                     "<div><button id='mybutton'>Text</button></div>")
+            (let [clicked (atom 0)]
+              (listen! (sel "body") :click #(swap! clicked inc))
+              (simulate-click-event (sel "#mybutton"))
+              (unlisten! (sel "body"))
+              (simulate-click-event (sel "#mybutton"))
+              (assert (= 1 @clicked)))))
+
+(add-test "can unlisten narrowed by type"
+          (fn []
+            (reset)
+            (append! (xpath "//body")
+                     "<div><button id='mybutton'>Text</button></div>")
+            (let [clicked (atom 0)]
+              (listen! (sel "body") :click #(swap! clicked inc))
+              (simulate-click-event (sel "#mybutton"))
+              (unlisten! (sel "body") :foobar)
+              (simulate-click-event (sel "#mybutton"))
+              (unlisten! (sel "body") :click)
+              (simulate-click-event (sel "#mybutton"))
+              (assert (= 2 @clicked)))))
+
+(add-test "can unlisten by key"
+          (fn []
+            (reset)
+            (append! (xpath "//body")
+                     "<div><button id='mybutton'>Text</button></div>")
+            (let [clicked (atom 0)
+                  keys (listen! (sel "body") :click #(swap! clicked inc))]
+              (simulate-click-event (sel "#mybutton"))
+              (unlisten-by-key! (first keys))
+              (simulate-click-event (sel "#mybutton"))
+              (assert (= 1 @clicked)))))
+
+(add-test "can send and listen for custom events with custom data"
+          (fn []
+            (reset)
+            (let [worked (atom false)]
+              (listen! :foobar (fn [evt]
+                                 (if (= "data" (:some evt))
+                                   (reset! worked true))))
+              (dispatch! :foobar {:some "data"})
+              (assert @worked))))
 
 (add-test "doesn't clone unless necessary"
           #(do
@@ -689,7 +785,6 @@
              (let [child (single-node "<div>hello</div>")]
                (append! (xpath "//body") child)
                (assert (= child (single-node (xpath "//body/div")))))))
-
 
 (add-test "test that data works"
           #(do
@@ -702,7 +797,8 @@
 (add-test "test that data works with bubbling"
           #(do
              (reset)
-             (append! (xpath "//body") "<div id='outerdata'><div id='innerdata'>hello</div></div>")
+             (append! (xpath "//body")
+                      "<div id='outerdata'><div id='innerdata'>hello</div></div>")
              (let [data {:some "complex data"}]
                (set-data! (by-id "outerdata") :my-impeccable-data data)
                (assert (= data (get-data (by-id "innerdata") :my-impeccable-data true))))))

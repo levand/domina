@@ -1,5 +1,6 @@
 (ns domina.css
-  (:require [goog.dom :as dom]
+  (:require [domina :as domina]
+            [goog.dom :as dom]
             [goog.dom.query :as query]))
 
 (defn- root-element

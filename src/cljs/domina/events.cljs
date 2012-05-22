@@ -92,7 +92,7 @@
 
 (defn- ancestor-nodes
   "Returns a seq of a node and its ancestors, starting with the document root."
-  ([n] (ancestor-nodes n (cons n)))
+  ([n] (ancestor-nodes n [n]))
   ([n so-far]
      (if-let [parent (.-parentNode n)]
        (recur parent (cons parent so-far))

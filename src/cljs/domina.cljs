@@ -463,7 +463,7 @@
    (nil? list-thing) '()
    (dm/satisfies? ISeqable list-thing) (seq list-thing)
    (array-like? list-thing) (lazy-nodelist list-thing)
-   :default (cons list-thing)))
+   :default (seq [list-thing])))
 
 ;;;;;;;;;;;;;;;;;;; Protocol Implementations ;;;;;;;;;;;;;;;;;
 
@@ -482,7 +482,7 @@
      (nil? content) '()
      (dm/satisfies? ISeqable content) (seq content)
      (array-like? content) (lazy-nodelist content)
-     :default (cons content)))
+     :default (seq [content])))
   (single-node [content]
     (cond
      (nil? content) nil

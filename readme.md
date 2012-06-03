@@ -116,7 +116,7 @@ Get the values of all `<input>` elements on the page:
 (map value (nodes (xpath "//input")))
 ```
 
-For examples of every currently implemented function, see the `test.cljs` file in the code repository, which exercises each function in unit tests against a DOM page. The `test.html` file loads and runs `test.cljs` in the context of the DOM.
+For examples of every currently implemented function, see the `test.cljs` file in the code repository, which exercises each function in unit tests against a DOM page.
 
 ## Event Handling
 
@@ -257,6 +257,18 @@ We decided *not* to compile this functionality directly into Domina for two reas
 
 - Potential licensing issues
 - Reduced code size. With some server side conditions, it is possible to avoid downloading the script altogether for browsers which support XPath natively, which is obviously not possible to determine at compile-time.
+
+## Running the Tests
+
+To execute the test suite ...
+
+1. Run `lein cljsbuild test`. This will generate a suite of test HTML
+   files in the `public` directory (e.g., `test_no_opt.html`,
+   `test_advanced.html`, etc.). Each file runs `test.cljs` in the context
+   of the DOM, and each file represents a different compiler optimization
+   setting.
+2. Open each of the `public/test_*.html` files in a browser and [verify
+   that all the tests pass](https://skitch.com/jasonrudolph/85fga/domina-test-results).
 
 ## Todo
 

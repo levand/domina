@@ -297,6 +297,17 @@
   [content]
   (seq (classes/get (single-node content))))
 
+(defn set-classes!
+  "Sets the class attribute of the content nodes to classes, which can
+  be either a class attribute string or a seq of classname strings."
+  [content classes]
+  (let [classes (if (coll? classes)
+                  (cstring/join " " classes)
+                  classes)]
+    (doseq [node (nodes content)]
+      (classes/set node classes)))
+  content)
+
 ;; Contents
 
 (defn text

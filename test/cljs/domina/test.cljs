@@ -2,7 +2,7 @@
   (:use [domina :only [nodes single-node by-id by-class children clone append!
                        prepend! detach! destroy! destroy-children! insert! insert-before!
                        insert-after! swap-content! style attr set-style! set-attr! styles attrs
-                       remove-attr! set-styles! set-attrs! has-class? add-class! remove-class! classes
+                       remove-attr! set-styles! set-attrs! has-class? add-class! remove-class! classes set-classes!
                        text set-text! value set-value! html set-html! set-data! get-data log-debug]]
         [domina.xpath :only [xpath]]
         [domina.css :only [sel]]
@@ -496,6 +496,32 @@
           #(do (reset)
                (append! (xpath "//body") "<div class='class1 class2 class3'>1</div>")
                (assert (= ["class1" "class2" "class3"] (classes (xpath "//div"))))))
+
+(add-test "can set the css classes for a node from a list"
+          #(do (reset)
+               (append! (xpath "//body") "<div>1</div>")
+               (set-classes! (xpath "//div") ["class1" "class2" "class3"])
+               (assert (= ["class1" "class2" "class3"] (classes (xpath "//div"))))))
+
+(add-test "can set the css classes for multiple nodes from a list"
+          #(do (reset)
+               (append! (xpath "//body") "<div>1</div><div>2</div>")
+               (set-classes! (xpath "//div") ["class1" "class2" "class3"])
+               (assert (= ["class1" "class2" "class3"] (classes (xpath "//div[1]"))))
+               (assert (= ["class1" "class2" "class3"] (classes (xpath "//div[2]"))))))
+
+(add-test "can set the css classes for a node from a string"
+          #(do (reset)
+               (append! (xpath "//body") "<div>1</div>")
+               (set-classes! (xpath "//div") "class1 class2 class3")
+               (assert (= ["class1" "class2" "class3"] (classes (xpath "//div"))))))
+
+(add-test "can set the css classes for multiple nodes from a string"
+          #(do (reset)
+               (append! (xpath "//body") "<div>1</div><div>2</div>")
+               (set-classes! (xpath "//div") "class1 class2 class3")
+               (assert (= ["class1" "class2" "class3"] (classes (xpath "//div[1]"))))
+               (assert (= ["class1" "class2" "class3"] (classes (xpath "//div[2]"))))))
 
 (add-test "can retrieve the text value of a node with normalization."
           #(do (reset)

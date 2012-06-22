@@ -269,6 +269,14 @@
                  (append! (xpath "//div[@class='d1']") n)
                  (assert (= 3 (count (nodes (xpath "//div[@class='d1']/p"))))))))
 
+(add-test "detach child nodes"
+          #(do (reset)
+               (standard-fixture)
+               (let [parent (xpath "//div[@class='d1']")
+                     detached-children (detach! (children parent))]
+                 (assert (= 0 (count (nodes (xpath "//div[@class='d1']/p")))))
+                 (assert (= 3 (count detached-children))))))
+
 (add-test "clear a node's contents"
           #(do (reset)
                (standard-fixture)

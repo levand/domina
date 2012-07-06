@@ -461,7 +461,7 @@
   [list-thing]
   (cond
    (nil? list-thing) '()
-   (dm/satisfies? ISeqable list-thing) (seq list-thing)
+   (satisfies? ISeqable list-thing) (seq list-thing)
    (array-like? list-thing) (lazy-nodelist list-thing)
    :default (seq [list-thing])))
 
@@ -480,13 +480,13 @@
   (nodes [content]
     (cond
      (nil? content) '()
-     (dm/satisfies? ISeqable content) (seq content)
+     (satisfies? ISeqable content) (seq content)
      (array-like? content) (lazy-nodelist content)
      :default (seq [content])))
   (single-node [content]
     (cond
      (nil? content) nil
-     (dm/satisfies? ISeqable content) (first content)
+     (satisfies? ISeqable content) (first content)
      (array-like? content) (. content (item 0))
      :default content)))
 

@@ -449,8 +449,7 @@
 (defn- array-like?
   [obj]
   (and obj
-       (.-length obj)
-       (or (.-indexOf obj) (.-item obj))))
+       (.-length obj)))
 
 (defn normalize-seq
   "Some versions of IE have things that are like arrays in that they

@@ -1,9 +1,13 @@
 (ns domina.test
-  (:use [domina :only [nodes single-node by-id by-class children clone append!
-                       prepend! detach! destroy! destroy-children! insert! insert-before!
-                       insert-after! swap-content! style attr set-style! set-attr! styles attrs
-                       remove-attr! set-styles! set-attrs! has-class? add-class! remove-class! classes set-classes!
-                       text set-text! value set-value! html set-html! set-data! get-data log-debug]]
+  (:use [domina :only [nodes single-node by-id by-class children clone
+                       append!  prepend! detach! destroy!
+                       destroy-children! insert! insert-before!
+                       insert-after! swap-content! style attr
+                       set-style! set-attr! styles attrs remove-attr!
+                       set-styles! set-attrs! has-class? add-class!
+                       remove-class!  classes set-classes!  text
+                       set-text! value set-value! html set-html!
+                       set-data! get-data log-debug]]
         [domina.xpath :only [xpath]]
         [domina.css :only [sel]]
         [domina.events :only [listen! capture! listen-once! capture-once!
@@ -148,6 +152,11 @@
           #(do (reset)
                (standard-fixture)
                (assert (= 1 (count (nodes (by-class "p3")))))))
+
+(add-test "look up multiple nodes by class"
+          #(do (reset)
+               (append! (xpath "//body") "<p class='tc'>test1</p><p class='tc'>test2</p>")
+               (assert (= 2 (count (nodes (by-class "tc")))))))
 
 (add-test "child selection"
           #(do (reset)
@@ -529,7 +538,6 @@
                (assert (= "Some text." (text (xpath "//p"))))
                (assert (= "Some text." (text (xpath "//p") true)))))
 
-;; Temporarily removed this test: IE8 handles this differently than other browsers.
 (add-test "can retrieve the text value of a node without normalization."
           #(do (reset)
                (append! (xpath "//body") "<p>\n\n   Some text.  \n  </p>")

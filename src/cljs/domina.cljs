@@ -311,12 +311,9 @@
 ;; Contents
 
 (defn text
-  "Returns the text of a node. Assumes content is a single node. Optional 'normalize' paramter indicates whether to collapse whitespace, normalize line breaks and trim (defaults to true). Does not return internal markup."
-  ([content] (text content true))
-  ([content normalize]
-     (if normalize
-       (string/trim (dom/getTextContent (single-node content)))
-       (dom/getRawTextContent (single-node content)))))
+  "Returns the text of a node. Assumes content is a single node. For consistency across browsers, will always trim whitespace of the beginning and end of the returned text."
+  [content]
+  (string/trim (dom/getTextContent (single-node content))))
 
 (defn set-text!
   "Sets the text value of all the nodes in the given content."

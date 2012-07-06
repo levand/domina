@@ -102,13 +102,13 @@
 ;;;;;;;;;;;;;;;;;;; Public API ;;;;;;;;;;;;;;;;;
 
 (def *debug* true)
-(defn log-debug [mesg]
+(defn log-debug [& mesg]
   (when (and *debug* (not (= (.-console js/window) js/undefined)))
-    (.log js/console mesg)))
+    (.log js/console (apply str  mesg))))
 
-(defn log [mesg]
+(defn log [& mesg]
   (when (.-console js/window)
-    (.log js/console mesg)))
+    (.log js/console (apply str mesg))))
 
 (defn by-id
   "Returns content containing a single node by looking up the given ID"
@@ -126,7 +126,7 @@
 (defn children
   "Gets all the child nodes of the elements in a content. Same as (xpath content '*') but more efficient."
   [content]
-  (mapcat dom/getChildren (nodes content)))
+  (doall (mapcat dom/getChildren (nodes content))))
 
 (defn clone
   "Returns a deep clone of content."

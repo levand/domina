@@ -7,7 +7,7 @@
                        set-styles! set-attrs! has-class? add-class!
                        remove-class!  classes set-classes!  text
                        set-text! value set-value! html set-html!
-                       set-data! get-data log-debug]]
+                       set-data! get-data log-debug log]]
         [domina.xpath :only [xpath]]
         [domina.css :only [sel]]
         [domina.events :only [listen! capture! listen-once! capture-once!

@@ -16,6 +16,7 @@
                        {:source-path "test/cljs"
                         :compiler  {:libs ["goog/dom/query.js"]
                                     :pretty-print true
+                                    :optimizations :none
                                     :output-dir "public/build_no_opt"
                                     :output-to "public/test_no_opt.js"}}
                        {:source-path "test/cljs"

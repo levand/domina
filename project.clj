@@ -1,10 +1,11 @@
-(defproject domina "1.0.0-SNAPSHOT"
+(defproject domina "1.0.1-SNAPSHOT"
   :description "A DOM manipulation library for ClojureScript inspired by JQuery"
   :source-path "src/clj"
-  :dependencies [[org.clojure/clojurescript "0.0-1424"]
-                 [org.clojure/clojure "1.4.0"]
-                 [goog-jar "1.0.0"]]
-  :plugins [[lein-cljsbuild "0.2.2"]
+  :dependencies [[org.clojure/clojure "1.4.0"]]
+  :profiles {:dev {:dependencies [[org.clojure/clojurescript "0.0-1450"]
+                                  [org.clojure/google-closure-library "0.0-1376-2"]
+                                  [org.clojure/google-closure-library-third-party "0.0-1376-2"]]}}
+  :plugins [[lein-cljsbuild "0.2.5"]
             [lein-clojars "0.9.0"]]
   :hooks [leiningen.cljsbuild]
   :cljsbuild {:builds [{:source-path "src/cljs"
@@ -36,7 +37,9 @@
                                     :optimizations :advanced
                                     :pretty-print true
                                     :output-dir ".cljsbuild/advanced"
-                                    :output-to "public/test_advanced.js"}}]})
+                                    :output-to "public/test_advanced.js"}}]}
+  :repositories {"sonatype-staging"
+                 "https://oss.sonatype.org/content/groups/staging/"})
 
 (comment
   (do

@@ -88,7 +88,8 @@
        (events/removeAll node)))
   ([content type]
      (let [type (find-builtin-type type)]
-       (events/removeAll node type))))
+       (doseq [node (domina/nodes content)]
+         (events/removeAll node type)))))
 
 (defn- ancestor-nodes
   "Returns a seq of a node and its ancestors, starting with the document root."

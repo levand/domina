@@ -1,10 +1,11 @@
 (ns domina.test
-  (:use [domina :only [nodes single-node by-id by-class children clone
-                       append!  prepend! detach! destroy!
-                       destroy-children! insert! insert-before!
-                       insert-after! swap-content! style attr
-                       set-style! set-attr! styles attrs remove-attr!
-                       set-styles! set-attrs! has-class? add-class!
+  (:use [domina :only [nodes single-node by-id by-class children
+                       common-ancestor ancestor? clone append!
+                       prepend! detach!  destroy!  destroy-children!
+                       insert!  insert-before!  insert-after!
+                       swap-content!  style attr set-style! set-attr!
+                       styles attrs remove-attr!  set-styles!
+                       set-attrs! has-class?  add-class!
                        remove-class!  classes set-classes!  text
                        set-text! value set-value! html set-html!
                        set-data! get-data log-debug log]]
@@ -850,6 +851,32 @@
              (let [data {:some "complex data"}]
                (set-data! (by-id "outerdata") :my-impeccable-data data)
                (assert (= data (get-data (by-id "innerdata") :my-impeccable-data true))))))
+
+(add-test "common-ancestor works"
+          #(do
+             (reset)
+             (append! (sel "body") "<div id='a1'/>")
+             (append! (sel "#a1") "<div id='i1'/>")
+             (append! (sel "#a1") "<div id='i2'/>")
+             (append! (sel "#i1") "<div id='t1'/>")
+             (append! (sel "#i2") "<div id='t2'/>")
+             (assert (not (nil? (common-ancestor (sel "#t1") (sel "#t2")))))
+             (assert (= (single-node (sel "#a1"))
+                        (common-ancestor (sel "#t1") (sel "#t2"))))))
+
+(add-test "ancestor? works"
+          #(do
+             (reset)
+             (append! (sel "body") "<div id='a1'/>")
+             (append! (sel "#a1") "<div id='i1'/>")
+             (append! (sel "#a1") "<div id='i2'/>")
+             (append! (sel "#i1") "<div id='t1'/>")
+             (append! (sel "#i2") "<div id='t2'/>")
+             (assert (ancestor? (sel "#a1") (sel "#t1")))
+             (assert (ancestor? (sel "#a1") (sel "#i1")))
+             (assert (ancestor? (sel "#a1") (sel "#a1")))
+             (assert (not (ancestor? (sel "#t1") (sel "#t2"))))
+             (assert (not (ancestor? (sel "#i1") (sel "#t2"))))))
 
 (defn report
   [test-results]

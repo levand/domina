@@ -128,6 +128,17 @@
   [content]
   (doall (mapcat dom/getChildren (nodes content))))
 
+(defn common-ancestor
+  "Returns the deepest common ancestor of the argument contents (which are presumed to be single nodes), or nil if they are from different documents."
+  [& contents]
+  (apply dom/findCommonAncestor (map single-node contents)))
+
+(defn ancestor?
+  "Returns true if the first argument is an ancestor of the second argument. Presumes both arguments are single-node contents."
+  [ancestor-content descendant-content]
+  (= (common-ancestor ancestor-content descendant-content)
+     (single-node ancestor-content)))
+
 (defn clone
   "Returns a deep clone of content."
   [content]

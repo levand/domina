@@ -372,7 +372,7 @@
           (doseq [node (nodes content)]
             (events/removeAll node)
             (set! (. node -innerHTML) value))
-          (catch Exception e
+          (catch js/Error e
             (replace-children! content value))))
       (replace-children! content html-string))
     content))

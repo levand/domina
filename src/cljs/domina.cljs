@@ -39,7 +39,7 @@
                  :default   [ 0 "" "" ]})) ;; TODO IE can't serialize <link> and <script> tags normally
 
 (defn- remove-extraneous-tbody!
-  [div html]
+  [div html tag-name start-wrap]
   (let [no-tbody? (not (re-find re-tbody html))
         tbody (if (and (= tag-name "table")
                        no-tbody?)
@@ -81,7 +81,7 @@
                 (recur (.-lastChild wrapper) (dec level))
                 wrapper))]
     (when support/extraneous-tbody?
-      (remove-extraneous-tbody! div html))
+      (remove-extraneous-tbody! div html tag-name start-wrap))
     (when (and (not support/leading-whitespace?)
                (re-find re-leading-whitespace html))
       (restore-leading-whitespace! div html))
@@ -372,7 +372,7 @@
           (doseq [node (nodes content)]
             (events/removeAll node)
             (set! (. node -innerHTML) value))
-          (catch Exception e
+          (catch js/Error e
             (replace-children! content value))))
       (replace-children! content html-string))
     content))

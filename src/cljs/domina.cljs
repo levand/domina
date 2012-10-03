@@ -63,7 +63,8 @@
                                                   html)))
                  (.-firstChild div)))
 
-(defn- html-to-dom
+(defn html-to-dom
+  "takes an string of html and returns a NodeList of dom fragments"
   [html]
   (let [html (cstring/replace html re-xhtml-tag "<$1></$2>")
         tag-name (. (str (second (re-find re-tag-name html)))

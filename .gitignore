@@ -11,3 +11,6 @@ lib
 pom.xml
 .lein-plugins
 /target
+*.*~
+\#*#
+.#*

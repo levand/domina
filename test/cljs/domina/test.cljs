@@ -647,8 +647,7 @@
           (fn []
             (reset)
             (append! (xpath "//body") "<button id='mybutton'>Text</button>")
-            (listen! (sel "#mybutton") :click (fn [e]
-                                                (reset! clicked true)))
+            (listen! (sel "#mybutton") :click (fn [e] nil))
             (assert (= 1 (count (get-listeners (sel "#mybutton") :click))))))
 
 (defn simulate-click-event

@@ -5,7 +5,7 @@
   :profiles {:dev {:dependencies [[org.clojure/clojurescript "0.0-1450"]
                                   [org.clojure/google-closure-library "0.0-1376-2"]
                                   [org.clojure/google-closure-library-third-party "0.0-1376-2"]]}}
-  :plugins [[lein-cljsbuild "0.2.5"]
+  :plugins [[lein-cljsbuild "0.2.7"]
             [lein-clojars "0.9.0"]]
   :hooks [leiningen.cljsbuild]
   :cljsbuild {:builds [{:source-path "src/cljs"

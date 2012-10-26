@@ -284,7 +284,7 @@
   content)
 
 (defn set-attrs!
-  "Sets the specified CSS styles fpr each node in the content, given a map of names and values. Style names may be keywords or strings."
+  "Sets the specified attributes for each node in the content, given a map of names and values. Names may be a string or keyword. Values will be cast to a string, multiple values wil be concatenated."
   [content attrs]
   (doseq [[name value] attrs]
     (set-attr! content name value))

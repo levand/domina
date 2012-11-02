@@ -877,6 +877,14 @@
              (assert (not (ancestor? (sel "#t1") (sel "#t2"))))
              (assert (not (ancestor? (sel "#i1") (sel "#t2"))))))
 
+(add-test "can add <option> elements to a <select> element."
+          #(do
+             (reset)
+             (append! (sel "body")
+                      "<select id='myselect'></select>")
+             (append! (by-id "myselect") "<option value='foo'>bar</option>")
+             (assert (= 1 (count (nodes (children (sel "#myselect"))))))))
+
 (defn report
   [test-results]
   (reset)

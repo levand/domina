@@ -93,7 +93,7 @@ Add a CSS class on a node with a particular id:
 Delete all nodes of a given class:
 
 ```clojure
-(delete! (by-class "foo"))
+(destroy! (by-class "foo"))
 ```
 
 Set some colors on all child nodes of `<div>` elements with a class of 'foo':

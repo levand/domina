@@ -122,12 +122,11 @@
   (dom/getElement (core/name id)))
 
 (declare normalize-seq)
+
 (defn by-class
   "Returns content containing nodes which have the specified CSS class."
   [class-name]
-  (reify DomContent
-         (nodes [_] (normalize-seq (dom/getElementsByClass (core/name class-name))))
-         (single-node [_] (normalize-seq (dom/getElementByClass (core/name class-name))))))
+  (normalize-seq (dom/getElementsByClass (core/name class-name))))
 
 (defn children
   "Gets all the child nodes of the elements in a content. Same as (xpath content '*') but more efficient."

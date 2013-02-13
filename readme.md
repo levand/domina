@@ -35,7 +35,7 @@ Selector functions take a string and return a `DomContent` representing matching
 (xpath "//div[@class='foo']/p[2]")
 ```
 
-This epxression returns a content containing all the paragraph elements in a document  which are the second children of divs with an class of 'foo'.
+This expression returns a content containing all the paragraph elements in a document  which are the second children of divs with an class of 'foo'.
 
 The `xpath` function also takes an optional first argument (which can be any `DomContent`) representing the context node(s) from which XPath evaluation will start. This allows selectors to be chained:
 
@@ -159,27 +159,12 @@ Implementing the `ILookup` protocol makes it easy to pull values from browser ev
 
 The `domina.events.Event` protocol supports the following methods:
 
-<table>
-  <tr><th>Method</th><th>Effect</th></tr>
-  <tr>
-    <td>`prevent-default`</td><td>Prevents the default action for an event from firing. For example, if you invoke `prevent-default` on a click event on a link, it will prevent the browser from navigating the browser as it normally would with a clicked link</td>
-  </tr>
-  <tr>
-    <td>`stop-propagation`</td><td>Prevents all future event listeners (in both the bubble and capture phases) from recieving the event.</td>
-  </tr>
-  <tr>
-    <td>`target`</td><td>Returns the target node of the event.</td>
-  </tr>
-   <tr>
-    <td>`current-target`</td><td>Returns the current target of the event (the node to which the current listener was attached).</td>
-  </tr>
-  <tr>
-    <td>`event-type`</td><td>Returns the type of the event</td>
-  </tr>
-   <tr>
-    <td>`raw-event`</td><td>Returns the underlying `goog.events.Event` object, rather than it's Domina wrapper.</td>
-  </tr>
-</table>
+- `prevent-default`  Prevents the default action for an event from firing. For example, if you invoke `prevent-default` on a click event on a link, it will prevent the browser from navigating the browser as it normally would with a clicked link.
+- `stop-propagation` Prevents all future event listeners (in both the bubble and capture phases) from recieving the event.
+- `target`           Returns the target node of the event.
+- `current-target`   Returns the current target of the event (the node to which the current listener was attached).
+- `event-type`       Returns the type of the event.
+- `raw-event`        Returns the underlying `goog.events.Event` object, rather than it's Domina wrapper.
 
 ### De-registering Event Handlers
 

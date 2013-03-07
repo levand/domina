@@ -308,6 +308,13 @@
     (classes/remove node class))
   content)
 
+(defn toggle-class!
+  "Toggles the specified CSS class from each node in the content."
+  [content class]
+  (doseq [node (nodes content)]
+    (classes/toggle node class))
+  content)
+
 (defn classes
   "Returns a seq of all the CSS classes currently applied to a node. Assumes content is a single node."
   [content]

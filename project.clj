@@ -2,13 +2,8 @@
   :description "A DOM manipulation library for ClojureScript inspired by JQuery"
   :source-path "src/clj"
   :dependencies [[org.clojure/clojure "1.4.0"]]
-
-  ;; :profiles {:dev {:dependencies [[org.clojure/clojurescript "0.0-1552"]
-  ;;                                 [org.clojure/google-closure-library "0.0-2029"]
-  ;;                                 [org.clojure/google-closure-library-third-party "0.0-2029"]]}}
-
-  :plugins [[lein-cljsbuild "0.2.10"]
-            [lein-clojars "0.9.0"]]
+  :plugins [[lein-cljsbuild "0.3.0"]
+            [lein-clojars "0.9.1"]]
   :hooks [leiningen.cljsbuild]
   :cljsbuild {:builds [{:source-path "src/cljs"
                         :jar true

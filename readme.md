@@ -275,3 +275,9 @@ To execute the test suite ...
 See the projects [Trello page](https://trello.com/board/domina/4f1f09c9ffa52a1e570372eb)
 
 If you'd like to participate, please just let me know and I'll add you.
+
+## License
+
+Copyright © 2012 Luke VanderHart
+
+Distributed under the Eclipse Public License, the same as Clojure.

@@ -256,10 +256,13 @@
   "Returns a map of the CSS styles/values. Assumes content will be a single node. Style names are returned as keywords."
   [content]
   (let [style (attr content "style")]
-    (if (string? style)
-      (parse-style-attributes style)
-      (if (. style -cssText)
-        (parse-style-attributes (. style -cssText))))))
+    (cond (string? style)
+            (parse-style-attributes style)
+          (nil? style)
+            {}
+          (. style -cssText)
+            (parse-style-attributes (. style -cssText))
+          :else {})))
 
 (defn attrs
   "Returns a map of the HTML attributes/values. Assumes content will be a single node. Attribute names are returned as keywords."

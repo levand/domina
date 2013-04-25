@@ -422,6 +422,12 @@
                (assert (= {:color "red" :background-color "black"}
                           (styles (xpath "//div"))))))
 
+(add-test "can get blank CSS styles from a single node."
+          #(do (reset)
+               (append! (xpath "//body") "<div>1</div>")
+               (assert (= {}
+                          (styles (xpath "//div"))))))
+
 (add-test "can get multiple HTML attributes from a single node."
           #(do (reset)
                (append! (xpath "//body") "<div>1</div>")

@@ -44,7 +44,14 @@
              val
              (aget evt (name k))))
          (-lookup [o k not-found] (or (-lookup o k)
-                                      not-found))))
+                                      not-found))
+         IAssociative
+         (-assoc [o k v]
+           (do
+             (aset evt k v)
+             o))
+         ISeqable
+         (-seq [o] (array-seq evt 0))))
     true))
 
 (defn- listen-internal!

@@ -27,6 +27,7 @@
 ;; about that (user-provided functions are usually just a bunch of side effects)
 ;; User functions can explicitly take control by calling prevent-default or
 ;; stop-propegation
+
 (defn- create-listener-function
   [f]
   (fn [evt]
@@ -45,11 +46,6 @@
              (aget evt (name k))))
          (-lookup [o k not-found] (or (-lookup o k)
                                       not-found))
-         IAssociative
-         (-assoc [o k v]
-           (do
-             (aset evt k v)
-             o))
          ISeqable
          (-seq [o] 
            (map #(vector % (gobj/get evt %)) (prim-seq (gobj/getKeys evt) 0)))

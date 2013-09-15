@@ -170,7 +170,7 @@ The `domina.events.Event` protocol supports the following methods:
 
 There are several ways to de-register an event handler.
 
-If you have they key returned by the registration function, you can de-register the handler by calling the `unlisten-by-key!` function, passing it the key as a single argument.
+If you have the key returned by the registration function, you can de-register the handler by calling the `unlisten-by-key!` function, passing it the key as a single argument.
 
 If you do not have the key in hand, you can remove all listeners from a node (or set of nodes) using the `unlisten!` function. It takes a DomContent, and an optional event type. If the event type is specified, it will only de-register handlers for that type, otherwise it will de-register everything from the specified node.
 

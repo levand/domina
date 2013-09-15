@@ -698,6 +698,18 @@
               (simulate-click-event (sel "#mybutton"))
               (assert @clicked))))
 
+(add-test "can listen for a browser event and stop propagation"
+          (fn []
+            (reset)
+            (append! (xpath "//body") "<div id='mydiv'>Text</div>")
+            (append! (sel "#mydiv") "<div id='internal'>Inner Stuff</div>")
+            (let [clicked (atom false)]
+              (listen! (sel "#internal") :click (fn [e] (stop-propagation e)))
+              (listen! (sel "#mydiv") :click (fn [e] (reset! clicked true)))
+              ; using the same dispatch! a user would use
+              (dispatch! (single-node (sel "#internal")) :click {})
+              (assert (not @clicked)))))
+
 (add-test "can extract string keys from an event using keyword accessors"
           (fn []
             (reset)

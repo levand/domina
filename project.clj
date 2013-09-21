@@ -1,12 +1,11 @@
 (defproject domina "1.0.2-SNAPSHOT"
   :description "A DOM manipulation library for ClojureScript inspired by JQuery"
-  :source-path "src/clj"
+  :source-paths ["src/cljs"]
   :dependencies [[org.clojure/clojure "1.4.0"]]
   :plugins [[lein-cljsbuild "0.3.0"]
             [lein-clojars "0.9.1"]]
   :hooks [leiningen.cljsbuild]
-  :cljsbuild {:builds [{:source-paths ["src/cljs"]
-                        :jar true
+  :cljsbuild {:builds [{:jar true
                         :compiler {:libs ["goog/dom/query.js"]
                                    :pretty-print true
                                    :output-dir ".cljsbuild/domina"

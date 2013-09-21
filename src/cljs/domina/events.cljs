@@ -1,3 +1,4 @@
+
 (ns domina.events
   (:require [domina :as domina]
             [goog.object :as gobj]
@@ -12,15 +13,9 @@
   (event-type [evt] "Returns the type of the the event")
   (raw-event [evt] "Returns the original GClosure event"))
 
-(def builtin-events (set (map keyword (gobj/getValues events/EventType))))
 
 (def root-element (.. js/window -document -documentElement))
 
-(defn- find-builtin-type
-  [evt-type]
-  (if (contains? builtin-events evt-type)
-    (name evt-type)
-    evt-type))
 
 ;; The listener function will always return true: we ignore the return value
 ;; of the user-provided function since we don't want consumers to have to worry
@@ -50,7 +45,7 @@
 (defn- listen-internal!
   [content type listener capture once]
   (let [f (create-listener-function listener)
-        t (find-builtin-type type)]
+        t (name type)]
     (doall (for [node (domina/nodes content)]
              (if once
                (events/listenOnce node t f capture)
@@ -87,7 +82,7 @@
      (doseq [node (domina/nodes content)]
        (events/removeAll node)))
   ([content type]
-     (let [type (find-builtin-type type)]
+     (let [type (name type)]
        (doseq [node (domina/nodes content)]
          (events/removeAll node type)))))
 
@@ -133,7 +128,7 @@
   "Dispatches an event of the given type, adding the values in event map to the event object. Optionally takes an event source. If none is provided, dispatches on the document's root element. Returns false if any handlers called prevent-default, otherwise true."
   ([type evt-map] (dispatch! root-element type evt-map))
   ([source type evt-map]
-     (let [evt (events/Event. (find-builtin-type type))]
+     (let [evt (events/Event. (name type))]
        (doseq [[k v] evt-map] (aset evt k v))
        (if (is-event-target? source)
          (dispatch-event-target! source evt)
@@ -148,5 +143,5 @@
   "Returns a sequence of event listeners for all the nodes in the
 content of a given type."
   [content type]
-  (let [type (find-builtin-type type)]
+  (let [type (name type)]
     (mapcat #(events/getListeners % type false) (domina/nodes content))))

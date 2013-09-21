@@ -472,7 +472,7 @@
 (defn- array-like?
   [obj]
   (and obj ;; is not nil
-       (not (.-name obj)) ;; is not an element (i.e, <select>)
+       (not (.-nodeName obj)) ;; is not an element (i.e, <select>)
        (.-length obj))) ;; has a length
 
 (defn normalize-seq

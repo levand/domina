@@ -385,7 +385,6 @@
       (let [value (cstring/replace html-string re-xhtml-tag "<$1></$2>")]
         (try
           (doseq [node (nodes content)]
-            (events/removeAll node)
             (set! (. node -innerHTML) value))
           (catch js/Error e
             (replace-children! content value))))

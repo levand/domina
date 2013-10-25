@@ -10,6 +10,7 @@ lib
 .repl
 pom.xml
 .lein-plugins
+.lein-failures
 /target
 *.*~
 \#*#

@@ -775,6 +775,21 @@
               (dispatch! (sel "#mybutton") :foobar {:some "data"})
               (assert (= [button body] @actual-elements)))))
 
+(add-test "target is correct when capturing custom events"
+          (fn []
+            (reset)
+            (append! (xpath "//body")
+                     "<div><button id='mybutton'>Text</button></div>")
+            (let [actual-elements (atom [])
+                  body (domina/single-node (sel "body"))
+                  button (domina/single-node (sel "button"))]
+              (listen! (sel "body") :foobar #(swap! actual-elements conj
+                                                    (target %)))
+              (listen! (sel "button") :foobar #(swap! actual-elements conj
+                                                      (target %)))
+              (dispatch! (sel "#mybutton") :foobar {:some "data"})
+              (assert (= [button button] @actual-elements)))))
+
 (add-test "can stop event propagation in the capture phase."
           (fn []
             (reset)

@@ -100,6 +100,7 @@
 (defn dispatch-browser!
   "Intended for internal/testing use only. Clients should prefer dispatch!. Dispatches an event as a simulated browser event from the given source node. Emulates capture/bubble behavior. Returns false if any handlers called prevent-default, otherwise true."
   [source evt]
+  (set! (.-target evt) (domina/single-node source))
   (let [ancestors (ancestor-nodes (domina/single-node source))]
     ;; Capture phase
     (doseq [n ancestors]

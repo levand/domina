@@ -27,7 +27,7 @@
                   (.selectSingleNode node expr))
                 (fn [resolver doc node expr]
                   (let [result (.evaluate doc expr node nil
-                                          XPathResult/FIRST_ORDERED_NODE_TYPE nil)]
+                                          js/XPathResult.FIRST_ORDERED_NODE_TYPE nil)]
                     (. result -singleNodeValue)))))
 
 (defn- select-nodes
@@ -38,7 +38,7 @@
                   (.selectNodes node expr))
                 (fn [resolver doc node expr]
                   (let [result (.evaluate doc expr node nil
-                                          XPathResult/ORDERED_NODE_SNAPSHOT_TYPE nil)
+                                          js/XPathResult.ORDERED_NODE_SNAPSHOT_TYPE nil)
                         num-results (.-snapshotLength result)]
                     (loop [i 0 acc nil]
                       (if (< i num-results)

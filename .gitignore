@@ -1,10 +1,7 @@
 classes
 .cljsbuild
 .lein-*
-public/build_no_opt
-public/test_*.js
-public/domina.js
-domina-tests
+dev-resources/public/js/
 lib
 *.jar
 .repl

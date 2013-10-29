@@ -1,6 +1,6 @@
 classes
 .cljsbuild
-.lein-deps-sum
+.lein-*
 public/build_no_opt
 public/test_*.js
 public/domina.js
@@ -9,9 +9,8 @@ lib
 *.jar
 .repl
 pom.xml
-.lein-plugins
-.lein-failures
-/target
+target
+out
 *.*~
 \#*#
 .#*

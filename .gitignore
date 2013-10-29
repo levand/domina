@@ -5,6 +5,7 @@ dev-resources/public/js/
 lib
 *.jar
 .repl
+repl
 pom.xml
 target
 out

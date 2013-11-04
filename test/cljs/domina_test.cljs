@@ -1,8 +1,11 @@
 (ns domina-test
-  (:require-macros [cemerick.cljs.test :as m :refer (deftest testing are)]
+  (:require-macros [cemerick.cljs.test :as m :refer (deftest testing are use-fixtures)]
                    [domina.macros :as dm])
   (:require [cemerick.cljs.test :as t]
-            [domina :as dom]))
+            [domina :as dom]
+            [domina.fixture :as fix]))
+
+(use-fixtures :each fix/each-fixture)
 
 ;;; nodes
 (deftest  nodes-test
@@ -18,7 +21,11 @@
              nil (dom/nodes ())
              nil (dom/nodes [])
              nil (dom/nodes {})
-             nil (dom/nodes #{}))))))
+             nil (dom/nodes #{}))))
+    (testing "Standard Cases\n"
+      (testing "(nodes content)"
+        (are [expected actual] (= expected actual)
+             true false)))))
 
 ;;; single-node
 (deftest  single-node-test
@@ -46,7 +53,11 @@
              nil (dom/by-id "")
              nil (dom/by-id "not-existent-id")
              nil (dom/by-id "not existent id")
-             nil (dom/by-id " "))))))
+             nil (dom/by-id " "))))
+    (testing "Standard Cases\n"
+      (testing "(by-id id)"
+        (are [expected actual] (= expected actual)
+             true (not (nil? (dom/by-id "id1"))))))))
 
 ;;; by-class
 (deftest  by-class-test
@@ -58,7 +69,13 @@
              nil (dom/by-class "")
              nil (dom/by-class " ")
              nil (dom/by-class "not-existent-class")
-             nil (dom/by-class "not existent class"))))))
+             nil (dom/by-class "not existent class"))))
+    (testing "Standard Cases\n"
+      (testing "(by-class css-clss)"
+        (are [expected actual] (= expected actual)
+             1 (count (dom/by-class "d1"))
+             2 (count (dom/by-class "p1"))
+             0 (count (dom/by-class "p2")))))))
 
 ;;; value
 (deftest  value-test

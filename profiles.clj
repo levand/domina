@@ -6,8 +6,8 @@
        :resources-paths ["dev-resources"]
        
        :dependencies [[com.cemerick/piggieback "0.1.0"]
-                      [ring "1.2.0"]
-                      [compojure "1.1.5"]]
+                      [ring "1.2.1"]
+                      [compojure "1.1.6"]]
        
        :plugins [[com.cemerick/clojurescript.test "0.1.0"]]
        

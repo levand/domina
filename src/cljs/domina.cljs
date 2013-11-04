@@ -94,6 +94,9 @@
     (html-to-dom s)
     (.createTextNode js/document s)))
 
+(defn- blank? [s]
+  (every? #(= " " %) s))
+
 ;;;;;;;;;;;;;;;;;;; Protocols ;;;;;;;;;;;;;;;;;
 
 ;; These are to silence a bug where the compiler emits a warning when
@@ -119,14 +122,16 @@
 (defn by-id
   "Returns content containing a single node by looking up the given ID"
   [id]
-  (dom/getElement (core/name id)))
+  (when (not (blank? id))
+    (dom/getElement (core/name id))))
 
 (declare normalize-seq)
 
 (defn by-class
   "Returns content containing nodes which have the specified CSS class."
   [class-name]
-  (normalize-seq (dom/getElementsByClass (core/name class-name))))
+  (when (not (blank? class-name))
+    (normalize-seq (dom/getElementsByClass (core/name class-name)))))
 
 (defn children
   "Gets all the child nodes of the elements in a content. Same as (xpath content '*') but more efficient."

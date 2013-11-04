@@ -356,7 +356,7 @@
 (defn value
   "Returns the value of a node (presumably a form field). Assumes content is a single node."
   [content]
-  (forms/getValue (single-node content)))
+  (when content (forms/getValue (single-node content))))
 
 (defn set-value!
   "Sets the value of all the nodes (presumably form fields) in the given content."
@@ -503,16 +503,24 @@
   ;; implementation instead of with a cond, except you can't create
   ;; protocols on Element or things like DispStaticNodeList in early
   ;; versions of IE.
+  nil
+  (nodes [content] nil)
+  (single-node [content] nil)
+  string
+  (nodes [content]
+    (when (not (blank? content))
+      (seq [content])))
+  (single-node [content]
+    (when (not (blank? content))
+      content))
   default
   (nodes [content]
     (cond
-     (nil? content) '()
      (satisfies? ISeqable content) (seq content)
      (array-like? content) (lazy-nodelist content)
      :default (seq [content])))
   (single-node [content]
     (cond
-     (nil? content) nil
      (satisfies? ISeqable content) (first content)
      (array-like? content) (. content (item 0))
      :default content)))

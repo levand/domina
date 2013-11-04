@@ -6,6 +6,7 @@ lib
 *.jar
 .repl
 repl
+.nrepl-port
 pom.xml
 target
 out

@@ -94,7 +94,7 @@
     (html-to-dom s)
     (.createTextNode js/document s)))
 
-(defn- blank? [s]
+(defn blank? [s]
   (every? #(= " " %) s))
 
 ;;;;;;;;;;;;;;;;;;; Protocols ;;;;;;;;;;;;;;;;;
@@ -160,7 +160,7 @@
 (defn append!
   "Given a parent and child contents, appends each of the children to all of the parents. If there is more than one node in the parent content, clones the children for the additional parents. Returns the parent content."
   [parent-content child-content]
-  (when parent-content 
+  (when parent-content
     (apply-with-cloning dom/appendChild parent-content child-content)
     parent-content))
 
@@ -498,8 +498,12 @@
 
 (extend-protocol DomContent
   string
-  (nodes [s] (doall (nodes (string-to-dom s))))
-  (single-node [s] (single-node (string-to-dom s)))
+  (nodes [s]
+    (when (not (blank? s))
+      (doall (nodes (string-to-dom s)))))
+  (single-node [s]
+    (when (not (blank? s))
+      (single-node (string-to-dom s))))
 
   ;; We'd prefer to do this polymorphically with a protocol
   ;; implementation instead of with a cond, except you can't create
@@ -508,13 +512,6 @@
   nil
   (nodes [content] nil)
   (single-node [content] nil)
-  string
-  (nodes [content]
-    (when (not (blank? content))
-      (seq [content])))
-  (single-node [content]
-    (when (not (blank? content))
-      content))
   default
   (nodes [content]
     (cond

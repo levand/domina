@@ -207,6 +207,16 @@
         (are [expected actual] (= expected actual)
              true false)))))
 
+;;; has-class?
+(deftest has-class?-test
+  (testing "Unit Testing for (has-class? content class)\n"
+    (testing "Edge Cases\n"
+      (testing "(has-class? content class)"
+        (are [expected actual] (= expected actual)
+             nil (dom/has-class? nil nil)
+             nil (dom/has-class? nil "p1")
+             false (dom/has-class? (dom/by-id "id1") nil))))))
+
 ;;; style
 (deftest  style-test
   (testing "Unit Testing for (style content name)\n"

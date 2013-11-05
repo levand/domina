@@ -17,8 +17,8 @@
              nil (dom/nodes nil)
              nil (dom/nodes "")
              nil (dom/nodes " ")
-             '("not-a-content") (dom/nodes "not-a-content")
-             '("not a content") (dom/nodes "not a content")
+             false (nil? (dom/nodes "not-a-content"))
+             false (nil? (dom/nodes "not a content"))
              nil (dom/nodes ())
              nil (dom/nodes [])
              nil (dom/nodes {})
@@ -38,8 +38,8 @@
              nil (dom/single-node nil)
              nil (dom/single-node "")
              nil (dom/single-node " ")
-             "not-a-node" (dom/single-node "not-a-node")
-             "not a node" (dom/single-node "not a node")
+             false (nil? (dom/single-node "not-a-node"))
+             false (nil? (dom/single-node "not a node"))
              nil (dom/single-node ())
              nil (dom/single-node [])
              nil (dom/single-node {})
@@ -97,14 +97,8 @@
              () (dom/children [])
              () (dom/children {})
              () (dom/children #{})
-             "Error" (try
-                       (dom/children "not-existent-parent")
-                       (catch js/Error e
-                         "Error"))
-             "Error" (try 
-                       (dom/children "not existent parent")
-                       (catch js/Error e
-                         "Error")))))
+             () (dom/children "not-existent-parent")
+             () (dom/children "not existent parent"))))
     (testing "Standard Cases\n"
         (testing "(children content)"
           (are [expected actual] (= expected actual)

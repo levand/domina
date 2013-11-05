@@ -3,8 +3,7 @@
                    [domina.macros :as dm])
   (:require [cemerick.cljs.test :as t]
             [domina :as dom]
-            [domina.fixture :as fix]
-            [domina.xpath :as xp]))
+            [domina.fixture :as fix]))
 
 (use-fixtures :each fix/each-fixture)
 
@@ -85,6 +84,7 @@
              () (dom/children (dom/append! (dom/by-class "p1") {}))
              () (dom/children (dom/append! (dom/by-class "p1") #{})))))))
 
+;;; detach
 (deftest  detach!-test
   (testing "Unit Testing for (detach! content)\n"
     (testing "Edge Cases\n"
@@ -102,6 +102,7 @@
              '(nil) (dom/detach! "not-existent-parent")
              '(nil) (dom/detach! "not existent parent"))))))
 
+;;; children
 (deftest  children-test
   (testing "Unit Testing for (children content)\n"
     (testing "Edge Cases\n"
@@ -117,6 +118,7 @@
              () (dom/children "not-existent-parent")
              () (dom/children "not existent parent"))))))
 
+;;; destroy
 (deftest  destroy!-test
   (testing "Unit Testing for (destroy! content)\n"
     (testing "Edge Cases\n"
@@ -132,8 +134,80 @@
              nil (dom/destroy! {})
              nil (dom/destroy! #{}))))))
 
-;;; style / attribute tests
+;;; common-ancestor
+(deftest  common-ancestor-test
+  (testing "Unit Testing for (common-ancestor &contents)\n"
+    (testing "Edge Cases\n"
+      (testing "(common-ancestor node-a)"
+        (are [expected actual] (= expected actual)
+             nil (dom/common-ancestor nil)))
+      (testing "(common-ancestor node-a node-b)"
+        (are [expected actual] (= expected actual)
+             nil (dom/common-ancestor nil nil)
+             nil (dom/common-ancestor nil (dom/by-id "id1"))
+             nil (dom/common-ancestor (dom/by-id "id1") nil)))
+      (testing "(common-ancestor node-a node-b node-c)"
+        (are [expected actual] (= expected actual)
+             nil (dom/common-ancestor nil nil nil)
+             nil (dom/common-ancestor nil (dom/by-id "id1") nil)
+             nil (dom/common-ancestor nil nil (dom/by-id "id1"))
+             nil (dom/common-ancestor (dom/by-id "id1") nil nil))))))
 
+;;; ancestor?
+(deftest  ancestor?-test
+  (testing "Unit Testing for (ancestor? ancestor-node descendant-node)\n"
+    (testing "Edge Cases\n"
+      (testing "(ancestor? ancestor descendant)"
+        (are [expected actual] (= expected actual)
+             nil (dom/ancestor? nil nil)
+             nil (dom/ancestor? nil (dom/by-id "id1"))
+             nil (dom/ancestor? (dom/by-id "id1") nil)
+
+             nil (dom/ancestor? () ())
+             nil (dom/ancestor? nil ())
+             nil (dom/ancestor? () nil)
+
+             nil (dom/ancestor? [] [])
+             nil (dom/ancestor? nil [])
+             nil (dom/ancestor? [] nil)
+
+             nil (dom/ancestor? {} {})
+             nil (dom/ancestor? nil {})
+             nil (dom/ancestor? {} nil)
+
+             nil (dom/ancestor? #{} #{})
+             nil (dom/ancestor? nil #{})
+             nil (dom/ancestor? #{} nil))))))
+
+;;; clone
+(deftest clone-test
+  (testing "Unit Testing for (clone node)\n"
+    (testing "Edge Cases\n"
+      (testing "(clone node)"
+        (are [expected actual] (= expected actual)
+             nil (dom/clone nil)
+             () (dom/clone ())
+             () (dom/clone [])
+             () (dom/clone {})
+             () (dom/clone #{}))))))
+
+;;; prepend!
+(deftest  prepend!-test
+  (testing "Unit Testing for (prepend! parent child)\n"
+    (testing "Edge Cases\n"
+      (testing "(prepend! parent child)"
+        (are [expected actual] (= expected actual)
+             true false)))))
+
+;;; destroy-children!
+(deftest  destroy-children!-test
+  (testing "Unit Testing for (destroy-children!)\n"
+    (testing "Edge Cases\n"
+      (testing "(destroy-children!)"
+        (are [expected actual] (= expected actual)
+             true false)))))
+
+;;; style
 (deftest  style-test
   (testing "Unit Testing for (style content name)\n"
     (testing "Edge Cases\n"

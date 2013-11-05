@@ -136,7 +136,8 @@
 (defn children
   "Gets all the child nodes of the elements in a content. Same as (xpath content '*') but more efficient."
   [content]
-  (doall (mapcat dom/getChildren (nodes content))))
+  (when content
+    (doall (mapcat dom/getChildren (nodes content)))))
 
 (defn common-ancestor
   "Returns the deepest common ancestor of the argument contents (which are presumed to be single nodes), or nil if they are from different documents."

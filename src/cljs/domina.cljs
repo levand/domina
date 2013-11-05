@@ -197,7 +197,8 @@
 (defn detach!
   "Removes all the nodes in a content from the DOM and returns them."
   [content]
-  (doall (map dom/removeNode (nodes content))))
+  (when content
+    (doall (map dom/removeNode (nodes content)))))
 
 (defn destroy!
   "Removes all the nodes in a content from the DOM. Returns nil."

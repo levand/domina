@@ -305,7 +305,8 @@
 (defn has-class?
   "Returns true if the node has the specified CSS class. Assumes content is a single node."
   [content class]
-  (classes/has (single-node content) class))
+  (when content
+    (classes/has (single-node content) class)))
 
 (defn add-class!
   "Adds the specified CSS class to each node in the content."

@@ -26,7 +26,8 @@
     (testing "Standard Cases\n"
       (testing "(nodes content)"
         (are [expected actual] (= expected actual)
-             true false)))))
+             3 (count (dom/nodes (xp/xpath "//p")))
+             1 (count (dom/nodes (xp/xpath "//div[@class='d1']"))))))))
 
 ;;; single-node
 (deftest  single-node-test
@@ -42,7 +43,13 @@
              nil (dom/single-node ())
              nil (dom/single-node [])
              nil (dom/single-node {})
-             nil (dom/single-node #{}))))))
+             nil (dom/single-node #{}))))
+    (testing "Standard Cases\n"
+      (testing "(single-node node)"
+        (are [expected actual] (= expected actual)
+             false (nil? (dom/single-node (xp/xpath "//p")))
+             false (nil? (dom/single-node (dom/by-class "p1")))
+             false (nil? (dom/single-node (dom/by-id "id1"))))))))
 
 ;;; by-id
 (deftest  by-id-test
@@ -58,7 +65,7 @@
     (testing "Standard Cases\n"
       (testing "(by-id id)"
         (are [expected actual] (= expected actual)
-             true (not (nil? (dom/by-id "id1"))))))))
+             false (nil? (dom/by-id "id1")))))))
 
 ;;; by-class
 (deftest  by-class-test
@@ -77,6 +84,32 @@
              1 (count (dom/by-class "d1"))
              2 (count (dom/by-class "p1"))
              0 (count (dom/by-class "p2")))))))
+
+(deftest  children-test
+  (testing "Unit Testing for (children content)\n"
+    (testing "Edge Cases\n"
+      (testing "(children content)"
+        (are [expected actual] (= expected actual)
+             nil (dom/children nil)
+             () (dom/children "")
+             () (dom/children " ")
+             () (dom/children ())
+             () (dom/children [])
+             () (dom/children {})
+             () (dom/children #{})
+             "Error" (try
+                       (dom/children "not-existent-parent")
+                       (catch js/Error e
+                         "Error"))
+             "Error" (try 
+                       (dom/children "not existent parent")
+                       (catch js/Error e
+                         "Error")))))
+    (testing "Standard Cases\n"
+        (testing "(children content)"
+          (are [expected actual] (= expected actual)
+               3 (count (dom/children (xp/xpath "//div")))
+               0 (count (dom/children (xp/xpath "//div/p"))))))))
 
 (deftest  append!-test
   (testing "Unit Testing for (append! parent-content child-content)\n"

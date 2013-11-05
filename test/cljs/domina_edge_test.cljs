@@ -1,4 +1,4 @@
-(ns domina-test
+(ns domina-edge-test
   (:require-macros [cemerick.cljs.test :as m :refer (deftest testing are use-fixtures)]
                    [domina.macros :as dm])
   (:require [cemerick.cljs.test :as t]
@@ -22,12 +22,7 @@
              nil (dom/nodes ())
              nil (dom/nodes [])
              nil (dom/nodes {})
-             nil (dom/nodes #{}))))
-    (testing "Standard Cases\n"
-      (testing "(nodes content)"
-        (are [expected actual] (= expected actual)
-             3 (count (dom/nodes (xp/xpath "//p")))
-             1 (count (dom/nodes (xp/xpath "//div[@class='d1']"))))))))
+             nil (dom/nodes #{}))))))
 
 ;;; single-node
 (deftest  single-node-test
@@ -43,13 +38,7 @@
              nil (dom/single-node ())
              nil (dom/single-node [])
              nil (dom/single-node {})
-             nil (dom/single-node #{}))))
-    (testing "Standard Cases\n"
-      (testing "(single-node node)"
-        (are [expected actual] (= expected actual)
-             false (nil? (dom/single-node (xp/xpath "//p")))
-             false (nil? (dom/single-node (dom/by-class "p1")))
-             false (nil? (dom/single-node (dom/by-id "id1"))))))))
+             nil (dom/single-node #{}))))))
 
 ;;; by-id
 (deftest  by-id-test
@@ -61,11 +50,7 @@
              nil (dom/by-id "")
              nil (dom/by-id "not-existent-id")
              nil (dom/by-id "not existent id")
-             nil (dom/by-id " "))))
-    (testing "Standard Cases\n"
-      (testing "(by-id id)"
-        (are [expected actual] (= expected actual)
-             false (nil? (dom/by-id "id1")))))))
+             nil (dom/by-id " "))))))
 
 ;;; by-class
 (deftest  by-class-test
@@ -77,13 +62,7 @@
              nil (dom/by-class "")
              nil (dom/by-class " ")
              nil (dom/by-class "not-existent-class")
-             nil (dom/by-class "not existent class"))))
-    (testing "Standard Cases\n"
-      (testing "(by-class css-class)"
-        (are [expected actual] (= expected actual)
-             1 (count (dom/by-class "d1"))
-             2 (count (dom/by-class "p1"))
-             0 (count (dom/by-class "p2")))))))
+             nil (dom/by-class "not existent class"))))))
 
 ;;; append!
 (deftest  append!-test
@@ -104,21 +83,7 @@
              () (dom/children (dom/append! (dom/by-class "p1") ()))
              () (dom/children (dom/append! (dom/by-class "p1") []))
              () (dom/children (dom/append! (dom/by-class "p1") {}))
-             () (dom/children (dom/append! (dom/by-class "p1") #{})))))
-    (testing "Standard Cases\n"
-      (testing "(append! single-parent single-child)"
-        (are [expected actual] (= expected actual)
-             1 (count (dom/children (dom/append! (dom/by-id "id1")
-                                                 "<span>text</span>")))))
-      (testing "Standard Cases\n"
-        (testing "(append! multiple-parent single-child)"
-          (are [expected actual] (= expected actual)
-               2 (count (dom/children (dom/append! (dom/by-class "p1")
-                                                   "<span>text</span>")))))
-        (testing "(append! multiple-parent multiple-children)"
-          (are [expected actual] (= expected actual)
-               6 (count (dom/children (dom/append! (dom/by-class "p1")
-                                                   "<p>text</p><span>text</span>")))))))))
+             () (dom/children (dom/append! (dom/by-class "p1") #{})))))))
 
 (deftest  detach!-test
   (testing "Unit Testing for (detach! content)\n"
@@ -135,11 +100,7 @@
              ;; I don't like at all the following two results. In my
              ;; opinion they should both return ()
              '(nil) (dom/detach! "not-existent-parent")
-             '(nil) (dom/detach! "not existent parent"))))
-    (testing "Standard Cases\n"
-        (testing "(detach! content)"
-          (are [expected actual] (= expected actual)
-               2 (count (dom/detach! (dom/by-class "p1"))))))))
+             '(nil) (dom/detach! "not existent parent"))))))
 
 (deftest  children-test
   (testing "Unit Testing for (children content)\n"
@@ -154,12 +115,7 @@
              () (dom/children {})
              () (dom/children #{})
              () (dom/children "not-existent-parent")
-             () (dom/children "not existent parent"))))
-    (testing "Standard Cases\n"
-        (testing "(children content)"
-          (are [expected actual] (= expected actual)
-               3 (count (dom/children (xp/xpath "//div")))
-               0 (count (dom/children (xp/xpath "//div/p"))))))))
+             () (dom/children "not existent parent"))))))
 
 (deftest  destroy!-test
   (testing "Unit Testing for (destroy! content)\n"
@@ -174,19 +130,16 @@
              nil (dom/destroy! ())
              nil (dom/destroy! [])
              nil (dom/destroy! {})
-             nil (dom/destroy! #{}))))
-    (testing "Standard Cases\n"
-        (testing "(destroy! single-node)"
-          (are [expected actual] (= expected actual)
-               0 (do (dom/append! (xp/xpath "//body") "<p class='appended1'>app1</p>")
-                     (dom/destroy! (xp/xpath "//body/p[@class='appended1']"))
-                     (count (dom/nodes (xp/xpath "//body/p[@class='appended1']"))))))
-        (testing "(destroy! multiple-nodes)"
-          (are [expected actual] (= expected actual)
-               0 (do (dom/append! (xp/xpath "//body")
-                              "<p class='appended2'>app1</p><p class='appended2'>app2</p>")
-                     (dom/destroy! (xp/xpath "//body/p[@class='appended2']"))
-                     (count (dom/nodes (xp/xpath "//body/p[@class='appended2']")))))))))
+             nil (dom/destroy! #{}))))))
+
+;;; style / attribute tests
+
+(deftest  style-test
+  (testing "Unit Testing for (style content name)\n"
+    (testing "Edge Cases\n"
+      (testing "(style content name)"
+        (are [expected actual] (= expected actual)
+             true false)))))
 
 ;;; value
 (deftest  value-test

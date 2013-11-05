@@ -27,4 +27,5 @@
            1 (count (dom/nodes (css/sel ".d1")))
            1 (count (dom/nodes (css/sel "#id1")))
            3 (count (dom/nodes (-> (css/sel ".d1")
-                                   (css/sel "p"))))))))
+                                   (css/sel "p"))))
+           3 (count (dom/nodes (css/sel ".d1 > p")))))))

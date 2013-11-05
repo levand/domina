@@ -159,8 +159,9 @@
 (defn append!
   "Given a parent and child contents, appends each of the children to all of the parents. If there is more than one node in the parent content, clones the children for the additional parents. Returns the parent content."
   [parent-content child-content]
-  (apply-with-cloning dom/appendChild parent-content child-content)
-  parent-content)
+  (when parent-content 
+    (apply-with-cloning dom/appendChild parent-content child-content)
+    parent-content))
 
 (defn insert!
   "Given a parent and child contents, appends each of the children to all of the parents at the specified index. If there is more than one node in the parent content, clones the children for the additional parents. Returns the parent content."

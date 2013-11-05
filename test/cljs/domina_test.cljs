@@ -3,7 +3,8 @@
                    [domina.macros :as dm])
   (:require [cemerick.cljs.test :as t]
             [domina :as dom]
-            [domina.fixture :as fix]))
+            [domina.fixture :as fix]
+            [domina.xpath :as xp]))
 
 (use-fixtures :each fix/each-fixture)
 
@@ -22,7 +23,7 @@
              nil (dom/nodes [])
              nil (dom/nodes {})
              nil (dom/nodes #{}))))
-    #_(testing "Standard Cases\n"
+    (testing "Standard Cases\n"
       (testing "(nodes content)"
         (are [expected actual] (= expected actual)
              true false)))))
@@ -61,7 +62,7 @@
 
 ;;; by-class
 (deftest  by-class-test
-  (testing "Unit Testing for (by-class class-name)\n"
+  (testing "Unit Testing for (by-class css-class)\n"
     (testing "Edge Cases\n"
       (testing "(by-class css-class)"
         (are [expected actual] (= expected actual)
@@ -71,11 +72,31 @@
              nil (dom/by-class "not-existent-class")
              nil (dom/by-class "not existent class"))))
     (testing "Standard Cases\n"
-      (testing "(by-class css-clss)"
+      (testing "(by-class css-class)"
         (are [expected actual] (= expected actual)
              1 (count (dom/by-class "d1"))
              2 (count (dom/by-class "p1"))
              0 (count (dom/by-class "p2")))))))
+
+(deftest  append!-test
+  (testing "Unit Testing for (append! parent-content child-content)\n"
+    (testing "Edge Cases\n"
+      (testing "(append! single-parent single-child)"
+        (are [expected actual] (= expected actual)
+             nil (dom/append! nil nil)
+             () (dom/children (dom/append! (dom/by-id "id1") nil))
+             () (dom/children (dom/append! (dom/by-id "id1") ""))
+             () (dom/children (dom/append! (dom/by-id "id1") " "))
+             nil (dom/append! nil "<div></div>")))
+      (testing "(append! multiple-parent single-child)"
+        (are [expected actual] (= expected actual)
+             () (dom/children (dom/append! (dom/by-class "p1") nil))
+             () (dom/children (dom/append! (dom/by-class "p1") ""))
+             () (dom/children (dom/append! (dom/by-class "p1") " "))))
+      (testing "Standard Cases\n"
+        (testing "(append! single-parent single-child)"
+          (are [expected actual] (= expected actual)
+               true false))))))
 
 ;;; value
 (deftest  value-test

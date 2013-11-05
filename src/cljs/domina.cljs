@@ -144,8 +144,10 @@
 (defn ancestor?
   "Returns true if the first argument is an ancestor of the second argument. Presumes both arguments are single-node contents."
   [ancestor-content descendant-content]
-  (= (common-ancestor ancestor-content descendant-content)
-     (single-node ancestor-content)))
+
+  (when (and ancestor-content descendant-content)
+    (= (common-ancestor ancestor-content descendant-content)
+       (single-node ancestor-content))))
 
 (defn clone
   "Returns a deep clone of content."

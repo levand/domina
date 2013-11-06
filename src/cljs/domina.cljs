@@ -119,19 +119,22 @@
 (defn by-id
   "Returns content containing a single node by looking up the given ID"
   [id]
-  (dom/getElement (core/name id)))
+  (when (not (cstring/blank? id))
+    (dom/getElement (core/name id))))
 
 (declare normalize-seq)
 
 (defn by-class
   "Returns content containing nodes which have the specified CSS class."
   [class-name]
-  (normalize-seq (dom/getElementsByClass (core/name class-name))))
+  (when (not (cstring/blank? class-name))
+    (normalize-seq (dom/getElementsByClass (core/name class-name)))))
 
 (defn children
   "Gets all the child nodes of the elements in a content. Same as (xpath content '*') but more efficient."
   [content]
-  (doall (mapcat dom/getChildren (nodes content))))
+  (when content
+    (doall (mapcat dom/getChildren (nodes content)))))
 
 (defn common-ancestor
   "Returns the deepest common ancestor of the argument contents (which are presumed to be single nodes), or nil if they are from different documents."
@@ -141,21 +144,27 @@
 (defn ancestor?
   "Returns true if the first argument is an ancestor of the second argument. Presumes both arguments are single-node contents."
   [ancestor-content descendant-content]
-  (= (common-ancestor ancestor-content descendant-content)
-     (single-node ancestor-content)))
+  (when (and ancestor-content
+             descendant-content
+             (not (empty? ancestor-content))
+             (not (empty? descendant-content)))
+    (= (common-ancestor ancestor-content descendant-content)
+       (single-node ancestor-content))))
 
 (defn clone
   "Returns a deep clone of content."
   [content]
-  (map #(. % (cloneNode true)) (nodes content)))
+  (when content
+    (map #(. % (cloneNode true)) (nodes content))))
 
 (declare apply-with-cloning)
 
 (defn append!
   "Given a parent and child contents, appends each of the children to all of the parents. If there is more than one node in the parent content, clones the children for the additional parents. Returns the parent content."
   [parent-content child-content]
-  (apply-with-cloning dom/appendChild parent-content child-content)
-  parent-content)
+  (when parent-content
+    (apply-with-cloning dom/appendChild parent-content child-content)
+    parent-content))
 
 (defn insert!
   "Given a parent and child contents, appends each of the children to all of the parents at the specified index. If there is more than one node in the parent content, clones the children for the additional parents. Returns the parent content."
@@ -190,7 +199,8 @@
 (defn detach!
   "Removes all the nodes in a content from the DOM and returns them."
   [content]
-  (doall (map dom/removeNode (nodes content))))
+  (when content
+    (doall (map dom/removeNode (nodes content)))))
 
 (defn destroy!
   "Removes all the nodes in a content from the DOM. Returns nil."
@@ -295,7 +305,8 @@
 (defn has-class?
   "Returns true if the node has the specified CSS class. Assumes content is a single node."
   [content class]
-  (classes/has (single-node content) class))
+  (when content
+    (classes/has (single-node content) class)))
 
 (defn add-class!
   "Adds the specified CSS class to each node in the content."
@@ -351,7 +362,7 @@
 (defn value
   "Returns the value of a node (presumably a form field). Assumes content is a single node."
   [content]
-  (forms/getValue (single-node content)))
+  (when content (forms/getValue (single-node content))))
 
 (defn set-value!
   "Sets the value of all the nodes (presumably form fields) in the given content."
@@ -491,23 +502,28 @@
 
 (extend-protocol DomContent
   string
-  (nodes [s] (doall (nodes (string-to-dom s))))
-  (single-node [s] (single-node (string-to-dom s)))
+  (nodes [s]
+    (when (not (cstring/blank? s))
+      (doall (nodes (string-to-dom s)))))
+  (single-node [s]
+    (when (not (cstring/blank? s))
+      (single-node (string-to-dom s))))
 
   ;; We'd prefer to do this polymorphically with a protocol
   ;; implementation instead of with a cond, except you can't create
   ;; protocols on Element or things like DispStaticNodeList in early
   ;; versions of IE.
+  nil
+  (nodes [content] nil)
+  (single-node [content] nil)
   default
   (nodes [content]
     (cond
-     (nil? content) '()
      (satisfies? ISeqable content) (seq content)
      (array-like? content) (lazy-nodelist content)
      :default (seq [content])))
   (single-node [content]
     (cond
-     (nil? content) nil
      (satisfies? ISeqable content) (first content)
      (array-like? content) (. content (item 0))
      :default content)))

@@ -15,7 +15,7 @@
       (testing "(nodes content)"
         (are [expected actual] (= expected actual)
              1 (count (dom/nodes (xp/xpath "//body")))
-             2 (count (dom/nodes (xp/xpath "//body/div")))
+             1 (count (dom/nodes (xp/xpath "//body/div")))
              1 (count (dom/nodes (xp/xpath "//div[@class='d1']"))))))))
 
 ;;; single-node
@@ -76,8 +76,8 @@
     (testing "Standard Cases\n"
         (testing "(children content)"
           (are [expected actual] (= expected actual)
-               5 (count (dom/children (xp/xpath "//div")))
-               2 (count (dom/children (xp/xpath "//div/p"))))))))
+               3 (count (dom/children (xp/xpath "//div")))
+               0 (count (dom/children (xp/xpath "//div/p"))))))))
 
 (deftest  destroy!-test
   (testing "Unit Testing for (destroy! content)\n"

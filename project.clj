@@ -5,7 +5,9 @@
                  [org.clojure/clojurescript "0.0-1847"]]
   :plugins [[lein-cljsbuild "0.3.2"]]
   :hooks [leiningen.cljsbuild]
-  :cljsbuild {:builds [{:compiler {:libs ["goog/dom/query.js"]
+  :cljsbuild {:builds {:deploy
+                       {:source-paths ["src/cljs"]
+                        :compiler {:libs ["goog/dom/query.js"]
                                    :pretty-print true
                                    :output-dir ".cljsbuild/domina"
-                                   :output-to "public/domina.js"}}]})
+                                   :output-to "public/domina.js"}}}})

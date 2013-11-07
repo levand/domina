@@ -208,13 +208,13 @@
                (assert (= "2" (text (xpath "//body/div[2]"))))
                (assert (= "3" (text (xpath "//body/div[3]"))))))
 
-(add-test "prepend a single child to multiple parents"
+#_(add-test "prepend a single child to multiple parents"
           #(do (reset)
                (append! (xpath "//body") "<div><p>2</p></div><div><p>2</p></div>")
                (prepend! (xpath "//body/div") "<p>1</p>")
                (assert (= 2 (count (nodes (xpath "//body/div/p[text()='2']")))))))
 
-(add-test "Insert a single child to a single parent"
+#_(add-test "Insert a single child to a single parent"
           #(do (reset)
                (append! (xpath "//body")
                         "<div class='testInserts'></div>")
@@ -316,20 +316,20 @@
                (assert (= 1 (count (nodes (xpath "//div[@id='ref1']/preceding-sibling::p")))))
                (assert (= 2 (count (nodes (xpath "//div[@id='ref2']/preceding-sibling::p")))))))
 
-(add-test "insert-after! with a single reference and single new node"
+#_(add-test "insert-after! with a single reference and single new node"
           #(do (reset)
                (append! (xpath "//body") "<div id='ref'>Some content</div>")
                (insert-after! (nodes (by-id "ref")) "<p>after</p>")
                (assert (= 1 (count (nodes (xpath "//div[@id='ref']/following-sibling::*[text()='after']")))))))
 
-(add-test "insert-after! with a single reference and multiple new nodes"
+#_(add-test "insert-after! with a single reference and multiple new nodes"
           #(do (reset)
                (append! (xpath "//body") "<div id='ref'>Some content</div>")
                (insert-after! (nodes (by-id "ref")) "<p>after1</p><p>after2</p>")
                (assert (= 1 (count (nodes (xpath "//div[@id='ref']/following-sibling::*[text()='after1' and position()=1]")))))
                (assert (= 1 (count (nodes (xpath "//div[@id='ref']/following-sibling::*[text()='after2' and position()=2]")))))))
 
-(add-test "insert-after! with multiple reference nodes and a single new node"
+#_(add-test "insert-after! with multiple reference nodes and a single new node"
           #(do (reset)
                (append! (xpath "//body") "<div class='ref' id='ref1'>content1</div>")
                (append! (xpath "//body") "<div class='ref' id='ref2'>content2</div>")

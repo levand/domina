@@ -1,6 +1,6 @@
 {:dev {:test-paths ["test/cljs"]
        :dependencies [[hiccups "0.2.0"]]
-       :plugins [[com.cemerick/clojurescript.test "0.1.0"]]
+       :plugins [[com.cemerick/clojurescript.test "0.2.0"]]
        :cljsbuild {:builds {:none
                             {:source-paths ["src/cljs" "test/cljs"]
                              :compiler  {:libs ["goog/dom/query.js"]

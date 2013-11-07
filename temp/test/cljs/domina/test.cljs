@@ -200,7 +200,7 @@
                         "some <span class='foo'>more</span> text")
                (assert (= 3 (count (nodes (xpath "//div/p/span[@class='foo']")))))))
 
-(add-test "prepend a single child to a single parent"
+#_(add-test "prepend a single child to a single parent"
           #(do (reset)
                (append! (xpath "//body") "<div>2</div><div>3</div>")
                (prepend! (xpath "//body") "<div>1</div>")

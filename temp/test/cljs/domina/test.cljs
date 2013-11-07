@@ -338,21 +338,21 @@
                (assert (= 2 (count (nodes (xpath "//div[@id='ref1']/following-sibling::p")))))
                (assert (= 1 (count (nodes (xpath "//div[@id='ref2']/following-sibling::p")))))))
 
-(add-test "swap-content! with a single reference node and a single new node"
+#_(add-test "swap-content! with a single reference node and a single new node"
           #(do (reset)
                (append! (xpath "//body") "<div><p id='before'>TYPO</p></div>")
                (swap-content! (xpath "//p[@id='before']") "<p id='after'>fixed</p>")
                (assert (= 0 (count (nodes (xpath "//p[@id='before']")))))
                (assert (= 1 (count (nodes (xpath "//p[@id='after']")))))))
 
-(add-test "swap-content! with a single reference node and multiple new nodes"
+#_(add-test "swap-content! with a single reference node and multiple new nodes"
           #(do (reset)
                (append! (xpath "//body") "<div><p id='before'>TYPO</p></div>")
                (swap-content! (xpath "//p[@id='before']") "<p class='after'>fixed1</p><p class='after'>fixed2</p>")
                (assert (= 0 (count (nodes (xpath "//p[@id='before']")))))
                (assert (= 2 (count (nodes (xpath "//p[@class='after']")))))))
 
-(add-test "swap-content! with multiple reference nodes and multiple new nodes"
+#_(add-test "swap-content! with multiple reference nodes and multiple new nodes"
           #(do (reset)
                (append! (xpath "//body") "<div><p class='before'>TYPO-1</p></div>")
                (append! (xpath "//body") "<div><p class='before'>TYPO-2</p></div>")

@@ -17,6 +17,7 @@
                                     insert-after!
                                     prepend!
                                     insert!
+                                    swap-content!
                                     text)]
             [domina.fixtures :as fix :refer (base-fixture)]
             [domina.xpath :as xp :refer (xpath)]
@@ -208,8 +209,13 @@
                    (text (xpath "//body/div[1]")))))
       (testing "(prepend! parents single-child)"
         (are [expected actual] (= expected actual)
-             2 (do (append! (xpath "//body") "<div><p>2</p></div><div><p>2</p></div>")
-                   (prepend! (xpath "//body/div") "<p>1</p>")
+             2 (do (append! (xpath "//body") 
+                            (hm/html [:div [:p "2"]]
+                                     [:div [:p "2"]])
+                            #_"<div><p>2</p></div><div><p>2</p></div>")
+                   (prepend! (xpath "//body/div") 
+                             (hm/html [:p "1"])
+                             #_"<p>1</p>")
                    (count (nodes (xpath "//body/div/p[text()='2']")))))))))
 
 (deftest  insert!-test
@@ -233,7 +239,7 @@
         (are [expected actual] (= expected actual)
              true false)))))
 
-
+;;; insert-after!
 (deftest  insert-after!-test
   (testing "Unit Testing for (insert-after! ref-nodes new-nodes)\n"
     (testing "Standard Cases\n"
@@ -266,3 +272,39 @@
                                 (hm/html [:p "after"]))
                  (+ (count (nodes (xpath "//div[@id='ref1']/following-sibling::p")))
                     (count (nodes (xpath "//div[@id='ref2']/following-sibling::p"))))))))))
+
+;;; swap-content!
+(deftest  swap-content!-test
+  (testing "Unit Testing for (swap-content! old-content new-content)\n"
+    (testing "Standard Cases\n"
+      (testing "(swap-content! single-old-node single-new-node)"
+        (are [expected actual] (= expected actual)
+             1 (do
+                 (append! (xpath "//body") 
+                          (hm/html [:div [:p#before "TYPO"]]))
+                 (swap-content! (xpath "//p[@id='before']") 
+                                (hm/html [:p#after "fixed"]))
+                 (+ (count (nodes (xpath "//p[@id='before']")))
+                    (count (nodes (xpath "//p[@id='after']")))))))
+      (testing "(swap-content! single-ref-node multiple-new-node)"
+        (are [expected actual] (= expected actual)
+             2 (do 
+                 (append! (xpath "//body") 
+                          (hm/html [:div [:p#before "TYPE"]]))
+                 (swap-content! (xpath "//p[@id='before']") 
+                                (hm/html [:p.after "fixed1"]
+                                         [:p.after "fixed2"]))
+                 (+ (count (nodes (xpath "//p[@id='before']")))
+                    (count (nodes (xpath "//p[@class='after']")))))))
+      (testing "(swap-content! multiple-ref-nodes multiple-new-node)"
+        (are [expected actual] (= expected actual)
+             4 (do 
+                 (append! (xpath "//body")
+                          (hm/html [:div [:p.before1 "TYPO-1"]]))
+                 (append! (xpath "//body") 
+                          (hm/html [:div [:p.before1"TYPO-2"]]))
+                 (swap-content! (xpath "//p[@class='before1']") 
+                                (hm/html [:p.after1 "fixed1"]
+                                         [:p.after1 "fixed2"]))
+                 (+ (count (nodes (xpath "//p[@class='before1']")))
+                    (count (nodes (xpath "//p[@class='after1']"))))))))))

@@ -13,7 +13,9 @@
                                     destroy!
                                     destroy-children!
                                     children
-                                    insert-before!)]
+                                    insert-before!
+                                    prepend!
+                                    text)]
             [domina.fixtures :as fix :refer (base-fixture)]
             [domina.xpath :as xp :refer (xpath)]
             [hiccups.runtime :as hrt]))
@@ -191,3 +193,16 @@
                    (+ (count (nodes (xpath "//div[@class='ref']")))
                       (count (nodes (xpath "//div[@id='ref1']/preceding-sibling::p")))
                       (count (nodes (xpath "//div[@id='ref2']/preceding-sibling::p"))))))))))
+
+;;; prepend!
+(deftest  prepend!-test
+  (testing "Unit Testing for (prepend! parents children)\n"
+    (testing "Standard Cases\n"
+      (testing "(prepend! single-parent single-child)"
+          (are [expected actual] (= expected actual)
+               1 (do
+                   (append! (xpath "//body") (hm/html [:div "2"] [:div "3"]))
+                   (prepend! (xpath "//body") (hm/html [:div "1"]))
+                   (count (+ (text (xpath "//body/div[1]"))
+                             #_(text (xpath "//body/div[2]"))
+                             #_(text (xpath "//body/div[3]"))))))))))

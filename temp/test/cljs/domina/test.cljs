@@ -69,28 +69,28 @@
 
 ;;;;;; CSS selection tests
 
-(add-test "basic CSS selection"
+#_(add-test "basic CSS selection"
           #(do (reset)
                (standard-fixture)
                (assert (= 3 (count (nodes (sel "p")))))))
 
-(add-test "basic CSS selection (single node)"
+#_(add-test "basic CSS selection (single node)"
           #(do (reset)
                (standard-fixture)
                (assert (not (nil? (single-node (sel "p")))))))
 
-(add-test "CSS selection with class specification"
+#_(add-test "CSS selection with class specification"
           #(do (reset)
                (standard-fixture)
                (assert (= 1 (count (nodes (sel ".d1")))))))
 
-(add-test "a relative CSS selector"
+#_(add-test "a relative CSS selector"
           #(do (reset)
                (standard-fixture)
                (assert (= 3 (count (nodes (-> (sel ".d1")
                                               (sel "p"))))))))
 
-(add-test "extended CSS chaining"
+#_(add-test "extended CSS chaining"
           #(do (reset)
                (append! (sel "body")
                         "<div><p><span>some text</span></p><p><span>more text</span></p></div>")
@@ -101,28 +101,28 @@
 
 ;;;;;; DOM Manipulation Tests
 
-add-test "basic xpath selection"
-#(do (reset)
-     (standard-fixture)
-     (assert (= 3 (count (nodes (xpath "//p"))))))
+#_(add-test "basic xpath selection"
+          #(do (reset)
+               (standard-fixture)
+               (assert (= 3 (count (nodes (xpath "//p")))))))
 
-(add-test "basic xpath selection (single node)"
+#_(add-test "basic xpath selection (single node)"
           #(do (reset)
                (standard-fixture)
                (assert (not (nil? (single-node (xpath "//p")))))))
 
-(add-test "xpath selection with class specification"
+#_(add-test "xpath selection with class specification"
           #(do (reset)
                (standard-fixture)
                (assert (= 1 (count (nodes (xpath "//div[@class='d1']")))))))
 
-(add-test "a relative xpath expression"
+#_(add-test "a relative xpath expression"
           #(do (reset)
                (standard-fixture)
                (assert (= 3 (count (nodes (-> (xpath "//body/div[@class='d1']")
                                               (xpath "p"))))))))
 
-(add-test "extended selection chaining"
+#_(add-test "extended selection chaining"
           #(do (reset)
                (append! (xpath "//body")
                         "<div><p><span>some text</span></p><p><span>more text</span></p></div>")
@@ -130,7 +130,7 @@ add-test "basic xpath selection"
                                               (xpath "./div")
                                               (xpath "./p")
                                               (xpath "./span"))))))))
-(add-test "advanced xpath"
+#_(add-test "advanced xpath"
           #(do (reset)
                (standard-fixture)
                (assert (= 2 (count (nodes (xpath "//p[following-sibling::p[@class='p3']]")))))))
@@ -140,7 +140,7 @@ add-test "basic xpath selection"
                (standard-fixture)
                (assert (= 1 (count (nodes (by-id "id1")))))))
 
-(add-test "look up node by id with context"
+#_(add-test "look up node by id with context"
           #(do (reset)
                (append! (sel "body")
                         "<div><p><span>some text</span></p><p><span>more text</span></p></div>")

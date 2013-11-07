@@ -13,14 +13,14 @@
                                          :optimizations :whitespace
                                          :pretty-print true
                                          :output-to "dev-resources/public/js/whitespace.js"}}
-                            :simple
-                            {:source-paths ["src/cljs" "test/cljs"]
-                             :compiler  {:libs ["goog/dom/query.js"]
-                                         :optimizations :simple
-                                         :pretty-print true
-                                         :output-to "dev-resources/public/js/simple.js"}}
-                            :advanced
-                            {:source-paths ["src/cljs" "test/cljs"]
+                            #_:simple
+                            #_{:source-paths ["src/cljs" "test/cljs"]
+                               :compiler  {:libs ["goog/dom/query.js"]
+                                           :optimizations :simple
+                                           :pretty-print true
+                                           :output-to "dev-resources/public/js/simple.js"}}
+                            #_:advanced
+                            #_{:source-paths ["src/cljs" "test/cljs"]
                              :compiler  {:libs ["goog/dom/query.js"]
                                          :optimizations :advanced
                                          :pretty-print true
@@ -28,8 +28,8 @@
                    :test-commands {"whitespace"
                                    ["phantomjs" :runner "dev-resources/public/js/whitespace.js"]
 
-                                   "simple"
-                                   ["phantomjs" :runner "dev-resources/public/js/simple.js"]
+                                   #_"simple"
+                                   #_["phantomjs" :runner "dev-resources/public/js/simple.js"]
 
-                                   "advanced"
-                                   ["phantomjs" :runner "dev-resources/public/js/advanced.js"]}}}}
+                                   #_"advanced"
+                                   #_["phantomjs" :runner "dev-resources/public/js/advanced.js"]}}}}

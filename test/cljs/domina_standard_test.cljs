@@ -14,7 +14,9 @@
                                     destroy-children!
                                     children
                                     insert-before!
+                                    insert-after!
                                     prepend!
+                                    insert!
                                     text)]
             [domina.fixtures :as fix :refer (base-fixture)]
             [domina.xpath :as xp :refer (xpath)]
@@ -160,7 +162,7 @@
                    (count (nodes (xpath "//div[@class='d1']/*")))))))))
 
 ;;; insert-before!
-(deftest  insert_before!-test
+(deftest  insert-before!-test
   (testing "Unit Testing for (insert-before! ref-nodes new-nodes)\n"
     (testing "Standard Cases\n"
         (testing "(insert-before! single-ref-node single-node)"
@@ -181,7 +183,7 @@
                         (count (nodes (xpath "//div[@id='ref']/preceding-sibling::*[text()='before1' and position()=2]"))))))))))
 
 ;;; insert-before!
-(deftest  insert_before!!-test
+(deftest  insert-before!!-test
   (testing "Unit Testing for (insert-before! ref-nodes new-nodes)\n"
     (testing "Standard Cases\n"
       (testing "(insert-before! multiple-ref-nodes single-node)"
@@ -199,10 +201,68 @@
   (testing "Unit Testing for (prepend! parents children)\n"
     (testing "Standard Cases\n"
       (testing "(prepend! single-parent single-child)"
-          (are [expected actual] (= expected actual)
-               1 (do
+        (are [expected actual] (= expected actual)
+             "1" (do
                    (append! (xpath "//body") (hm/html [:div "2"] [:div "3"]))
                    (prepend! (xpath "//body") (hm/html [:div "1"]))
-                   (count (+ (text (xpath "//body/div[1]"))
-                             #_(text (xpath "//body/div[2]"))
-                             #_(text (xpath "//body/div[3]"))))))))))
+                   (text (xpath "//body/div[1]")))))
+      (testing "(prepend! parents single-child)"
+        (are [expected actual] (= expected actual)
+             2 (do (append! (xpath "//body") "<div><p>2</p></div><div><p>2</p></div>")
+                   (prepend! (xpath "//body/div") "<p>1</p>")
+                   (count (nodes (xpath "//body/div/p[text()='2']")))))))))
+
+(deftest  insert!-test
+  (testing "Unit Testing for (insert! parents children)\n"
+    (testing "Standard Cases\n"
+      (testing "(insert! parent child)"
+        (are [expected actual] (= expected actual)
+             5 (do
+                 (append! (xpath "//body")
+                          (hm/html [:div.testInserts]))
+                 (append! (xpath "//div[@class='testInserts']")
+                          (hm/html [:p.i1]))
+                 (append! (xpath "//div[@class='testInserts']")
+                          (hm/html [:p.i3]))
+                 (insert! (xpath "//div[@class='testInserts']")
+                          (hm/html [:p.i2]) 1)
+                 (+ (count (nodes (xpath "//div[@class='testInserts']/p")))
+                    (count (nodes (xpath "//p[@class='i2']/preceding-sibling::*")))
+                    (count (nodes (xpath "//p[@class='i2']/following-sibling::*")))))))
+      (testing "(insert! parents single-child)"
+        (are [expected actual] (= expected actual)
+             true false)))))
+
+
+(deftest  insert-after!-test
+  (testing "Unit Testing for (insert-after! ref-nodes new-nodes)\n"
+    (testing "Standard Cases\n"
+      (testing "(insert-after! single-ref-node single-node)"
+        (are [expected actual] (= expected actual)
+             1 (do
+                 (append! (xpath "//body")
+                          (hm/html [:div#ref "Some content"]))
+                 (insert-after! (nodes (by-id "ref"))
+                                (hm/html [:p "after"]))
+                 (count (nodes (xpath "//div[@id='ref']/following-sibling::*[text()='after']"))))))
+      (testing "(insert-after! single-ref-node multiple-nodes)"
+        (are [expected actual] (= expected actual)
+             2 (do
+                 (append! (xpath "//body")
+                          (hm/html [:div#ref "Some content"]))
+                 (insert-after! (nodes (by-id "ref"))
+                                (hm/html [:p "after1"]
+                                         [:p "after2"]))
+                 (+ (count (nodes (xpath "//div[@id='ref']/following-sibling::*[text()='after1' and position()=1]")))
+                    (count (nodes (xpath "//div[@id='ref']/following-sibling::*[text()='after2' and position()=2]")))))))
+      (testing "(insert-after! multiple-ref-node multiple-nodes)"
+        (are [expected actual] (= expected actual)
+             3 (do
+                 (append! (xpath "//body")
+                          (hm/html [:div#ref1.ref "content1"]))
+                 (append! (xpath "//body")
+                          (hm/html [:div#ref2.ref "content2"]))
+                 (insert-after! (nodes (by-class "ref"))
+                                (hm/html [:p "after"]))
+                 (+ (count (nodes (xpath "//div[@id='ref1']/following-sibling::p")))
+                    (count (nodes (xpath "//div[@id='ref2']/following-sibling::p"))))))))))

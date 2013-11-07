@@ -28,4 +28,5 @@
                (count (nodes (-> (xpath "//body")
                                  (xpath "./div")
                                  (xpath "./p")
-                                 (xpath "./span")))))))))
+                                 (xpath "./span")))))
+           2 (count (nodes (xpath "//p[following-sibling::p[@class='p3']]")))))))

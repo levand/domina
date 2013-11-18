@@ -1,5 +1,8 @@
 {:dev {:test-paths ["test/cljs"]
-       :dependencies [[hiccups "0.2.0"]]
+       :dependencies [[hiccups "0.2.0"]
+                      [ring "1.2.1"]
+                      [compojure "1.1.6"]
+                      [enlive "1.1.4"]]
        :plugins [[com.cemerick/clojurescript.test "0.2.0"]
                  [com.cemerick/austin "0.1.3"]]
        :cljsbuild {:builds {#_:none

@@ -1,4 +1,5 @@
-{:dev {:test-paths ["test/cljs"]
+{:dev {:resource-paths ["dev-resources"]
+       :test-paths ["dev-resources/clj" "test/cljs"]
        :dependencies [[hiccups "0.2.0"]
                       [ring "1.2.1"]
                       [compojure "1.1.6"]

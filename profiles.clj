@@ -1,5 +1,5 @@
 {:dev {:resource-paths ["dev-resources"]
-       :test-paths ["dev-resources/clj" "test/cljs"]
+       :test-paths ["dev-resources/clj" "test/cljs" "dev-resources/cljs"]
        :dependencies [[hiccups "0.2.0"]
                       [ring "1.2.1"]
                       [compojure "1.1.6"]
@@ -13,7 +13,7 @@
                                          :optimizations :none
                                          :output-to "dev-resources/public/js/none.js"}}
                             :whitespace
-                            {:source-paths ["src/cljs" "test/cljs"]
+                            {:source-paths ["src/cljs" "test/cljs" "dev-resources/cljs"]
                              :compiler  {:libs ["goog/dom/query.js"]
                                          :optimizations :whitespace
                                          :pretty-print true

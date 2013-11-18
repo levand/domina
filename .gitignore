@@ -1,10 +1,6 @@
 classes
 .cljsbuild
 .lein-deps-sum
-public/build_no_opt
-public/test_*.js
-public/domina.js
-domina-tests
 .lein-repl-history
 lib
 out

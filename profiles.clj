@@ -37,4 +37,5 @@
                                    #_["phantomjs" :runner "dev-resources/public/js/simple.js"]
 
                                    #_"advanced"
-                                   #_["phantomjs" :runner "dev-resources/public/js/advanced.js"]}}}}
+                                   #_["phantomjs" :runner "dev-resources/public/js/advanced.js"]}}
+       :repl-options {:init-ns domina.server}}}

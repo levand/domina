@@ -15,22 +15,15 @@
       <li><code>cd</code> to
         <code>$DOMINA</code>, and run:
         <pre>$ lein do compile, repl</pre> This will compile the domina cljs code.
-      <li>Once you're in the REPL (it will start up in the
-        <code>domina.server</code> namespace), evaluate
+      <li>Once you're in the REPL evaluate
         <code>(run)</code>.  That just starts jetty on port
         <code>8080</code>; if you open a browser to
         <a href="http://localhost:8080">that server</a>, you'll
         see this page.
       </li>
-      <li>Create a new Austin ClojureScript REPL environment,
-        like so:
-        <pre>(def repl-env (reset! cemerick.austin.repls/browser-repl-env
-          (cemerick.austin/repl-env)))
-        </pre>
+      <li>Activate the browser-connected REPL like so:
+        <pre>(browser-repl)</pre>
       </li>
-      <li>Turn your Clojure REPL into a ClojureScript REPL
-        tied to that REPL environment with
-        <pre>(cemerick.austin.repls/cljs-repl repl-env)</pre></li>
       <li>Now that the ClojureScript REPL is ready, you need to load
         <a href="http://localhost:8080">http://localhost:8080</a>, or
         reload it if you brought it up before the REPL environment was

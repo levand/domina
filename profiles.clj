@@ -38,4 +38,8 @@
 
                                    #_"advanced"
                                    #_["phantomjs" :runner "dev-resources/public/js/advanced.js"]}}
-       :repl-options {:init-ns domina.server}}}
+       :injections [(require '[ring.server :as http :refer [run]]
+                             'cemerick.austin.repls)
+                    (defn browser-repl []
+                      (cemerick.austin.repls/cljs-repl (reset! cemerick.austin.repls/browser-repl-env
+                                                               (cemerick.austin/repl-env))))]}}

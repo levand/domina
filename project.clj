@@ -6,30 +6,30 @@
             [lein-clojars "0.9.1"]]
   :hooks [leiningen.cljsbuild]
   :cljsbuild {:builds [{:jar true
-                        :compiler {
+                        :compiler {:libs ["goog/dom/query.js"]
                                    :pretty-print true
                                    :output-dir ".cljsbuild/domina"
                                    :output-to "public/domina.js"}}
                        {:source-paths ["test/cljs"]
-                        :compiler  {
+                        :compiler  {:libs ["goog/dom/query.js"]
                                     :pretty-print true
                                     :optimizations :none
                                     :output-dir "public/build_no_opt"
                                     :output-to "public/test_no_opt.js"}}
                        {:source-paths ["test/cljs"]
-                        :compiler  {
+                        :compiler  {:libs ["goog/dom/query.js"]
                                     :optimizations :whitespace
                                     :pretty-print true
                                     :output-dir ".cljsbuild/whitespace"
                                     :output-to "public/test_whitespace.js"}}
                        {:source-paths ["test/cljs"]
-                        :compiler  {
+                        :compiler  {:libs ["goog/dom/query.js"]
                                     :optimizations :simple
                                     :pretty-print true
                                     :output-dir ".cljsbuild/simple"
                                     :output-to "public/test_simple.js"}}
                        {:source-paths ["test/cljs"]
-                        :compiler  {
+                        :compiler  {:libs ["goog/dom/query.js"]
                                     :optimizations :advanced
                                     :pretty-print true
                                     :output-dir ".cljsbuild/advanced"

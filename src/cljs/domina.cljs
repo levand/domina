@@ -10,6 +10,7 @@
             [cljs.core :as core]
             [clojure.string :as cstring]
             [domina.support :as support])
+  (:refer-clojure :exclude [clone])
   (:require-macros [domina.macros :as dm]))
 
 ;;;;;;;;;;;;;;;;;;; Parse HTML to DOM ;;

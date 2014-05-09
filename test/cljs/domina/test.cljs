@@ -10,12 +10,14 @@
                        set-text! value set-value! html set-html!
                        set-data! get-data log-debug log]]
         [domina.xpath :only [xpath]]
-        [domina.css :only [sel]]
         [domina.events :only [listen! capture! listen-once! capture-once!
                               unlisten! dispatch-event! dispatch! unlisten-by-key!
                               get-listeners prevent-default stop-propagation
                               target current-target event-type raw-event]])
   (:require [goog.events :as events]
+            [domina.css-lite :as css-lite]
+            [domina.css :as css]
+
             ; [clojure.browser.repl :as repl]
             ))
 
@@ -33,6 +35,8 @@
       }
     }
   };")
+
+(def ^:dynamic sel)
 
 (def tests (atom []))
 
@@ -962,6 +966,31 @@
       (add-class! (by-id "test-summary") "passed")
       (add-class! (by-id "test-summary") "failed"))))
 
-(def test-results (doall (run-tests)))
+(defn ms-time
+  []
+  (.now js/Date))
+
+(defn timing-comparison
+  [loop-times]
+  (let [time-full-start (ms-time)
+        _ (binding (sel css/sel)
+            (doall (take loop-times (repeatedly #(run-test "a relative CSS selector")))))
+        time-full-end (ms-time)
+        time-lite-start (ms-time)
+        _ (binding (sel css-lite/sel)
+            (doall (take loop-times (repeatedly #(run-test "a relative CSS selector")))))
+        time-lite-end (ms-time)]
+    [[(goog.string/format "domina.css/sel %sms" (- time-full-end time-full-start)) nil]
+     [(goog.string/format "domina.css-lite/sel %sms" (- time-lite-end time-lite-start)) nil]]))
+
+(-> (concat '(["TIMINGS"])
+            (timing-comparison 1000)
+            '(["Full CSS" nil])
+            (binding [sel css/sel]
+              (doall (run-tests)))
+            '(["CSS-lite" nil])
+            (binding [sel css-lite/sel]
+              (doall (run-tests))))
+    report)
+
 #_(def test-results (doall (run-named "can get multiple HTML attributes from a single node.")))
-(report test-results)

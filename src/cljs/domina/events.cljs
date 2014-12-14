@@ -45,7 +45,7 @@
            (map #(vector % (gobj/get evt %)) (prim-seq (gobj/getKeys evt) 0)))
          IPrintWithWriter
          (-pr-writer [o writer opts]
-           (-write writer "domina.event" (into {} (seq o))))))
+           (-write writer (into {} (seq o))))))
     true))
 
 (defn- listen-internal!

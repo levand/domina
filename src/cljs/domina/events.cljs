@@ -39,7 +39,19 @@
              val
              (aget evt (name k))))
          (-lookup [o k not-found] (or (-lookup o k)
-                                      not-found))))
+                                      not-found))
+         ISeqable
+         (-seq [o] 
+           (map #(vector % (gobj/get evt %)) (prim-seq (gobj/getKeys evt) 0)))
+         IPrintWithWriter
+         (-pr-writer [o writer opts]
+           (let [pr-pair (fn [keyval] (pr-sequential-writer writer pr-writer "" " " "" opts keyval))]
+             (pr-sequential-writer writer pr-pair "{" ", " "}" opts 
+                                   (reify
+                                     ISeqable
+                                     (-seq [o] 
+                                       (map #(vector % (gobj/get evt %)) (prim-seq (gobj/getKeys evt) 0))))
+                                   )))))
     true))
 
 (defn- listen-internal!

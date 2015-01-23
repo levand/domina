@@ -6,7 +6,7 @@ Domina is a jQuery inspired DOM manipulation library for ClojureScript. It provi
 
 Pull requests are extremely welcome.
 
-You can obtain Domina by pulling from Clojars: `[domina "1.0.2"]`.
+You can obtain Domina by pulling from Clojars: `[domina "1.0.3"]`.
 
 ## Rationale
 

@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>bREPL Connection</title>
+    <!--[if lt IE 9]>
+        <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+    <script src="js/whitespace.js" type="text/javascript"></script>
+  </head>
+  <body>
+    <h1>BREPL connection</h1>
+    <h2>Running the brepl</h2>
+    <ol>
+      <li><code>cd</code> to
+        <code>$DOMINA</code>, and run:
+        <pre>$ lein do compile, repl</pre> This will compile the domina cljs code.
+      <li>Once you're in the REPL evaluate
+        <code>(run)</code>.  That just starts jetty on port
+        <code>8080</code>; if you open a browser to
+        <a href="http://localhost:8080">that server</a>, you'll
+        see this page.
+      </li>
+      <li>Activate the browser-connected REPL like so:
+        <pre>(browser-repl)</pre>
+      </li>
+      <li>Now that the ClojureScript REPL is ready, you need to load
+        <a href="http://localhost:8080">http://localhost:8080</a>, or
+        reload it if you brought it up before the REPL environment was
+        created. Once you do that, evaluate some ClojureScript to make
+        sure your shiny new REPL is working, e.g.
+        <pre>(js/alert "Hello, Domina!")</pre>
+      </li>
+    </ol>
+  </body>
+</html>

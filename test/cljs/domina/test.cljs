@@ -1,5 +1,5 @@
 (ns domina.test
-  (:use [domina :only [nodes single-node by-id by-class children
+  (:use [domina.core :only [nodes single-node by-id by-class children
                        common-ancestor ancestor? clone append!
                        prepend! detach!  destroy!  destroy-children!
                        insert!  insert-before!  insert-after!

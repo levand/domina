@@ -1,5 +1,5 @@
 (ns domina.xpath
-  (:require [domina :as domina]
+  (:require [domina.core :as domina]
             [goog.dom :as dom]))
 
 ;; This file covers the same basic functionality as goog.dom.xml.

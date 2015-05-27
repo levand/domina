@@ -1,4 +1,4 @@
-(ns domina
+(ns domina.core
   (:require
    [goog.dom :as dom]
             [goog.dom.xml :as xml]

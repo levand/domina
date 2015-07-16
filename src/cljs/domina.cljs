@@ -241,29 +241,27 @@
   content)
 
 ;; We don't use the existing style/parseStyleAttributes because it camelcases everything.
-;; This uses the same technique, however.
 (defn parse-style-attributes
-  "Parses a CSS style string and returns the properties as a map."
+  "Returns a map of a single css name/value pair."
   [style]
-  (reduce (fn [acc pair]
-            (let [[k v] (. pair split #"\s*:\s*")]
-              (if (and k v)
-                (assoc acc (keyword (. k (toLowerCase))) v)
-                acc)))
-          {}
-          (. style split #"\s*;\s*")))
+  (let [length (.-length style)]
+    (apply merge (map
+      (fn [i]
+        (let [name (.item style i)
+              value (.getPropertyValue style name)
+              priority (.getPropertyPriority style name)]
+          (if (= "" priority) {(keyword name) value} {(keyword name) (str value " " priority)})))
+      (range length)))))
+
 
 (defn styles
   "Returns a map of the CSS styles/values. Assumes content will be a single node. Style names are returned as keywords."
   [content]
-  (let [style (attr content "style")]
-    (cond (string? style)
-            (parse-style-attributes style)
-          (nil? style)
-            {}
-          (. style -cssText)
-            (parse-style-attributes (. style -cssText))
-          :else {})))
+  (let [style (.-style (single-node content))
+        length (.-length style)]
+    (cond
+      (pos? length) (parse-style-attributes style)
+      :else {})))
 
 (defn attrs
   "Returns a map of the HTML attributes/values. Assumes content will be a single node. Attribute names are returned as keywords."

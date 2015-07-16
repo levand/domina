@@ -428,6 +428,14 @@
                (assert (= {}
                           (styles (xpath "//div"))))))
 
+(add-test "can get CSS styles with ':' in property from a single node."
+          #(do (reset)
+               (append! (xpath "//body") "<div>1</div>")
+               (set-style! (xpath "//div") "background-image" "url(http://www.some-site.com:8088/image.jpg)")
+               (set-style! (xpath "//div") "background-color" "black")
+               (assert (= {:background-image "url(http://www.some-site.com:8088/image.jpg)" :background-color "black"}
+                          (styles (xpath "//div"))))))
+
 (add-test "can get multiple HTML attributes from a single node."
           #(do (reset)
                (append! (xpath "//body") "<div>1</div>")

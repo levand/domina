@@ -183,7 +183,7 @@ There are also `listen-once!` and `capture-once!` variants of `listen!` and `cap
 
 ### Custom Events
 
-In addition to native events dispatched by the browser, Domina allows you to create and dispatch arbitary events using the `dispatch!` function.
+In addition to native events dispatched by the browser, Domina allows you to create and dispatch arbitrary events using the `dispatch!` function.
 
 The `dispatch!` function takes an event target as a DomContent (assumed to be a single node), an event type, and an event map. Keys and values in the event map are merged in to the event object, and can be used to pass arbitrary data to event handlers.
 

@@ -2,7 +2,7 @@
   (:require-macros [cemerick.cljs.test :as m :refer (deftest testing are use-fixtures)]
                    [domina.macros :as dm])
   (:require [cemerick.cljs.test :as t]
-            [domina :as dom :refer (nodes)]
+            [domina.core :as dom :refer (nodes)]
             [domina.css :as css :refer (sel)]
             [domina.fixtures :as fix :refer (base-fixture)]))
 

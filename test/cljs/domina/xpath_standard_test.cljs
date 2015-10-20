@@ -3,7 +3,7 @@
                    [domina.macros :as dm]
                    [hiccups.core :as hm])
   (:require [cemerick.cljs.test :as t]
-            [domina :as dom :refer (nodes single-node append!)]
+            [domina.core :as dom :refer (nodes single-node append!)]
             [domina.xpath :as css :refer (xpath)]
             [domina.fixtures :as fix :refer (base-fixture)]
             [hiccups.runtime :as hrt]))

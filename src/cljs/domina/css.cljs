@@ -1,5 +1,5 @@
 (ns domina.css
-  (:require [domina :as domina]
+  (:require [domina.core :as domina]
             [goog.dom :as dom]
             [goog.dom.query :as query]))
 

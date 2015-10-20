@@ -3,7 +3,7 @@
                    [domina.macros :as dm]
                    [hiccups.core :as hm])
   (:require [cemerick.cljs.test :as t]
-            [domina :as dom :refer (nodes append!)]
+            [domina.core :as dom :refer (nodes append!)]
             [domina.css :as css :refer (sel)]
             [domina.fixtures :as fix :refer (base-fixture)]
             [hiccups.runtime :as hrt]))

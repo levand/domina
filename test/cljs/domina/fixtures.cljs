@@ -1,7 +1,7 @@
 (ns domina.fixtures
   (:require-macros [domina.macros :as dm]
                    [hiccups.core :as hm])
-  (:require [domina :as dom :refer (append! destroy!)]
+  (:require [domina.core :as dom :refer (append! destroy!)]
             [hiccups.runtime :as hrt]
             [domina.xpath :as css :refer (xpath)]
             [domina.events :as de :refer (unlisten!)]))

@@ -1,5 +1,5 @@
 (ns domina.events
-  (:require [domina :as domina]
+  (:require [domina.core :as domina]
             [goog.object :as gobj]
             [goog.events :as events]))
 

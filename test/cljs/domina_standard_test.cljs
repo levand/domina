@@ -1,24 +1,24 @@
-(ns domina-standard-test
+(ns domina-standard-test.test
   (:require-macros [cemerick.cljs.test :as m :refer (deftest testing are use-fixtures)]
                    [domina.macros :as dm]
                    [hiccups.core :as hm])
   (:require [cemerick.cljs.test :as t]
-            [domina :as dom :refer (nodes
-                                    single-node
-                                    by-id
-                                    by-class
-                                    append!
-                                    clone
-                                    detach!
-                                    destroy!
-                                    destroy-children!
-                                    children
-                                    insert-before!
-                                    insert-after!
-                                    prepend!
-                                    insert!
-                                    swap-content!
-                                    text)]
+            [domina.core :as dom :refer (nodes
+                                         single-node
+                                         by-id
+                                         by-class
+                                         append!
+                                         clone
+                                         detach!
+                                         destroy!
+                                         destroy-children!
+                                         children
+                                         insert-before!
+                                         insert-after!
+                                         prepend!
+                                         insert!
+                                         swap-content!
+                                         text)]
             [domina.fixtures :as fix :refer (base-fixture)]
             [domina.xpath :as xp :refer (xpath)]
             [hiccups.runtime :as hrt]))

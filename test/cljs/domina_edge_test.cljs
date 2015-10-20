@@ -1,22 +1,22 @@
-(ns domina-edge-test
+(ns domina-edge-test.test
   (:require-macros [cemerick.cljs.test :as m :refer (deftest testing are use-fixtures)]
                    [domina.macros :as dm])
   (:require [cemerick.cljs.test :as t]
-            [domina :as dom :refer (nodes
-                                    single-node
-                                    by-class
-                                    by-id
-                                    append!
-                                    prepend!
-                                    clone
-                                    ancestor?
-                                    common-ancestor
-                                    children
-                                    detach!
-                                    destroy!
-                                    destroy-children!
-                                    has-class?
-                                    value)]
+            [domina.core :as dom :refer (nodes
+                                         single-node
+                                         by-class
+                                         by-id
+                                         append!
+                                         prepend!
+                                         clone
+                                         ancestor?
+                                         common-ancestor
+                                         children
+                                         detach!
+                                         destroy!
+                                         destroy-children!
+                                         has-class?
+                                         value)]
             [domina.xpath :as xp :refer (xpath)]
             [domina.fixtures :as fix :refer (base-fixture)]))
 

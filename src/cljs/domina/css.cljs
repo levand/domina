@@ -12,9 +12,9 @@
   "Returns content based on a css selector expression. Takes an optional content as a base; if none is given, uses the HTML element as a base."
   ([expr] (sel (root-element) expr))
   ([base expr] (reify domina/DomContent
-                 (nodes [_] (mapcat #(domina/normalize-seq (dom/query expr %))
+                 (nodes [_] (mapcat #(domina/normalize-seq (.querySelectorAll % expr))
                                     (domina/nodes base)))
                  (single-node [_] (first (filter
                                           (complement nil?)
-                                          (mapcat #(domina/normalize-seq (dom/query expr %))
+                                          (mapcat #(domina/normalize-seq (.querySelector % expr))
                                                   (domina/nodes base))))))))

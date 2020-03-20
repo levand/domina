@@ -12,7 +12,7 @@
         [domina.xpath :only [xpath]]
         [domina.css :only [sel]]
         [domina.events :only [listen! capture! listen-once! capture-once!
-                              unlisten! dispatch-event! dispatch! unlisten-by-key!
+                              unlisten! dispatch! unlisten-by-key!
                               get-listeners prevent-default stop-propagation
                               target current-target event-type raw-event]])
   (:require [goog.events :as events]

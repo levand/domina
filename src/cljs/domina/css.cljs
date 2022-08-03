@@ -15,5 +15,5 @@
                                     (domina/nodes base)))
                  (single-node [_] (first (filter
                                           (complement nil?)
-                                          (mapcat #(domina/normalize-seq (.querySelectorAll % expr))
+                                          (mapcat #(domina/normalize-seq (.querySelector % expr))
                                                   (domina/nodes base))))))))

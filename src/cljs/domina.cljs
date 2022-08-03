@@ -97,11 +97,6 @@
 
 ;;;;;;;;;;;;;;;;;;; Protocols ;;;;;;;;;;;;;;;;;
 
-;; These are to silence a bug where the compiler emits a warning when
-;; it hits the defprotocol for DomContent.
-(declare nodes)
-(declare single-node)
-
 (defprotocol DomContent
   (nodes [content] "Returns the content as a sequence of nodes.")
   (single-node [nodeseq] "Returns the content as a single node (the first node, if the content contains more than one"))

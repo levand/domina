@@ -129,7 +129,7 @@
   "Dispatches an event of the given type, adding the values in event map to the event object. Optionally takes an event source. If none is provided, dispatches on the document's root element. Returns false if any handlers called prevent-default, otherwise true."
   ([type evt-map] (dispatch! root-element type evt-map))
   ([source type evt-map]
-     (let [evt (events/Event. (name type))]
+     (let [evt (goog.events.Event. (name type))]
        (doseq [[k v] evt-map] (aset evt k v))
        (if (is-event-target? source)
          (dispatch-event-target! source evt)

@@ -97,18 +97,13 @@
 
 ;;;;;;;;;;;;;;;;;;; Protocols ;;;;;;;;;;;;;;;;;
 
-;; These are to silence a bug where the compiler emits a warning when
-;; it hits the defprotocol for DomContent.
-(declare nodes)
-(declare single-node)
-
 (defprotocol DomContent
   (nodes [content] "Returns the content as a sequence of nodes.")
   (single-node [nodeseq] "Returns the content as a single node (the first node, if the content contains more than one"))
 
 ;;;;;;;;;;;;;;;;;;; Public API ;;;;;;;;;;;;;;;;;
 
-(def *debug* true)
+(def ^:dynamic *debug* true)
 (defn log-debug [& mesg]
   (when (and *debug* (not (= (.-console js/window) js/undefined)))
     (.log js/console (apply str  mesg))))
@@ -191,12 +186,12 @@
 (defn detach!
   "Removes all the nodes in a content from the DOM and returns them."
   [content]
-  (doall (map dom/removeNode (nodes content))))
+  (doall (map dom/removeNode (vec (nodes content)))))
 
 (defn destroy!
   "Removes all the nodes in a content from the DOM. Returns nil."
   [content]
-  (dorun (map dom/removeNode (nodes content))))
+  (dorun (map dom/removeNode (vec (nodes content)))))
 
 (defn destroy-children!
   "Removes all the child nodes in a content from the DOM. Returns the original content."
